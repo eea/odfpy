@@ -1,0 +1,64 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+# Copyright (C) 2006 Søren Roug, European Environment Agency
+#
+# This is free software.  You may redistribute it under the terms
+# of the Apache license and the GNU General Public License Version
+# 2 or at your option any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public
+# License along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+#
+# Contributor(s):
+#
+from odf.odf2xhtml import ODF2XHTML
+import zipfile
+import sys
+from time import localtime
+
+try:
+    from cStringIO import StringIO
+except ImportError:
+    from StringIO import StringIO
+
+if len(sys.argv) != 3:
+    sys.stderr.write("Usage: %s inputfile outputfile\n" % sys.argv[0])
+    sys.exit(1)
+
+inpath = sys.argv[1]
+basename = inpath[max(inpath.rfind('/'), inpath.rfind('\\'), inpath.rfind(':'))+1:]
+dot = basename.rfind('.')
+if dot > 0: basename = basename[:dot]
+
+now = localtime()[:6]
+
+odhandler = ODF2XHTML()
+result = odhandler.odf2xhtml(inpath).encode('us-ascii','xmlcharrefreplace')
+
+try:
+    zout = zipfile.ZipFile(sys.argv[2], "w", zipfile.ZIP_DEFLATED)
+except:
+    sys.stderr.write("Unable to open %s for writing\n" % sys.argv[2])
+
+zipinfo = zipfile.ZipInfo('%s/%s.htm' % (basename, basename), now)
+zipinfo.external_attr = 0100644 << 16L  # Unix permissions
+zout.writestr(zipinfo, result)
+
+try:
+    z = zipfile.ZipFile(inpath)
+except:
+    sys.stderr.write("Unable to open %s or file is not OpenDocument\n" % sys.argv[2])
+
+for zinfo in z.infolist():
+    if zinfo.filename[0:9] == 'Pictures/':
+        zipinfo = zipfile.ZipInfo(basename + "/" + zinfo.filename, now)
+        zipinfo.external_attr = 0100644 << 16L  # Unix permissions
+        zout.writestr(zipinfo, z.read(zinfo.filename))
+z.close()
+zout.close()

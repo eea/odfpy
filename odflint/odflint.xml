@@ -1,0 +1,39 @@
+<?xml version="1.0" ?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+  "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+<refentry id="odflint">
+<refnamediv>
+<refname>odflint</refname>
+<refpurpose>Check ODF file for problems</refpurpose>
+</refnamediv>
+
+<refsynopsisdiv>
+<cmdsynopsis>
+    <command>odflint</command>
+    <arg choice="plain"><replaceable>path</replaceable></arg>
+</cmdsynopsis>
+</refsynopsisdiv>
+
+<refsect1><title>Description</title>
+<para><command>odflint</command> is a program that will check
+an ODF file and give warning if it finds something suspect.
+It is not able to make a full validation due to the complexity
+of the schema.
+</para>
+<para>
+&quot;Path&quot; is assumed to be an
+OpenDocument file of text, spreadsheet or presentation type.
+</para>
+</refsect1>
+<refsect1><title>Example</title>
+<screen>
+odflint odf-file
+</screen>
+</refsect1>
+<refsect1><title>See Also</title>
+<para>
+<command>odftools</command>(1),
+</para>
+</refsect1>
+</refentry>
+

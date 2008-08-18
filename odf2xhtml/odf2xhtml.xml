@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN" "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+<refentry id="odf2xhtml">
+  <refnamediv>
+    <refname>odf2xhtml</refname>
+    <refpurpose>Convert ODF to HTML</refpurpose>
+  </refnamediv>
+  <refsynopsisdiv>
+    <cmdsynopsis>
+      <command>odf2xhtml</command>
+      <arg choice="plain">
+        <replaceable>path</replaceable>
+      </arg>
+    </cmdsynopsis>
+  </refsynopsisdiv>
+  <refsect1>
+    <title>Description</title>
+    <para><command>odf2xhtml</command> is a program that will create 
+a webpage (.html) from the input file and will write the webpage to stdout.
+</para>
+    <para>
+"Path" is assumed to be an
+OpenDocument file of text, spreadsheet or presentation type.
+</para>
+  </refsect1>
+  <refsect1>
+    <title>Example</title>
+    <screen>
+odf2xhtml odf-file
+</screen>
+  </refsect1>
+  <refsect1>
+    <title>See Also</title>
+    <para><command>odf2mht</command>(1)</para>
+  </refsect1>
+</refentry>

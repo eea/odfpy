@@ -1,0 +1,38 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+# Copyright (C) 2007 Søren Roug, European Environment Agency
+#
+# This is free software.  You may redistribute it under the terms
+# of the Apache license and the GNU General Public License Version
+# 2 or at your option any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public
+# License along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+#
+# Contributor(s):
+#
+from odf.odf2xhtml import ODF2XHTML
+import sys
+
+try:
+    from cStringIO import StringIO
+except ImportError:
+    from StringIO import StringIO
+
+if len(sys.argv) != 2:
+    sys.stderr.write("Usage: %s inputfile\n" % sys.argv[0])
+    sys.exit(1)
+
+odhandler = ODF2XHTML()
+try:
+    result = odhandler.odf2xhtml(sys.argv[1]).encode('us-ascii','xmlcharrefreplace')
+except:
+    sys.stderr.write("Unable to open file %s or file is not OpenDocument\n" % sys.argv[1])
+    sys.exit(1)
+sys.stdout.write(result)

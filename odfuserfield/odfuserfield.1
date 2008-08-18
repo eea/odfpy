@@ -1,0 +1,57 @@
+.\" ** You probably do not want to edit this file directly **
+.\" It was generated using the DocBook XSL Stylesheets (version 1.69.1).
+.\" Instead of manually editing it, you probably should edit the DocBook XML
+.\" source for it and then use the DocBook XSL Stylesheets to regenerate it.
+.TH "ODFUSERFIELD" "1" "12/14/2006" "" ""
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.SH "NAME"
+odfuserfield \- List or change the user\-field declarations in an ODF file
+.SH "SYNOPSIS"
+.HP 13
+\fBodfuserfield\fR [\-l] [\-L] [\-x\ \fIfield\fR...] [\-X\ \fIfield\fR...] [\-s\ \fIfield:value\fR...] [\-o\ \fIpath\fR] \fIpath\fR
+.SH "DESCRIPTION"
+.PP
+\fBOdfuserfield\fR
+is a program that will list or change the user variable declarations in an OpenDocument file. There are two kinds of variables in OpenDocument. Simple variables can take different values at different positions, throughout a document. User variables have the same value throughout a document. Due to the latter's global nature it is safe to change them with an external application.
+.PP
+Use
+\fBodfuserfield\fR
+to fill out form letters before printing or giving to the user.
+.PP
+"Path" is assumed to be an OpenDocument file of text, spreadsheet or presentation type.
+.SH "OPTIONS"
+.TP
+\-l
+List (extract) all known user\-fields.
+.TP
+\-L
+List (extract) all known user\-fields with type and value.
+.TP
+\-x \fIfield\fR
+Extract the contents of this field from the file.
+.TP
+\-X \fIfield\fR
+Same as \-x, but also preserves/includes the field name and type.
+.TP
+\-s \fIfield:value\fR
+Set the value of an existing user field. The field type will be the same.
+.TP
+\-o \fIpath\fR
+Filename to write modified ODT file to. If no
+\fB\-o\fR
+option is provided, the ODT file will be written to stdout.
+.SH "EXAMPLE"
+.sp
+.nf
+odfuserfield \-L odf\-file
+.fi
+.SH "SEE ALSO"
+.PP
+\fBformail\fR(1),
+\fBid3tag\fR(1)
+.SH "TODO"
+.PP
+Implement formulas. See OpenDocument v1.0 specification section 6.3.5. This requires a different syntax for \-s arguments.

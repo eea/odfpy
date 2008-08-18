@@ -1,0 +1,273 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+# Copyright (C) 2007 Søren Roug, European Environment Agency
+#
+# This is free software.  You may redistribute it under the terms
+# of the Apache license and the GNU General Public License Version
+# 2 or at your option any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public
+# License along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+#
+# Contributor(s):
+#
+import zipfile, time, sys, getopt, mimetypes, tempfile
+from urllib2 import urlopen, quote, unquote
+from urlparse import urlunsplit, urlsplit
+import xml.sax, xml.sax.saxutils
+from odf.namespaces import XLINKNS, DRAWNS
+from odf.odfmanifest import manifestlist
+from odf.manifest import Manifest, FileEntry
+try:
+    from cStringIO import StringIO
+except ImportError:
+    from StringIO import StringIO
+
+sys.tracebacklimit = 0
+
+OUTENCODING="utf-8"
+
+UNIXPERMS = 0100644 << 16L  # -rw-r--r--
+
+# Manifest list
+mlist = {}
+
+# Variable to count the number of retrieval failures
+failures = 0
+
+# Set to one if quiet behaviour is wanted
+quiet = 0
+
+# If set will write every url to import
+verbose = 0
+
+# Dictionary with new pictures. Key is original file path
+# Item is a tuple of ( newfilename, metatype, image )
+newpictures = {}
+
+def importpicture(href):
+    """ Add the picture to the ZIP file
+        Returns the new path name to the file in the zip archive
+        If it is unable to import, then it returns the original href
+        Sideeffect: add line to manifest
+    """
+    global newpictures, failures, verbose
+
+    # Check that it is not already in the manifest
+    if mlist.has_key(href): return href
+
+    image = None
+    if verbose: print >>sys.stderr, "Importing", href,
+    if href[:7] == "http://" or href[:8] == "https://" or href[:6] == "ftp://":
+        # There is a bug in urlopen: It can't open urls with non-ascii unicode
+        # characters. Convert to UTF-8 and then use percent encoding
+        try:
+            goodhref = href.encode('ascii')
+        except:
+            o = list(urlsplit(href))
+            o[2] = quote(o[2].encode('utf-8'))
+            goodhref = urlunsplit(o)
+        if newpictures.has_key(goodhref):
+            if verbose: print >>sys.stderr, "already imported"
+            return newpictures[goodhref][0]  # Already imported
+        try:
+            f = urlopen(goodhref)
+            image = f.read()
+            headers = f.info()
+            f.close()
+            # Get the mimetype from the headerlines
+            c_t = headers['Content-Type'].split(';')[0].strip()
+            if c_t: mediatype = c_t.split(';')[0].strip()
+            if verbose: print >>sys.stderr, "OK"
+        except:
+            failures += 1
+            if verbose: print >>sys.stderr, "failed"
+            return href
+        # Remove query string
+        try: href= href[:href.rindex('?')]
+        except: pass
+        try:
+            lastslash = href[href.rindex('/'):]
+            ext = lastslash[lastslash.rindex('.'):]
+        except: ext = mimetypes.guess_extension(mediatype)
+    # Everything is a simple path.
+    else:
+        goodhref = href
+        if href[:3] == '../':
+            if directory is None:
+                goodhref = unquote(href[3:])
+            else:
+                goodhref = unquote(directory + href[2:])
+        if newpictures.has_key(goodhref):
+            if verbose: print >>sys.stderr, "already imported"
+            return newpictures[goodhref][0]  # Already imported
+        mediatype, encoding = mimetypes.guess_type(goodhref)
+        if mediatype is None:
+            mediatype = ''
+            try: ext = goodhref[goodhref.rindex('.'):]
+            except: ext=''
+        else:
+            ext = mimetypes.guess_extension(mediatype)
+        try:
+            image = file(goodhref).read()
+            if verbose: print >>sys.stderr, "OK"
+        except:
+            failures += 1
+            if verbose: print >>sys.stderr, "failed"
+            return href
+    # If we have a picture to import, the image variable contains it
+    # and manifestfn, ext and mediatype has a value
+    if image:
+        manifestfn = "Pictures/imported%d%s" % (len(mlist), str(ext))
+        mlist[manifestfn] = {'media-type': mediatype, 'full-path': manifestfn }
+        newpictures[goodhref] = (manifestfn, mediatype, image)
+        return manifestfn
+
+    if verbose: print >>sys.stderr, "not imported"
+    return href
+
+def makemanifest():
+    import cStringIO
+    xml=cStringIO.StringIO()
+    m = Manifest()
+    for key, item in mlist.items():
+        f = FileEntry(mediatype=item['media-type'], fullpath=item['full-path'])
+        m.addElement(f)
+    m.toXml(0,xml)
+    return xml.getvalue()
+
+def exitwithusage(exitcode=2):
+    """ Print out usage information and exit """
+    print >>sys.stderr, "Usage: %s [-q] [-v] [-o output] [inputfile]" % sys.argv[0]
+    print >>sys.stderr, "\tInputfile must be OpenDocument format"
+    sys.exit(exitcode)
+
+base = xml.sax.saxutils.XMLGenerator
+
+class odfcontentparser(base):
+
+    def __init__(self):
+        self._mimetype = ''
+        self.output = StringIO()
+        self.seenfields = {}
+        base.__init__(self, self.output, OUTENCODING)
+
+    def startElementNS(self, name, qname, attrs):
+        if name == (DRAWNS,u'image'):
+            href = attrs.get((XLINKNS,u'href'))
+            newhref = importpicture(href)
+            attrs = dict(attrs.items())
+            # Take advantage that startElementNS can take a normal
+            # dict as attrs
+            attrs[(XLINKNS,u'href')] = newhref
+
+        base.startElementNS(self, name, qname, attrs)
+
+    def characters(self, content):
+        base.characters(self, content)
+
+    def content(self):
+        return self.output.getvalue()
+
+now = time.localtime()[:6]
+outputfile = None
+writefile = True
+
+try:
+    opts, args = getopt.getopt(sys.argv[1:], "qvo:")
+except getopt.GetoptError:
+    exitwithusage()
+
+for o, a in opts:
+    if o == "-o":
+        outputfile = a
+        writefile = True
+    if o == "-q":
+        quiet = 1
+    if o == "-v":
+        verbose = 1
+
+odfs = odfcontentparser()
+parser = xml.sax.make_parser()
+parser.setFeature(xml.sax.handler.feature_namespaces, 1)
+parser.setContentHandler(odfs)
+
+if len(args) == 0:
+    try:
+        zin = zipfile.ZipFile(sys.stdin,'r')
+        directory = None
+    except:
+        print >>sys.stderr, "Couldn't open OpenDocument file"
+        exitwithusage()
+else:
+    fn = args[0]
+    if not zipfile.is_zipfile(fn):
+        exitwithusage()
+    dirinx = max(fn.rfind('\\'), fn.rfind('/'))
+    if dirinx >= 0: directory = fn[:dirinx]
+    else: directory = "."
+
+    zin = zipfile.ZipFile(fn, 'r')
+
+manifest = zin.read('META-INF/manifest.xml')
+mlist = manifestlist(manifest)
+content = zin.read('content.xml')
+parser.parse(StringIO(content))
+
+if writefile:     # Better to check that there are new pictures
+    if outputfile is None:
+        tempfp = tempfile.TemporaryFile()
+        zout = zipfile.ZipFile(tempfp,"w")
+    elif outputfile == '-':
+        zout = zipfile.ZipFile(sys.stdout,"w")
+    else:
+        zout = zipfile.ZipFile(outputfile,"w")
+
+
+    # Loop through the input zipfile and copy the content to the output until we
+    # get to the content.xml. Then substitute.
+    for zinfo in zin.infolist():
+        if zinfo.filename == "content.xml":
+            # Write content
+            zi = zipfile.ZipInfo("content.xml", now)
+            zi.compress_type = zipfile.ZIP_DEFLATED
+            zi.external_attr = UNIXPERMS
+            zout.writestr(zi,odfs.content() )
+        elif zinfo.filename == "META-INF/manifest.xml":
+            zi = zipfile.ZipInfo("META-INF/manifest.xml", now)
+            zi.compress_type = zipfile.ZIP_DEFLATED
+            zi.external_attr = UNIXPERMS
+            zout.writestr(zi,makemanifest() )
+        else:
+            payload = zin.read(zinfo.filename)
+            zout.writestr(zinfo, payload)
+    # Add the new pictures
+    for oldpath,picturetpl in newpictures.items():
+        zi = zipfile.ZipInfo(picturetpl[0], now)
+        zi.compress_type = zipfile.ZIP_DEFLATED
+        zi.external_attr = UNIXPERMS
+        zout.writestr(zi, picturetpl[2])
+
+    zout.close()
+zin.close()
+
+# Write the result back into the source file
+if outputfile is None:
+    tempfp.seek(0)    # Rewind
+    savefp = file(fn,'w')
+    data = tempfp.read()
+    while data:
+        savefp.write(data)
+        data = tempfp.read()
+    tempfp.close()
+    savefp.close()
+
+if quiet == 0 and failures > 0:
+    print >>sys.stderr, "Couldn't import %d image(s)" % failures
+sys.exit( int(failures > 0) )

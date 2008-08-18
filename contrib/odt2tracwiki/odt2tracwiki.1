@@ -1,0 +1,25 @@
+.\" ** You probably do not want to edit this file directly **
+.\" It was generated using the DocBook XSL Stylesheets (version 1.69.1).
+.\" Instead of manually editing it, you probably should edit the DocBook XML
+.\" source for it and then use the DocBook XSL Stylesheets to regenerate it.
+.TH "ODT2TRACWIKI" "1" "02/07/2007" "" ""
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.SH "NAME"
+odt2tracwiki \- Convert ODD to Trac Wiki format
+.SH "SYNOPSIS"
+.HP 13
+\fBodt2tracwiki\fR \fIpath\fR
+.SH "DESCRIPTION"
+.PP
+\fBodt2tracwiki\fR
+is a program that will create a Trac Wiki format. See http://trac.edgewall.org/. I expect to add a feature that will upload the page with images to a Trac Wiki page using XML\-RPC. http://trac\-hacks.org/wiki/XmlRpcPlugin
+.PP
+"Path" is assumed to be an OpenDocument file of text, spreadsheet or presentation type.
+.SH "EXAMPLE"
+.sp
+.nf
+odt2tracwiki odf\-file
+.fi

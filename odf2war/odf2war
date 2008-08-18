@@ -1,0 +1,61 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+# Copyright (C) 2006 Søren Roug, European Environment Agency
+#
+# This is free software.  You may redistribute it under the terms
+# of the Apache license and the GNU General Public License Version
+# 2 or at your option any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public
+# License along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+#
+# Contributor(s):
+#
+from odf.odf2xhtml import ODF2XHTML
+import tarfile
+import zipfile
+import sys
+from time import time
+
+try:
+    from cStringIO import StringIO
+except ImportError:
+    from StringIO import StringIO
+
+if len(sys.argv) != 3:
+    sys.stderr.write("Usage: %s inputfile outputfile\n" % sys.argv[0])
+    sys.exit(1)
+
+now = long(time())
+odhandler = ODF2XHTML()
+result = odhandler.odf2xhtml(sys.argv[1]).encode('us-ascii','xmlcharrefreplace')
+tar = tarfile.open(sys.argv[2], "w:gz")
+tarinfo = tarfile.TarInfo()
+tarinfo.name = 'index.html'
+tarinfo.uid = 501
+tarinfo.gid = 100
+tarinfo.size = len(result)
+tarinfo.mtime = now
+#tarinfo.uname = "johndoe"
+#tarinfo.gname = "fake"
+tar.addfile(tarinfo, StringIO(result))
+z = zipfile.ZipFile(sys.argv[1])
+for zinfo in z.infolist():
+    if zinfo.filename[0:9] == 'Pictures/':
+        tarinfo = tarfile.TarInfo()
+        tarinfo.name = zinfo.filename
+        tarinfo.uid = 501
+        tarinfo.gid = 456
+        tarinfo.size = zinfo.file_size
+        tarinfo.mtime = now
+        #tarinfo.uname = "johndoe"
+        #tarinfo.gname = "fake"
+        tar.addfile(tarinfo, StringIO(z.read(zinfo.filename)))
+z.close()
+tar.close()

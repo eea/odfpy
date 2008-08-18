@@ -1,0 +1,85 @@
+This is a collection of utility programs written in Python to manipulate
+OpenDocument files.
+
+How to proceed: Each application has its own directory. In there, look
+at the manual pages. The Python-based tools need the odf library. Just
+make a symbolic link like this: ln -s ../odf odf
+... or type: make
+
+For your own use of the odf library, see api-for-odfpy.odt
+
+                             -o- INSTALLATION -o-
+
+First you get the package.
+
+$  svn export http://opendocumentfellowship.com/repos/odfpy/trunk odfpy
+
+$ python setup.py build
+$ su
+# python setup.py install
+
+                             -o- APPLICATIONS -o-
+
+odt2mht is a program that will create a MIME-encapsulated web archive
+(.mht) format that can be read by Internet Explorer. IE6 seems to have
+problems with large MHT files.
+
+mailodf is a program that will create a MIME-encapsulated web archive
+and then sends it as an email.
+
+odt2war is a program that will create a KDE Web Archive (.war) that can be
+read by Konqueror.
+
+ODFFile is a Zope 2.x product that will accept an ODT file, and show it as
+HTML incl.  images. It can optionally put the standard_html_header and
+standard_html_footer around the content.
+
+                            -o- TODO / IDEAS -o-
+
+* html2odf
+  Alex Hudson has been contracted to produce a command-line html2odf 
+  converter. It should include support for images, tables, CSS, etc.
+  He will provide a C# version first, and later a C version.
+
+* odf2pdf
+  A valuable tool, but one that is hard to do. PDF is an immensely
+  popular format, but it's tricky to make PDFs. With an odf2pdf tool
+  available, many developers would use ODF purely for the purpose of
+  generating a PDF later. The latest idea is to hire KOffice 
+  developers and get them to trim down KOffice into a converter.
+
+* pdf2odf
+  This conversion is less likely to produce good results, but it 
+  might be worth a shot. Poppler is a pdf library that can convert 
+  PDF into XML. Maybe we can convert that XML to ODF.
+  http://webcvs.freedesktop.org/poppler/poppler/
+
+* odfclean
+  A command-line program that removes unused automatic styles, 
+  metadata and track-changes. Some companies might like to send all
+  out-going files through odfclean to remove any information they
+  don't want others to see.
+
+* odf2xliff
+  Create XLIFF extraction and merge application. XLIFF is a OASIS file
+  for translations. You extract the text strings, send them to the translator
+  and then import them. It allows you to work on the document in the
+  meantime and only retranslate the changed parts.
+
+* odfdiff
+  A program that can generate a diff between two ODF files. Useful for 
+  SVN commit messages. This is very difficult to do. But see:
+  http://www.manageability.org/blog/stuff/open-source-xml-diff-in-java/view
+  http://freshmeat.net/projects/xmldiff/
+
+* odfsign
+  Sign and verify the signature(s) of an ODF document.
+
+                             -o- REFERENCES -o-
+
+ODF Developers Corner:
+ * Test suite
+ * ODF spec
+ * ODF book
+
+ http://develop.opendocumentfellowship.com/

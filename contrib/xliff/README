@@ -1,0 +1,8 @@
+This script will create a OpenDocument Text out of an XLIFF file.
+The texts to translate are stored on <user-field-decl> elements.
+
+Send the OpenDocument Text to the translator.
+
+You can then extract the translations later with odfuserfields and in
+principle put them back into the original XLIFF file, but this is an
+exercise left to the reader.

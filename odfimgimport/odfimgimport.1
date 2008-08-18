@@ -1,0 +1,45 @@
+.\"     Title: odfimgimport
+.\"    Author: 
+.\" Generator: DocBook XSL Stylesheets v1.73.2 <http://docbook.sf.net/>
+.\"      Date: 02/10/2008
+.\"    Manual: 
+.\"    Source: 
+.\"
+.TH "ODFIMGIMPORT" "1" "02/10/2008" "" ""
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.SH "NAME"
+odfimgimport - Import external images
+.SH "SYNOPSIS"
+.HP 13
+\fBodfimgimport\fR [\-q] [\-o\ \fIoutputfile\fR] [\fIinputfile\fR]
+.SH "DESCRIPTION"
+.PP
+If you copy and paste html from your webbrowser to your word processor, the pictures in the pasted text will still load the images from the Internet\. This script will import all images into the OpenDocument file\.
+.PP
+If you don\'t provide an input file, the program will read from stdin\. If the program reads from stdin, it might not know how to resolve relative filenames\. If you don\'t provide an output file, the program will import the pictures into the input file\.
+.SH "OPTIONS"
+.PP
+\-q
+.RS 4
+If there are images that can\'t be imported, odfimgimport will write how many has failed\. The \-q flag will prevent that\.
+.RE
+.PP
+\-v
+.RS 4
+Verbose: Prints the URL of every image it tries to import and the result\.
+.RE
+.PP
+\-o \fIoutputfile\fR
+.RS 4
+The file to save the output to\. "\-" is stdout\. Defaults to the input file\.
+.RE
+.SH "EXAMPLE"
+.sp
+.RS 4
+.nf
+odfimgimport \-v \-o newfile\.odt oldfile\.odt
+.fi
+.RE

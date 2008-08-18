@@ -1,0 +1,43 @@
+.\"     Title: mailodf
+.\"    Author: 
+.\" Generator: DocBook XSL Stylesheets v1.73.2 <http://docbook.sf.net/>
+.\"      Date: 07/27/2008
+.\"    Manual: 
+.\"    Source: 
+.\"
+.TH "MAILODF" "1" "07/27/2008" "" ""
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.SH "NAME"
+mailodf - Email ODF file as HTML archive
+.SH "SYNOPSIS"
+.HP 8
+\fBmailodf\fR [\-f\ \fIfrom\fR] [\-s\ \fIsubject\fR] \fIinputfile\fR \fIrecipients\fR...
+.SH "DESCRIPTION"
+.PP
+mailodf is a program that will create a MIME\-encapsulated web archive and then sends it as an email\. Most email programs that understand HTML understands this format\.
+.PP
+"Inputfile" is assumed to be an OpenDocument file of text, spreadsheet or presentation type\.
+.SH "REFERENCES"
+.IP "" 4
+HTTRACK (http://www\.httrack\.com/) can create such archives with the \-%M option\.
+.IP "" 4
+http://en\.wikipedia\.org/wiki/MHTML
+.IP "" 4
+http://www\.dsv\.su\.se/~jpalme/ietf/mhtml\.html
+.IP "" 4
+http://users\.otenet\.gr/~geosp/kmhtconvert/
+.IP "" 4
+http://www\.faqs\.org/rfcs/rfc2557\.html
+.SH "EXAMPLE"
+.sp
+.RS 4
+.nf
+mailodf \-f lars\.oppermann@sun\.com \-s "F\.Y\.I" odf\-file
+.fi
+.RE
+.SH "SEE ALSO"
+.PP
+odf2mht

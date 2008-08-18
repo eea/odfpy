@@ -1,0 +1,423 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xliff SYSTEM "http://www.oasis-open.org/committees/xliff/documents/xliff.dtd">
+<!-- XLIFF Format Copyright © OASIS Open 2001-2003 -->
+<xliff version="1.0">
+<file
+original="global.txt"
+product-name="Honoloko genxliff"
+product-version="1.0"
+datatype="plaintext"
+source-language="en"
+target-language="da"
+date="2005-08-24T21:13:34Z"
+>
+<header>
+</header>
+<body>
+ <trans-unit id="intro">
+  <source>Welcome to our Island of Honoloko.</source>
+  <target>Velkommen til vores ø, Honoloko.</target>
+ </trans-unit>
+ <trans-unit id="introHealth">
+  <source>I am the Health Machine.</source>
+  <target>Jeg er Sundheds-maskinen.</target>
+ </trans-unit>
+ <trans-unit id="introEnergy">
+  <source>I am the Energy Robot.</source>
+  <target>Jeg er Energirobotten.</target>
+ </trans-unit>
+ <trans-unit id="introResources">
+  <source>I am the Resources Creature.</source>
+  <target>Jeg er Ressource-dyret.</target>
+ </trans-unit>
+ <trans-unit id="introFitness">
+  <source>I am the Fitness Bunny.</source>
+  <target>Jeg er Kondikaninen.</target>
+ </trans-unit>
+ <trans-unit id="introGroup">
+  <source>We will help you around Honoloko by giving you tips. Enjoy your time here, but be careful what you decide to do. Your actions will affect the environment and the health of our Island and of the people that live here.</source>
+  <target>Vi vil hjælpe dig rundt på Honoloko ved at give dig tips. Hav det sjovt her, men pas på, hvad du beslutter dig for at gøre. Dine handlinger vil påvirke miljøet og sundheden for øen og dens indbyggere.</target>
+ </trans-unit>
+ <trans-unit id="charChoose1">
+  <source>Would you like to be a breakdancer or a kung-fu master?</source>
+  <target>Vil du være breakdancer eller kung-fu mester?</target>
+ </trans-unit>
+ <trans-unit id="charChoose2">
+  <source>Would you like to be a Boy/Girl?</source>
+  <target>Vil du være dreng eller pige?</target>
+ </trans-unit>
+ <trans-unit id="charChoose3">
+  <source>Choose your name</source>
+  <target>Vælg dit navn</target>
+ </trans-unit>
+ <trans-unit id="instructions1">
+  <source>Hi</source>
+  <target>Hej</target>
+ </trans-unit>
+ <trans-unit id="instructions2">
+  <source>You are about to depart for our beautiful Island of Honoloko. Remember, answer the questions and think about the people and environment. Keep an eye on the gameboard so you can see the effect of your decisions.</source>
+  <target>Du skal snart af sted til vores smukke ø, Honoloko. Husk på at besvare spørgsmålene og at tænke på folk og miljø. Hold øje med spillebrættet, så du kan se dine beslutningers virkninger.</target>
+ </trans-unit>
+ <trans-unit id="l2">
+  <source>Choose which building you would like to build on the board:</source>
+  <target>Vælg, hvilken bygning du vil bygge på spillebrættet:</target>
+ </trans-unit>
+ <trans-unit id="l2c1">
+  <source>Sewage Plant</source>
+  <target>Rensningsanlæg</target>
+ </trans-unit>
+ <trans-unit id="l2c2">
+  <source>Luxury Hotel</source>
+  <target>Luksushotel</target>
+ </trans-unit>
+ <trans-unit id="l2c3">
+  <source>Car Factory</source>
+  <target>Bilfabrik</target>
+ </trans-unit>
+ <trans-unit id="l1">
+  <source>Choose how you would like to travel around the board:</source>
+  <target>Vælg hvordan du vil bevæge dig rundt på spillebrættet:</target>
+ </trans-unit>
+ <trans-unit id="l1c1">
+  <source>Car</source>
+  <target>Bil</target>
+ </trans-unit>
+ <trans-unit id="l1c2">
+  <source>Bus</source>
+  <target>Bus</target>
+ </trans-unit>
+ <trans-unit id="l1c3">
+  <source>Bike</source>
+  <target>Cykel</target>
+ </trans-unit>
+ <trans-unit id="l3">
+  <source>Choose how you would like to spend your time:</source>
+  <target>Vælg hvordan du vil bruge din tid:</target>
+ </trans-unit>
+ <trans-unit id="l3c1">
+  <source>Play</source>
+  <target>Lege</target>
+ </trans-unit>
+ <trans-unit id="l3c2">
+  <source>Laze</source>
+  <target>Dovne</target>
+ </trans-unit>
+ <trans-unit id="l3c3">
+  <source>Explore</source>
+  <target>Udforske</target>
+ </trans-unit>
+ <trans-unit id="score90to100">
+  <source>Well Done! You scored really well. You are obviously a master at breakdance/kung-fu and your coolness has helped you make the right decisions. The healthy, fit, happy people of lucious Honoloko throw a party in your honour. Please come back soon!</source>
+  <target>Godt gået! Du scorede mange points. Du er åbenbart mester i breakdance/kung-fu, og det har hjulpet dig til at træffe de rigtige beslutninger. De sunde, veltrænede og lykkelige folk på Honoloko holder en fest til ære for dig. Kom snart igen!</target>
+ </trans-unit>
+ <trans-unit id="score80to89">
+  <source>Excellent! You scored really well. Your advanced handling of the resources and environment has made the people of Honoloko very healthy and fit. Keep them happy and come back soon!</source>
+  <target>Glimrende! Du scorede mange points. Din dygtige håndtering af ressourcerne og miljøet har gjort folkene på Honoloko meget raske og veltrænede. Bliv ved med at gøre dem glade og kom snart igen!</target>
+ </trans-unit>
+ <trans-unit id="score70to79">
+  <source>Great. It seems like you know what you are doing when it comes to handling Honoloko's resources and energy. The island's people are fit and healthy. They want you to come back!</source>
+  <target>Flot. Du lader til at have styr på at håndtere Honolokos ressourcer og energi. Øens indbyggere er i god form og raske. De vil have, at du kommer tilbage!</target>
+ </trans-unit>
+ <trans-unit id="score60to69">
+  <source>Good. You scored above average, but you need to spend more attention on how you care for the environment and your health. You should practice more by playing again.</source>
+  <target>Godt. Du scorede flere points end gennemsnittet, men du skal være mere opmærksom på, hvordan du passer på miljøet og dit helbred. Du burde øve dig mere ved at spille spillet igen.</target>
+ </trans-unit>
+ <trans-unit id="score50to59">
+  <source>You scored OK but you did some damage too. You haven't improved our Island either and there is a lot you could do better. The people of Honoloko allow you to leave the Island without paying for the damage you have done. Come back to put it right!</source>
+  <target>Du klarede dig godt, men du forvoldte også nogen skade. Du har ikke forbedret øen, og der er meget, du kunne gøre bedre. Folkene på Honoloko vil lade dig forlade øen uden at betale for den skade, som du forvoldte. Kom tilbage og ret bod på skaden!</target>
+ </trans-unit>
+ <trans-unit id="score40to49">
+  <source>You scored OK but you did some damage too. You haven't improved our Island either and there is a lot you could do better. The people of Honoloko allow you to leave the Island without paying for the damage you have done. Come back to put it right!</source>
+  <target>Du klarede dig godt, men du forvoldte også nogen skade. Du har ikke forbedret øen, og der er meget, du kunne gøre bedre. Folkene på Honoloko vil lade dig forlade øen uden at betale for den skade, som du forvoldte. Kom tilbage og ret bod på skaden!</target>
+ </trans-unit>
+ <trans-unit id="score30to39">
+  <source>You scored below average and as a result the island is less healthy and more polluted than when you arrived. People are unhealthy and are wasting resources. You should come back to put it right.</source>
+  <target>Du scorede mindre end gennemsnittet, og som følge deraf er øen mindre sund og mere forurenet, end da du ankom. Folk er usunde og spilder ressourcer. Du burde komme tilbage og rette bod på skaden.</target>
+ </trans-unit>
+ <trans-unit id="score20to29">
+  <source>You scored pretty badly. You have managed to cause a lot of damage to the health and environment of Honoloko and its people. The people demand that you come back and repair the damage you inflicted on them. Click to play again.</source>
+  <target>Du scorede temmelig dårligt. Du har forvoldt stor skade på Honoloko og dens indbyggeres helbred og miljø. Folkene forlanger, at du kommer tilbage og udbedrer den skade, du har forvoldt dem. Klik for at spille igen.</target>
+ </trans-unit>
+ <trans-unit id="score10to19">
+  <source>Are you being serious! Is this the best you can do!? You've caused pollution and wasted our resources, and Honoloko is in a complete mess!! You need to change your attitude now. The unhealthy, overweight people of Honoloko won't let you leave the island. You have to stay and clear up the mess! Click to play again.</source>
+  <target>Tager du det overhovedet alvorligt? Er det virkelig dit bedste? Du har forårsaget forurening og spildt vores ressourcer. Honoloko er i suppedasen! Du må straks ændre din holdning. De usunde, overvægtige folk på Honoloko vil ikke lade dig forlade øen. Du må blive og rydde op i redeligheden! Klik for at spille igen.</target>
+ </trans-unit>
+ <trans-unit id="score0to09">
+  <source>You should be locked away! Armageddon is now upon us. You completely destroyed all the resources on Honoloko and its people are miserably unhealthy. How long do you think will you survive without food or water? Click to play again.</source>
+  <target>Du burde spærres inde! Dommedag er over os. Du har fuldstændig ødelagt alle ressourcer på Honoloko, og øens indbyggere er jammerligt usunde. Hvor længe tror du, du kan overleve uden mad og drikke? Klik for at spille igen.</target>
+ </trans-unit>
+ <trans-unit id="scoretop100">
+  <source>To enter our high score table and for the opportunity to win a prize enter your email and select your country here. Click here if you are not on line</source>
+  <target>Indtast din e-mail-adresse og vælg dit land her, hvis du vil på listen over topscorere og vinde en præmie. Klik her, hvis du ikke er tilsluttet internettet.</target>
+ </trans-unit>
+ <trans-unit id="scoreTop100Offline">
+  <source>Here is your code, write it down and when you are next online visit www.honoloko.com/score.php and enter your code.</source>
+  <target>Her er din adgangskode. Skriv den ned. Besøg www.honoloko.com/score.php næste gang du er på nettet, og indtast din kode.</target>
+ </trans-unit>
+ <trans-unit id="enviroScoreRes9to10">
+  <source>Congratulations, You've helped us use our resources wisely! Come back with your friends.</source>
+  <target>Tillykke. Du har hjulpet os med at bruge vores ressourcer fornuftigt! Kom tilbage med dine venner.</target>
+ </trans-unit>
+ <trans-unit id="enviroScoreRes7to8">
+  <source>Thanks, you've helped us keep on using our resources quite well!</source>
+  <target>Tak. Du har hjulpet os med at bruge vores ressourcer ganske godt!</target>
+ </trans-unit>
+ <trans-unit id="enviroScoreRes5to6">
+  <source>Your use of resources is average and can be improved.</source>
+  <target>Din anvendelse af ressourcer er gennemsnitlig og kan forbedres.</target>
+ </trans-unit>
+ <trans-unit id="enviroScoreRes3to4">
+  <source>Using so much of Honoloko's resources has proved disastrous. Better shape up next time.</source>
+  <target>Brug af så mange af Honolokos ressourcer har været katastrofalt. Tag dig sammen næste gang.</target>
+ </trans-unit>
+ <trans-unit id="enviroScoreRes0to2">
+  <source>You managed to waste all of Honoloko's natural resources in your short stay.</source>
+  <target>Det lykkedes dig at spilde alle Honolokos naturressourcer under dit korte ophold.</target>
+ </trans-unit>
+ <trans-unit id="enviroScoreEnergy9to10">
+  <source>Well done, you didn't waste any energy and you helped our environment!</source>
+  <target>Godt gået! Du spildte ingen energi, og du hjalp miljøet.</target>
+ </trans-unit>
+ <trans-unit id="enviroScoreEnergy7to8">
+  <source>Good work, you managed to use energy sensibly.</source>
+  <target>Flot! Du forvaltede energien fornuftigt.</target>
+ </trans-unit>
+ <trans-unit id="enviroScoreEnergy5to6">
+  <source>You could have done better, but at least you didn't blow the power station up!</source>
+  <target>Du kunne have klaret dig bedre, men du sprang i det mindste ikke kraftværket i luften!</target>
+ </trans-unit>
+ <trans-unit id="enviroScoreEnergy3to4">
+  <source>You wasted a huge amount of energy while you were here.</source>
+  <target>Du spildte en enorm mængde energi, mens du var her.</target>
+ </trans-unit>
+ <trans-unit id="enviroScoreEnergy0to2">
+  <source>You wasted so much energy that you blew up our power station. Thanks a lot!</source>
+  <target>Du spildte så megen energi, at kraftværket sprængte i luften. Tak skal du have!</target>
+ </trans-unit>
+ <trans-unit id="enviroScoreFit9to10">
+  <source>You are super fit! We all fancy you!</source>
+  <target>Du er i topform! Vi er alle vilde med dig!</target>
+ </trans-unit>
+ <trans-unit id="enviroScoreFit7to8">
+  <source>You are quite fit. But visit Honoloko again and try to get fitter!</source>
+  <target>Du er i god form. Besøg Honoloko igen og prøv at forbedre din kondi!</target>
+ </trans-unit>
+ <trans-unit id="enviroScoreFit5to6">
+  <source>You are doing ok, but there's room for improvement.</source>
+  <target>Du klarer dig fint, men der er plads til forbedring.</target>
+ </trans-unit>
+ <trans-unit id="enviroScoreFit3to4">
+  <source>You're not fit enough. Walking to the fridge and back is not real exercise.</source>
+  <target>Din kondi er for dårlig. At gå hen til køleskabet og tilbage igen tæller ikke som idræt.</target>
+ </trans-unit>
+ <trans-unit id="enviroScoreFit0to2">
+  <source>You are super lazy. Did you spend the whole day sitting in front of the TV?</source>
+  <target>Du er superdoven. Sad du foran fjernsynet hele dagen?</target>
+ </trans-unit>
+ <trans-unit id="enviroScoreHealth9to10">
+  <source>You are very healthy. You probably eat well and don't smoke. Keep it up!</source>
+  <target>Du er ved godt helbred. Du spiser sikkert godt og ryger ikke. Bliv ved med det!</target>
+ </trans-unit>
+ <trans-unit id="enviroScoreHealth7to8">
+  <source>You are in good health. Keep it up.</source>
+  <target>Du er ved godt helbred. Hold det ved lige.</target>
+ </trans-unit>
+ <trans-unit id="enviroScoreHealth5to6">
+  <source>You don't look well. You could do better</source>
+  <target>Du ser ikke for sund ud. Det kunne du forbedre.</target>
+ </trans-unit>
+ <trans-unit id="enviroScoreHealth3to4">
+  <source>You are pretty unhealthy. Shape up!</source>
+  <target>Du er temmelig usund. Se at komme i form!</target>
+ </trans-unit>
+ <trans-unit id="enviroScoreHealth0to2">
+  <source>Are you still breathing?</source>
+  <target>Trækker du stadig vejret?</target>
+ </trans-unit>
+ <trans-unit id="extendedInstructions1">
+  <source>Our Island of Honoloko is very similar to the real world, where your actions really do make a difference to your surroundings. The effects of your actions are immediately visible.</source>
+  <target>Vores ø, Honoloko, minder meget om den virkelige verden, hvor dine handlinger har indflydelse på dine omgivelser. Dine handlingers virkninger kan ses med det samme.</target>
+ </trans-unit>
+ <trans-unit id="extendedInstructions2">
+  <source>The aim of the game is to make decisions that most improve the health and environment on Honoloko.</source>
+  <target>Formålet med spillet er at forbedre helbredet og miljøet på Honoloko.</target>
+ </trans-unit>
+ <trans-unit id="extendedInstructions3">
+  <source>If your decisions score well in Resources or Energy you improve the Environment. When Health or Fitness scores go up or down, you see the Health of the people who live on Honoloko getting better or worse. Remember a better environment means healthier people.</source>
+  <target>Hvis dine beslutninger giver mange ressource- og energipoints, forbedrer du miljøet. Når pointene for helbred og kondition går op eller ned, ser du, hvordan folks helbred på Honoloko bliver bedre eller værre. Husk på, at et bedre miljø betyder sundere mennesker.</target>
+ </trans-unit>
+ <trans-unit id="extendedInstructions4">
+  <source>Keep an eye on the island, where you will see changes taking place according to your decisions.</source>
+  <target>Hold øje med øen, hvor du kan se forandringer afhængigt af dine beslutninger.</target>
+ </trans-unit>
+ <trans-unit id="extendedInstructions5">
+  <source>The scores show up in the billboards beside the road, and the colour of the billboard shows how you are doing. Red means you are doing badly in that sector, orange means average, and green means really good.</source>
+  <target>Dine points kan aflæses på pointtavlerne ved vejsiden, og tavlens farve viser, hvor godt du klarer dig. Rødt betyder, at du klarer dig dårligt i den sektor, orange betyder gennemsnitligt, og grønt betyder rigtig godt.</target>
+ </trans-unit>
+ <trans-unit id="extendedInstructions6">
+  <source>Your total score appears at the end of the game with your scores for each of the four sections.</source>
+  <target>Dine samlede points og dine points for hver af de fire sektioner kan ses, når spillet er forbi.</target>
+ </trans-unit>
+ <trans-unit id="topScoreboard">
+  <source>Top Scoreboard</source>
+  <target>Topscorertavle</target>
+ </trans-unit>
+ <trans-unit id="top100Scoreboard">
+  <source>Top 100 Scoreboard</source>
+  <target>Topscorertavle med de 100 bedste</target>
+ </trans-unit>
+ <trans-unit id="topScorers">
+  <source>These are the top scorers from Honoloko Island. You can win a prize if you get onto this board. If your name is drawn we will contact you so you can claim your prize.</source>
+  <target>Her er topscorerne fra øen Honoloko. Du kan vinde en præmie, hvis du kommer med på tavlen. Hvis dit navn bliver udtrukket, kontakter vi dig, så du kan få din præmie.</target>
+ </trans-unit>
+ <trans-unit id="topScoresFrom">
+  <source>Top scores from</source>
+  <target>Topscoring fra</target>
+ </trans-unit>
+ <trans-unit id="tellAFriend">
+  <source>Tell a friend</source>
+  <target>Fortæl en ven om det</target>
+ </trans-unit>
+ <trans-unit id="tellAFriendNotes">
+  <source>You completed the game. Bring a friend here and see if you can score higher than them!</source>
+  <target>Du fuldførte spillet. Tag en ven med og se, om du kan få flere points end ham/hende.</target>
+ </trans-unit>
+ <trans-unit id="playAgain">
+  <source>Play Again</source>
+  <target>Spil igen</target>
+ </trans-unit>
+ <trans-unit id="totalScore">
+  <source>Total Score</source>
+  <target>Samlet scoring</target>
+ </trans-unit>
+ <trans-unit id="volume">
+  <source>Volume</source>
+  <target>Lydstyrke</target>
+ </trans-unit>
+ <trans-unit id="on">
+  <source>On</source>
+  <target>Tænd</target>
+ </trans-unit>
+ <trans-unit id="off">
+  <source>Off</source>
+  <target>Sluk</target>
+ </trans-unit>
+ <trans-unit id="homePage">
+  <source>Homepage</source>
+  <target>Hjemmeside</target>
+ </trans-unit>
+ <trans-unit id="credits">
+  <source>Credits</source>
+  <target>Rulletekst</target>
+ </trans-unit>
+ <trans-unit id="inst">
+  <source>Instructions</source>
+  <target>Instrukser</target>
+ </trans-unit>
+ <trans-unit id="audioControls">
+  <source>Audio Controls</source>
+  <target>Lydstyring</target>
+ </trans-unit>
+ <trans-unit id="creditsText1">
+  <source>European Environment Agency</source>
+  <target>Det Europæiske Miljøagentur</target>
+ </trans-unit>
+ <trans-unit id="creditsText2">
+  <source>Produced by</source>
+  <target>Produceret af</target>
+ </trans-unit>
+ <trans-unit id="creditsText3">
+  <source>The EEA in co-operation with the WHO Regional Office for Europe</source>
+  <target>EEA i samarbejde med WHO's regionale kontor for Europa</target>
+ </trans-unit>
+ <trans-unit id="cancel">
+  <source>Cancel</source>
+  <target>Annullér</target>
+ </trans-unit>
+ <trans-unit id="tellAFriendError">
+  <source>Sorry the email address you gave didn't work properly</source>
+  <target>E-mail-adressen, du angav, virkede desværre ikke</target>
+ </trans-unit>
+ <trans-unit id="tellAFriendSuccess">
+  <source>Your friend has been asked to come to Honoloko</source>
+  <target>Din ven er blevet inviteret til Honoloko</target>
+ </trans-unit>
+ <trans-unit id="tellAFriendsEmailText">
+  <source>Friend's email</source>
+  <target>Vennens e-mail-adresse</target>
+ </trans-unit>
+ <trans-unit id="tellAFriendsNameText">
+  <source>Friend's name</source>
+  <target>Vennens navn</target>
+ </trans-unit>
+ <trans-unit id="yourName">
+  <source>Your name</source>
+  <target>Dit navn</target>
+ </trans-unit>
+ <trans-unit id="next">
+  <source>Next</source>
+  <target>Videre</target>
+ </trans-unit>
+ <trans-unit id="newGameButton">
+  <source>New game</source>
+  <target>Nyt spil</target>
+ </trans-unit>
+ <trans-unit id="scoreboardButton">
+  <source>Scoreboard</source>
+  <target>Pointtavle</target>
+ </trans-unit>
+ <trans-unit id="tellAFriendButton">
+  <source>Tell a Friend</source>
+  <target>Fortæl en ven</target>
+ </trans-unit>
+ <trans-unit id="correctLanguage">
+  <source>Is this the correct language for you?</source>
+  <target>Er det det rette sprog for dig?</target>
+ </trans-unit>
+ <trans-unit id="checkCountryScores">
+  <source>Click on your country name to view the scores of people that are also from the same country.</source>
+  <target>Klik på dit land for at se scoringslisten for folk fra samme land.</target>
+ </trans-unit>
+ <trans-unit id="checkPosition">
+  <source>Click on your score to view what your position is.</source>
+  <target>Klik på din scoring for at se, hvad din stilling er.</target>
+ </trans-unit>
+ <trans-unit id="checkRank">
+  <source>Click on your name to see how you rank in the scoreboard.</source>
+  <target>Klik på dit navn for at se, hvor du er på pointtavlen.</target>
+ </trans-unit>
+ <trans-unit id="feedbackSent">
+  <source>This has been sent successfully.</source>
+  <target>Din besked er blevet sendt.</target>
+ </trans-unit>
+ <trans-unit id="feedbackWait">
+  <source>Please wait for confirmation</source>
+  <target>Vent venligst på bekræftelse</target>
+ </trans-unit>
+ <trans-unit id="continue">
+  <source>Continue</source>
+  <target>Fortsæt</target>
+ </trans-unit>
+ <trans-unit id="country">
+  <source>Country</source>
+  <target>Land</target>
+ </trans-unit>
+ <trans-unit id="email">
+  <source>Email address</source>
+  <target>E-mail-adresse</target>
+ </trans-unit>
+ <trans-unit id="characterName">
+  <source>Your character's name</source>
+  <target>Din figurs navn</target>
+ </trans-unit>
+ <trans-unit id="playerName">
+  <source>Your real name</source>
+  <target>Dit virkelige navn</target>
+ </trans-unit>
+ <trans-unit id="formError">
+  <source>Please check your details and make sure you have spelt your email address correctly and have filled in all the sections.</source>
+  <target>Efterprøv dine detaljer og sørg for, at du har indtastet din e-mail-adresse korrekt og udfyldt alle dele.</target>
+ </trans-unit>
+</body>
+</file>
+</xliff>

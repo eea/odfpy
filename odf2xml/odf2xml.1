@@ -1,0 +1,36 @@
+.\"     Title: odf2xml
+.\"    Author: 
+.\" Generator: DocBook XSL Stylesheets v1.73.2 <http://docbook.sf.net/>
+.\"      Date: 08/05/2008
+.\"    Manual: 
+.\"    Source: odfpy
+.\"
+.TH "ODF2XML" "1" "08/05/2008" "odfpy" ""
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.SH "NAME"
+odf2xml - Create OpenDocument XML file from OD? package
+.SH "SYNOPSIS"
+.HP 8
+\fBodf2xml\fR [\-o\ \fIoutputfile\fR] [\fIinputfile\fR]
+.SH "DESCRIPTION"
+.PP
+OpenDocument can be a complete office document in a single XML file\. The script will take an OpenDocument and create an XML file This is mainly useful XML processors such as XSL transformation\.
+.PP
+"Inputfile" is assumed to be an OpenDocument file\. If there is no inputfile, the program will read from standard input\. If output file is not specified output will be to standard out\.
+.SH "EXAMPLE"
+.sp
+.RS 4
+.nf
+odf2xml \-o file\.xml  testdocument\.odt
+.fi
+.RE
+.SH "SEE ALSO"
+.PP
+\fBodftools\fR(1),
+\fBxml2odf\fR(1)
+.SH "BUGS"
+.PP
+Doesn\'t handle external data \-\- images and such\.
