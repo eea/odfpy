@@ -1,7 +1,7 @@
 0.8
 	Added the ability to load a document.
-after 0.6.1
-	- refactored command-line tool odfuserfied into odf.userfield as a
+0.7
+	refactored command-line tool odfuserfied into odf.userfield as a
 	library and adapted odfuserfied to use this library
 
 0.6.1
