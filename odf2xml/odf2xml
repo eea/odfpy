@@ -21,16 +21,21 @@
 
 # OpenDocument can be a complete office document in a single
 # XML document. This script will create such a document.
-import sys, getopt
+import sys, getopt, base64
 from odf.opendocument import load
+from odf.draw import Image, ObjectOle
+from odf.style import BackgroundImage
+from odf.text import ListLevelStyleImage
+from odf.office import BinaryData
 
 def usage():
-   sys.stderr.write("Usage: %s [-o outputfile] [inputfile]\n" % sys.argv[0])
+   sys.stderr.write("Usage: %s [-e] [-o outputfile] [inputfile]\n" % sys.argv[0])
 
 
 if __name__ == "__main__":
+    embedimage = False
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "o:", ["output="])
+        opts, args = getopt.getopt(sys.argv[1:], "o:e", ["output="])
     except getopt.GetoptError:
         usage()
         sys.exit(2)
@@ -40,6 +45,8 @@ if __name__ == "__main__":
     for o, a in opts:
         if o in ("-o", "--output"):
             outputfile = a
+        if o == '-e':
+            embedimage = True
 
     if len(args) > 1:
         usage()
@@ -48,6 +55,18 @@ if __name__ == "__main__":
         d = load(sys.stdin)
     else:
         d = load(args[0])
+    if embedimage:
+        images = d.getElementsByType(Image) + \
+           d.getElementsByType(BackgroundImage) +  \
+           d.getElementsByType(ObjectOle) + \
+           d.getElementsByType(ListLevelStyleImage)
+        for image in images:
+            href = image.getAttribute('href')
+            if href and href[:9] == "Pictures/":
+                p = d.Pictures[href]
+                bp = base64.encodestring(p[1])
+                image.addElement(BinaryData(text=bp))
+                image.removeAttribute('href')
     xml = d.xml()
     if outputfile == '-':
         sys.stdout.write(xml)

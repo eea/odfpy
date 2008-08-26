@@ -330,6 +330,23 @@ class Element(Node):
         else:
             self.appendChild(CDATASection(cdata))
 
+    def removeAttribute(self, attr, check_grammar=True):
+        """ Removes an attribute by name. """
+        allowed_attrs = self.allowed_attributes()
+        if allowed_attrs is None:
+            if type(attr) == type(()):
+                prefix, localname = attr
+                self.removeAttrNS(prefix, localname)
+            else:
+                raise AttributeError, "Unable to add simple attribute - use (namespace, localpart)"
+        else:
+            # Construct a list of allowed arguments
+            allowed_args = [ a[1].lower().replace('-','') for a in allowed_attrs]
+            if check_grammar and attr not in allowed_args:
+                raise AttributeError, "Attribute %s is not allowed in <%s>" % ( attr, self.tagName)
+            i = allowed_args.index(attr)
+            self.removeAttrNS(allowed_attrs[i][0], allowed_attrs[i][1])
+
     def setAttribute(self, attr, value, check_grammar=True):
         """ Add an attribute to the element
             This is sort of a convenience method. All attributes in ODF have
@@ -374,6 +391,12 @@ class Element(Node):
         if not self.namespaces.has_key(namespace):
             self.namespaces[namespace] = prefix
         return self.attributes.get(prefix + ":" + localpart)
+
+    def removeAttrNS(self, namespace, localpart):
+        prefix = _nsassign(namespace)
+        if not self.namespaces.has_key(namespace):
+            self.namespaces[namespace] = prefix
+        del self.attributes[prefix + ":" + localpart]
 
     def getAttribute(self, attr):
         allowed_attrs = self.allowed_attributes()
