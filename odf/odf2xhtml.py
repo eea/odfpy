@@ -336,8 +336,9 @@ special_styles = {
 class ODF2XHTML(handler.ContentHandler):
     """ The ODF2XHTML parses an ODF file and produces XHTML"""
 
-    def __init__(self):
+    def __init__(self, generate_css = True):
         # Tags
+        self.generate_css = generate_css
         self.elements = {
         (DCNS, 'title'): (self.s_processcont, self.e_dc_title),
         (DCNS, 'language'): (self.s_processcont, self.e_dc_contentlanguage),
@@ -566,7 +567,10 @@ class ODF2XHTML(handler.ContentHandler):
             style = style + "left:" +  attrs[(SVGNS,"x")] + ";"
         if attrs.has_key( (SVGNS,"y") ):
             style = style + "top:" +  attrs[(SVGNS,"y")] + ";"
-        self.opentag('div', {'class': name, 'style': style})
+        if self.generate_css:
+            self.opentag('div', {'class': name, 'style': style})
+        else:
+            self.opentag('div')
 
     def e_draw_frame(self, tag, attrs):
         """ End the <draw:frame>
@@ -593,8 +597,9 @@ class ODF2XHTML(handler.ContentHandler):
         imghref = attrs[(XLINKNS,"href")]
         imghref = self.rewritelink(imghref)
         htmlattrs = {'alt':"", 'src':imghref }
-        if anchor_type != "char":
-            htmlattrs['style'] = "display: block;"
+        if self.generate_css:
+            if anchor_type != "char":
+                htmlattrs['style'] = "display: block;"
         self.emptytag('img', htmlattrs)
 
     def s_draw_page(self, tag, attrs):
@@ -607,7 +612,10 @@ class ODF2XHTML(handler.ContentHandler):
         stylename = stylename.replace(".","_")
         masterpage = attrs.get( (DRAWNS,'master-page-name'),"")
         masterpage = masterpage.replace(".","_")
-        self.opentag('fieldset', {'class':"DP-%s MP-%s" % (stylename, masterpage) })
+        if self.generate_css:
+            self.opentag('fieldset', {'class':"DP-%s MP-%s" % (stylename, masterpage) })
+        else:
+            self.opentag('fieldset')
         self.opentag('legend')
         self.writeout(escape(name))
         self.closetag('legend')
@@ -617,15 +625,16 @@ class ODF2XHTML(handler.ContentHandler):
 
     def html_body(self, tag, attrs):
         self.writedata()
-        self.opentag('style', {'type':"text/css"}, True)
-        self.writeout('/*<![CDATA[*/\n')
-        self.writeout('\nimg { width: 100%; height: 100%; }\n')
-        self.writeout('* { padding: 0; margin: 0; }\n')
-        self.writeout('body { margin: 0 1em; }\n')
-        self.writeout('ol, ul { padding-left: 2em; }\n')
-        self.generate_stylesheet()
-        self.writeout('/*]]>*/\n')
-        self.closetag('style')
+        if self.generate_css:
+            self.opentag('style', {'type':"text/css"}, True)
+            self.writeout('/*<![CDATA[*/\n')
+            self.writeout('\nimg { width: 100%; height: 100%; }\n')
+            self.writeout('* { padding: 0; margin: 0; }\n')
+            self.writeout('body { margin: 0 1em; }\n')
+            self.writeout('ol, ul { padding-left: 2em; }\n')
+            self.generate_stylesheet()
+            self.writeout('/*]]>*/\n')
+            self.closetag('style')
         self.purgedata()
         self.closetag('head')
         self.opentag('body', block=True)
@@ -660,7 +669,10 @@ class ODF2XHTML(handler.ContentHandler):
     def generate_footnotes(self):
         if self.currentnote == 0:
             return
-        self.opentag('ol', {'style':'border-top: 1px solid black'}, True)
+        if self.generate_css:
+            self.opentag('ol', {'style':'border-top: 1px solid black'}, True)
+        else:
+            self.opentag('ol')
         for key in range(1,self.currentnote+1):
             note = self.notedict[key]
 #       for key,note in self.notedict.items():
@@ -874,7 +886,7 @@ class ODF2XHTML(handler.ContentHandler):
         """ Start a table
         """
         c = attrs.get( (TABLENS,'style-name'), None)
-        if c:
+        if c and self.generate_css:
             c = c.replace(".","_")
             self.opentag('table',{ 'class': "T-%s" % c })
         else:
@@ -958,7 +970,7 @@ class ODF2XHTML(handler.ContentHandler):
         for x in range(level + 1,10):
             self.headinglevels[x] = 0
         special = special_styles.get("P-"+name)
-        if special:
+        if special or not self.generate_css:
             self.opentag('h%s' % level)
         else:
             self.opentag('h%s' % level, {'class':"P-%s" % name })
@@ -997,7 +1009,10 @@ class ODF2XHTML(handler.ContentHandler):
             # textbox itself may be nested within another list.
             level = self.tagstack.count_tags(tag) + 1
             name = self.tagstack.rfindattr( (TEXTNS,'style-name') )
-        self.opentag('%s' % self.listtypes.get(name), {'class':"%s_%d" % (name, level) })
+        if self.generate_css:
+            self.opentag('%s' % self.listtypes.get(name), {'class':"%s_%d" % (name, level) })
+        else:
+            self.opentag('%s' % self.listtypes.get(name))
         self.purgedata()
 
     def e_text_list(self, tag, attrs):
@@ -1113,7 +1128,8 @@ class ODF2XHTML(handler.ContentHandler):
             specialtag = special_styles.get("P-"+c)
             if specialtag is None:
                 specialtag = 'p'
-                htmlattrs['class'] = "P-%s" % c
+                if self.generate_css:
+                    htmlattrs['class'] = "P-%s" % c
         self.opentag(specialtag, htmlattrs)
         self.purgedata()
 
@@ -1149,7 +1165,7 @@ class ODF2XHTML(handler.ContentHandler):
         if c:
             c = c.replace(".","_")
             special = special_styles.get("S-"+c)
-            if special is None:
+            if special is None and self.generate_css:
                 htmlattrs['class'] = "S-%s" % c
         self.opentag('span', htmlattrs)
         self.purgedata()

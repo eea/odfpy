@@ -1,26 +1,32 @@
 .\"     Title: odf2xhtml
 .\"    Author: 
-.\" Generator: DocBook XSL Stylesheets v1.72.0 <http://docbook.sf.net/>
-.\"      Date: 09/29/2007
+.\" Generator: DocBook XSL Stylesheets v1.73.2 <http://docbook.sf.net/>
+.\"      Date: 10/17/2008
 .\"    Manual: 
-.\"    Source: 
+.\"    Source: odfpy
 .\"
-.TH "ODF2XHTML" "1" "09/29/2007" "" ""
+.TH "ODF2XHTML" "1" "10/17/2008" "odfpy" ""
 .\" disable hyphenation
 .nh
 .\" disable justification (adjust text to left margin only)
 .ad l
 .SH "NAME"
-odf2xhtml \- Convert ODF to HTML
+odf2xhtml - Convert ODF to HTML
 .SH "SYNOPSIS"
 .HP 10
-\fBodf2xhtml\fR \fIpath\fR
+\fBodf2xhtml\fR [\-e] \fIpath\fR
 .SH "DESCRIPTION"
 .PP
 \fBodf2xhtml\fR
-is a program that will create a webpage (.html) from the input file and will write the webpage to stdout.
+is a program that will create a webpage (\.html) from the input file and will write the webpage to stdout\.
 .PP
-"Path" is assumed to be an OpenDocument file of text, spreadsheet or presentation type.
+"Path" is assumed to be an OpenDocument file of text, spreadsheet or presentation type\.
+.SH "OPTIONS"
+.PP
+\-p, \-\-plain
+.RS 4
+The \-p flag will generate HTML without CSS\.
+.RE
 .SH "EXAMPLE"
 .sp
 .RS 4

@@ -1,6 +1,13 @@
 <?xml version="1.0"?>
 <!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN" "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
 <refentry id="odf2xhtml">
+  <refentryinfo>
+    <productname>odfpy</productname>
+  </refentryinfo>
+  <refmeta>
+    <refentrytitle>odf2xhtml</refentrytitle>
+    <manvolnum>1</manvolnum>
+  </refmeta>
   <refnamediv>
     <refname>odf2xhtml</refname>
     <refpurpose>Convert ODF to HTML</refpurpose>
@@ -8,6 +15,7 @@
   <refsynopsisdiv>
     <cmdsynopsis>
       <command>odf2xhtml</command>
+      <arg choice="opt">-e </arg>
       <arg choice="plain">
         <replaceable>path</replaceable>
       </arg>
@@ -23,6 +31,21 @@ a webpage (.html) from the input file and will write the webpage to stdout.
 OpenDocument file of text, spreadsheet or presentation type.
 </para>
   </refsect1>
+
+  <refsect1>
+    <title>Options</title>
+    <variablelist>
+      <varlistentry>
+        <term>-p, --plain</term>
+        <listitem>
+          <para>
+The -p flag will generate HTML without CSS.
+</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsect1>
+
   <refsect1>
     <title>Example</title>
     <screen>
