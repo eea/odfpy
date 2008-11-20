@@ -1,3 +1,0 @@
-<dtml-if "conversion == 'embedded'"><dtml-var standard_html_header></dtml-if>
-<dtml-var xhtml>
-<dtml-if "conversion == 'embedded'"><dtml-var standard_html_footer></dtml-if>
