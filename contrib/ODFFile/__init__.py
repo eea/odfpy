@@ -21,6 +21,7 @@
 #Zope imports
 from ODFFile import ODFFile, manage_addODFFileForm, manage_addODFFile
 from AccessControl.Permissions import add_documents_images_and_files
+#from App.ImageFile import ImageFile
 
 
 def initialize(context):
@@ -38,5 +39,7 @@ def initialize(context):
     context.registerHelpTitle('ODFFile')
 
 #misc_ = {
-#   'help.gif':ImageFile('images/help.gif', globals())
+#  'text':ImageFile('images/openofficeorg-oasis-text.gif', globals()),
+#  'presentation':ImageFile('images/openofficeorg-oasis-presentation.gif', globals()),
+#  'spreadsheet':ImageFile('images/openofficeorg-oasis-spreadsheet.gif', globals())
 #    }

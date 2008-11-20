@@ -1,0 +1,5 @@
+OpenDocument File: Use OpenDocument as web content management
+
+  OpenDocument File will accept an ODF file and show it as HTML incl.
+  images. It can optionally put the standard_html_header and
+  standard_html_footer around the content.

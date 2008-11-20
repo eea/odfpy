@@ -90,7 +90,7 @@ class ODFFile(File):
     """ ODFFile class """
 
     meta_type = "OpenDocument File"
-#   icon = 'misc_/ODFFile/file'
+#   icon = 'misc_/ODFFile/presentation'
 
 #   manage_options = (
 #       (File.manage_options[5],
@@ -156,10 +156,6 @@ class ODFFile(File):
         data, size = self._read_data(file)
         content_type = self._get_content_type(file, data, self.__name__, 'undefined')
         self.update_data(data, content_type, size)
-        suffix = odmimetypes.get(content_type)
-        if suffix:
-            self.suffix = suffix
-        self.update_xhtml()
         self._p_changed = 1
 
     security.declareProtected(view, 'download')
@@ -167,7 +163,7 @@ class ODFFile(File):
         """ set for download asociated file """
         self.REQUEST.RESPONSE.setHeader('Content-Type', self.content_type)
         self.REQUEST.RESPONSE.setHeader('Content-Length', self.size)
-        self.REQUEST.RESPONSE.setHeader('Content-Disposition', 'attachment;filename="' + self.id() + "." + self.suffix + '"')
+        self.REQUEST.RESPONSE.setHeader('Content-Disposition', 'attachment;filename="' + self.id() + self.suffix + '"')
         return ODFFile.inheritedAttribute('index_html')(self, REQUEST, RESPONSE)
 
     security.declareProtected(view, 'download')
@@ -215,8 +211,12 @@ class ODFFile(File):
         self.xhtml = odhandler.odf2xhtml(fd).encode('us-ascii','xmlcharrefreplace')
         self.title = odhandler.title
 
-#   update_data__roles__=()
-#   def update_data(self, data, content_type=None, size=None):
-#       File.__dict__['update_data'](self, data, content_type, size)
+    update_data__roles__=()
+    def update_data(self, data, content_type=None, size=None):
+        File.__dict__['update_data'](self, data, content_type, size)
+        suffix = odmimetypes.get(content_type)
+        if suffix:
+            self.suffix = suffix
+        self.update_xhtml()
 
 InitializeClass(ODFFile)
