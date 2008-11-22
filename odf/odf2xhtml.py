@@ -350,6 +350,7 @@ class ODF2XHTML(handler.ContentHandler):
         (DRAWNS, 'fill-image'): (self.s_draw_fill_image, None),
         (DRAWNS, "layer-set"):(self.s_ignorexml, None),
         (DRAWNS, 'page'): (self.s_draw_page, self.e_draw_page),
+        (DRAWNS, 'text-box'): (self.s_draw_textbox, self.e_draw_textbox),
         (METANS, 'creation-date'):(self.s_processcont, self.e_dc_metatag),
         (METANS, 'generator'):(self.s_processcont, self.e_dc_metatag),
         (METANS, 'initial-creator'): (self.s_processcont, self.e_dc_metatag),
@@ -549,14 +550,18 @@ class ODF2XHTML(handler.ContentHandler):
         """ A <draw:frame> is made into a <div> in HTML which is then styled
         """
         anchor_type = attrs.get((TEXTNS,'anchor-type'),'char')
+        htmltag = 'object'
         name = "G-" + attrs.get( (DRAWNS,'style-name'), "")
         if name == 'G-':
             name = "PR-" + attrs.get( (PRESENTATIONNS,'style-name'), "")
         name = name.replace(".","_")
         if anchor_type == "paragraph":
-            style = ""
+            style = 'position: relative;'
         elif anchor_type == 'char':
             style = "position: relative;"
+        elif anchor_type == 'as-char':
+            htmltag = 'object'
+            style = ''
         else:
             style = "position: absolute;"
         if attrs.has_key( (SVGNS,"width") ):
@@ -568,14 +573,14 @@ class ODF2XHTML(handler.ContentHandler):
         if attrs.has_key( (SVGNS,"y") ):
             style = style + "top:" +  attrs[(SVGNS,"y")] + ";"
         if self.generate_css:
-            self.opentag('div', {'class': name, 'style': style})
+            self.opentag(htmltag, {'class': name, 'style': style})
         else:
-            self.opentag('div')
+            self.opentag(htmltag)
 
     def e_draw_frame(self, tag, attrs):
         """ End the <draw:frame>
         """
-        self.closetag('div')
+        self.closetag('object')
 
     def s_draw_fill_image(self, tag, attrs):
         name = attrs.get( (DRAWNS,'name'), "NoName")
@@ -622,6 +627,17 @@ class ODF2XHTML(handler.ContentHandler):
 
     def e_draw_page(self, tag, attrs):
         self.closetag('fieldset')
+
+    def s_draw_textbox(self, tag, attrs):
+        style = ''
+        if attrs.has_key( (FONS,"min-height") ):
+            style = style + "min-height:" +  attrs[(FONS,"min-height")] + ";"
+        self.opentag('div', {'style': style})
+
+    def e_draw_textbox(self, tag, attrs):
+        """ End the <draw:text-box>
+        """
+        self.closetag('div')
 
     def html_body(self, tag, attrs):
         self.writedata()
