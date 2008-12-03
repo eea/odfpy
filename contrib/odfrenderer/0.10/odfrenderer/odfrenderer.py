@@ -4,6 +4,22 @@ import os
 from tempfile import mkstemp
 from odf.odf2xhtml import ODF2XHTML
 
+
+class ODF2XHTMLBody(ODF2XHTML):
+
+    def rewritelink(self, imghref):
+        imghref = imghref.replace("Pictures/","index_html?pict=")
+        return imghref
+
+class ODF2XHTMLEmbedded(ODF2XHTMLBody):
+
+    def __init__(self):
+        ODF2XHTML.__init__(self, generate_css=False)
+        self.elements[(OFFICENS, u"text")] = (None,None)
+        self.elements[(OFFICENS, u"spreadsheet")] = (None,None)
+        self.elements[(OFFICENS, u"presentation")] = (None,None)
+        self.elements[(OFFICENS, u"document-content")] = (None,None)
+
 class OdfRenderer(Component):
     """Display OpenDocument as HTML."""
     implements(IHTMLPreviewRenderer)
@@ -19,15 +35,19 @@ class OdfRenderer(Component):
 
     def render(self, req, input_type, content, filename=None, url=None):
         self.env.log.debug('HTML output for ODF')
-        odhandler = ODF2XHTML()
+        odhandler = ODF2XHTMLEmbedded()
         hfile, hfilename = mkstemp('tracodf')
-        if hasattr(content,'read'):
-            os.write(hfile, content.read())
-        else:
-            os.write(hfile, content)
-        os.close(hfile)
-        out = odhandler.odf2xhtml(hfilename).encode('us-ascii','xmlcharrefreplace')
-        os.unlink(hfilename)
+        try:
+            if hasattr(content,'read'):
+                os.write(hfile, content.read())
+            else:
+                os.write(hfile, content)
+            os.close(hfile)
+            out = odhandler.odf2xhtml(hfilename).encode('us-ascii','xmlcharrefreplace')
+        except:
+            self.env.log.error("odf2xhtml failed")
+        finally:
+            os.unlink(hfilename)
         if out != '':
             return out
         return "<h1>HTML preview failed</h1>"
