@@ -1,6 +1,6 @@
 
 odf:
-	ln -s ../odf
+	ln -s ../../odf
 
 clean:
 	rm -f odf

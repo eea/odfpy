@@ -206,10 +206,10 @@ class StyleToCSS:
         if hpos == "center":
             sdict['margin-left'] = "auto"
             sdict['margin-right'] = "auto"
-        else:
-            # force it to be *something* then delete it
-            sdict['margin-left'] = sdict['margin-right'] = ''
-            del sdict['margin-left'], sdict['margin-right']
+#       else:
+#           # force it to be *something* then delete it
+#           sdict['margin-left'] = sdict['margin-right'] = ''
+#           del sdict['margin-left'], sdict['margin-right']
 
         if hpos in ("right","outside"):
             if wrap in ( "left", "parallel","dynamic"):
@@ -336,7 +336,7 @@ special_styles = {
 class ODF2XHTML(handler.ContentHandler):
     """ The ODF2XHTML parses an ODF file and produces XHTML"""
 
-    def __init__(self, generate_css = True):
+    def __init__(self, generate_css=True, embedable=False):
         # Tags
         self.generate_css = generate_css
         self.elements = {
@@ -423,6 +423,12 @@ class ODF2XHTML(handler.ContentHandler):
         (TEXTNS, "table-of-content-source"):(self.s_text_x_source, self.e_text_x_source),
         (TEXTNS, "user-index-source"):(self.s_text_x_source, self.e_text_x_source),
         }
+        if embedable:
+            self.elements[(OFFICENS, u"text")] = (None,None)
+            self.elements[(OFFICENS, u"spreadsheet")] = (None,None)
+            self.elements[(OFFICENS, u"presentation")] = (None,None)
+            self.elements[(OFFICENS, u"document-content")] = (None,None)
+
 
     def writeout(self, s):
         if s != '':
@@ -550,17 +556,17 @@ class ODF2XHTML(handler.ContentHandler):
         """ A <draw:frame> is made into a <div> in HTML which is then styled
         """
         anchor_type = attrs.get((TEXTNS,'anchor-type'),'char')
-        htmltag = 'object'
+        htmltag = 'div'
         name = "G-" + attrs.get( (DRAWNS,'style-name'), "")
         if name == 'G-':
             name = "PR-" + attrs.get( (PRESENTATIONNS,'style-name'), "")
         name = name.replace(".","_")
         if anchor_type == "paragraph":
-            style = 'position: relative;'
+            style = 'position:relative;'
         elif anchor_type == 'char':
-            style = "position: relative;"
+            style = "position:relative;"
         elif anchor_type == 'as-char':
-            htmltag = 'object'
+            htmltag = 'div'
             style = ''
         else:
             style = "position: absolute;"
@@ -580,7 +586,7 @@ class ODF2XHTML(handler.ContentHandler):
     def e_draw_frame(self, tag, attrs):
         """ End the <draw:frame>
         """
-        self.closetag('object')
+        self.closetag('div')
 
     def s_draw_fill_image(self, tag, attrs):
         name = attrs.get( (DRAWNS,'name'), "NoName")
@@ -632,7 +638,8 @@ class ODF2XHTML(handler.ContentHandler):
         style = ''
         if attrs.has_key( (FONS,"min-height") ):
             style = style + "min-height:" +  attrs[(FONS,"min-height")] + ";"
-        self.opentag('div', {'style': style})
+        self.opentag('div')
+#       self.opentag('div', {'style': style})
 
     def e_draw_textbox(self, tag, attrs):
         """ End the <draw:text-box>
@@ -645,7 +652,7 @@ class ODF2XHTML(handler.ContentHandler):
             self.opentag('style', {'type':"text/css"}, True)
             self.writeout('/*<![CDATA[*/\n')
             self.writeout('\nimg { width: 100%; height: 100%; }\n')
-            self.writeout('* { padding: 0; margin: 0; }\n')
+            self.writeout('* { padding: 0; margin: 0;  background-color:white; }\n')
             self.writeout('body { margin: 0 1em; }\n')
             self.writeout('ol, ul { padding-left: 2em; }\n')
             self.generate_stylesheet()

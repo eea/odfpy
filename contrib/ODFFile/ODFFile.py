@@ -40,15 +40,6 @@ class ODF2XHTMLBody(ODF2XHTML):
         imghref = imghref.replace("Pictures/","index_html?pict=")
         return imghref
 
-class ODF2XHTMLEmbedded(ODF2XHTMLBody):
-
-    def __init__(self):
-        ODF2XHTML.__init__(self)
-        self.elements[(OFFICENS, u"text")] = (None,None)
-        self.elements[(OFFICENS, u"spreadsheet")] = (None,None)
-        self.elements[(OFFICENS, u"presentation")] = (None,None)
-        self.elements[(OFFICENS, u"document-content")] = (None,None)
-
 manage_addODFFileForm=DTMLFile('dtml/odffileAdd', globals())
 
 def manage_addODFFile(self, id='', file='',title='', precondition='', content_type='', conversion='embedded',
@@ -202,9 +193,9 @@ class ODFFile(File):
         if self.size == 0:
             return
         if self.conversion == 'embedded':
-            odhandler = ODF2XHTMLEmbedded()
+            odhandler = ODF2XHTMLBody(embedable=True)
         else:
-            odhandler = ODF2XHTMLBody()
+            odhandler = ODF2XHTMLBody(embedable=False)
         fd = StringIO(str(self.data))
         self._save_pictures(fd)
         fd.seek(0)

@@ -7,18 +7,12 @@ from odf.odf2xhtml import ODF2XHTML
 
 class ODF2XHTMLBody(ODF2XHTML):
 
+    def __init__(self):
+        ODF2XHTML.__init__(self, generate_css=False, embedable=True)
+
     def rewritelink(self, imghref):
         imghref = imghref.replace("Pictures/","index_html?pict=")
         return imghref
-
-class ODF2XHTMLEmbedded(ODF2XHTMLBody):
-
-    def __init__(self):
-        ODF2XHTML.__init__(self, generate_css=False)
-        self.elements[(OFFICENS, u"text")] = (None,None)
-        self.elements[(OFFICENS, u"spreadsheet")] = (None,None)
-        self.elements[(OFFICENS, u"presentation")] = (None,None)
-        self.elements[(OFFICENS, u"document-content")] = (None,None)
 
 class OdfRenderer(Component):
     """Display OpenDocument as HTML."""
@@ -35,7 +29,7 @@ class OdfRenderer(Component):
 
     def render(self, req, input_type, content, filename=None, url=None):
         self.env.log.debug('HTML output for ODF')
-        odhandler = ODF2XHTMLEmbedded()
+        odhandler = ODF2XHTMLBody()
         hfile, hfilename = mkstemp('tracodf')
         try:
             if hasattr(content,'read'):
