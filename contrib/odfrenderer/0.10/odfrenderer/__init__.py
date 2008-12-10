@@ -1,1 +1,1 @@
-from odfrenderer import *
+from odfpreview import OdfPreview

@@ -14,7 +14,7 @@ class ODF2XHTMLBody(ODF2XHTML):
         imghref = imghref.replace("Pictures/","index_html?pict=")
         return imghref
 
-class OdfRenderer(Component):
+class OdfPreview(Component):
     """Display OpenDocument as HTML."""
     implements(IHTMLPreviewRenderer)
 
