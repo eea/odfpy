@@ -1,0 +1,2 @@
+For some reason the script crashes on the make_parser() call in odf2xhtml.py,
+but only when called from Trac.
