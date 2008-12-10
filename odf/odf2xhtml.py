@@ -22,7 +22,7 @@
 #pdb.set_trace()
 import zipfile
 import xml.sax
-from xml.sax import handler
+from xml.sax import handler, expatreader
 from xml.sax.xmlreader import InputSource
 from xml.sax.saxutils import escape, quoteattr
 
@@ -1258,7 +1258,10 @@ class ODF2XHTML(handler.ContentHandler):
         # Extract the interesting files
         z = zipfile.ZipFile(self._odffile)
 
-        parser = xml.sax.make_parser()
+        # For some reason Trac has trouble when xml.sax.make_parser() is used.
+        # Could it be because PyXML is installed, and therefore a different parser
+        # might be chosen? By calling expatreader directly we avoid this issue
+        parser = expatreader.create_parser()
         parser.setFeature(handler.feature_namespaces, 1)
         parser.setContentHandler(self)
         parser.setErrorHandler(handler.ErrorHandler())
