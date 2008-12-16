@@ -64,7 +64,7 @@ def csvToOds( pathFileCSV, pathFileODS, tableName='table', delimiter=',', quotin
 		table.addElement(tr)
 		for val in row:
 			if fltExp.match(val) or intExp.match(val):
-				tc = TableCell(valuetype="float", value=round(float(val),2))  #Rounded to two digits
+				tc = TableCell(valuetype="float", value=float(val))  #Rounded to two digits
 			else:
 				tc = TableCell(valuetype="string")
 			tr.addElement(tc)
@@ -75,7 +75,7 @@ def csvToOds( pathFileCSV, pathFileODS, tableName='table', delimiter=',', quotin
 	textdoc.save( pathFileODS )
 	
 if __name__ == "__main__":
-	usage = "%prog -i file .csv -o file .ods -d \"&\""
+	usage = "%prog -i file.csv -o file.ods -d \"&\""
 	parser = OptionParser(usage=usage, version="%prog 0.1")
 	parser.add_option('-i','--input', action='store',
 			dest='input', help='File input in csv')
@@ -114,9 +114,6 @@ if __name__ == "__main__":
 	parser.add_option('-r','--quotechar', action='store',
 			dest='quotechar', help='''specifies a one-character string to use as the quoting character.  It defaults to ".''')
 						
-	parser.add_option('-z','--open-office', action='store_true',
-			dest='open_office', help='Open file ods in open office -calc')
-	
 	(options, args) = parser.parse_args()
 	
 	if options.input:
@@ -166,9 +163,3 @@ if __name__ == "__main__":
 		
 	csvToOds( pathFileCSV=pathFileCSV, pathFileODS=pathFileODS, delimiter=delimiter, skipinitialspace=skipinitialspace,
 						escapechar=escapechar, lineterminator=lineterminator, tableName=tableName, quotechar=quotechar)
-	
-	if options.open_office:
-		import os
-		os.system( 'ooffice -calc ' + pathFileODS )
-	else:
-		print "The file saved is %s" % pathFileODS
