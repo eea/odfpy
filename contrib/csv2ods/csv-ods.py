@@ -37,34 +37,20 @@ def csvToOds( pathFileCSV, pathFileODS, tableName='table', delimiter=',', quotin
 	tablecontents.addElement(TextProperties(fontweight="bold"))
 	textdoc.styles.addElement(tablecontents)
 	
-	# Create automatic styles for the column widths.
-	# We want two different widths, one in inches, the other one in metric.
-	# ODF Standard section 15.9.1
-	widthshort = Style(name="Wshort", family="table-column")
-	widthshort.addElement(TableColumnProperties(columnwidth="1.7cm"))
-	textdoc.automaticstyles.addElement(widthshort)
-	
-	widthwide = Style(name="Wwide", family="table-column")
-	widthwide.addElement(TableColumnProperties(columnwidth="1.5in"))
-	textdoc.automaticstyles.addElement(widthwide)
-	
-	# Start the table, and describe the columns
+	# Start the table
 	table = Table( name=tableName )
-	table.addElement(TableColumn(numbercolumnsrepeated=4,stylename=widthshort))
-	table.addElement(TableColumn(numbercolumnsrepeated=3,stylename=widthwide))
 	
 	reader = csv.reader(open(pathFileCSV), delimiter=delimiter,
 						quoting=quoting, quotechar=quotechar, escapechar=escapechar,
 						skipinitialspace=skipinitialspace, lineterminator=lineterminator)
-	fltExp = re.compile('[-+]?[0-9]+\.[0-9]+$')
-	intExp = re.compile("^[1-9]\d*$")
+	fltExp = re.compile('^\s*[-+]?\d+(\.\d+)?\s*$')
 	
 	for row in reader:
 		tr = TableRow()
 		table.addElement(tr)
 		for val in row:
-			if fltExp.match(val) or intExp.match(val):
-				tc = TableCell(valuetype="float", value=float(val))  #Rounded to two digits
+			if fltExp.match(val):
+				tc = TableCell(valuetype="float", value=val.strip())
 			else:
 				tc = TableCell(valuetype="string")
 			tr.addElement(tc)
@@ -75,7 +61,7 @@ def csvToOds( pathFileCSV, pathFileODS, tableName='table', delimiter=',', quotin
 	textdoc.save( pathFileODS )
 	
 if __name__ == "__main__":
-	usage = "%prog -i file.csv -o file.ods -d \"&\""
+	usage = "%prog -i file.csv -o file.ods -d"
 	parser = OptionParser(usage=usage, version="%prog 0.1")
 	parser.add_option('-i','--input', action='store',
 			dest='input', help='File input in csv')
