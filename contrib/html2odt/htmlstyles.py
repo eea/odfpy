@@ -9,18 +9,20 @@ def addStandardStyles(doc):
     style.addElement(p)
     doc.styles.addElement(style)
 
+    style = Style(name="List_20_Contents", displayname="List Contents", family="paragraph", parentstylename="Standard", attributes={'class':"html"})
+    p = ParagraphProperties(marginleft="1cm", marginright="0cm", textindent="0cm", autotextindent="false")
+    style.addElement(p)
+    doc.styles.addElement(style)
+
+    
+    style = Style(name="List_20_Heading", displayname="List Heading", family="paragraph", parentstylename="Standard",
+         nextstylename="List_20_Contents", attributes={'class':"html"})
+    p = ParagraphProperties(marginleft="0cm", marginright="0cm", textindent="0cm", autotextindent="false")
+    style.addElement(p)
+    doc.styles.addElement(style)
+
     style = Style(name="Text_20_body_20_indent", displayname="Text body indent", family="paragraph", parentstylename="Text_20_body", attributes={'class':"text"})
     p = ParagraphProperties(marginleft="0.499cm", marginright="0cm", textindent="0cm", autotextindent="false")
-    style.addElement(p)
-    doc.styles.addElement(style)
-
-    style = Style(name="Salutation", family="paragraph", parentstylename="Standard", attributes={'class':"text"})
-    p = ParagraphProperties(numberlines="false", linenumber=0)
-    style.addElement(p)
-    doc.styles.addElement(style)
-
-    style = Style(name="Signature", family="paragraph", parentstylename="Standard", attributes={'class':"text"})
-    p = ParagraphProperties(numberlines="false", linenumber=0)
     style.addElement(p)
     doc.styles.addElement(style)
 

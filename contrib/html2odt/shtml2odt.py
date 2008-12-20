@@ -26,7 +26,7 @@ from cgi import escape,parse_header
 from types import StringType
 
 from odf.opendocument import OpenDocumentText
-from odf import dc,text
+from odf import dc, text, table
 import htmlstyles
 
 
@@ -106,38 +106,37 @@ class HTML2ODTParser(HTMLParser):
         self.processcont = True
         self.__data = []
         self.elements = {
-     'a':    (self.s_html_a, self.e_html_a),
+     'a':    (self.s_html_a, self.close_tag),
      'base': ( self.output_base, None),
-     'b':    ( self.s_html_emphasis, self.e_html_emphasis),
+     'b':    ( self.s_html_emphasis, self.close_tag),
      'br':   ( self.output_br, None),
-     'caption': ( self.output_caption, None),
      'col':  ( self.s_html_col, None),
-     'dd':   ( self.s_html_dd, None),
+     'dd':   ( self.s_html_dd, self.close_tag),
      'dt':   ( self.s_html_dt, None),
      'div':  ( self.s_html_section, self.e_html_section),
-     'em':   ( self.s_html_emphasis, self.e_html_emphasis),
-     'h1':   ( self.s_html_headline, self.e_html_headline),
-     'h2':   ( self.s_html_headline, self.e_html_headline),
-     'h3':   ( self.s_html_headline, self.e_html_headline),
-     'h4':   ( self.s_html_headline, self.e_html_headline),
-     'h5':   ( self.s_html_headline, self.e_html_headline),
-     'h6':   ( self.s_html_headline, self.e_html_headline),
+     'em':   ( self.s_html_emphasis, self.close_tag),
+     'h1':   ( self.s_html_headline, self.close_tag),
+     'h2':   ( self.s_html_headline, self.close_tag),
+     'h3':   ( self.s_html_headline, self.close_tag),
+     'h4':   ( self.s_html_headline, self.close_tag),
+     'h5':   ( self.s_html_headline, self.close_tag),
+     'h6':   ( self.s_html_headline, self.close_tag),
      'head': ( self.s_ignorexml, None),
-     'i':    ( self.s_html_emphasis, self.e_html_emphasis),
+     'i':    ( self.s_html_emphasis, self.close_tag),
      'img':  ( self.output_img, None),
      'li':   ( self.s_html_li, self.e_html_li),
      'meta': ( self.meta_encoding, None),
      'ol':   ( self.output_ol, self.e_html_list),
      'p':    ( self.s_html_block, self.e_html_block),
-     'span': ( self.s_html_span, self.e_html_span),
-     'strong':( self.s_html_emphasis, self.e_html_emphasis),
+     'span': ( self.s_html_span, self.close_tag),
+     'strong':( self.s_html_emphasis, self.close_tag),
      'table':( self.s_html_table, self.e_html_table),
-     'td':   ( self.s_html_td, self.e_html_td),
-     'th':   ( self.s_html_td, self.e_html_td),
+     'td':   ( self.s_html_td, self.close_tag),
+     'th':   ( self.s_html_td, self.close_tag),
      'title':( self.s_html_title, self.e_html_title),
-     'tr':   ( self.s_html_tr, self.e_html_tr),
+     'tr':   ( self.s_html_tr, self.close_tag),
      'ul':   ( self.output_ul, self.e_html_list),
-     'var':  ( self.s_html_emphasis, self.e_html_emphasis),
+     'var':  ( self.s_html_emphasis, self.close_tag),
      'input':( self.output_input, None),
      'select':( self.output_select, None),
      'textarea':( self.output_textarea, None),
@@ -218,16 +217,10 @@ class HTML2ODTParser(HTMLParser):
         self.curr.addElement(e)
         self.curr = e
 
-    def e_html_emphasis(self, tag):
-        self.curr = self.curr.parentNode
-
     def s_html_span(self, tag, attrs):
         e = text.Span()
         self.curr.addElement(e)
         self.curr = e
-
-    def e_html_span(self, tag):
-        self.curr = self.curr.parentNode
 
     def s_html_title(self, tag, attrs):
         e = dc.Title()
@@ -256,14 +249,20 @@ class HTML2ODTParser(HTMLParser):
             e = text.A(type="simple", href=href)
         else:
             e = text.A()
+#       if self.curr.parentNode.qname != text.P().qname:
+#           p = text.P()
+#           self.curr.addElement(p)
+#           self.curr = p
         self.curr.addElement(e)
         self.curr = e
 
-    def e_html_a(self, tag):
+    def close_tag(self, tag):
         self.curr = self.curr.parentNode
 
     def s_html_dd(self, tag, attrs):
-        self.write_odt(u'<text:p text:style-name="List_20_Contents">')
+        e = text.P(stylename="List_20_Contents")
+        self.curr.addElement(e)
+        self.curr = e
 
     def s_html_dt(self, tag, attrs):
         self.write_odt(u'<text:p text:style-name="List_20_Heading">')
@@ -316,32 +315,27 @@ class HTML2ODTParser(HTMLParser):
         self.curr.addElement(e)
         self.curr = e
 
-    def e_html_headline(self, tag):
-        self.curr = self.curr.parentNode
-
     def s_html_table(self, tag, attrs):
-        self.write_odt(u'<table:table>')
+        e = table.Table()
+        self.curr.addElement(e)
+        self.curr = e
 
     def e_html_table(self, tag):
-        self.write_odt(u'</table:table>')
+        self.curr = self.curr.parentNode
 
     def s_html_td(self, tag, attrs):
-        self.write_odt(u'<table:table-cell>')
-
-    def e_html_td(self, tag):
-        self.write_odt(u'</table:table-cell>')
+        e = table.TableCell()
+        self.curr.addElement(e)
+        self.curr = e
 
     def s_html_tr(self, tag, attrs):
-        self.write_odt(u'<table:table-row>')
-
-    def e_html_tr(self, tag):
-        self.write_odt(u'</table:table-row>')
+        e = table.TableRow()
+        self.curr.addElement(e)
+        self.curr = e
 
     def s_html_col(self, tag, attrs):
-        self.write_odt(u'<table:table-column/>')
-
-    def output_caption(self, tag, attrs):
-        self.write_odt(u'Caption: ')
+        e = table.TableColumn()
+        self.curr.addElement(e)
 
     def s_html_section(self, tag, attrs):
         """ Outputs block tag such as <p> and <div> """
@@ -349,11 +343,13 @@ class HTML2ODTParser(HTMLParser):
         if name is None:
             self.sectnum = self.sectnum + 1
             name = "Sect%d" % self.sectnum
-        self.write_odt(u'<text:section text:name="%s">' % name)
+        e = text.Section(name=name)
+        self.curr.addElement(e)
+        self.curr = e
 
     def e_html_section(self, tag):
         """ Outputs block tag such as <p> and <div> """
-        self.write_odt(u'</text:section>')
+        self.curr = self.curr.parentNode
 
     def s_html_block(self, tag, attrs):
         """ Outputs block tag such as <p> and <div> """
