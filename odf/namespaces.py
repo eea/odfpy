@@ -20,9 +20,10 @@
 TOOLSVERSION = u"ODFPY/0.8.1dev"
 
 ANIMNS         = u"urn:oasis:names:tc:opendocument:xmlns:animation:1.0"
+DBNS           = u"urn:oasis:names:tc:opendocument:xmlns:database:1.0"
 CHARTNS        = u"urn:oasis:names:tc:opendocument:xmlns:chart:1.0"
 CONFIGNS       = u"urn:oasis:names:tc:opendocument:xmlns:config:1.0"
-DBNS           = u"http://openoffice.org/2004/database"
+#DBNS           = u"http://openoffice.org/2004/database"
 DCNS           = u"http://purl.org/dc/elements/1.1/"
 DOMNS          = u"http://www.w3.org/2001/xml-events"
 DR3DNS         = u"urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0"
