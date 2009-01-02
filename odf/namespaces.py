@@ -40,6 +40,7 @@ OOONS          = u"http://openoffice.org/2004/office"
 OOOWNS         = u"http://openoffice.org/2004/writer"
 OOOCNS         = u"http://openoffice.org/2004/calc"
 PRESENTATIONNS = u"urn:oasis:names:tc:opendocument:xmlns:presentation:1.0"
+RDFANS         = u"http://docs.oasis-open.org/opendocument/meta/rdfa#"
 SCRIPTNS       = u"urn:oasis:names:tc:opendocument:xmlns:script:1.0"
 SMILNS         = u"urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0"
 STYLENS        = u"urn:oasis:names:tc:opendocument:xmlns:style:1.0"
@@ -48,6 +49,7 @@ TABLENS        = u"urn:oasis:names:tc:opendocument:xmlns:table:1.0"
 TEXTNS         = u"urn:oasis:names:tc:opendocument:xmlns:text:1.0"
 XFORMSNS       = u"http://www.w3.org/2002/xforms"
 XLINKNS        = u"http://www.w3.org/1999/xlink"
+XMLNS          = "http://www.w3.org/XML/1998/namespace"
 
 
 nsdict = {
@@ -71,6 +73,7 @@ nsdict = {
    OOOWNS: u'ooow',
    OOOCNS: u'ooc',
    PRESENTATIONNS: u'presentation',
+   RDFANS: u'rdfa',
    SCRIPTNS: u'script',
    SMILNS: u'smil',
    STYLENS: u'style',
@@ -79,4 +82,5 @@ nsdict = {
    TEXTNS: u'text',
    XFORMSNS: u'xforms',
    XLINKNS: u'xlink',
+   XMLNS: u'xml',
 }

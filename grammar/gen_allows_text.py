@@ -68,17 +68,19 @@ class S22RelaxParser(handler.ContentHandler):
         #print "START ",tag
         if tag == (RELAXNS, 'define'):
             self.currdef = {}
-            self.currdef['refs'] = []
             self.currdef['name'] = attrs.get( (None, 'name'))
+            self.currdef['type'] = None
+            self.currdef['datatypeLibrary'] = None
         elif tag in ((RELAXNS, 'attribute'), (RELAXNS, 'start')):
             self.ignore = 1
-        elif tag == (RELAXNS, 'ref'):
-            ref = attrs.get( (None, 'name'))
-            if ref not in self.currdef['refs']:
-                self.currdef['refs'].append(ref)
         elif tag == (RELAXNS, 'name'):
             self.currdef['ns'] = attrs.get( (None, 'ns'))
             self.data = []
+        elif tag == (RELAXNS, 'data'):
+            self.currdef['type'] = attrs.get( (None, 'type'))
+            self.currdef['datatypeLibrary'] = attrs.get( (None, 'datatypeLibrary'))
+        elif tag == (RELAXNS, 'text'):
+            self.currdef['type'] = "text"
 
     def endElementNS(self, tag, qname):
         if tag in ((RELAXNS, 'attribute'), (RELAXNS, 'start')):
@@ -117,47 +119,14 @@ if __name__ == "__main__":
     defs = p.definitions
     keys= defs.keys()
     keys.sort()
-    print '''# -*- coding: utf-8 -*-
-# Copyright (C) 2006-2008 Søren Roug, European Environment Agency
-#
-# This library is free software; you can redistribute it and/or
-# modify it under the terms of the GNU Lesser General Public
-# License as published by the Free Software Foundation; either
-# version 2.1 of the License, or (at your option) any later version.
-#
-# This library is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-# Lesser General Public License for more details.
-#
-# You should have received a copy of the GNU Lesser General Public
-# License along with this library; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-#
-# Contributor(s):
-#
 
-__doc__=""" In principle the OpenDocument schema converted to python structures.
-Currently it contains the legal child elements of a given element.
-To be used for validation check in the API
-"""
-
-from odf.namespaces import *'''
-
-    print "allowed_children = {"
+    print "allows_text = ("
     for key in keys:
         val = defs[key]
         if val['element'] == u'__ANYNAME__':
             continue
+        if val.get('type') is None:
+            continue
         ns = val.get('ns','UNKNOWN')
-        refs = val['refs']
-        if len(refs) == 1 and defs[refs[0]]['element'] == u'__ANYNAME__':
-            print "\t(%sNS,u'%s') : " % (nsdict.get(ns,'unknown').upper(), val['element'])
-            print "\t\tNone,"
-        else:
-            print "\t(%sNS,u'%s') : (" % (nsdict.get(ns,'unknown').upper(), val['element'])
-            for r in refs:
-                ns = defs[r].get('ns','UNKNOWN')
-                print "\t\t(%sNS,u'%s'), " % (nsdict.get(ns,'unknown').upper(), defs[r]['element'])
-            print "\t),"
-    print "}"
+        print "\t(%sNS,u'%s')," % (nsdict.get(ns,'unknown').upper(), val['element'])
+    print ")"

@@ -44,10 +44,9 @@ class Attribute(Node):
     " Attribute "
 
 #
-# Extract headings from content.xml
 #
-class ODTHeadingHandler(handler.ContentHandler):
-    """ Extract headings from content.xml of an ODT file """
+class S22RelaxParser(handler.ContentHandler):
+
     def __init__(self):
         self.data = []
         self.level = 0
@@ -82,11 +81,11 @@ class ODTHeadingHandler(handler.ContentHandler):
             currnode.name = "__ANYNAME__"
         self.data = []
 
-def odtheadings(relaxfile):
+def parse_rng(relaxfile):
     content = file(relaxfile)
     parser = make_parser()
     parser.setFeature(handler.feature_namespaces, 1)
-    parser.setContentHandler(ODTHeadingHandler())
+    parser.setContentHandler(S22RelaxParser())
     parser.setErrorHandler(handler.ErrorHandler())
 
     inpsrc = InputSource()
@@ -95,8 +94,7 @@ def odtheadings(relaxfile):
 
 
 if __name__ == "__main__":
-    filler = "          "
-    odtheadings("simplified-7-22.rng")
+    parse_rng("simplified-7-22.rng")
 
     print "allowed_attributes = {"
 
@@ -104,8 +102,13 @@ if __name__ == "__main__":
     slist.sort()
     for s in slist:
         e = elements[s]
-        print "\t(%sNS,u'%s'):(" % (nsdict.get(e.ns,'unknown').upper(), e.name)
-        for a in e.attrs.values():
-            print "\t\t(%sNS,u'%s')," % (nsdict.get(a.ns,'unknown').upper(), a.name)
-        print "\t),"
+        if e.name == u'__ANYNAME__':
+            continue
+        if len(e.attrs.values()) == 1 and e.attrs.values()[0].name == u'__ANYNAME__':
+            print "\t(%sNS,u'%s'): None," % (nsdict.get(e.ns,'unknown').upper(), e.name)
+        else:
+            print "\t(%sNS,u'%s'):(" % (nsdict.get(e.ns,'unknown').upper(), e.name)
+            for a in e.attrs.values():
+                print "\t\t(%sNS,u'%s')," % (nsdict.get(a.ns,'unknown').upper(), a.name)
+            print "\t),"
     print "}"
