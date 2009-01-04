@@ -2,6 +2,26 @@
 <!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
    "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
 <refentry id="odfuserfield">
+  <refentryinfo>
+    <productname>odfpy</productname>
+    <author>
+      <firstname>Søren</firstname><surname>Roug</surname>
+      <contrib>Original author</contrib>
+    </author>
+    <author>
+      <firstname>Michael</firstname><surname>Howitz</surname>
+      <affiliation>
+      <orgname>gocept gmbh &amp; co. kg</orgname>
+      </affiliation>
+      <contrib>Refactoring</contrib>
+    </author>
+  </refentryinfo>
+  <refmeta>
+    <refentrytitle>odfuserfield</refentrytitle>
+    <manvolnum>1</manvolnum>
+    <refmiscinfo class="manual">User commands</refmiscinfo>
+  </refmeta>
+
 <refnamediv>
 <refname>odfuserfield</refname>
 <refpurpose>List or change the user-field declarations in an ODF file</refpurpose>

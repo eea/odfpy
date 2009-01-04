@@ -2,6 +2,17 @@
 <!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
    "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
 <refentry id="odf2war">
+  <refentryinfo>
+    <productname>odfpy</productname>
+    <author><firstname>Søren</firstname><surname>Roug</surname>
+    <contrib>Original author</contrib>
+    </author>
+  </refentryinfo>
+  <refmeta>
+    <refentrytitle>odf2war</refentrytitle>
+    <manvolnum>1</manvolnum>
+    <refmiscinfo class="manual">User commands</refmiscinfo>
+  </refmeta>
 <refnamediv>
 <refname>odf2war</refname>
 <refpurpose>Convert ODF to KDE web archive</refpurpose>

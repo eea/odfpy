@@ -1,12 +1,12 @@
-.\"     Title: odfmeta
-.\"    Author: S\(/oren Roug
+.\"     Title: csv2ods
+.\"    Author: Agustin Henze <agustinhenze at gmail.com>
 .\" Generator: DocBook XSL Stylesheets v1.74.0 <http://docbook.sf.net/>
 .\"      Date: 01/04/2009
 .\"    Manual: User commands
 .\"    Source: odfpy
 .\"  Language: English
 .\"
-.TH "ODFMETA" "1" "01/04/2009" "odfpy" "User commands"
+.TH "CSV2ODS" "1" "01/04/2009" "odfpy" "User commands"
 .\" -----------------------------------------------------------------
 .\" * (re)Define some macros
 .\" -----------------------------------------------------------------
@@ -167,67 +167,77 @@
 .\" * MAIN CONTENT STARTS HERE *
 .\" -----------------------------------------------------------------
 .SH "Name"
-odfmeta \- List or change the metadata of an ODF file
+csv2ods \- Create OpenDocument spreadsheet from comma separated values
 .SH "Synopsis"
 .fam C
-.HP \w'\fBodfmeta\fR\ 'u
-\fBodfmeta\fR [\-l] [\-c] [\-d] [\-x\ \fImetafield\fR...] [\-X\ \fImetafield\fR...] [\-a\ \fImetafield\fR...] [\-A\ \fImetafield\fR...] [\-I\ \fImetafield\fR...] [\-o\ \fIpath\fR] \fIpath\fR
+.HP \w'\fBcsv2ods\fR\ 'u
+\fBcsv2ods\fR \-i\ \fIfile\&.csv\fR \-o\ \fIfile\&.ods\fR
 .fam
 .SH "Description"
 .PP
-\fBodfmeta\fR
-is a program that will list or change the metadata in an OpenDocument file\&. This is useful for version control systems\&. You can change title, keywords, description etc\&.
-.PP
-"Path" is assumed to be an OpenDocument file of text, spreadsheet or presentation type\&.
+This program reads a file in CSV format \- table of columns delimited by commas, tabs or any other character\&. It then creates a spreadsheet\&. If a value looks like a number the cell is formatted as a number as well\&.
 .SH "Options"
 .PP
-\-l
+\-\-version
 .RS 4
-List (extract) all known metadata fields\&.
+Show program\'s version number and exit
 .RE
 .PP
-\-c
+\-h, \-\-help
 .RS 4
-Make field values continous by normalizing white space\&. Might be convenient when postprocessing with standard (line oriented) text utilities\&.
+Show help message and exit
 .RE
 .PP
-\-d
+\-i \fIINPUT\fR, \-\-input=\fIINPUT\fR
 .RS 4
-Update the modification date to the current date and time\&.
+File input in csv\&.
 .RE
 .PP
-\-x \fImetafield\fR
+\-o \fIOUTPUT\fR, \-\-output=\fIOUTPUT\fR
 .RS 4
-Extract the contents of this metafield from the file\&. Known field names are creation\-date, creator, date, description, editing\-cycles, editing\-duration, generator, initial\-creator, keyword, language, print\-date, printed\-by, subject, title, user\-defined\&. All other names are assumed to be user defined\&.
+File output in ods\&.
 .RE
 .PP
-\-X \fImetafield\fR
+\-d \fIDELIMITER\fR, \-\-delimiter=\fIDELIMITER\fR
 .RS 4
-Same as \-x, but also preserves/includes the field name\&.
+Specifies a one\-character string to use as the field separator\&. It defaults to ","\&.
 .RE
 .PP
-\-a \fImetafield\fR
+\-c \fIENCODING\fR, \-\-encoding=\fIENCODING\fR
 .RS 4
-Append a custom metafield to the metadata; but only if a similar field does not exist yet\&.
+Specifies the encoding the file csv\&. It defaults to utf\-8\&.
 .RE
 .PP
-\-A \fImetafield\fR
+\-t \fITABLENAME\fR, \-\-table=\fITABLENAME\fR
 .RS 4
-Append a custom metafield to the metadata in any case\&.
+The table name in the output file\&.
 .RE
 .PP
-\-I \fImetafield\fR
+\-s \fISKIPINITIALSPACE\fR, \-\-skipinitialspace=\fISKIPINITIALSPACE\fR
 .RS 4
-Append a custom metafield to the metadata and remove any existing similar field\&.
+Specifies how to interpret whitespace which immediately follows a delimiter\&. It defaults to False, which means that whitespace immediately following a delimiter is part of the following field\&.
 .RE
 .PP
-\-o \fIpath\fR
+\-l \fILINETERMINATOR\fR, \-\-lineterminator=\fILINETERMINATOR\fR
 .RS 4
-Filename to write modified ODT file to\&. If no
-\fB\-o\fR
-option is provided, the ODT file will be written to stdout\&.
+Specifies the character sequence which should terminate rows\&.
 .RE
-.SH "Examples"
+.PP
+\-q \fIQUOTING\fR, \-\-quoting=\fIQUOTING\fR
+.RS 4
+It can take on any of the following module constants: 0 = QUOTE_MINIMAL means only when required, for example, when a field contains either the quotechar or the delimiter\&. 1 = QUOTE_ALL means that quotes are always placed around fields\&. 2 = QUOTE_NONNUMERIC means that quotes are always placed around fields which do not parse as integers or floating point numbers\&. 3 = QUOTE_NONE means that quotes are never placed around fields\&. It defaults is QUOTE_MINIMAL\&.
+.RE
+.PP
+\-e \fIESCAPECHAR\fR, \-\-escapechar=\fIESCAPECHAR\fR
+.RS 4
+Specifies a one\-character string used to escape the delimiter when quoting is set to QUOTE_NONE\&.
+.RE
+.PP
+\-r \fIQUOTECHAR\fR, \-\-quotechar=\fIQUOTECHAR\fR
+.RS 4
+Specifies a one\-character string to use as the quoting character\&. It defaults to "\&.
+.RE
+.SH "Example"
 .sp
 .if n \{\
 .RS 4
@@ -241,8 +251,7 @@ option is provided, the ODT file will be written to stdout\&.
 .BB lightgray adjust-for-leading-newline
 .sp -1
 
-odfmeta \-l odf\-file
-odfmeta \-I "title:The Little Engine That Could" \-A subject:I\-think\-I\-can \-o newfile\&.odt source\&.odt
+csv2ods \-i /etc/passwd \-o accounts\&.odt \-d:
 .EB lightgray adjust-for-leading-newline
 .if t \{\
 .sp 1
@@ -253,21 +262,9 @@ odfmeta \-I "title:The Little Engine That Could" \-A subject:I\-think\-I\-can \-
 .if n \{\
 .RE
 .\}
-.SH "See Also"
-.PP
-
-\fBodftools\fR(1),
-\fBformail\fR(1),
-\fBid3tag\fR(1)
-.SH "Todo"
-.PP
-Should also let the user view and change the <text:user\-field\-decl> in content\&.xml\&. Perhaps this is better done by a different application?
-.SH "Bugs"
-.PP
-All known versions of OpenOffice\&.org keep only four <meta:user\-defined> elements\&. If you add more than those, you\'ll loose them next time you save with OpenOffice\&.org\&. KOffice keeps only one <meta:keyword> element\&.
 .SH "Author"
 .PP
-\fBS\(/oren Roug\fR
+\fBAgustin Henze\fR <\&agustinhenze at gmail\&.com\&>
 .RS 4
-Original author
+Original author of csv\-ods\&.py
 .RE

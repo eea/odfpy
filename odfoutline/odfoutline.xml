@@ -2,6 +2,18 @@
 <!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
    "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
 <refentry id="odfoutline">
+  <refentryinfo>
+    <productname>odfpy</productname>
+    <author><firstname>Søren</firstname><surname>Roug</surname>
+    <contrib>Original author</contrib>
+    </author>
+  </refentryinfo>
+  <refmeta>
+    <refentrytitle>odfoutline</refentrytitle>
+    <manvolnum>1</manvolnum>
+    <refmiscinfo class="manual">User commands</refmiscinfo>
+  </refmeta>
+
 <refnamediv>
 <refname>odfoutline</refname>
 <refpurpose>Show outline of OpenDocument</refpurpose>

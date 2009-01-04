@@ -3,10 +3,14 @@
 <refentry id="odf2xhtml">
   <refentryinfo>
     <productname>odfpy</productname>
+    <author><firstname>Søren</firstname><surname>Roug</surname>
+    <contrib>Original author</contrib>
+    </author>
   </refentryinfo>
   <refmeta>
     <refentrytitle>odf2xhtml</refentrytitle>
     <manvolnum>1</manvolnum>
+    <refmiscinfo class="manual">User commands</refmiscinfo>
   </refmeta>
   <refnamediv>
     <refname>odf2xhtml</refname>

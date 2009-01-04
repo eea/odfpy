@@ -25,6 +25,7 @@ version = '0.8.1dev'
 
 if platform.system() in ('Linux','Unix'):
     man1pages = [('share/man/man1', [
+           'csv2ods/csv2ods.1',
            'mailodf/mailodf.1',
            'odf2xhtml/odf2xhtml.1',
            'odf2mht/odf2mht.1',
@@ -94,6 +95,7 @@ Take also a look at the contrib folder."""
       url='http://opendocumentfellowship.com/development/projects/odfpy',
       packages=['odf'],
       scripts=[
+          'csv2ods/csv2ods',
           'mailodf/mailodf',
           'odf2xhtml/odf2xhtml',
           'odf2mht/odf2mht',
