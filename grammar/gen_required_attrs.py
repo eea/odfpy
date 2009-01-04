@@ -73,7 +73,7 @@ class S22RelaxParser(handler.ContentHandler):
 
     def endElementNS(self, tag, qname):
         if tag == (RELAXNS, 'element'):
-            elements[(self.currelem.ns, self.currelem.name)] = self.currelem
+            self.elements[(self.currelem.ns, self.currelem.name)] = self.currelem
             self.currelem = None
         elif tag == (RELAXNS, 'attribute'):
             if self.optional == 0:
@@ -87,21 +87,19 @@ class S22RelaxParser(handler.ContentHandler):
             self.optional = self.optional - 1
         self.data = []
 
-def parse_rng(relaxfile, elements):
-    content = file(relaxfile)
+
+if __name__ == "__main__":
+    elements = {}
     parser = make_parser()
     parser.setFeature(handler.feature_namespaces, 1)
     parser.setContentHandler(S22RelaxParser(elements))
     parser.setErrorHandler(handler.ErrorHandler())
 
-    inpsrc = InputSource()
-    inpsrc.setByteStream(content)
-    parser.parse(inpsrc)
-
-
-if __name__ == "__main__":
-    elements = {}
-    parse_rng("simplified-7-22.rng", elements)
+    for relaxfile in ["simple-manifest-7-22.rng","simple-schema-7-22.rng"]:
+        content = file(relaxfile)
+        inpsrc = InputSource()
+        inpsrc.setByteStream(content)
+        parser.parse(inpsrc)
 
     slist = elements.keys()
     slist.sort()

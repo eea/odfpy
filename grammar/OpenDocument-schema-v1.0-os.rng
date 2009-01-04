@@ -8,19 +8,6 @@
 
     © 2002-2005 OASIS Open
     © 1999-2005 Sun Microsystems, Inc.
-
-    This document and translations of it may be copied and furnished
-    to others, and derivative works that comment on or otherwise explain 
-    it or assist in its implementation may be prepared, copied, 
-    published and distributed, in whole or in part, without restriction 
-    of any kind, provided that the above copyright notice and this 
-    paragraph are included on all such copies and derivative works. 
-    However, this document itself does not be modified in any way, such 
-    as by removing the copyright notice or references to OASIS, except 
-    as needed for the purpose of developing OASIS specifications, in 
-    which case the procedures for copyrights defined in the OASIS 
-    Intellectual Property Rights document must be followed, or as 
-    required to translate it into languages other than English.
 -->
 
 <grammar
@@ -789,22 +776,22 @@
             </attribute>
         </optional>
         <optional>
-            <attribute name="frame-count">
+            <attribute name="meta:frame-count">
                 <ref name="nonNegativeInteger"/>
             </attribute>
         </optional>
         <optional>
-            <attribute name="sentence-count">
+            <attribute name="meta:sentence-count">
                 <ref name="nonNegativeInteger"/>
             </attribute>
         </optional>
         <optional>
-            <attribute name="syllable-count">
+            <attribute name="meta:syllable-count">
                 <ref name="nonNegativeInteger"/>
             </attribute>
         </optional>
         <optional>
-            <attribute name="non-whitespace-character-count">
+            <attribute name="meta:non-whitespace-character-count">
                 <ref name="nonNegativeInteger"/>
             </attribute>
         </optional>
@@ -11533,7 +11520,7 @@
 <define name="svg-font-face-name">
     <element name="svg:font-face-name">
         <optional>
-            <attribute name="name"/>
+            <attribute name="svg:name"/>
         </optional>
         <empty/>
     </element>
@@ -12302,7 +12289,7 @@
         <attribute name="text:number-position" a:defaultValue="left">
             <choice>
                 <value>left</value>
-                <value>rigth</value>
+                <value>right</value>
                 <value>inner</value>
                 <value>outer</value>
             </choice>

@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-# Copyright (C) 2006 Søren Roug, European Environment Agency
+# Copyright (C) 2009 Søren Roug, European Environment Agency
 #
 # This is free software.  You may redistribute it under the terms
 # of the Apache license and the GNU General Public License Version
@@ -91,28 +91,24 @@ class S22RelaxParser(handler.ContentHandler):
             if self.currdef.has_key('element'):
                 self.definitions[self.currdef['name']] = self.currdef
         elif tag == (RELAXNS, 'name'):
-            #print "ELEMENT NAME:", self.text()
             self.currdef['element'] = self.text()
         elif tag == (RELAXNS, 'anyName'):
             self.currdef['element'] = "__ANYNAME__"
         self.data = []
 
-def parse_rng(relaxfile):
-    content = file(relaxfile)
+if __name__ == "__main__":
+    elements = {}
     parser = make_parser()
     parser.setFeature(handler.feature_namespaces, 1)
     p = S22RelaxParser()
     parser.setContentHandler(p)
     parser.setErrorHandler(handler.ErrorHandler())
 
-    inpsrc = InputSource()
-    inpsrc.setByteStream(content)
-    parser.parse(inpsrc)
-    return p
-
-
-if __name__ == "__main__":
-    p = parse_rng("simplified-7-22.rng")
+    for relaxfile in ["simple-manifest-7-22.rng","simple-schema-7-22.rng"]:
+        content = file(relaxfile)
+        inpsrc = InputSource()
+        inpsrc.setByteStream(content)
+        parser.parse(inpsrc)
 
     defs = p.definitions
     keys= defs.keys()

@@ -114,7 +114,7 @@ def parse_rng(relaxfile):
 
 
 if __name__ == "__main__":
-    p = parse_rng("simplified-7-22.rng")
+    p = parse_rng("simple-schema-7-22.rng")
 
     defs = p.definitions
     keys= defs.keys()

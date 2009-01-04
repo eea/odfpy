@@ -94,7 +94,7 @@ def parse_rng(relaxfile):
 
 
 if __name__ == "__main__":
-    parse_rng("simplified-7-22.rng")
+    parse_rng("simple-schema-7-22.rng")
 
     print "allowed_attributes = {"
 

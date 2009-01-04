@@ -789,22 +789,22 @@
             </attribute>
         </optional>
         <optional>
-            <attribute name="frame-count">
+            <attribute name="meta:frame-count">
                 <ref name="nonNegativeInteger"/>
             </attribute>
         </optional>
         <optional>
-            <attribute name="sentence-count">
+            <attribute name="meta:sentence-count">
                 <ref name="nonNegativeInteger"/>
             </attribute>
         </optional>
         <optional>
-            <attribute name="syllable-count">
+            <attribute name="meta:syllable-count">
                 <ref name="nonNegativeInteger"/>
             </attribute>
         </optional>
         <optional>
-            <attribute name="non-whitespace-character-count">
+            <attribute name="meta:non-whitespace-character-count">
                 <ref name="nonNegativeInteger"/>
             </attribute>
         </optional>
