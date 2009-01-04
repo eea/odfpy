@@ -20,11 +20,9 @@
 from xml.sax import make_parser,handler
 from xml.sax.xmlreader import InputSource
 import xml.sax.saxutils
-import sys
 
 RELAXNS=u"http://relaxng.org/ns/structure/1.0"
 
-elements = {}
 currdef = None
 currelement = None
 currnode = None
@@ -47,9 +45,10 @@ class Attribute(Node):
 #
 class S22RelaxParser(handler.ContentHandler):
 
-    def __init__(self):
+    def __init__(self, elements):
         self.data = []
         self.level = 0
+        self.elements = elements
 
     def text(self):
         return ''.join(self.data)
@@ -81,20 +80,18 @@ class S22RelaxParser(handler.ContentHandler):
             currnode.name = "__ANYNAME__"
         self.data = []
 
-def parse_rng(relaxfile):
-    content = file(relaxfile)
+if __name__ == "__main__":
+    elements = {}
     parser = make_parser()
     parser.setFeature(handler.feature_namespaces, 1)
-    parser.setContentHandler(S22RelaxParser())
+    parser.setContentHandler(S22RelaxParser(elements))
     parser.setErrorHandler(handler.ErrorHandler())
 
-    inpsrc = InputSource()
-    inpsrc.setByteStream(content)
-    parser.parse(inpsrc)
-
-
-if __name__ == "__main__":
-    parse_rng("simple-schema-7-22.rng")
+    for relaxfile in ["simple-manifest-7-22.rng","simple-schema-7-22.rng"]:
+        content = file(relaxfile)
+        inpsrc = InputSource()
+        inpsrc.setByteStream(content)
+        parser.parse(inpsrc)
 
     print "allowed_attributes = {"
 
