@@ -86,5 +86,15 @@ class TestAllowedChildren(unittest.TestCase):
                 for attr in atts:
                     assert attr in newatts, "Element %s:%s not in new grammar for %s:%s" % (attr + element)
 
+class TestAllowsText(unittest.TestCase):
+    def testGrammarNew(self):
+        "Testing grammarnew keys"
+        for element in grammarnew.allows_text:
+            assert element in grammar.allows_text, "%s:%s not in installed grammar" % element
+
+    def testGrammar(self):
+        for element in grammar.allows_text:
+            assert element in grammarnew.allows_text, "%s:%s not in new grammar" % element
+
 if __name__ == '__main__':
     unittest.main()
