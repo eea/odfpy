@@ -548,6 +548,9 @@
                 <optional>
                     <ref name="draw-layer-set"/>
                 </optional>
+                <optional>
+                    <ref name="table-table-template"/>
+                </optional>
             </interleave>
         </element>
     </optional>
@@ -10779,6 +10782,9 @@
         <ref name="common-anim-attlist"/>
         <ref name="common-endsync-timing-attlist"/>
         <ref name="common-timing-attlist"/>
+        <zeroOrMore>
+           <ref name="animation-element"/>
+        </zeroOrMore>
     </element>
 </define>
 <define name="animation-element" combine="choice">

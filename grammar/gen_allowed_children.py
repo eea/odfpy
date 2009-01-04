@@ -69,6 +69,7 @@ class S22RelaxParser(handler.ContentHandler):
         if tag == (RELAXNS, 'define'):
             self.currdef = {}
             self.currdef['refs'] = []
+            self.currdef['elements'] = []
             self.currdef['name'] = attrs.get( (None, 'name'))
         elif tag in ((RELAXNS, 'attribute'), (RELAXNS, 'start')):
             self.ignore = 1
@@ -88,12 +89,12 @@ class S22RelaxParser(handler.ContentHandler):
             return
         #print "END   ",tag
         if tag == (RELAXNS, 'define'):
-            if self.currdef.has_key('element'):
+            if len(self.currdef['elements']):
                 self.definitions[self.currdef['name']] = self.currdef
         elif tag == (RELAXNS, 'name'):
-            self.currdef['element'] = self.text()
+            self.currdef['elements'].append(self.text())
         elif tag == (RELAXNS, 'anyName'):
-            self.currdef['element'] = "__ANYNAME__"
+            self.currdef['elements'].append("__ANYNAME__")
         self.data = []
 
 if __name__ == "__main__":
@@ -110,8 +111,8 @@ if __name__ == "__main__":
         inpsrc.setByteStream(content)
         parser.parse(inpsrc)
 
-    defs = p.definitions
-    keys= defs.keys()
+    definitions = p.definitions
+    keys= definitions.keys()
     keys.sort()
     print '''# -*- coding: utf-8 -*-
 # Copyright (C) 2006-2008 Søren Roug, European Environment Agency
@@ -142,18 +143,20 @@ from odf.namespaces import *'''
 
     print "allowed_children = {"
     for key in keys:
-        val = defs[key]
-        if val['element'] == u'__ANYNAME__':
-            continue
-        ns = val.get('ns','UNKNOWN')
-        refs = val['refs']
-        if len(refs) == 1 and defs[refs[0]]['element'] == u'__ANYNAME__':
-            print "\t(%sNS,u'%s') : " % (nsdict.get(ns,'unknown').upper(), val['element'])
-            print "\t\tNone,"
-        else:
-            print "\t(%sNS,u'%s') : (" % (nsdict.get(ns,'unknown').upper(), val['element'])
-            for r in refs:
-                ns = defs[r].get('ns','UNKNOWN')
-                print "\t\t(%sNS,u'%s'), " % (nsdict.get(ns,'unknown').upper(), defs[r]['element'])
-            print "\t),"
+        definition = definitions[key]
+        for elmname in definition['elements']:
+            if elmname == u'__ANYNAME__':
+                continue
+            ns = definition.get('ns','UNKNOWN')
+            refs = definition['refs']
+            if len(refs) == 1 and u'__ANYNAME__' in definitions[refs[0]]['elements']:
+                print "\t(%sNS,u'%s') : " % (nsdict.get(ns,'unknown').upper(), elmname)
+                print "\t\tNone,"
+            else:
+                print "\t(%sNS,u'%s') : (" % (nsdict.get(ns,'unknown').upper(), elmname)
+                for r in refs:
+                    ns = definitions[r].get('ns','UNKNOWN')
+                    for elmref in definitions[r]['elements']:
+                        print "\t\t(%sNS,u'%s'), " % (nsdict.get(ns,'unknown').upper(), elmref)
+                print "\t),"
     print "}"
