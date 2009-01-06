@@ -55,7 +55,7 @@
             <ref name="style-graphic-properties-content-strict"/>
         </define>
         <define name="style-chart-properties-content">
-            <ref name="style-properties-content"/>
+            <ref name="style-chart-properties-content-strict"/>
         </define>
     </include>
 </grammar>

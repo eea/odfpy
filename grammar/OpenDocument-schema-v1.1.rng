@@ -11516,11 +11516,11 @@
     <attribute name="text:style-name">
         <ref name="styleNameRef"/>
     </attribute>
-    <attribute name="text:paragraph-style-name">
-        <optional>
-            <ref name="styleNameRef"/>
-        </optional>
-    </attribute>
+    <optional>
+        <attribute name="text:paragraph-style-name">
+                <ref name="styleNameRef"/>
+        </attribute>
+    </optional>
 </define>
 <define name="style-font-face">
     <element name="style:font-face">

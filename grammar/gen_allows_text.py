@@ -25,7 +25,6 @@ from odf.namespaces import *
 
 RELAXNS=u"http://relaxng.org/ns/structure/1.0"
 
-#elements = {}
 
 class Node:
     ns = None
@@ -71,6 +70,7 @@ class S22RelaxParser(handler.ContentHandler):
             self.currdef['name'] = attrs.get( (None, 'name'))
             self.currdef['type'] = None
             self.currdef['datatypeLibrary'] = None
+            self.currdef['elements'] = []
         elif tag in ((RELAXNS, 'attribute'), (RELAXNS, 'start')):
             self.ignore = 1
         elif tag == (RELAXNS, 'name'):
@@ -90,31 +90,26 @@ class S22RelaxParser(handler.ContentHandler):
             return
         #print "END   ",tag
         if tag == (RELAXNS, 'define'):
-            if self.currdef.has_key('element'):
+            if len(self.currdef['elements']):
                 self.definitions[self.currdef['name']] = self.currdef
         elif tag == (RELAXNS, 'name'):
-            #print "ELEMENT NAME:", self.text()
-            self.currdef['element'] = self.text()
+            self.currdef['elements'].append(self.text())
         elif tag == (RELAXNS, 'anyName'):
-            self.currdef['element'] = "__ANYNAME__"
+            self.currdef['elements'].append("__ANYNAME__")
         self.data = []
 
-def parse_rng(relaxfile):
-    content = file(relaxfile)
+if __name__ == "__main__":
     parser = make_parser()
     parser.setFeature(handler.feature_namespaces, 1)
     p = S22RelaxParser()
     parser.setContentHandler(p)
     parser.setErrorHandler(handler.ErrorHandler())
 
-    inpsrc = InputSource()
-    inpsrc.setByteStream(content)
-    parser.parse(inpsrc)
-    return p
-
-
-if __name__ == "__main__":
-    p = parse_rng("simple-schema-7-22.rng")
+    for relaxfile in ["simple-manifest-7-22.rng","simple-schema-7-22.rng"]:
+        content = file(relaxfile)
+        inpsrc = InputSource()
+        inpsrc.setByteStream(content)
+        parser.parse(inpsrc)
 
     defs = p.definitions
     keys= defs.keys()
@@ -123,10 +118,11 @@ if __name__ == "__main__":
     print "allows_text = ("
     for key in keys:
         val = defs[key]
-        if val['element'] == u'__ANYNAME__':
-            continue
         if val.get('type') is None:
             continue
         ns = val.get('ns','UNKNOWN')
-        print "\t(%sNS,u'%s')," % (nsdict.get(ns,'unknown').upper(), val['element'])
+        for elmname in val['elements']:
+            if elmname == u'__ANYNAME__':
+                continue
+            print "\t(%sNS,u'%s')," % (nsdict.get(ns,'unknown').upper(), elmname)
     print ")"

@@ -13593,14 +13593,16 @@
 </define>
 
 <define name="common-table-template-attlist" combine="interleave">
-    <attribute name="table:style-name">
-        <ref name="styleNameRef"/>
-    </attribute>
-    <attribute name="table:paragraph-style-name">
-        <optional>
+    <optional>
+        <attribute name="table:style-name">
             <ref name="styleNameRef"/>
-        </optional>
-    </attribute>
+        </attribute>
+    </optional>
+    <optional>
+        <attribute name="table:paragraph-style-name">
+                <ref name="styleNameRef"/>
+        </attribute>
+    </optional>
 </define>
 
 <define name="table-background">

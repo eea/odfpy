@@ -69,10 +69,10 @@ class S22RelaxParser(handler.ContentHandler):
     def endElementNS(self, tag, qname):
         global currnode, currelement
         if tag == (RELAXNS, 'element'):
-            elements[(currelement.ns, currelement.name)] = currelement
+            self.elements[(currelement.ns, currelement.name)] = currelement
             currelement = None
         elif tag == (RELAXNS, 'attribute'):
-            currelement.attrs[currnode.name] = currnode
+            currelement.attrs[(currnode.ns, currnode.name)] = currnode
             currnode = None
         elif tag == (RELAXNS, 'name'):
             currnode.name = self.text()
@@ -101,6 +101,7 @@ if __name__ == "__main__":
         e = elements[s]
         if e.name == u'__ANYNAME__':
             continue
+        print "# allowed_attributes"
         if len(e.attrs.values()) == 1 and e.attrs.values()[0].name == u'__ANYNAME__':
             print "\t(%sNS,u'%s'): None," % (nsdict.get(e.ns,'unknown').upper(), e.name)
         else:

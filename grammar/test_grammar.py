@@ -30,32 +30,38 @@ grammarnew.allowed_children[(STYLENS,u'chart-properties')] = (
                                 )
 
 class TestAllowedAtts(unittest.TestCase):
-    def testGrammarNew(self):
+    def testNewAllowedAtts(self):
         "Testing grammarnew keys"
         for element,atts in grammarnew.allowed_attributes.items():
             assert element in grammar.allowed_attributes, "%s:%s not in installed grammar" % element
             insatts = grammar.allowed_attributes[element]
-            for attr in atts:
-                assert attr in insatts, "Attribute %s:%s not in installed grammar for %s:%s" % (attr + element)
+            if atts is None:
+                assert insatts is None, "Element %s:%s should have unknown attributes" % element
+            else:
+                for attr in atts:
+                    assert attr in insatts, "Attribute %s:%s not in installed grammar for %s:%s" % (attr + element)
 
-    def testGrammar(self):
+    def testAllowedAtts(self):
         "Testing grammar keys"
         for element, atts in grammar.allowed_attributes.items():
             assert element in grammarnew.allowed_attributes, "%s:%s not in new grammar" % element
             newatts = grammarnew.allowed_attributes[element]
-            for attr in atts:
-                assert attr in newatts, "Attribute %s:%s not in new grammar for %s:%s" % (attr + element)
+            if atts is None:
+                assert newatts is None, "Element %s:%s should have unknown attributes" % element
+            else:
+                for attr in atts:
+                    assert attr in newatts, "Attribute %s:%s not in new grammar for %s:%s" % (attr + element)
 
 class TestRequiredAtts(unittest.TestCase):
-    def testGrammarNew(self):
+    def testRequiredAttsNew(self):
         "Testing grammarnew keys"
         for element,atts in grammarnew.required_attributes.items():
             assert element in grammar.required_attributes, "%s:%s not in installed grammar" % element
             insatts = grammar.required_attributes[element]
             for attr in atts:
-                assert attr in insatts, "Attribute %s:%s not in installed grammar" % attr
+                assert attr in insatts, "Attribute %s:%s not in installed grammar for %s:%s" % (attr + element)
 
-    def testGrammar(self):
+    def testRequiredAtts(self):
         "Testing grammar keys"
         for element, atts in grammar.required_attributes.items():
             assert element in grammarnew.required_attributes, "%s:%s not in new grammar" % element
@@ -64,7 +70,7 @@ class TestRequiredAtts(unittest.TestCase):
                 assert attr in newatts, "Attribute %s:%s not in new grammar" % attr
 
 class TestAllowedChildren(unittest.TestCase):
-    def testGrammarNew(self):
+    def testAllowedChildrenNew(self):
         "Testing grammarnew keys"
         for element,atts in grammarnew.allowed_children.items():
             assert element in grammar.allowed_children, "%s:%s not in installed grammar" % element
@@ -75,7 +81,7 @@ class TestAllowedChildren(unittest.TestCase):
                 for attr in atts:
                     assert attr in insatts, "Element %s:%s not in installed grammar for %s:%s" % (attr + element)
 
-    def testGrammar(self):
+    def testAllowedChildren(self):
         "Testing grammar keys"
         for element, atts in grammar.allowed_children.items():
             assert element in grammarnew.allowed_children, "%s:%s not in new grammar" % element
@@ -87,12 +93,12 @@ class TestAllowedChildren(unittest.TestCase):
                     assert attr in newatts, "Element %s:%s not in new grammar for %s:%s" % (attr + element)
 
 class TestAllowsText(unittest.TestCase):
-    def testGrammarNew(self):
+    def testAllowsTextNew(self):
         "Testing grammarnew keys"
         for element in grammarnew.allows_text:
             assert element in grammar.allows_text, "%s:%s not in installed grammar" % element
 
-    def testGrammar(self):
+    def testAllowsText(self):
         for element in grammar.allows_text:
             assert element in grammarnew.allows_text, "%s:%s not in new grammar" % element
 

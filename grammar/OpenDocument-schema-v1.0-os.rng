@@ -16690,7 +16690,7 @@
 </define>
 <define name="style-graphic-properties-attlist" combine="interleave">
     <optional>
-        <attribute name="style:wrap-dynamic-treshold">
+        <attribute name="style:wrap-dynamic-threshold">
             <ref name="nonNegativeLength"/>
         </attribute>
     </optional>
