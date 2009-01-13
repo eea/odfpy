@@ -556,6 +556,9 @@
                 <optional>
                     <ref name="draw-layer-set"/>
                 </optional>
+                <optional>
+                    <ref name="table-table-template"/>
+                </optional>
             </interleave>
         </element>
     </optional>

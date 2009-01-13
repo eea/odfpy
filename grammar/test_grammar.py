@@ -67,7 +67,7 @@ class TestRequiredAtts(unittest.TestCase):
             assert element in grammarnew.required_attributes, "%s:%s not in new grammar" % element
             newatts = grammarnew.required_attributes[element]
             for attr in atts:
-                assert attr in newatts, "Attribute %s:%s not in new grammar" % attr
+                assert attr in newatts, "Attribute %s:%s not in new grammar for %s:%s" % (attr + element)
 
 class TestAllowedChildren(unittest.TestCase):
     def testAllowedChildrenNew(self):

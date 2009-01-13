@@ -72,10 +72,10 @@ class S22RelaxParser(handler.ContentHandler):
             self.elements[(currelement.ns, currelement.name)] = currelement
             currelement = None
         elif tag == (RELAXNS, 'attribute'):
-            currelement.attrs[(currnode.ns, currnode.name)] = currnode
             currnode = None
         elif tag == (RELAXNS, 'name'):
             currnode.name = self.text()
+            currelement.attrs[(currnode.ns, currnode.name)] = currnode
         elif tag == (RELAXNS, 'anyName'):
             currnode.name = "__ANYNAME__"
         self.data = []
@@ -102,11 +102,11 @@ if __name__ == "__main__":
         if e.name == u'__ANYNAME__':
             continue
         print "# allowed_attributes"
-        if len(e.attrs.values()) == 1 and e.attrs.values()[0].name == u'__ANYNAME__':
+        if len(e.attrs.keys()) == 1 and e.attrs.values()[0].name == u'__ANYNAME__':
             print "\t(%sNS,u'%s'): None," % (nsdict.get(e.ns,'unknown').upper(), e.name)
         else:
             print "\t(%sNS,u'%s'):(" % (nsdict.get(e.ns,'unknown').upper(), e.name)
-            for a in e.attrs.values():
-                print "\t\t(%sNS,u'%s')," % (nsdict.get(a.ns,'unknown').upper(), a.name)
+            for a in e.attrs.keys():
+                print "\t\t(%sNS,u'%s')," % (nsdict.get(a[0],'unknown').upper(), a[1])
             print "\t),"
     print "}"
