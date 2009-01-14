@@ -552,6 +552,8 @@ def load(odffile):
             doc.addPicture(mvalue['full-path'], mvalue['media-type'], z.read(mentry))
         elif mentry == "Thumbnails/thumbnail.png":
             doc.addThumbnail(z.read(mentry))
+        elif mentry in ('settings.xml', 'meta.xml', 'content.xml', 'styles.xml'):
+            pass
         else:
             if mvalue['full-path'][-1] == '/':
                 doc._extra.append(OpaqueObject(mvalue['full-path'], mvalue['media-type'], None))
