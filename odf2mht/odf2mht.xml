@@ -5,7 +5,7 @@
   <refentryinfo>
     <productname>odfpy</productname>
     <author><firstname>Søren</firstname><surname>Roug</surname>
-    <contrib>Original author</contrib>
+      <contrib>Original author</contrib>
     </author>
   </refentryinfo>
   <refmeta>
@@ -26,11 +26,10 @@
 </refsynopsisdiv>
 
 <refsect1><title>Description</title>
-<para><command>odf2mht</command> is a program that will 
-create a MIME-encapsulated web archive (.mht) format that can be read by 
-Internet Explorer and many email programs such as MS-Outlook.
+<para><command>Odf2mht</command> is a program that will 
+create a MIME-encapsulated web archive (.mht) format where images are preserved.
+The file can be read by Internet Explorer, MS-Word and many email programs such as MS-Outlook.
 It will write the web archive to stdout.
-IE6 seems to have problems with large MHT files.
 </para>
 <para>
 &quot;Path&quot; is assumed to be an
@@ -48,8 +47,14 @@ OpenDocument file of text, spreadsheet or presentation type.
 </refsect1>
 <refsect1><title>Example</title>
 <screen>
-odf2mht odf-file
+odf2mht example.odt &gt;example.mht
 </screen>
+</refsect1>
+
+<refsect1><title>Bugs</title>
+<para>
+IE6 seems to have problems with large MHT files.
+</para>
 </refsect1>
 <refsect1><title>See Also</title>
 <para>
