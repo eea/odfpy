@@ -49,7 +49,7 @@ TABLENS        = u"urn:oasis:names:tc:opendocument:xmlns:table:1.0"
 TEXTNS         = u"urn:oasis:names:tc:opendocument:xmlns:text:1.0"
 XFORMSNS       = u"http://www.w3.org/2002/xforms"
 XLINKNS        = u"http://www.w3.org/1999/xlink"
-XMLNS          = "http://www.w3.org/XML/1998/namespace"
+XMLNS          = u"http://www.w3.org/XML/1998/namespace"
 
 
 nsdict = {

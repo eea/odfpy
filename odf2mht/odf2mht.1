@@ -1,12 +1,12 @@
 .\"     Title: odf2mht
 .\"    Author: S\(/oren Roug
 .\" Generator: DocBook XSL Stylesheets v1.74.0 <http://docbook.sf.net/>
-.\"      Date: 01/04/2009
+.\"      Date: 01/21/2009
 .\"    Manual: User commands
 .\"    Source: odfpy
 .\"  Language: English
 .\"
-.TH "ODF2MHT" "1" "01/04/2009" "odfpy" "User commands"
+.TH "ODF2MHT" "1" "01/21/2009" "odfpy" "User commands"
 .\" -----------------------------------------------------------------
 .\" * (re)Define some macros
 .\" -----------------------------------------------------------------
@@ -175,8 +175,8 @@ odf2mht \- Convert ODF to HTML archive
 .fam
 .SH "Description"
 .PP
-\fBodf2mht\fR
-is a program that will create a MIME\-encapsulated web archive (\&.mht) format that can be read by Internet Explorer and many email programs such as MS\-Outlook\&. It will write the web archive to stdout\&. IE6 seems to have problems with large MHT files\&.
+\fBOdf2mht\fR
+is a program that will create a MIME\-encapsulated web archive (\&.mht) format where images are preserved\&. The file can be read by Internet Explorer, MS\-Word and many email programs such as MS\-Outlook\&. It will write the web archive to stdout\&.
 .PP
 "Path" is assumed to be an OpenDocument file of text, spreadsheet or presentation type\&.
 .SH "References"
@@ -209,7 +209,7 @@ http://www\&.faqs\&.org/rfcs/rfc2557\&.html
 .BB lightgray adjust-for-leading-newline
 .sp -1
 
-odf2mht odf\-file
+odf2mht example\&.odt >example\&.mht
 .EB lightgray adjust-for-leading-newline
 .if t \{\
 .sp 1
@@ -220,6 +220,9 @@ odf2mht odf\-file
 .if n \{\
 .RE
 .\}
+.SH "Bugs"
+.PP
+IE6 seems to have problems with large MHT files\&.
 .SH "See Also"
 .PP
 
