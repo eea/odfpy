@@ -180,13 +180,6 @@ odfmeta -I "title:The Little Engine That Could" -A subject:I-think-I-can -o newf
 </para>
 </refsect1>
 
-<refsect1><title>Todo</title>
-<para>
-Should also let the user view and change the &lt;text:user-field-decl&gt; in
-content.xml. Perhaps this is better done by a different application?
-</para>
-</refsect1>
-
 <refsect1><title>Bugs</title>
 <para>
 All known versions of OpenOffice.org keep only four &lt;meta:user-defined&gt; elements.

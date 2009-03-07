@@ -56,7 +56,7 @@ showversion = None
 
 def exitwithusage(exitcode=2):
     """ print out usage information """
-    sys.stderr.write("Usage: %s [-cdlv] [-xXaAI metafield]... [-o output] [inputfile]\n" % sys.argv[0])
+    sys.stderr.write("Usage: %s [-cdlvV] [-xXaAI metafield]... [-o output] [inputfile]\n" % sys.argv[0])
     sys.stderr.write("\tInputfile must be OpenDocument format\n")
     sys.exit(exitcode)
 
