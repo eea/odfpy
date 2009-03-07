@@ -23,6 +23,8 @@
 <cmdsynopsis>
     <command>odfmeta</command>
     <arg>-l</arg>
+    <arg>-v</arg>
+    <arg>-V</arg>
     <arg>-c</arg>
     <arg>-d</arg>
     <arg rep="repeat">-x <replaceable>metafield</replaceable></arg>
@@ -59,6 +61,17 @@ List (extract) all known metadata fields.
 </listitem>
 </varlistentry>
 
+<varlistentry>
+<term>-v or -V</term>
+<listitem>
+<para>
+Print the version number of the ODF document <emphasis>format</emphasis>.
+If you use -V it will print "version:" before the number for compatibility with -X.
+The version number can't be modified.
+
+</para>
+</listitem>
+</varlistentry>
 <varlistentry>
 <term>-c</term>
 <listitem>
@@ -155,14 +168,13 @@ If no <option>-o</option> option is provided, the ODT file will be written to st
 
 <refsect1><title>Examples</title>
 <screen>
-odfmeta -l odf-file
+odfmeta -l odf-file.odt
 odfmeta -I "title:The Little Engine That Could" -A subject:I-think-I-can -o newfile.odt source.odt
 </screen>
 </refsect1>
 
 <refsect1><title>See Also</title>
 <para>
-<command>odftools</command>(1),
 <command>formail</command>(1),
 <command>id3tag</command>(1)
 </para>

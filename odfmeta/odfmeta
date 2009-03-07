@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-# Copyright (C) 2006 Søren Roug, European Environment Agency
+# Copyright (C) 2006-2009 Søren Roug, European Environment Agency
 #
 # This is free software.  You may redistribute it under the terms
 # of the Apache license and the GNU General Public License Version
@@ -52,10 +52,11 @@ Xfields = []
 addfields = {}
 deletefields = {}
 yieldfields = {}
+showversion = None
 
 def exitwithusage(exitcode=2):
     """ print out usage information """
-    sys.stderr.write("Usage: %s [-cdl] [-xXaAI metafield]... [-o output] [inputfile]\n" % sys.argv[0])
+    sys.stderr.write("Usage: %s [-cdlv] [-xXaAI metafield]... [-o output] [inputfile]\n" % sys.argv[0])
     sys.stderr.write("\tInputfile must be OpenDocument format\n")
     sys.exit(exitcode)
 
@@ -92,6 +93,7 @@ class odfmetaparser(base):
         then manipulate in memory.
         Small issue: Reorders elements
     """
+    version = 'Unknown'
 
     def __init__(self):
         self._mimetype = ''
@@ -107,6 +109,11 @@ class odfmetaparser(base):
 # location and not at the end
 #       if name == (METANS,u'template'):
 #           self._data = [attrs.get((XLINKNS,u'title'),'')]
+        if showversion and name == (OFFICENS,u'document-meta'):
+            if showversion == '-V':
+                print "version:%s" % attrs.get((OFFICENS,u'version'),'Unknown')
+            else:
+                print "%s" % attrs.get((OFFICENS,u'version'),'Unknown')
         if name == (METANS,u'user-defined'):
             field = attrs.get((METANS,u'name'))
         if field in deletefields:
@@ -165,7 +172,7 @@ writemeta = False   # Do we change any meta data?
 usenormalize = False
 
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "cdlI:A:a:o:x:X:")
+    opts, args = getopt.getopt(sys.argv[1:], "cdlvVI:A:a:o:x:X:")
 except getopt.GetoptError:
     exitwithusage()
 
@@ -193,6 +200,8 @@ for o, a in opts:
         deletefields[(DCNS,u'date')] = True
     if o == '-c':
         usenormalize = True
+    if o in ('-v', '-V'):
+        showversion = o
     if o == '-l':
         Xfields = fields.values()
     if o == "-x":

@@ -1,12 +1,12 @@
 .\"     Title: odfmeta
 .\"    Author: S\(/oren Roug
 .\" Generator: DocBook XSL Stylesheets v1.74.0 <http://docbook.sf.net/>
-.\"      Date: 01/04/2009
+.\"      Date: 03/07/2009
 .\"    Manual: User commands
 .\"    Source: odfpy
 .\"  Language: English
 .\"
-.TH "ODFMETA" "1" "01/04/2009" "odfpy" "User commands"
+.TH "ODFMETA" "1" "03/07/2009" "odfpy" "User commands"
 .\" -----------------------------------------------------------------
 .\" * (re)Define some macros
 .\" -----------------------------------------------------------------
@@ -171,7 +171,7 @@ odfmeta \- List or change the metadata of an ODF file
 .SH "Synopsis"
 .fam C
 .HP \w'\fBodfmeta\fR\ 'u
-\fBodfmeta\fR [\-l] [\-c] [\-d] [\-x\ \fImetafield\fR...] [\-X\ \fImetafield\fR...] [\-a\ \fImetafield\fR...] [\-A\ \fImetafield\fR...] [\-I\ \fImetafield\fR...] [\-o\ \fIpath\fR] \fIpath\fR
+\fBodfmeta\fR [\-l] [\-v] [\-V] [\-c] [\-d] [\-x\ \fImetafield\fR...] [\-X\ \fImetafield\fR...] [\-a\ \fImetafield\fR...] [\-A\ \fImetafield\fR...] [\-I\ \fImetafield\fR...] [\-o\ \fIpath\fR] \fIpath\fR
 .fam
 .SH "Description"
 .PP
@@ -184,6 +184,12 @@ is a program that will list or change the metadata in an OpenDocument file\&. Th
 \-l
 .RS 4
 List (extract) all known metadata fields\&.
+.RE
+.PP
+\-v or \-V
+.RS 4
+Print the version number of the ODF document
+\fIformat\fR\&. If you use \-V it will print "version:" before the number for compatibility with \-X\&. The version number can\'t be modified\&.
 .RE
 .PP
 \-c
@@ -241,7 +247,7 @@ option is provided, the ODT file will be written to stdout\&.
 .BB lightgray adjust-for-leading-newline
 .sp -1
 
-odfmeta \-l odf\-file
+odfmeta \-l odf\-file\&.odt
 odfmeta \-I "title:The Little Engine That Could" \-A subject:I\-think\-I\-can \-o newfile\&.odt source\&.odt
 .EB lightgray adjust-for-leading-newline
 .if t \{\
@@ -256,7 +262,6 @@ odfmeta \-I "title:The Little Engine That Could" \-A subject:I\-think\-I\-can \-
 .SH "See Also"
 .PP
 
-\fBodftools\fR(1),
 \fBformail\fR(1),
 \fBid3tag\fR(1)
 .SH "Todo"

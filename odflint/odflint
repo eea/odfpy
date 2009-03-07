@@ -34,6 +34,11 @@ except ImportError:
 
 
 extension_attributes = {
+	 "OpenDocument 1.2" : {
+		(STYLENS,u'section-properties'): (
+			(STYLENS,u'editable'),
+		),
+	},
 	 "OpenOffice.org" : {
 		(METANS,u'template'): (
 			(XLINKNS,u'role'),
@@ -44,9 +49,6 @@ extension_attributes = {
 		(STYLENS,u'paragraph-properties'): (
 			(TEXTNS,u'enable-numbering'),
                         (STYLENS,u'join-border'),
-		),
-		(STYLENS,u'section-properties'): (
-			(STYLENS,u'editable'),
 		),
 		(STYLENS,u'table-cell-properties'): (
 			(STYLENS,u'writing-mode'),

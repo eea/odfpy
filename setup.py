@@ -29,7 +29,6 @@ if platform.system() in ('Linux','Unix'):
            'mailodf/mailodf.1',
            'odf2xhtml/odf2xhtml.1',
            'odf2mht/odf2mht.1',
-           'odf2war/odf2war.1',
            'odf2xml/odf2xml.1',
            'odfimgimport/odfimgimport.1',
            'odflint/odflint.1',
@@ -79,7 +78,6 @@ In addition to the API, there are a few scripts:
 - mailodf - Email ODF file as HTML archive
 - odf2xhtml - Convert ODF to (X)HTML
 - odf2mht - Convert ODF to HTML archive
-- odf2war - Convert ODF to KDE web archive
 - odf2xml - Create OpenDocument XML file from OD? package
 - odfimgimport - Import external images
 - odflint - Check ODF file for problems
@@ -99,7 +97,6 @@ Take also a look at the contrib folder."""
           'mailodf/mailodf',
           'odf2xhtml/odf2xhtml',
           'odf2mht/odf2mht',
-          'odf2war/odf2war',
           'odf2xml/odf2xml',
           'odfimgimport/odfimgimport',
           'odflint/odflint',
