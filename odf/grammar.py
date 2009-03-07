@@ -27,12 +27,14 @@ from namespaces import *
 
 # The following code is generated from the RelaxNG schema with this notice:
 
-#   OASIS OpenDocument v1.0
-#   OASIS standard, 1 May 2005
-#   Relax-NG Manifest Schema
+#   OASIS OpenDocument v1.1
+#   OASIS Standard, 1 Feb 2007
+#   Relax-NG Schema
 
-#   © 2002-2005 OASIS Open
-#   © 1999-2005 Sun Microsystems, Inc.
+#   $Id$
+
+#   © 2002-2007 OASIS Open
+#   © 1999-2007 Sun Microsystems, Inc.
 
 #   This document and translations of it may be copied and furnished
 #   to others, and derivative works that comment on or otherwise explain
@@ -337,6 +339,7 @@ allowed_children = {
 		(STYLENS,u'map'),
 		(STYLENS,u'text-properties'),
 	),
+# allowed_children
 	(NUMBERNS,u'time-style') : (
 		(NUMBERNS,u'am-pm'),
 		(NUMBERNS,u'hours'),
@@ -436,6 +439,7 @@ allowed_children = {
 		(TEXTNS,u'list'),
 		(TEXTNS,u'p'),
 	),
+# allowed_children
 	(DRAWNS,u'ellipse') : (
 		(DRAWNS,u'glue-point'),
 		(OFFICENS,u'event-listeners'),
@@ -450,6 +454,7 @@ allowed_children = {
 	),
 	(DRAWNS,u'equation') : (
 	),
+# allowed_children
 	(DRAWNS,u'fill-image') : (
 	),
 	(DRAWNS,u'floating-frame') : (
@@ -470,6 +475,7 @@ allowed_children = {
 		(SVGNS,u'desc'),
 		(SVGNS,u'title'),
 	),
+# allowed_children
 	(DRAWNS,u'g') : (
 		(DR3DNS,u'scene'),
 		(DRAWNS,u'caption'),
@@ -541,6 +547,7 @@ allowed_children = {
 		(MATHNS,u'math'),
 		(OFFICENS,u'document'),
 	),
+# allowed_children
 	(DRAWNS,u'object-ole') : (
 		(OFFICENS,u'binary-data'),
 	),
@@ -579,6 +586,7 @@ allowed_children = {
 		(PRESENTATIONNS,u'animations'),
 		(PRESENTATIONNS,u'notes'),
 	),
+# allowed_children
 	(DRAWNS,u'page-thumbnail') : (
 		(SVGNS,u'desc'),
 		(SVGNS,u'title'),
@@ -612,6 +620,7 @@ allowed_children = {
 		(TEXTNS,u'list'),
 		(TEXTNS,u'p'),
 	),
+# allowed_children
 	(DRAWNS,u'rect') : (
 		(DRAWNS,u'glue-point'),
 		(OFFICENS,u'event-listeners'),
@@ -667,6 +676,7 @@ allowed_children = {
 		(TEXTNS,u'table-of-content'),
 		(TEXTNS,u'user-index'),
 	),
+# allowed_children
 	(FORMNS,u'button') : (
 		(FORMNS,u'properties'),
 		(OFFICENS,u'event-listeners'),
@@ -757,6 +767,7 @@ allowed_children = {
 		(FORMNS,u'properties'),
 		(OFFICENS,u'event-listeners'),
 	),
+# allowed_children
 	(FORMNS,u'image-frame') : (
 		(FORMNS,u'properties'),
 		(OFFICENS,u'event-listeners'),
@@ -1263,6 +1274,7 @@ allowed_children = {
 		(TEXTNS,u'user-index'),
 		(TEXTNS,u'variable-decls'),
 	),
+# allowed_children
 	(STYLENS,u'footer-left') : (
 		(STYLENS,u'region-center'),
 		(STYLENS,u'region-left'),
@@ -1300,6 +1312,7 @@ allowed_children = {
 		(STYLENS,u'columns'),
 		(TEXTNS,u'list-style'),
 	),
+# allowed_children
 	(STYLENS,u'handout-master') : (
 		(DR3DNS,u'scene'),
 		(DRAWNS,u'caption'),
@@ -1420,6 +1433,7 @@ allowed_children = {
 		(STYLENS,u'columns'),
 		(STYLENS,u'footnote-sep'),
 	),
+# allowed_children
 	(STYLENS,u'paragraph-properties') : (
 		(STYLENS,u'background-image'),
 		(STYLENS,u'drop-cap'),
@@ -1463,6 +1477,7 @@ allowed_children = {
 	(STYLENS,u'tab-stops') : (
 		(STYLENS,u'tab-stop'),
 	),
+# allowed_children
 	(STYLENS,u'table-cell-properties') : (
 		(STYLENS,u'background-image'),
 	),
@@ -1536,6 +1551,7 @@ allowed_children = {
 		(TABLENS,u'error-message'),
 		(TABLENS,u'help-message'),
 	),
+# allowed_children
 	(TABLENS,u'content-validations') : (
 		(TABLENS,u'content-validation'),
 	),
@@ -1579,6 +1595,7 @@ allowed_children = {
 		(TEXTNS,u'table-of-content'),
 		(TEXTNS,u'user-index'),
 	),
+# allowed_children
 	(TABLENS,u'cut-offs') : (
 		(TABLENS,u'insertion-cut-off'),
 		(TABLENS,u'movement-cut-off'),
@@ -1650,6 +1667,7 @@ allowed_children = {
 	),
 	(TABLENS,u'database-source-table') : (
 	),
+# allowed_children
 	(TABLENS,u'dde-link') : (
 		(OFFICENS,u'dde-source'),
 		(TABLENS,u'table'),
@@ -1676,6 +1694,7 @@ allowed_children = {
 		(TABLENS,u'highlighted-range'),
 		(TABLENS,u'operation'),
 	),
+# allowed_children
 	(TABLENS,u'error-macro') : (
 	),
 	(TABLENS,u'error-message') : (
@@ -1743,6 +1762,7 @@ allowed_children = {
 		(TABLENS,u'named-expression'),
 		(TABLENS,u'named-range'),
 	),
+# allowed_children
 	(TABLENS,u'named-range') : (
 	),
 	(TABLENS,u'null-date') : (
@@ -1777,6 +1797,7 @@ allowed_children = {
 		(DRAWNS,u'rect'),
 		(DRAWNS,u'regular-polygon'),
 	),
+# allowed_children
 	(TABLENS,u'sort') : (
 		(TABLENS,u'sort-by'),
 	),
@@ -1857,6 +1878,7 @@ allowed_children = {
 		(TEXTNS,u'table-of-content'),
 		(TEXTNS,u'user-index'),
 	),
+# allowed_children
 	(TABLENS,u'table-column') : (
 	),
 	(TABLENS,u'table-column-group') : (
@@ -1890,6 +1912,7 @@ allowed_children = {
 		(TABLENS,u'table-row'),
 		(TEXTNS,u'soft-page-break'),
 	),
+# allowed_children
 	(TABLENS,u'table-source') : (
 	),
 	(TABLENS,u'table-template') : (
@@ -2040,6 +2063,7 @@ allowed_children = {
 		(TEXTNS,u'variable-input'),
 		(TEXTNS,u'variable-set'),
 	),
+# allowed_children
 	(TEXTNS,u'alphabetical-index') : (
 		(TEXTNS,u'alphabetical-index-source'),
 		(TEXTNS,u'index-body'),
@@ -2325,6 +2349,7 @@ allowed_children = {
 		(TEXTNS,u'variable-input'),
 		(TEXTNS,u'variable-set'),
 	),
+# allowed_children
 	(TEXTNS,u'hidden-paragraph') : (
 	),
 	(TEXTNS,u'hidden-text') : (
@@ -2742,6 +2767,7 @@ allowed_children = {
 	),
 	(TEXTNS,u'reference-mark-end') : (
 	),
+# allowed_children
 	(TEXTNS,u'reference-mark-start') : (
 	),
 	(TEXTNS,u'reference-ref') : (
@@ -2877,6 +2903,7 @@ allowed_children = {
 		(TEXTNS,u'variable-input'),
 		(TEXTNS,u'variable-set'),
 	),
+# allowed_children
 	(TEXTNS,u'ruby-text') : (
 	),
 	(TEXTNS,u's') : (
@@ -2930,6 +2957,7 @@ allowed_children = {
 	),
 	(TEXTNS,u'sender-country') : (
 	),
+# allowed_children
 	(TEXTNS,u'sender-email') : (
 	),
 	(TEXTNS,u'sender-fax') : (
@@ -2969,6 +2997,7 @@ allowed_children = {
 	),
 	(TEXTNS,u'sort-key') : (
 	),
+# allowed_children
 	(TEXTNS,u'span') : (
 		(DR3DNS,u'scene'),
 		(DRAWNS,u'a'),
@@ -3096,6 +3125,7 @@ allowed_children = {
 		(TEXTNS,u'variable-input'),
 		(TEXTNS,u'variable-set'),
 	),
+# allowed_children
 	(TEXTNS,u'subject') : (
 	),
 	(TEXTNS,u'tab') : (
@@ -3232,6 +3262,7 @@ allows_text = (
 	(METANS,u'date-string'),
 	(METANS,u'editing-cycles'),
 	(METANS,u'editing-duration'),
+# allows_text
 	(METANS,u'generator'),
 	(METANS,u'initial-creator'),
 	(METANS,u'keyword'),
@@ -3274,6 +3305,7 @@ allows_text = (
 	(TEXTNS,u'hidden-paragraph'),
 	(TEXTNS,u'hidden-text'),
 	(TEXTNS,u'image-count'),
+# allowed_children
 	(TEXTNS,u'index-entry-span'),
 	(TEXTNS,u'index-title-template'),
 	(TEXTNS,u'initial-creator'),
@@ -3321,6 +3353,7 @@ allows_text = (
 	(TEXTNS,u'sequence'),
 	(TEXTNS,u'sequence-ref'),
 	(TEXTNS,u'sheet-name'),
+# allowed_children
 	(TEXTNS,u'span'),
 	(TEXTNS,u'subject'),
 	(TEXTNS,u'table-count'),
@@ -3364,6 +3397,7 @@ required_attributes = {
 	(ANIMNS,u'set'): (
 		(SMILNS,u'attributeName'),
 	),
+# required_attributes
 	(ANIMNS,u'transitionFilter'): (
 		(SMILNS,u'type'),
 	),
@@ -3389,6 +3423,7 @@ required_attributes = {
 	(CONFIGNS,u'config-item-set'): (
 		(CONFIGNS,u'name'),
 	),
+# required_attributes
 	(NUMBERNS,u'boolean-style'): (
 		(STYLENS,u'name'),
 	),
@@ -3424,6 +3459,7 @@ required_attributes = {
 		(SVGNS,u'viewBox'),
 		(SVGNS,u'd'),
 	),
+# required_attributes
 	(DRAWNS,u'a'): (
 		(XLINKNS,u'href'),
 	),
@@ -3470,7 +3506,9 @@ required_attributes = {
 		(SVGNS,u'y'),
 		(SVGNS,u'x'),
 		(DRAWNS,u'id'),
+		(DRAWNS,u'escape-direction'),
 	),
+# required_attributes
 	(DRAWNS,u'gradient'): (
 		(DRAWNS,u'style'),
 	),
@@ -3518,6 +3556,7 @@ required_attributes = {
 		(DRAWNS,u'points'),
 		(SVGNS,u'viewBox'),
 	),
+# required_attributes
 	(DRAWNS,u'polyline'): (
 		(DRAWNS,u'points'),
 		(SVGNS,u'viewBox'),
@@ -3564,6 +3603,7 @@ required_attributes = {
 	(FORMNS,u'hidden'): (
 		(FORMNS,u'id'),
 	),
+# required_attributes
 	(FORMNS,u'image'): (
 		(FORMNS,u'id'),
 	),
@@ -3646,6 +3686,7 @@ required_attributes = {
 		(DRAWNS,u'color'),
 		(DRAWNS,u'shape-id'),
 	),
+# required_attributes
 	(PRESENTATIONNS,u'event-listener'): (
 		(PRESENTATIONNS,u'action'),
 		(SCRIPTNS,u'event-name'),
@@ -3692,6 +3733,7 @@ required_attributes = {
 	(STYLENS,u'column'): (
 		(STYLENS,u'rel-width'),
 	),
+# required_attributes
 	(STYLENS,u'column-sep'): (
 		(STYLENS,u'width'),
 	),
@@ -3739,6 +3781,7 @@ required_attributes = {
 	(SVGNS,u'stop'): (
 		(SVGNS,u'offset'),
 	),
+# required_attributes
 	(TABLENS,u'body'): (
 		(TEXTNS,u'style-name'),
 	),
@@ -3809,6 +3852,7 @@ required_attributes = {
 	(TABLENS,u'database-range'): (
 		(TABLENS,u'target-range-address'),
 	),
+# required_attributes
 	(TABLENS,u'database-source-query'): (
 		(TABLENS,u'query-name'),
 		(TABLENS,u'database-name'),
@@ -3855,6 +3899,7 @@ required_attributes = {
 		(TABLENS,u'position'),
 		(TABLENS,u'id'),
 	),
+# required_attributes
 	(TABLENS,u'label-range'): (
 		(TABLENS,u'label-cell-range-address'),
 		(TABLENS,u'data-cell-range-address'),
@@ -3887,6 +3932,7 @@ required_attributes = {
 		(TABLENS,u'index'),
 		(TABLENS,u'name'),
 	),
+# required_attributes
 	(TABLENS,u'scenario'): (
 		(TABLENS,u'is-active'),
 		(TABLENS,u'scenario-ranges'),
@@ -3955,6 +4001,7 @@ required_attributes = {
 	(TEXTNS,u'bookmark'): (
 		(TEXTNS,u'name'),
 	),
+# required_attributes
 	(TEXTNS,u'bookmark-end'): (
 		(TEXTNS,u'name'),
 	),
@@ -4001,6 +4048,7 @@ required_attributes = {
 	(TEXTNS,u'dde-connection'): (
 		(TEXTNS,u'connection-name'),
 	),
+# required_attributes
 	(TEXTNS,u'dde-connection-decl'): (
 		(OFFICENS,u'dde-topic'),
 		(OFFICENS,u'dde-application'),
@@ -4048,6 +4096,7 @@ required_attributes = {
 	(TEXTNS,u'list-style'): (
 		(STYLENS,u'name'),
 	),
+# required_attributes
 	(TEXTNS,u'measure'): (
 		(TEXTNS,u'kind'),
 	),
@@ -4211,6 +4260,7 @@ allowed_attributes = {
 # Completes Dublin Core end
 	(MATHNS,u'math'): None,
 	(XFORMSNS,u'model'): None,
+# allowed_attributes
 	(ANIMNS,u'animate'):(
 		(ANIMNS,u'formula'),
 		(ANIMNS,u'sub-item'),
@@ -4238,6 +4288,7 @@ allowed_attributes = {
 		(SMILNS,u'to'),
 		(SMILNS,u'values'),
 	),
+# allowed_attributes
 	(ANIMNS,u'animateColor'):(
 		(ANIMNS,u'color-interpolation'),
 		(ANIMNS,u'color-interpolation-direction'),
@@ -4297,6 +4348,7 @@ allowed_attributes = {
 		(SVGNS,u'origin'),
 		(SVGNS,u'path'),
 	),
+# allowed_attributes
 	(ANIMNS,u'animateTransform'):(
 		(ANIMNS,u'formula'),
 		(ANIMNS,u'sub-item'),
@@ -4322,6 +4374,7 @@ allowed_attributes = {
 		(SMILNS,u'values'),
 		(SVGNS,u'type'),
 	),
+# allowed_attributes
 	(ANIMNS,u'audio'):(
 		(ANIMNS,u'audio-level'),
 		(ANIMNS,u'id'),
@@ -4352,6 +4405,7 @@ allowed_attributes = {
 		(ANIMNS,u'id'),
 		(PRESENTATIONNS,u'master-element'),
 	),
+# allowed_attributes
 	(ANIMNS,u'iterate'):(
 		(ANIMNS,u'id'),
 		(ANIMNS,u'iterate-interval'),
@@ -4400,6 +4454,7 @@ allowed_attributes = {
 		(SMILNS,u'restart'),
 		(PRESENTATIONNS,u'master-element'),
 	),
+# allowed_attributes
 	(ANIMNS,u'param'):(
 		(ANIMNS,u'name'),
 		(ANIMNS,u'value'),
@@ -4447,6 +4502,7 @@ allowed_attributes = {
 		(SMILNS,u'to'),
 
 	),
+# allowed_attributes
 	(ANIMNS,u'transitionFilter'):(
 		(ANIMNS,u'formula'),
 		(ANIMNS,u'sub-item'),
@@ -4564,6 +4620,7 @@ allowed_attributes = {
 	(CHARTNS,u'stock-gain-marker'):(
 		(CHARTNS,u'style-name'),
 	),
+# allowed_attributes
 	(CHARTNS,u'stock-loss-marker'):(
 		(CHARTNS,u'style-name'),
 	),
@@ -4637,6 +4694,7 @@ allowed_attributes = {
 		(NUMBERNS,u'country'),
 		(NUMBERNS,u'language'),
 	),
+# allowed_attributes
 	(NUMBERNS,u'date-style'):(
 		(NUMBERNS,u'transliteration-language'),
 		(STYLENS,u'name'),
@@ -4675,6 +4733,7 @@ allowed_attributes = {
 	(NUMBERNS,u'hours'):(
 		(NUMBERNS,u'style'),
 	),
+# allowed_attributes
 	(NUMBERNS,u'minutes'):(
 		(NUMBERNS,u'style'),
 	),
@@ -5084,6 +5143,7 @@ allowed_attributes = {
 		(SVGNS,u'x'),
 		(DRAWNS,u'text-style-name'),
 	),
+# allowed_attributes
 	(DRAWNS,u'enhanced-geometry'):(
 		(DRAWNS,u'extrusion-rotation-center'),
 		(DRAWNS,u'extrusion-shininess'),
@@ -5129,6 +5189,7 @@ allowed_attributes = {
 		(DRAWNS,u'glue-point-type'),
 		(DRAWNS,u'text-path'),
 	),
+# allowed_attributes
 	(DRAWNS,u'equation'):(
 		(DRAWNS,u'formula'),
 		(DRAWNS,u'name'),
@@ -5179,6 +5240,7 @@ allowed_attributes = {
 		(TEXTNS,u'anchor-page-number'),
 		(TEXTNS,u'anchor-type'),
 	),
+# allowed_attributes
 	(DRAWNS,u'g'):(
 		(DRAWNS,u'id'),
                 (DRAWNS,u'caption-id'),
@@ -5201,6 +5263,7 @@ allowed_attributes = {
 		(SVGNS,u'x'),
 		(DRAWNS,u'align'),
 		(DRAWNS,u'id'),
+		(DRAWNS,u'escape-direction'),
 	),
 	(DRAWNS,u'gradient'):(
 		(DRAWNS,u'style'),
@@ -5250,6 +5313,7 @@ allowed_attributes = {
 		(DRAWNS,u'name'),
 		(DRAWNS,u'display'),
 	),
+# allowed_attributes
 	(DRAWNS,u'layer-set'):(
 	),
 	(DRAWNS,u'line'):(
@@ -5371,6 +5435,7 @@ allowed_attributes = {
 		(DRAWNS,u'name'),
 		(DRAWNS,u'value'),
 	),
+# allowed_attributes
 	(DRAWNS,u'path'):(
 		(TABLENS,u'table-background'),
 		(DRAWNS,u'layer'),
@@ -5428,6 +5493,7 @@ allowed_attributes = {
 		(SVGNS,u'viewBox'),
 		(TEXTNS,u'anchor-type'),
 	),
+# allowed_attributes
 	(DRAWNS,u'polyline'):(
 		(TABLENS,u'table-background'),
 		(DRAWNS,u'layer'),
@@ -5523,6 +5589,7 @@ allowed_attributes = {
 		(FONS,u'max-width'),
                 (TEXTNS,u'id'),
 	),
+# allowed_attributes
 	(FORMNS,u'button'):(
 		(FORMNS,u'tab-stop'),
 		(FORMNS,u'focus-on-click'),
@@ -5594,6 +5661,7 @@ allowed_attributes = {
 		(FORMNS,u'current-value'),
 		(FORMNS,u'size'),
 	),
+# allowed_attributes
 	(FORMNS,u'connection-resource'):(
 		(XLINKNS,u'href'),
 	),
@@ -5643,6 +5711,7 @@ allowed_attributes = {
 		(FORMNS,u'printable'),
 		(FORMNS,u'id'),
 	),
+# allowed_attributes
 	(FORMNS,u'form'):(
 		(XLINKNS,u'actuate'),
 		(XLINKNS,u'href'),
@@ -5699,6 +5768,7 @@ allowed_attributes = {
 		(FORMNS,u'printable'),
 		(FORMNS,u'id'),
 	),
+# allowed_attributes
 	(FORMNS,u'generic-control'):(
 		(FORMNS,u'control-implementation'),
 		(XFORMSNS,u'bind'),
@@ -5978,6 +6048,7 @@ allowed_attributes = {
 	),
 	(METANS,u'generator'):(
 	),
+# allowed_attributes
 	(METANS,u'hyperlink-behaviour'):(
 		(OFFICENS,u'target-frame-name'),
 		(XLINKNS,u'show'),
@@ -6073,6 +6144,7 @@ allowed_attributes = {
 	),
 	(OFFICENS,u'image'):(
 	),
+# allowed_attributes
 	(OFFICENS,u'master-styles'):(
 	),
 	(OFFICENS,u'meta'):(
@@ -6143,6 +6215,7 @@ allowed_attributes = {
 		(PRESENTATIONNS,u'speed'),
 		(DRAWNS,u'shape-id'),
 	),
+# allowed_attributes
 	(PRESENTATIONNS,u'hide-text'):(
 		(PRESENTATIONNS,u'direction'),
 		(PRESENTATIONNS,u'effect'),
@@ -6216,6 +6289,7 @@ allowed_attributes = {
 		(PRESENTATIONNS,u'play-full'),
 		(XLINKNS,u'show'),
 	),
+# allowed_attributes
 	(SCRIPTNS,u'event-listener'):(
 		(SCRIPTNS,u'language'),
 		(SCRIPTNS,u'macro-name'),
@@ -6308,6 +6382,7 @@ allowed_attributes = {
 	(STYLENS,u'default-style'):(
 		(STYLENS,u'family'),
 	),
+# allowed_attributes
 	(STYLENS,u'drawing-page-properties'): (
 		(DRAWNS,u'fill'),
 		(DRAWNS,u'fill-color'),
@@ -6350,6 +6425,7 @@ allowed_attributes = {
 		(STYLENS,u'style-name'),
 		(STYLENS,u'lines'),
 	),
+# allowed_attributes
 	(STYLENS,u'font-face'):(
 		(STYLENS,u'font-adornments'),
 		(STYLENS,u'font-charset'),
@@ -6590,6 +6666,7 @@ allowed_attributes = {
 		(PRESENTATIONNS,u'use-header-name'),
 		(PRESENTATIONNS,u'use-date-time-name'),
 	),
+# allowed_attributes
 	(STYLENS,u'header'):(
 		(STYLENS,u'display'),
 	),
@@ -6654,6 +6731,7 @@ allowed_attributes = {
 		(STYLENS,u'name'),
 		(STYLENS,u'page-usage'),
 	),
+# allowed_attributes
 	(STYLENS,u'page-layout-properties'): (
 		(FONS,u'background-color'),
 		(FONS,u'border'),
@@ -6703,6 +6781,7 @@ allowed_attributes = {
 		(STYLENS,u'table-centering'),
 		(STYLENS,u'writing-mode'),
 	),
+# allowed_attributes
 	(STYLENS,u'paragraph-properties'): (
 		(FONS,u'background-color'),
 		(FONS,u'border'),
@@ -6793,6 +6872,7 @@ allowed_attributes = {
 		(STYLENS,u'display-name'),
 		(STYLENS,u'parent-style-name'),
 	),
+# allowed_attributes
 	(STYLENS,u'tab-stop'):(
 		(STYLENS,u'leader-text-style'),
 		(STYLENS,u'leader-width'),
@@ -6841,6 +6921,7 @@ allowed_attributes = {
 		(STYLENS,u'text-align-source'),
 		(STYLENS,u'vertical-align'),
 	),
+# allowed_attributes
 	(STYLENS,u'table-column-properties'): (
 		(FONS,u'break-after'),
 		(FONS,u'break-before'),
@@ -6963,6 +7044,7 @@ allowed_attributes = {
 	(SVGNS,u'font-face-format'):(
 		(SVGNS,u'string'),
 	),
+# allowed_attributes
 	(SVGNS,u'font-face-name'):(
 		(SVGNS,u'name'),
 	),
@@ -7003,6 +7085,7 @@ allowed_attributes = {
 	),
 	(SVGNS,u'title'):(
 	),
+# allowed_attributes
 	(TABLENS,u'body'):(
 		(TEXTNS,u'paragraph-style-name'),
 		(TEXTNS,u'style-name'),
@@ -7072,6 +7155,7 @@ allowed_attributes = {
 	),
 	(TABLENS,u'content-validations'):(
 	),
+# allowed_attributes
 	(TABLENS,u'covered-table-cell'):(
 		(TABLENS,u'protect'),
 		(OFFICENS,u'string-value'),
@@ -7387,6 +7471,7 @@ allowed_attributes = {
 		(TABLENS,u'end-table'),
 		(TABLENS,u'start-column'),
 	),
+# allowed_attributes
 	(TABLENS,u'source-service'):(
 		(TABLENS,u'user-name'),
 		(TABLENS,u'source-name'),
@@ -7433,6 +7518,7 @@ allowed_attributes = {
 		(TABLENS,u'formula'),
 		(OFFICENS,u'time-value'),
 	),
+# allowed_attributes
 	(TABLENS,u'table-column'):(
 		(TABLENS,u'style-name'),
 		(TABLENS,u'default-cell-style-name'),
@@ -7525,6 +7611,7 @@ allowed_attributes = {
 		(TEXTNS,u'key2-phonetic'),
 		(TEXTNS,u'string-value-phonetic'),
 	),
+# allowed_attributes
 	(TEXTNS,u'alphabetical-index-mark-end'):(
 		(TEXTNS,u'id'),
 	),
@@ -7579,6 +7666,7 @@ allowed_attributes = {
 		(TEXTNS,u'style-name'),
 		(TEXTNS,u'bibliography-type'),
 	),
+# allowed_attributes
 	(TEXTNS,u'bibliography-mark'):(
 		(TEXTNS,u'address'),
 		(TEXTNS,u'annote'),
@@ -7628,6 +7716,7 @@ allowed_attributes = {
 	(TEXTNS,u'bookmark-start'):(
 		(TEXTNS,u'name'),
 	),
+# allowed_attributes
 	(TEXTNS,u'change'):(
 		(TEXTNS,u'change-id'),
 	),
@@ -7747,6 +7836,7 @@ allowed_attributes = {
 		(TEXTNS,u'fixed'),
 		(TEXTNS,u'display'),
 	),
+# allowed_attributes
 	(TEXTNS,u'format-change'):(
 	),
 	(TEXTNS,u'h'):(
@@ -7794,6 +7884,7 @@ allowed_attributes = {
 		(TEXTNS,u'style-name'),
 		(TEXTNS,u'display'),
 	),
+# allowed_attributes
 	(TEXTNS,u'index-entry-link-end'):(
 		(TEXTNS,u'style-name'),
 	),
@@ -7890,6 +7981,7 @@ allowed_attributes = {
 		(STYLENS,u'num-letter-sync'),
 		(TEXTNS,u'start-value'),
 	),
+# allowed_attributes
 	(TEXTNS,u'list-style'):(
 		(TEXTNS,u'consecutive-numbering'),
 		(STYLENS,u'display-name'),
@@ -8079,6 +8171,7 @@ allowed_attributes = {
 	(TEXTNS,u'sender-country'):(
 		(TEXTNS,u'fixed'),
 	),
+# allowed_attributes
 	(TEXTNS,u'sender-email'):(
 		(TEXTNS,u'fixed'),
 	),
@@ -8173,6 +8266,7 @@ allowed_attributes = {
 		(TEXTNS,u'caption-sequence-format'),
 		(TEXTNS,u'relative-tab-stop-position'),
 	),
+# allowed_attributes
 	(TEXTNS,u'table-of-content'):(
 		(TEXTNS,u'protected'),
 		(TEXTNS,u'style-name'),
@@ -8248,6 +8342,7 @@ allowed_attributes = {
 		(TEXTNS,u'name'),
 		(TEXTNS,u'display'),
 	),
+# allowed_attributes
 	(TEXTNS,u'user-field-input'):(
 		(STYLENS,u'data-style-name'),
 		(TEXTNS,u'name'),

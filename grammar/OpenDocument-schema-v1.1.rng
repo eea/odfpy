@@ -6751,7 +6751,7 @@
         </attribute>
     </optional>
 </define>
-<define name="draw-glue-points-attlist" combine="interleave">
+<define name="draw-glue-point-attlist" combine="interleave">
     <attribute name="draw:escape-direction">
         <choice>
             <value>auto</value>

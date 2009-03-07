@@ -71,7 +71,7 @@ nsdict = {
    OFFICENS: u'office',
    OOONS: u'ooo',
    OOOWNS: u'ooow',
-   OOOCNS: u'ooc',
+   OOOCNS: u'oooc',
    PRESENTATIONNS: u'presentation',
    RDFANS: u'rdfa',
    SCRIPTNS: u'script',
