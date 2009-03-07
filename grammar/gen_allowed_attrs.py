@@ -75,7 +75,8 @@ class S22RelaxParser(handler.ContentHandler):
             currnode = None
         elif tag == (RELAXNS, 'name'):
             currnode.name = self.text()
-            currelement.attrs[(currnode.ns, currnode.name)] = currnode
+            if currnode != currelement:
+                currelement.attrs[(currnode.ns, currnode.name)] = currnode
         elif tag == (RELAXNS, 'anyName'):
             currnode.name = "__ANYNAME__"
         self.data = []

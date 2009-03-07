@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-# Copyright (C) 2008 Søren Roug, European Environment Agency
+# Copyright (C) 2008-2009 Søren Roug, European Environment Agency
 #
 # This is free software.  You may redistribute it under the terms
 # of the Apache license and the GNU General Public License Version
@@ -18,29 +18,26 @@
 # Contributor(s):
 #
 #
-import string, sys, re
+import string, sys, re, getopt
 import urllib2, htmlentitydefs, urlparse
 from urllib import quote_plus
 from HTMLParser import HTMLParser
 from cgi import escape,parse_header
 from types import StringType
 
-from odf.opendocument import OpenDocumentText
+from odf.opendocument import OpenDocumentText, load
 from odf import dc, text, table
 import htmlstyles
 
 
-def checkurl(url, http_proxy=None):
+def converturl(url, document=None):
     """ grab and convert url
     """
     url = string.strip(url)
 #   if url.lower()[:5] != "http:":
 #       raise IOError, "Only http is accepted"
 
-    if http_proxy:
-        _proxies = { 'http': http_proxy }
-    else:
-        _proxies = {}
+    _proxies = {}
     proxy_support = urllib2.ProxyHandler(_proxies)
     opener = urllib2.build_opener(proxy_support, urllib2.HTTPHandler)
 
@@ -62,8 +59,7 @@ def checkurl(url, http_proxy=None):
         if parms.has_key('charset'):
             encoding = parms['charset']
 
-    mhp = HTML2ODTParser(encoding, url)
-    failure = ""
+    mhp = HTML2ODTParser(document, encoding, url)
     mhp.feed(data)
     return  mhp
 
@@ -87,11 +83,32 @@ class TagObject:
 
 class HTML2ODTParser(HTMLParser):
 
-    def __init__(self, encoding, baseurl):
+    def __init__(self, document, encoding, baseurl):
         HTMLParser.__init__(self)
-        self.doc = OpenDocumentText()
+        self.doc = document
         self.curr = self.doc.text
-        htmlstyles.addStandardStyles(self.doc)
+        if self.doc.getStyleByName("Standard") is None:
+            style = Style(name="Standard", family="paragraph", attributes={'class':"text"})
+            self.doc.styles.addElement(style)
+
+        if self.doc.getStyleByName("Text_20_body") is None:
+            style = Style(name="Text_20_body", displayname="Text body", family="paragraph",
+               parentstylename="Standard", attributes={'class':"text"})
+            p = ParagraphProperties(margintop="0cm", marginbottom="0.212cm")
+            style.addElement(p)
+            self.doc.styles.addElement(style)
+
+        if self.doc.getStyleByName("Heading") is None:
+            style = Style(name="Heading", family="paragraph", parentstylename="Standard",
+                nextstylename="Text_20_body", attributes={'class':"text"})
+            p = ParagraphProperties(margintop="0.423cm", marginbottom="0.212cm", keepwithnext="always")
+            style.addElement(p)
+            p = TextProperties(fontname="Nimbus Sans L", fontsize="14pt",
+                 fontnameasian="DejaVu LGC Sans", fontsizeasian="14pt",
+                 fontnamecomplex="DejaVu LGC Sans", fontsizecomplex="14pt")
+            style.addElement(p)
+            self.doc.styles.addElement(style)
+
         self.encoding = encoding
         (scheme, host, path, params, fragment) = urlparse.urlsplit(baseurl)
         lastslash = path.rfind('/')
@@ -108,7 +125,8 @@ class HTML2ODTParser(HTMLParser):
         self.elements = {
      'a':    (self.s_html_a, self.close_tag),
      'base': ( self.output_base, None),
-     'b':    ( self.s_html_emphasis, self.close_tag),
+     'b':    ( self.s_html_fontstyle, self.close_tag),
+     'big':  ( self.s_html_fontstyle, self.close_tag),
      'br':   ( self.output_br, None),
      'col':  ( self.s_html_col, None),
      'dd':   ( self.s_html_dd, self.close_tag),
@@ -122,26 +140,27 @@ class HTML2ODTParser(HTMLParser):
      'h5':   ( self.s_html_headline, self.close_tag),
      'h6':   ( self.s_html_headline, self.close_tag),
      'head': ( self.s_ignorexml, None),
-     'i':    ( self.s_html_emphasis, self.close_tag),
+     'i':    ( self.s_html_fontstyle, self.close_tag),
      'img':  ( self.output_img, None),
      'li':   ( self.s_html_li, self.e_html_li),
      'meta': ( self.meta_encoding, None),
      'ol':   ( self.output_ol, self.e_html_list),
      'p':    ( self.s_html_block, self.e_html_block),
+     's':    ( self.s_html_fontstyle, self.close_tag),
+     'small':( self.s_html_fontstyle, self.close_tag),
      'span': ( self.s_html_span, self.close_tag),
+     'strike':( self.s_html_fontstyle, self.close_tag),
      'strong':( self.s_html_emphasis, self.close_tag),
      'table':( self.s_html_table, self.e_html_table),
      'td':   ( self.s_html_td, self.close_tag),
      'th':   ( self.s_html_td, self.close_tag),
      'title':( self.s_html_title, self.e_html_title),
      'tr':   ( self.s_html_tr, self.close_tag),
+     'tt':   ( self.s_html_fontstyle, self.close_tag),
+     'u':    ( self.s_html_fontstyle, self.close_tag),
      'ul':   ( self.output_ul, self.e_html_list),
      'var':  ( self.s_html_emphasis, self.close_tag),
-     'input':( self.output_input, None),
-     'select':( self.output_select, None),
-     'textarea':( self.output_textarea, None),
     }
-
 
     def result(self):
         """ Return a string
@@ -206,16 +225,66 @@ class HTML2ODTParser(HTMLParser):
     def output_br(self, tag, attrs):
         self.curr.addElement(text.LineBreak())
 
-    def s_html_emphasis(self, tag, attrs):
+    def s_html_font(self, tag, attrs):
+        """ 15.2.1 Font style elements: the TT, I, B, BIG, SMALL,
+            STRIKE, S, and U elements
+        """
         tagdict = {
-           'b': 'Bold',
-           'em':'Emphasis',
-           'i':'Italic',
-           'strong': 'Strong_20_Emphasis',
-           'var':'Variable'}
-        e = text.Span(stylename=tagdict.get(tag,'Emphasis'))
+        }
+
+    def s_html_emphasis(self, tag, attrs):
+        """ 9.2.1 Phrase elements: EM, STRONG, DFN, CODE, SAMP, KBD,
+            VAR, CITE, ABBR, and ACRONYM
+        """
+        tagdict = {
+           'cite':      ['Citation', {'fontstyle':"italic", 'fontstyleasian':"italic", 'fontstylecomplex':"italic" }],
+           'code':      ['Source_20_Text', {'fontname':"Courier", 'fontnameasian':"Courier",'fontnamecomplex':"Courier" }],
+           'dfn':      ['Definition',{ }],
+           'em':      ['Emphasis', {'fontstyle':"italic", 'fontstyleasian':"italic", 'fontstylecomplex':"italic" }],
+           'strong':   ['Strong_20_Emphasis': {'fontweight':"bold",'fontweightasian':"bold",'fontweightcomplex':"bold"}],
+           'var':      ['Variable', {'fontstyle':"italic", 'fontstyleasian':"italic", 'fontstylecomplex':"italic" }],
+           }
+        stylename = tagdict.get(tag,'Emphasis')
+        # Add the styles we need to the stylesheet
+        if stylename == "Source_20_Text" and self.doc.getStyleByName(stylename) is None:
+            style = Style(name="Source_20_Text", displayname="Source Text", family="text")
+            p = TextProperties(fontname="Courier", fontnameasian="Courier", fontnamecomplex="Courier")
+            style.addElement(p)
+            self.doc.styles.addElement(style)
+
+        e = text.Span(stylename=stylename)
         self.curr.addElement(e)
         self.curr = e
+
+    def s_html_fontstyle(self, tag, attrs):
+        """ 15.2.1 Font style elements: the TT, I, B, BIG, SMALL,
+            STRIKE, S, and U elements
+            ('tt' is not considered an automatic style by OOo)
+        """
+        tagdict = {
+           'b':      ['BoldX',{'fontweight':"bold",
+                      'fontweightasian':"bold",'fontweightcomplex':"bold" }],
+           'big':    ['BigX', {'fontsize':"120%"}],
+           'i':      ['ItalicX', {'fontstyle':"italic", 'fontstyleasian':"italic", 'fontstylecomplex':"italic" }],
+           'tt':     ['TeletypeX', {'fontname':"Courier", 'fontnameasian':"Courier", 'fontnamecomplex':"Courier" }],
+           's':      ['StrikeX', {'textlinethroughstyle':"solid"}],
+           'small':  ['SmallX', {'fontsize':"80%"}],
+           'strike': ['StrikeX', {'textlinethroughstyle':"solid"}],
+           'u':      ['UnderlineX', {'textunderlinestyle':"solid", 'textunderlinewidth':"auto",
+                      'textunderlinecolor':"fontcolor"}],
+        }
+        stylename,styledecl = tagdict.get(tag,[None,None])
+        if stylename and self.doc.getStyleByName(stylename) is None:
+            style = Style(name=stylename, family="text")
+            style.addElement(TextProperties(attributes=styledecl))
+            self.doc.automaticstyles.addElement(style)
+        if stylename:
+            e = text.Span(stylename=stylename)
+        else:
+            e = text.Span()
+        self.curr.addElement(e)
+        self.curr = e
+
 
     def s_html_span(self, tag, attrs):
         e = text.Span()
@@ -260,12 +329,26 @@ class HTML2ODTParser(HTMLParser):
         self.curr = self.curr.parentNode
 
     def s_html_dd(self, tag, attrs):
+        if self.doc.getStyleByName("List_20_Contents") is None:
+            style = Style(name="List_20_Contents", displayname="List Contents", family="paragraph",
+                 parentstylename="Standard", attributes={'class':"html"})
+            p = ParagraphProperties(marginleft="1cm", marginright="0cm", textindent="0cm", autotextindent="false")
+            style.addElement(p)
+            self.doc.styles.addElement(style)
         e = text.P(stylename="List_20_Contents")
         self.curr.addElement(e)
         self.curr = e
 
     def s_html_dt(self, tag, attrs):
-        self.write_odt(u'<text:p text:style-name="List_20_Heading">')
+        if self.doc.getStyleByName("List_20_Heading") is None:
+            style = Style(name="List_20_Heading", displayname="List Heading", family="paragraph", parentstylename="Standard",
+                 nextstylename="List_20_Contents", attributes={'class':"html"})
+            p = ParagraphProperties(marginleft="0cm", marginright="0cm", textindent="0cm", autotextindent="false")
+            style.addElement(p)
+            self.doc.styles.addElement(style)
+        e = text.P(stylename="List_20_Heading")
+        self.curr.addElement(e)
+        self.curr = e
 
     def output_ul(self, tag, attrs):
         self.write_odt(u'<text:list text:style-name="List_20_1">')
@@ -282,35 +365,36 @@ class HTML2ODTParser(HTMLParser):
     def e_html_li(self, tag):
         self.write_odt(u'</text:p></text:list-item>')
 
-    def output_select(self, tag, attrs):
-        return
-        self.write_odt(u'<br/>Combo box:')
-
-    def output_textarea(self, tag, attrs):
-        return
-        self.write_odt(u'<form:textarea>')
-
-    def output_input(self, tag, attrs):
-        return
-        type = listget(attrs, 'type', "text")
-        value = listget(attrs, 'value', "")
-        if type == "text":
-            self.write_odt(u'<br/>Edit:')
-        elif type == "submit":
-            self.write_odt(u' %s' % value)
-        elif type == "checkbox":
-            #FIXME - Only works in XHTML
-            checked = listget(attrs, 'checked', "not checked")
-            self.write_odt(u'<br/>Checkbox:' % checked)
-        elif type == "radio":
-            checked = listget(attrs, 'checked', "not checked")
-            self.write_odt(u'<br/>Radio button:' % checked)
-        elif type == "file":
-            self.write_odt(u'File upload edit %s' % value)
-            self.write_odt(u'<br/>Browse button:')
-
     def s_html_headline(self, tag, attrs):
-        self.write_odt(u'<text:h text:style-name="Heading_20_%s" text:outline-level="%s">' % (tag[1],tag[1]))
+        stylename = "Heading_20_%s" % tag[1]
+        if stylename == "Heading_20_1" and self.doc.getStyleByName("Heading_20_1") is None:
+            style = Style(name="Heading_20_1", displayname="Heading 1",
+                 family="paragraph", parentstylename="Heading", nextstylename="Text_20_body",
+                 attributes={'class':"text"}, defaultoutlinelevel=1)
+            p = TextProperties(fontsize="115%", fontweight="bold", fontsizeasian="115%",
+                 fontweightasian="bold", fontsizecomplex="115%", fontweightcomplex="bold")
+            style.addElement(p)
+            self.doc.styles.addElement(style)
+
+        if stylename == "Heading_20_2" and self.doc.getStyleByName("Heading_20_2") is None:
+            style = Style(name="Heading_20_2", displayname="Heading 2",
+                 family="paragraph", parentstylename="Heading", nextstylename="Text_20_body",
+                 attributes={'class':"text"}, defaultoutlinelevel=2)
+            p = TextProperties(fontsize="14pt", fontstyle="italic", fontweight="bold",
+                 fontsizeasian="14pt", fontstyleasian="italic", fontweightasian="bold",
+                 fontsizecomplex="14pt", fontstylecomplex="italic", fontweightcomplex="bold")
+            style.addElement(p)
+            self.doc.styles.addElement(style)
+
+        if stylename == "Heading_20_3" and self.doc.getStyleByName("Heading_20_3") is None:
+            style = Style(name="Heading_20_3", displayname="Heading 3",
+                 family="paragraph", parentstylename="Heading", nextstylename="Text_20_body",
+                 attributes={'class':"text"}, defaultoutlinelevel=3)
+            p = TextProperties(fontsize="14pt", fontweight="bold", fontsizeasian="14pt",
+                 fontweightasian="bold", fontsizecomplex="14pt", fontweightcomplex="bold")
+            style.addElement(p)
+            self.doc.styles.addElement(style)
+
         e = text.H(stylename="Heading_20_%s" % tag[1], outlinelevel=tag[1])
         self.curr.addElement(e)
         self.curr = e
@@ -507,10 +591,29 @@ class HTML2ODTParser(HTMLParser):
             self.handle_data(attrval[i:n])
             i = n
 
+def usage():
+   sys.stderr.write("Usage: %s [-a] inputurl outputfile\n" % sys.argv[0])
+
 if __name__ == "__main__":
-    import sys
-    result = checkurl(sys.argv[1])
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], "a", ["append"])
+
+    except getopt.GetoptError:
+        usage()
+        sys.exit(2)
+
+    appendto = False
+    for o, a in opts:
+        if o in ("-a", "--append"):
+            appendto = True
+
+    if appendto:
+        doc = load(args[1])
+    else:
+        doc = OpenDocumentText()
+
+    result = converturl(args[0], doc)
     print result.doc.xml()
-    result.doc.save("helloworld", True)
+    result.doc.save(args[1])
 
 

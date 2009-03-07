@@ -42,7 +42,7 @@ class TestAllowedAtts(unittest.TestCase):
                     assert attr in insatts, "Attribute %s:%s not in installed grammar for %s:%s" % (attr + element)
 
     def testAllowedAtts(self):
-        "Testing grammar keys"
+        "Testing allowed attributes in grammar"
         for element, atts in grammar.allowed_attributes.items():
             assert element in grammarnew.allowed_attributes, "%s:%s not in new grammar" % element
             newatts = grammarnew.allowed_attributes[element]
@@ -71,7 +71,7 @@ class TestRequiredAtts(unittest.TestCase):
 
 class TestAllowedChildren(unittest.TestCase):
     def testAllowedChildrenNew(self):
-        "Testing grammarnew keys"
+        "Testing allowed children in grammarnew"
         for element,atts in grammarnew.allowed_children.items():
             assert element in grammar.allowed_children, "%s:%s not in installed grammar" % element
             insatts = grammar.allowed_children[element]
@@ -82,7 +82,7 @@ class TestAllowedChildren(unittest.TestCase):
                     assert attr in insatts, "Element %s:%s not in installed grammar for %s:%s" % (attr + element)
 
     def testAllowedChildren(self):
-        "Testing grammar keys"
+        "Testing allowed children in grammar"
         for element, atts in grammar.allowed_children.items():
             assert element in grammarnew.allowed_children, "%s:%s not in new grammar" % element
             newatts = grammarnew.allowed_children[element]
