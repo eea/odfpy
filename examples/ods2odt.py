@@ -20,7 +20,7 @@
 
 # This script converts a spreadsheet to a text file. I.e. it copies
 # the sheets and turns them into tables in the textfile
-# Note: Does not copy images
+# Note: Copy of images does not work?
 #
 import sys, getopt
 from odf.opendocument import OpenDocumentText, load
@@ -72,4 +72,5 @@ if __name__ == "__main__":
         textdoc.text.addElement(sheet)
         textdoc.text.addElement(P())
 
+    textdoc.Pictures = spreadsheetdoc.Pictures
     textdoc.save(outputfile)
