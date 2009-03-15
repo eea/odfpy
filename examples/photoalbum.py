@@ -17,7 +17,7 @@
 #
 # Contributor(s):
 #
-import os,sys,struct
+import os,sys,getopt,struct
 from cStringIO import StringIO
 from odf.opendocument import OpenDocumentPresentation
 from odf.style import Style, MasterPage, PageLayout, PageLayoutProperties, \
@@ -83,8 +83,22 @@ def getImageInfo(data):
 
     return content_type, width, height
 
-if __name__ == '__main__':
-    outfilename = "photoalbum.odp"
+def usage():
+   sys.stderr.write("Usage: %s [-o outputfile] [input-directory]\n" % sys.argv[0])
+
+if __name__ == "__main__":
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], "o:", ["output="])
+    except getopt.GetoptError:
+        usage()
+        sys.exit(2)
+
+    outputfile = "photoalbum.odp"
+
+    for o, a in opts:
+        if o in ("-o", "--output"):
+            outputfile = a
+            if outputfile[-4:] != ".odp": outputfile += ".odp"
 
     doc = OpenDocumentPresentation()
 
@@ -116,10 +130,10 @@ if __name__ == '__main__':
     masterpage = MasterPage(name="MyMaster", pagelayoutname=pagelayout)
     doc.masterstyles.addElement(masterpage)
 
-    if len(sys.argv) == 1:
+    if len(args) == 0:
         pict_dir = "."
     else:
-        pict_dir = sys.argv[1]
+        pict_dir = args[0]
     # Slides
     for picture in os.listdir(pict_dir):
         try:
@@ -144,9 +158,10 @@ if __name__ == '__main__':
         titleframe.addElement(textbox)
         textbox.addElement(P(text=picture))
 
-        photoframe = Frame(stylename=photostyle, width="%fpt" % w, height="%fpt" % h, x="40pt", y="56pt")
+        offsetx = 400.0 - w/2.0
+        photoframe = Frame(stylename=photostyle, width="%fpt" % w, height="%fpt" % h, x="%fpt" % offsetx, y="56pt")
         page.addElement(photoframe)
         href = doc.addPicture(pict_dir + "/" + picture)
         photoframe.addElement(Image(href=href))
 
-    doc.save(outfilename)
+    doc.save(outputfile)
