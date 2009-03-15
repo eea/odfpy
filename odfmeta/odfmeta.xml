@@ -44,7 +44,7 @@ the metadata in an OpenDocument file. This is useful for version
 control systems. You can change title, keywords, description etc.
 </para>
 <para>
-&quot;Path&quot; is assumed to be an
+<quote>Path</quote> is assumed to be an
 OpenDocument file of text, spreadsheet or presentation type.
 </para>
 </refsect1>

@@ -35,7 +35,7 @@ and then sends it as an email.
 Most email programs that understand HTML understands this format.
 </para>
 <para>
-&quot;Inputfile&quot; is assumed to be an
+<quote>Inputfile</quote> is assumed to be an
 OpenDocument file of text, spreadsheet or presentation type.
 </para>
 </refsect1>

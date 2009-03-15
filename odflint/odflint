@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-# Copyright (C) 2007 Søren Roug, European Environment Agency
+# Copyright (C) 2009 Søren Roug, European Environment Agency
 #
 # This is free software.  You may redistribute it under the terms
 # of the Apache license and the GNU General Public License Version
@@ -40,6 +40,10 @@ extension_attributes = {
 		),
 		(MANIFESTNS,u'file-entry'): (
 			(MANIFESTNS,u'version'),
+		),
+		(TEXTNS,u'list'): (
+			(TEXTNS,u'continue-list'),
+			(XMLNS,u'id'),
 		),
 	},
 	 "OpenOffice.org" : {

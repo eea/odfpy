@@ -1,12 +1,12 @@
 .\"     Title: xml2odf
 .\"    Author: S\(/oren Roug
 .\" Generator: DocBook XSL Stylesheets v1.74.0 <http://docbook.sf.net/>
-.\"      Date: 01/04/2009
+.\"      Date: 03/15/2009
 .\"    Manual: User commands
 .\"    Source: odfpy
 .\"  Language: English
 .\"
-.TH "XML2ODF" "1" "01/04/2009" "odfpy" "User commands"
+.TH "XML2ODF" "1" "03/15/2009" "odfpy" "User commands"
 .\" -----------------------------------------------------------------
 .\" * (re)Define some macros
 .\" -----------------------------------------------------------------
@@ -177,7 +177,9 @@ xml2odf \- Create ODF package from OpenDocument in XML form
 .PP
 OpenDocument can be a complete office document in a single XML file\&. The script will take such a document and create a package\&. This is mainly useful as a postprocesser of a program producing XML, such as a stylesheet\&.
 .PP
-"Inputfile" is assumed to be an OpenDocument file in XML form\&. If there is no inputfile, the program will read from standard input\&. The flag \-s adds correct suffix to the filename according to what mime type is found in the XML file, in cause you don\'t know already what document type you are packaging\&.
+
+\(lqInputfile\(rq
+is assumed to be an OpenDocument file in XML form\&. If there is no inputfile, the program will read from standard input\&. The flag \-s adds correct suffix to the filename according to what mime type is found in the XML file, in cause you don\'t know already what document type you are packaging\&.
 .PP
 If output file is not specified output will be to standard out\&.
 .PP

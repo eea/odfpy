@@ -1,12 +1,12 @@
 .\"     Title: odfmeta
 .\"    Author: S\(/oren Roug
 .\" Generator: DocBook XSL Stylesheets v1.74.0 <http://docbook.sf.net/>
-.\"      Date: 03/07/2009
+.\"      Date: 03/15/2009
 .\"    Manual: User commands
 .\"    Source: odfpy
 .\"  Language: English
 .\"
-.TH "ODFMETA" "1" "03/07/2009" "odfpy" "User commands"
+.TH "ODFMETA" "1" "03/15/2009" "odfpy" "User commands"
 .\" -----------------------------------------------------------------
 .\" * (re)Define some macros
 .\" -----------------------------------------------------------------
@@ -178,7 +178,9 @@ odfmeta \- List or change the metadata of an ODF file
 \fBodfmeta\fR
 is a program that will list or change the metadata in an OpenDocument file\&. This is useful for version control systems\&. You can change title, keywords, description etc\&.
 .PP
-"Path" is assumed to be an OpenDocument file of text, spreadsheet or presentation type\&.
+
+\(lqPath\(rq
+is assumed to be an OpenDocument file of text, spreadsheet or presentation type\&.
 .SH "Options"
 .PP
 \-l
@@ -264,9 +266,6 @@ odfmeta \-I "title:The Little Engine That Could" \-A subject:I\-think\-I\-can \-
 
 \fBformail\fR(1),
 \fBid3tag\fR(1)
-.SH "Todo"
-.PP
-Should also let the user view and change the <text:user\-field\-decl> in content\&.xml\&. Perhaps this is better done by a different application?
 .SH "Bugs"
 .PP
 All known versions of OpenOffice\&.org keep only four <meta:user\-defined> elements\&. If you add more than those, you\'ll loose them next time you save with OpenOffice\&.org\&. KOffice keeps only one <meta:keyword> element\&.

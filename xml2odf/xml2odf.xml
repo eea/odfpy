@@ -36,7 +36,7 @@ This is mainly useful as a postprocesser of a program producing XML,
 such as a stylesheet.
 </para>
 <para>
-&quot;Inputfile&quot; is assumed to be an
+<quote>Inputfile</quote> is assumed to be an
 OpenDocument file in XML form.
 If there is no inputfile, the program will read from standard input.
 

@@ -54,7 +54,7 @@ Use <command>odfuserfield</command> to fill out form letters before
 printing or giving to the user.
 </para>
 <para>
-&quot;Path&quot; is assumed to be an
+<quote>Path</quote> is assumed to be an
 OpenDocument file of text, spreadsheet or presentation type.
 </para>
 </refsect1>

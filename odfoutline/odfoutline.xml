@@ -32,7 +32,7 @@ odfoutline is a simple program that will show the headings in the file
 and the level the heading is.
 </para>
 <para>
-&quot;Path&quot; is assumed to be an
+<quote>Path</quote> is assumed to be an
 OpenDocument file of text, spreadsheet or presentation type.
 </para>
 </refsect1>
