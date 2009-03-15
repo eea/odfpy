@@ -12,20 +12,11 @@ For your own use of the odf library, see api-for-odfpy.odt
 
 First you get the package.
 
-$  svn export https://svn.forge.osor.eu/svn/odfpy/trunk odfpy
+$ svn export https://svn.forge.osor.eu/svn/odfpy/trunk odfpy
 
 $ python setup.py build
 $ su
 # python setup.py install
-
-                             -o- APPLICATIONS -o-
-
-odt2mht is a program that will create a MIME-encapsulated web archive
-(.mht) format that can be read by Internet Explorer. IE6 seems to have
-problems with large MHT files.
-
-mailodf is a program that will create a MIME-encapsulated web archive
-and then sends it as an email.
 
                             -o- TODO / IDEAS -o-
 
@@ -67,12 +58,3 @@ and then sends it as an email.
 
 * odfsign
   Sign and verify the signature(s) of an ODF document.
-
-                             -o- REFERENCES -o-
-
-ODF Developers Corner:
- * Test suite
- * ODF spec
- * ODF book
-
- http://develop.opendocumentfellowship.com/
