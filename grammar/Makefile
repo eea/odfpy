@@ -24,7 +24,9 @@ allowed_attrs.py: simple-schema-7-22.rng simple-manifest-7-22.rng gen_allowed_at
 	python gen_allowed_attrs.py > allowed_attrs.py
 
 clean:
-	rm -f odf simple-schema-7-*.rng simple-manifest-7-*.rng required_attrs.py allowed_attrs.py allowed_children.py
+	rm -f odf simple-schema-7-*.rng simple-manifest-7-*.rng \
+	  required_attrs.py allowed_attrs.py allowed_children.py allows_text.py \
+	  grammarnew.py
 
 odf:
 	ln -s ../odf

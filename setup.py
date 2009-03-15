@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# Copyright (C) 2006-2008 Søren Roug, European Environment Agency
+# Copyright (C) 2006-2009 Søren Roug, European Environment Agency
 #
 # This is free software.  You may redistribute it under the terms
 # of the Apache license and the GNU General Public License Version
@@ -75,6 +75,7 @@ understanding of data types.
 
 In addition to the API, there are a few scripts:
 
+- csv2odf - Create OpenDocument spreadsheet from comma separated values
 - mailodf - Email ODF file as HTML archive
 - odf2xhtml - Convert ODF to (X)HTML
 - odf2mht - Convert ODF to HTML archive

@@ -38,6 +38,9 @@ extension_attributes = {
 		(STYLENS,u'section-properties'): (
 			(STYLENS,u'editable'),
 		),
+		(MANIFESTNS,u'file-entry'): (
+			(MANIFESTNS,u'version'),
+		),
 	},
 	 "OpenOffice.org" : {
 		(METANS,u'template'): (
