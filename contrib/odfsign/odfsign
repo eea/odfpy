@@ -1,0 +1,92 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# Copyright (C) 2006 Søren Roug, European Environment Agency
+#
+# This is free software.  You may redistribute it under the terms
+# of the Apache license and the GNU General Public License Version
+# 2 or at your option any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public
+# License along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+#
+# Contributor(s):
+#
+# Requires PyXML
+import sha,base64,zipfile,sys
+from xml.dom.ext.reader import PyExpat
+from xml.dom.ext.c14n import Canonicalize
+import StringIO
+
+
+def data_digest(data):
+    return base64.b64encode(sha.new(data).digest())
+
+def xml_digest(dom):
+    s = StringIO.StringIO()
+    Canonicalize(dom,s)
+    canon = s.getvalue().encode('utf-8')
+    return data_digest(canon)
+
+def get_signatureproperty(dom, ref):
+    property_list = dom.getElementsByTagNameNS('http://www.w3.org/2000/09/xmldsig#','SignatureProperty')
+    for p in property_list:
+       id = p.getAttributeNS(None,'Id')
+       if ref == id: return p
+    return None
+
+def exitwithusage(exitcode=2):
+    sys.stderr.write("Usage: %s inputfile\n" % sys.argv[0])
+    sys.exit(exitcode)
+    
+if __name__ == '__main__':
+    if len(sys.argv) != 2:
+        exitwithusage()
+    z = zipfile.ZipFile(sys.argv[1])
+    namelist = z.namelist()
+    if "META-INF/documentsignatures.xml" not in namelist:
+        print "This document is not signed"
+        sys.exit()
+    documentsignatures_xml = z.read('META-INF/documentsignatures.xml')
+    reader = PyExpat.Reader()
+    doc = reader.fromString(documentsignatures_xml)
+
+    signature_list = doc.getElementsByTagNameNS('http://www.w3.org/2000/09/xmldsig#','Signature')
+    print "Document has %s signature(s)" % len(signature_list)
+    signnum = 1
+    for signature in signature_list:
+        date = signature.getElementsByTagNameNS("http://purl.org/dc/elements/1.1/","date")[0].firstChild.nodeValue
+#       print date.__dict__
+
+        print "Checking signature #%d - signed on %s" % (signnum, date),
+        refs = signature.getElementsByTagNameNS('http://www.w3.org/2000/09/xmldsig#','Reference')
+        for ref in refs:
+            status = "OK"
+            uri = ref.getAttributeNS(None,'URI')
+            digest_value = ref.getElementsByTagNameNS('http://www.w3.org/2000/09/xmldsig#','DigestValue')[0].firstChild.nodeValue
+            if uri[0] != '#':
+                document = z.read(uri)
+                if uri[-4:] == ".xml" and len(document) != 0:
+                    dom = PyExpat.Reader().fromString(document)
+                    digest_actual = xml_digest(dom)
+                else:
+                    digest_actual = data_digest(document)
+            else:
+                # FIXME
+                # fragments aren't canonicalized. See http://www.w3.org/TR/xmldsig-core/#sec-URI
+                xmlfragment = get_signatureproperty(doc, uri[1:])
+                if xmlfragment is None:
+                    continue
+                digest_actual = digest_value
+                #digest_actual  = xml_digest(xmlfragment)
+            if digest_value != digest_actual:
+                status = "failed"
+
+        print status
+        signnum += 1
+

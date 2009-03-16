@@ -394,6 +394,7 @@ class OpenDocument:
 
         # Write any extra files
         for op in self._extra:
+            if op.filename == "META-INF/documentsignatures.xml": continue # Don't save signatures
             self.manifest.addElement(manifest.FileEntry(fullpath=op.filename, mediatype=op.mediatype))
             zi = zipfile.ZipInfo(op.filename.encode('utf-8'), self._now)
             zi.compress_type = zipfile.ZIP_DEFLATED
