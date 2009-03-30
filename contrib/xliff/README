@@ -6,3 +6,9 @@ Send the OpenDocument Text to the translator.
 You can then extract the translations later with odfuserfields and in
 principle put them back into the original XLIFF file, but this is an
 exercise left to the reader.
+
+Other projects on translation:
+
+http://translate.sourceforge.net/wiki/toolkit/odf2xliff
+http://translate.sourceforge.net/wiki/developers/projects/odf
+http://www.hforge.org/odf-i18n-tests
