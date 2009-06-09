@@ -60,16 +60,16 @@ class UserFields(object):
 
         src ... source document name, file like object or None for stdin
         dest ... destination document name, file like object or None for stdout
-   
+
         """
         self.src_file = src
         self.dest_file = dest
 
     def list_fields(self):
         """List (extract) all known user-fields.
-        
+
         Returns list of user-field names.
-        
+
         """
         return [x[0] for x in self.list_fields_and_values()]
 
@@ -88,7 +88,7 @@ class UserFields(object):
                                      value_type.encode(OUTENCODING),
                                      value.encode(OUTENCODING)))
             return attrs
-        
+
         self._content_handler(_callback)
         return found_fields
 
@@ -274,19 +274,7 @@ class ODFContentParser(xml.sax.saxutils.XMLGenerator):
         self._undeclared_ns_maps = []
 
         for (name, value) in attrs.items():
-            if name[0] is None:
-                name = name[1]
-            elif self._current_context[name[0]] is None:
-                # default namespace
-                #If an attribute has a nsuri but not a prefix, we must
-                #create a prefix and add a nsdecl
-                prefix = self.GENERATED_PREFIX % self._generated_prefix_ctr
-                self._generated_prefix_ctr = self._generated_prefix_ctr + 1
-                name = prefix + ':' + name[1]
-                self._out.write(' xmlns:%s=%s' % (prefix, quoteattr(name[0])))
-                self._current_context[name[0]] = prefix
-            else:
-                name = self._current_context[name[0]] + ":" + name[1]
+            name = self._qname(name)
             self._out.write(' %s=' % name)
             writeattr(self._out, value)
         self._out.write('>')

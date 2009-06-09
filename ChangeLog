@@ -1,10 +1,12 @@
+past 0.9
+	Made sure userfield.py works with OpenOffice.org 3.x files.
 0.9
 	Updated to ODF version 1.1
 0.8
 	Added the ability to load a document.
 0.7
-	refactored command-line tool odfuserfied into odf.userfield as a
-	library and adapted odfuserfied to use this library
+	Refactored command-line tool odfuserfied into odf.userfield as a
+	library and adapted odfuserfied to use this library.
 
 0.6.1
 	TODO: collect changes from svn check-in messages
