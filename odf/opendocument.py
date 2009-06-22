@@ -233,9 +233,11 @@ class OpenDocument:
                 for styleref in ( (DRAWNS,u'style-name'),
                         (DRAWNS,u'text-style-name'),
                         (PRESENTATIONNS,u'style-name'),
-                        (STYLENS,u'style-name'),
+                        (STYLENS,u'data-style-name'),
                         (STYLENS,u'list-style-name'),
                         (STYLENS,u'page-layout-name'),
+                        (STYLENS,u'style-name'),
+                        (TABLENS,u'default-cell-style-name'),
                         (TABLENS,u'style-name'),
                         (TEXTNS,u'style-name') ):
                     if e.getAttrNS(styleref[0],styleref[1]):
