@@ -18,6 +18,8 @@ $ python setup.py build
 $ su
 # python setup.py install
 
+The library is incompatible with PyXML.
+
                             -o- TODO / IDEAS -o-
 
 * html2odf
