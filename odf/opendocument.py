@@ -185,7 +185,7 @@ class OpenDocument:
         if self.fontfacedecls.hasChildNodes():
             self.fontfacedecls.toXml(1, xml)
         a = AutomaticStyles()
-        stylelist = self._used_auto_styles([self.styles, self.body])
+        stylelist = self._used_auto_styles([self.styles, self.automaticstyles, self.body])
         if len(stylelist) > 0:
             a.write_open_tag(1, xml)
             for s in stylelist:
