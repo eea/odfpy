@@ -12304,7 +12304,7 @@
         <ref name="styleName"/>
     </attribute>
 </define>
-<define name="style-data-style-attlist" combine="interleave">
+<define name="common-data-style-attlist" combine="interleave">
     <optional>
         <attribute name="style:display-name">
             <ref name="string"/>
