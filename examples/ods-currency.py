@@ -17,6 +17,8 @@
 #
 # Contributor(s):
 # Søren Roug
+# This example shows how to do a conditional currency style. We want negative
+# numbers to show as red and as Australian dollars.
 
 from odf.opendocument import OpenDocumentSpreadsheet
 from odf.style import Style, TextProperties, TableColumnProperties, Map
@@ -26,35 +28,29 @@ from odf.table import Table, TableColumn, TableRow, TableCell
 
 textdoc = OpenDocumentSpreadsheet()
 # Create a style for the table content. One we can modify
-# later in the word processor.
+# later in the spreadsheet.
 tablecontents = Style(name="Large number", family="table-cell")
 tablecontents.addElement(TextProperties(fontfamily="Arial", fontsize="15pt"))
 textdoc.styles.addElement(tablecontents)
 
 # Create automatic styles for the column widths.
-widthwide = Style(name="co1", family="table-column")
-widthwide.addElement(TableColumnProperties(columnwidth="2.8cm", breakbefore="auto"))
-textdoc.automaticstyles.addElement(widthwide)
+widewidth = Style(name="co1", family="table-column")
+widewidth.addElement(TableColumnProperties(columnwidth="2.8cm", breakbefore="auto"))
+textdoc.automaticstyles.addElement(widewidth)
 
 # Create the styles for $AUD format currency values
-tmpcs = CurrencySymbol(language="en", country="AU")
-tmpcs.addText(u'$')
-ns1=CurrencyStyle(name="positive-AUD", volatile="true")
-ns1.addElement(tmpcs)
+ns1 = CurrencyStyle(name="positive-AUD", volatile="true")
+ns1.addElement(CurrencySymbol(language="en", country="AU", text=u"$"))
 ns1.addElement(Number(decimalplaces="2", minintegerdigits="1", grouping="true"))
 textdoc.styles.addElement(ns1)
 
-ns2=CurrencyStyle(name="main-AUD")
+# Create the main style.
+ns2 = CurrencyStyle(name="main-AUD")
 ns2.addElement(TextProperties(color="#ff0000"))
-tmpcs=Text()
-tmpcs.addText(u'-')
-ns2.addElement(tmpcs)
-tmpcs = CurrencySymbol(language="en", country="AU")
-tmpcs.addText(u'$')
-ns2.addElement(tmpcs)
+ns2.addElement(Text(text=u"-"))
+ns2.addElement(CurrencySymbol(language="en", country="AU", text=u"$"))
 ns2.addElement(Number(decimalplaces="2", minintegerdigits="1", grouping="true"))
-tmpcs = Map(condition="value()>=0", applystylename="positive-AUD")
-ns2.addElement(tmpcs)
+ns2.addElement(Map(condition="value()>=0", applystylename="positive-AUD"))
 textdoc.styles.addElement(ns2)
 
 # Create automatic style for the price cells.
@@ -62,13 +58,13 @@ moneycontents = Style(name="ce1", family="table-cell", parentstylename=tablecont
 textdoc.automaticstyles.addElement(moneycontents)
 
 # Start the table, and describe the columns
-table = Table(name="Test")
+table = Table(name="Currency colours")
 # Create a column (same as <col> in HTML) Make all cells in column default to currency
-table.addElement(TableColumn(stylename=widthwide, defaultcellstylename="ce1"))
+table.addElement(TableColumn(stylename=widewidth, defaultcellstylename="ce1"))
 # Create a row (same as <tr> in HTML)
 tr = TableRow()
 table.addElement(tr)
-# Create a cell
+# Create a cell with a negative value. It should show as red.
 cell = TableCell(valuetype="currency", currency="AUD", value="-125")
 cell.addElement(P(text=u"$-125.00")) # The current displayed value
 tr.addElement(cell)
@@ -76,10 +72,10 @@ tr.addElement(cell)
 # Create a row (same as <tr> in HTML)
 tr = TableRow()
 table.addElement(tr)
-# Create another cell
+# Create another cell but with a positive value. It should show in black
 cell = TableCell(valuetype="currency", currency="AUD", value="123")
 cell.addElement(P(text=u"$123.00")) # The current displayed value
 tr.addElement(cell)
 
 textdoc.spreadsheet.addElement(table)
-textdoc.save("test.ods")
+textdoc.save("currency.ods")

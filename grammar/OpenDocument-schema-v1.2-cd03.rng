@@ -1,18 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
     OASIS OpenDocument v1.2
-	Draft7, 26 May 2008
+	Committee Draft 03, 30 July 2009
     Relax-NG Schema
 
-    $Id$
-
-    © 2002-2005 OASIS Open
-    © 1999-2005 Sun Microsystems, Inc.
+    © 2002-2009 OASIS Open
 -->
 
 <grammar
     xmlns="http://relaxng.org/ns/structure/1.0"
-    xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
 
     datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
 
@@ -36,16 +32,16 @@
     xmlns:xlink="http://www.w3.org/1999/xlink"
     xmlns:math="http://www.w3.org/1998/Math/MathML"
     xmlns:xforms="http://www.w3.org/2002/xforms"
+    xmlns:grddl="http://www.w3.org/2003/g/data-view#"
+    xmlns:xhtml="http://www.w3.org/1999/xhtml"
 
     xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
     xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
     xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0"
-    
-    xmlns:rdfa="http://docs.oasis-open.org/opendocument/meta/rdfa#"
 >
 <define name="office-process-content">
     <optional>
-        <attribute name="office:process-content" a:defaultValue="true">
+        <attribute name="office:process-content">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -113,16 +109,23 @@
         <ref name="string"/>
     </attribute>
 </define>
+<define name="office-document-common-attrs" combine="interleave">
+	<optional>
+		<attribute name="grddl:transformation">
+			<list>
+				<zeroOrMore>
+					<ref name="anyURI"/>
+				</zeroOrMore>
+			</list>
+		</attribute>
+	</optional>
+</define>
 <define name="office-meta">
     <optional>
         <element name="office:meta">
-            <ref name="office-meta-content"/>
+            <ref name="office-meta-content-strict"/>
         </element>
     </optional>
-</define>
-
-<define name="office-meta-content">
-    <ref name="anyElements"/>
 </define>
 
 <define name="office-meta-content-strict">
@@ -139,9 +142,7 @@
     <element name="office:text">
         <ref name="office-text-attlist"/>
         <ref name="office-text-content-prelude"/>
-        <zeroOrMore>
-            <ref name="office-text-content-main"/>
-        </zeroOrMore>
+		<ref name="office-text-content-main"/>
         <ref name="office-text-content-epilogue"/>
     </element>
 </define>
@@ -160,7 +161,6 @@
             <ref name="text-page-sequence"/>
             <zeroOrMore>
                 <choice>
-                    <!-- ref name="draw-a"/ Ed. Note: shape incl. draw-a now --> 
                     <ref name="shape"/>
                 </choice>
             </zeroOrMore>
@@ -175,7 +175,6 @@
         <ref name="text-list"/>
         <ref name="text-numbered-paragraph"/>
         <ref name="table-table"/>
-        <!-- ref name="draw-a"/ Ed. Note: shape incl. draw-a now -->
         <ref name="text-section"/>
         <ref name="text-soft-page-break"/>
         <ref name="text-table-of-content"/>
@@ -194,14 +193,14 @@
 </define>
 <define name="office-text-attlist" combine="interleave">
     <optional>
-        <attribute name="text:global" a:defaultValue="false">
+        <attribute name="text:global">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="office-text-attlist" combine="interleave">
     <optional>
-        <attribute name="text:use-soft-page-breaks" a:defaultValue="false">
+        <attribute name="text:use-soft-page-breaks">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -665,16 +664,14 @@
 </define>
 <define name="office-meta-data" combine="choice">
     <element name="meta:template">
+		<attribute name="xlink:type">
+			<value>simple</value>
+		</attribute>
         <attribute name="xlink:href">
             <ref name="anyURI"/>
         </attribute>
         <optional>
-            <attribute name="xlink:type" a:defaultValue="simple">
-                <value>simple</value>
-            </attribute>
-        </optional>
-        <optional>
-            <attribute name="xlink:actuate" a:defaultValue="onRequest">
+            <attribute name="xlink:actuate">
                 <value>onRequest</value>
             </attribute>
         </optional>
@@ -693,24 +690,22 @@
 <define name="office-meta-data" combine="choice">
     <element name="meta:auto-reload">
         <optional>
-            <attribute name="xlink:type" a:defaultValue="simple">
-                <value>simple</value>
-            </attribute>
-        </optional>
-        <optional>
-            <attribute name="xlink:show" a:defaultValue="replace">
-                <value>replace</value>
-            </attribute>
-        </optional>
-        <optional>
-            <attribute name="xlink:actuate" a:defaultValue="onLoad">
-                <value>onLoad</value>
-            </attribute>
-        </optional>
-        <optional>
-            <attribute name="xlink:href">
-                <ref name="anyURI"/>
-            </attribute>
+			<attribute name="xlink:type">
+				<value>simple</value>
+			</attribute>
+			<attribute name="xlink:href">
+				<ref name="anyURI"/>
+			</attribute>
+			<optional>
+				<attribute name="xlink:show">
+					<value>replace</value>
+				</attribute>
+			</optional>
+			<optional>
+				<attribute name="xlink:actuate">
+					<value>onLoad</value>
+				</attribute>
+			</optional>
         </optional>
         <optional>
             <attribute name="meta:delay">
@@ -889,7 +884,7 @@
 </define>
 <define name="heading-attrs" combine="interleave">
     <optional>
-        <attribute name="text:restart-numbering" a:defaultValue="false">
+        <attribute name="text:restart-numbering">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -903,33 +898,11 @@
 </define>
 <define name="heading-attrs" combine="interleave">
     <optional>
-        <attribute name="text:is-list-header" a:defaultValue="false">
+        <attribute name="text:is-list-header">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
-<!-- DRAFT7: new def start: ODF-Metadata-Proposal http://lists.oasis-open.org/archives/office/200708/msg00103.html -->
-<!-- Note: The following definition is not requires because a heading gets -->
-<!-- the same attributes as a paragraph -->
-<!--
-<define name="heading-attrs" combine="interleave">
-	<optional>
-	 	<ref name="xml-id"/>
-	</optional>
-</define>
--->
-<!-- DRAFT7: new def end -->
-<!-- DRAFT7: new def start: ODF-Metadata-Proposal http://lists.oasis-open.org/archives/office/200708/msg00103.html -->
-<!-- Note: The following definition is not requires because a heading gets -->
-<!-- the same attributes as a paragraph -->
-<!--
-<define name="heading-attrs" combine="interleave">
-	<optional>
-	 	<ref name="common-in-content-meta-attlist"/>
-	</optional>
-</define>
--->
-<!-- DRAFT7: new def end -->
 <define name="text-number">
     <element name="text:number">
         <ref name="string"/>
@@ -962,27 +935,21 @@
 </define>
 <define name="paragraph-attrs" combine="interleave">
     <optional>
-<!-- DRAFT7: changed def start: xml:id-Proposal http://lists.oasis-open.org/archives/office/200808/msg00093.html -->
 		<attribute name="text:id">
 			<ref name="NCName"/>
 		</attribute>
-<!-- DRAFT7: changed def end -->
     </optional>
 </define>
-<!-- DRAFT7: new def start: ODF-Metadata-Proposal http://lists.oasis-open.org/archives/office/200708/msg00103.html -->
 <define name="paragraph-attrs" combine="interleave">
 	<optional>
 	 	<ref name="xml-id"/>
 	</optional>
 </define>
-<!-- DRAFT7: new def end -->
-<!-- DRAFT7: new def start: ODF-Metadata-Proposal http://lists.oasis-open.org/archives/office/200708/msg00103.html -->
 <define name="paragraph-attrs" combine="interleave">
 	<optional>
 	 	<ref name="common-in-content-meta-attlist"/>
 	</optional>
 </define>
-<!-- DRAFT7: new def end -->
 <define name="text-page-sequence">
     <element name="text:page-sequence">
         <oneOrMore>
@@ -1033,13 +1000,11 @@
         </attribute>
     </optional>
 </define>
-<!-- DRAFT7: new def start: ODF-Metadata-Proposal http://lists.oasis-open.org/archives/office/200708/msg00103.html -->
 <define name="text-list-attr" combine="interleave">
 	<optional>
 	 	<ref name="xml-id"/>
 	</optional>
 </define>
-<!-- DRAFT7: new def end -->
 <define name="text-list-item">
     <element name="text:list-item">
         <ref name="text-list-item-attr"/>
@@ -1073,28 +1038,22 @@
         </attribute>
     </optional>
 </define>
-<!-- DRAFT7: new def start: ODF-Metadata-Proposal http://lists.oasis-open.org/archives/office/200708/msg00103.html -->
 <define name="text-list-item-attr" combine="interleave">
 	<optional>
 	 	<ref name="xml-id"/>
 	</optional>
 </define>
-<!-- DRAFT7: new def end -->
 <define name="text-list-header">
     <element name="text:list-header">
-<!-- DRAFT7: new def start: ODF-Metadata-Proposal http://lists.oasis-open.org/archives/office/200708/msg00103.html -->
         <ref name="text-list-header-attr"/>
-<!-- DRAFT7: new def end -->
         <ref name="text-list-item-content"/>
     </element>
 </define>
-<!-- DRAFT7: new def start: ODF-Metadata-Proposal http://lists.oasis-open.org/archives/office/200708/msg00103.html -->
 <define name="text-list-header-attr" combine="interleave">
 	<optional>
 	 	<ref name="xml-id"/>
 	</optional>
 </define>
-<!-- DRAFT7: new def end -->
 <define name="text-numbered-paragraph">
     <element name="text:numbered-paragraph">
         <ref name="text-numbered-paragraph-attr"/>
@@ -1109,12 +1068,12 @@
 </define>
 <define name="text-numbered-paragraph-attr" combine="interleave"> 
     <attribute name="text:list-id"> 
-        <data type="NCName"/> 
+        <ref name="NCName"/> 
     </attribute> 
 </define>
 <define name="text-numbered-paragraph-attr" combine="interleave">
     <optional>
-        <attribute name="text:level" a:defaultValue="1">
+        <attribute name="text:level">
             <ref name="positiveInteger"/>
         </attribute>
     </optional>
@@ -1132,13 +1091,11 @@
         </attribute>
     </optional>
 </define>
-<!-- DRAFT7: new def start: ODF-Metadata-Proposal http://lists.oasis-open.org/archives/office/200708/msg00103.html -->
 <define name="text-numbered-paragraph-attr" combine="interleave">
 	<optional>
 	 	<ref name="xml-id"/>
 	</optional>
 </define>
-<!-- DRAFT7: new def end -->
 <define name="text-section">
     <element name="text:section">
         <ref name="text-section-attlist"/>
@@ -1182,18 +1139,16 @@
     </optional>
     <optional>
         <attribute name="text:protection-key-digest-algorithm"
-                   a:defaultValue="http://www.w3.org/2000/09/xmldsig#sha1">
+                  >
             <ref name="anyURI"/>
         </attribute>
     </optional>
 </define>
-<!-- DRAFT7: new def start: ODF-Metadata-Proposal http://lists.oasis-open.org/archives/office/200708/msg00103.html -->
 <define name="common-section-attlist" combine="interleave">
 	<optional>
 	 	<ref name="xml-id"/>
 	</optional>
 </define>
-<!-- DRAFT7: new def end -->
 <define name="text-section-attlist" combine="interleave">
     <choice>
         <attribute name="text:display">
@@ -1220,16 +1175,14 @@
 </define>
 <define name="text-section-source-attr" combine="interleave">
     <optional>
+		<attribute name="xlink:type">
+			<value>simple</value>
+		</attribute>
         <attribute name="xlink:href">
             <ref name="anyURI"/>
         </attribute>
         <optional>
-            <attribute name="xlink:type" a:defaultValue="simple">
-                <value>simple</value>
-            </attribute>
-        </optional>
-        <optional>
-            <attribute name="xlink:show" a:defaultValue="embed">
+            <attribute name="xlink:show">
                 <value>embed</value>
             </attribute>
         </optional>
@@ -1264,7 +1217,7 @@
 </define>
 <define name="text-tracked-changes-attr" combine="interleave">
     <optional>
-        <attribute name="text:track-changes" a:defaultValue="true">
+        <attribute name="text:track-changes">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -1275,7 +1228,6 @@
         <ref name="text-changed-region-content"/>
     </element>
 </define>
-<!-- DRAFT7: changed def start: xml:id-Proposal http://lists.oasis-open.org/archives/office/200808/msg00093.html -->
 <define name="text-changed-region-attr" combine="interleave">
 	<choice>
 	 	<ref name="text-changed-region-text-id"/>
@@ -1292,7 +1244,6 @@
 		<ref name="NCName"/>
 	</attribute>
 </define>
-<!-- DRAFT7: changed def end -->
 <define name="text-changed-region-content" combine="choice">
     <element name="text:insertion">
         <ref name="office-change-info"/>
@@ -1442,16 +1393,14 @@
     </optional>
 </define>
 <define name="text-a-attlist" combine="interleave">
+	<attribute name="xlink:type">
+		<value>simple</value>
+	</attribute>
     <attribute name="xlink:href">
         <ref name="anyURI"/>
     </attribute>
     <optional>
-        <attribute name="xlink:type" a:defaultValue="simple">
-            <value>simple</value>
-        </attribute>
-    </optional>
-    <optional>
-        <attribute name="xlink:actuate" a:defaultValue="onRequest">
+        <attribute name="xlink:actuate">
             <value>onRequest</value>
         </attribute>
     </optional>
@@ -1483,7 +1432,6 @@
         </attribute>
     </optional>
 </define>
-<!-- DRAFT7: new def start: ODF-Metadata-Proposal http://lists.oasis-open.org/archives/office/200708/msg00103.html -->
 <define name="paragraph-content" combine="choice">
 	<element name="text:meta">
 	 	<ref name="text-meta-attlist"/>
@@ -1497,26 +1445,18 @@
 	 	<ref name="common-in-content-meta-attlist"/>
 	</optional>
 </define>
-<!-- DRAFT7: new def end -->
-<!-- DRAFT7: new def start: ODF-Metadata-Proposal http://lists.oasis-open.org/archives/office/200708/msg00103.html -->
 <define name="text-meta-attlist" combine="interleave">
 	<optional>
 	 	<ref name="xml-id"/>
 	</optional>
 </define>
-<!-- DRAFT7: new def end -->
 <define name="paragraph-content" combine="choice">
     <choice>
-<!-- DRAFT7: changed def start: ODF-Metadata-Proposal http://lists.oasis-open.org/archives/office/200708/msg00103.html -->
 		<ref name="text-bookmark"/>
 		<ref name="text-bookmark-start"/>
 		<ref name="text-bookmark-end"/>
-<!-- DRAFT7: new def end -->
     </choice>
 </define>
-<!-- DRAFT7: new def start: ODF-Metadata-Proposal http://lists.oasis-open.org/archives/office/200708/msg00103.html -->
-<!-- Note: Added missing element definitions -->
-<!-- Note: Added an <empty/> as element content -->
 <define name="text-bookmark">
 	<element name="text:bookmark">
 	 	<ref name="text-bookmark-attlist"/>
@@ -1550,28 +1490,21 @@
 	 	<ref name="string"/>
 	</attribute>
 </define>
-<!-- DRAFT7: new def end -->
-<!-- DRAFT7: new def start: ODF-Metadata-Proposal http://lists.oasis-open.org/archives/office/200708/msg00103.html -->
 <define name="text-bookmark-attlist" combine="interleave">
 	<optional>
 	 	<ref name="xml-id"/>
 	</optional>
 </define>
-<!-- DRAFT7: new def end -->
-<!-- DRAFT7: new def start: ODF-Metadata-Proposal http://lists.oasis-open.org/archives/office/200708/msg00103.html -->
 <define name="text-bookmark-start-attlist" combine="interleave">
 	<optional>
 	 	<ref name="xml-id"/>
 	</optional>
 </define>
-<!-- DRAFT7: new def end -->
-<!-- DRAFT7: new def start: ODF-Metadata-Proposal http://lists.oasis-open.org/archives/office/200708/msg00103.html -->
 <define name="text-bookmark-start-attlist" combine="interleave">
 	<optional>
 	 	<ref name="common-in-content-meta-attlist"/>
 	</optional>
 </define>
-<!-- DRAFT7: new def end -->
 <define name="paragraph-content" combine="choice">
     <element name="text:reference-mark">
         <attribute name="text:name">
@@ -1632,7 +1565,9 @@
             </attribute>
         </optional>
         <element name="text:ruby-base">
-            <ref name="paragraph-content"/>
+			<zeroOrMore>
+                <ref name="paragraph-content"/>
+			</zeroOrMore>
         </element>
         <element name="text:ruby-text">
             <optional>
@@ -1654,10 +1589,7 @@
     <ref name="change-marks"/>
 </define>
 <define name="paragraph-content" combine="choice">
-    <!-- choice -->
-        <ref name="shape"/>
-        <!-- ref name="draw-a"/ Ed. Note: shape incl. draw-a now -->
-    <!-- /choice -->
+	<ref name="shape"/>
 </define>
 <define name="paragraph-content" combine="choice">
     <element name="text:date">
@@ -2547,14 +2479,12 @@
         <interleave>
             <choice>
                 <group>
+					<attribute name="xlink:type">
+						<value>simple</value>
+					</attribute>
                     <attribute name="xlink:href">
                         <ref name="anyURI"/>
                     </attribute>
-                    <optional>
-                        <attribute name="xlink:type" a:defaultValue="simple">
-                            <value>simple</value>
-                        </attribute>
-                    </optional>
                 </group>    
                 <text/>
             </choice>
@@ -2627,7 +2557,6 @@
         <text/>
     </element>
 </define>
-<!-- DRAFT7: new def start: ODF-Metadata-Proposal http://lists.oasis-open.org/archives/office/200708/msg00103.html -->
 <define name="paragraph-content" combine="choice">
 	<element name="text:meta-field">
 	 	<ref name="text-meta-field-attlist"/>
@@ -2642,7 +2571,6 @@
 <define name="text-meta-field-attlist" combine="interleave">
 	<ref name="common-field-data-style-name-attlist"/>
 </define>
-<!-- DRAFT7: new def end -->
 <define name="common-value-type-attlist">
     <attribute name="office:value-type">
         <ref name="valueType"/>
@@ -2730,7 +2658,7 @@
 <define name="common-field-description-attlist">
     <optional>
         <attribute name="text:description">
-            <text/>
+            <ref name="string"/>
         </attribute>
     </optional>
 </define>
@@ -2828,7 +2756,6 @@
 <define name="paragraph-content" combine="choice">
     <element name="text:user-index-mark-end">
         <ref name="text-id"/>
-        <ref name="text-outline-level"/>
     </element>
 </define>
 <define name="paragraph-content" combine="choice">
@@ -2895,7 +2822,7 @@
 </define>
 <define name="text-alphabetical-index-mark-attrs" combine="interleave">
     <optional>
-        <attribute name="text:main-entry" a:defaultValue="false">
+        <attribute name="text:main-entry">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -3025,7 +2952,7 @@
 </define>
 <define name="text-table-of-content-source-attlist" combine="interleave">
     <optional>
-        <attribute name="text:use-outline-level" a:defaultValue="true">
+        <attribute name="text:use-outline-level">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -3115,7 +3042,7 @@
 </define>
 <define name="text-index-scope-attr">
     <optional>
-        <attribute name="text:index-scope" a:defaultValue="document">
+        <attribute name="text:index-scope">
             <choice>
                 <value>document</value>
                 <value>chapter</value>
@@ -3129,14 +3056,14 @@
 <define name="text-relative-tab-stop-position-attr">
     <optional>
         <attribute name="text:relative-tab-stop-position"
-                   a:defaultValue="true">
+                  >
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="text-illustration-index-source-attrs" combine="interleave">
     <optional>
-        <attribute name="text:use-caption" a:defaultValue="true">
+        <attribute name="text:use-caption">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -3230,35 +3157,35 @@
 </define>
 <define name="text-object-index-source-attrs" combine="interleave">
     <optional>
-        <attribute name="text:use-spreadsheet-objects" a:defaultValue="false">
+        <attribute name="text:use-spreadsheet-objects">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="text-object-index-source-attrs" combine="interleave">
     <optional>
-        <attribute name="text:use-math-objects" a:defaultValue="false">
+        <attribute name="text:use-math-objects">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="text-object-index-source-attrs" combine="interleave">
     <optional>
-        <attribute name="text:use-draw-objects" a:defaultValue="false">
+        <attribute name="text:use-draw-objects">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="text-object-index-source-attrs" combine="interleave">
     <optional>
-        <attribute name="text:use-chart-objects" a:defaultValue="false">
+        <attribute name="text:use-chart-objects">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="text-object-index-source-attrs" combine="interleave">
     <optional>
-        <attribute name="text:use-other-objects" a:defaultValue="false">
+        <attribute name="text:use-other-objects">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -3295,33 +3222,33 @@
 </define>
 <define name="text-user-index-source-attr" combine="interleave">
     <optional>
-        <attribute name="text:use-index-marks" a:defaultValue="false">
+        <attribute name="text:use-index-marks">
             <ref name="boolean"/>
         </attribute>
     </optional>
     <optional>
-        <attribute name="text:use-index-source-styles" a:defaultValue="false">
+        <attribute name="text:use-index-source-styles">
             <ref name="boolean"/>
         </attribute>
     </optional>
     <optional>
-        <attribute name="text:use-graphics" a:defaultValue="false">
+        <attribute name="text:use-graphics">
             <ref name="boolean"/>
         </attribute>
     </optional>
     <optional>
-        <attribute name="text:use-tables" a:defaultValue="false">
+        <attribute name="text:use-tables">
             <ref name="boolean"/>
         </attribute>
     </optional>
     <optional>
         <attribute name="text:use-floating-frames"
-                     a:defaultValue="false">
+                    >
             <ref name="boolean"/>
         </attribute>
     </optional>
     <optional>
-        <attribute name="text:use-objects" a:defaultValue="false">
+        <attribute name="text:use-objects">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -3329,7 +3256,7 @@
 <define name="text-user-index-source-attr" combine="interleave">
     <optional>
         <attribute name="text:copy-outline-levels"
-                     a:defaultValue="false">
+                    >
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -3387,7 +3314,7 @@
 </define>
 <define name="text-alphabetical-index-source-attrs" combine="interleave">
     <optional>
-        <attribute name="text:ignore-case" a:defaultValue="false">
+        <attribute name="text:ignore-case">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -3401,46 +3328,46 @@
 </define>
 <define name="text-alphabetical-index-source-attrs" combine="interleave">
     <optional>
-        <attribute name="text:alphabetical-separators" a:defaultValue="false">
+        <attribute name="text:alphabetical-separators">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="text-alphabetical-index-source-attrs" combine="interleave">
     <optional>
-        <attribute name="text:combine-entries" a:defaultValue="true">
+        <attribute name="text:combine-entries">
             <ref name="boolean"/>
         </attribute>
     </optional>
     <optional>
         <attribute name="text:combine-entries-with-dash"
-                   a:defaultValue="false">
+                  >
             <ref name="boolean"/>
         </attribute>
     </optional>
     <optional>
-        <attribute name="text:combine-entries-with-pp" a:defaultValue="true">
-            <ref name="boolean"/>
-        </attribute>
-    </optional>
-</define>
-<define name="text-alphabetical-index-source-attrs" combine="interleave">
-    <optional>
-        <attribute name="text:use-keys-as-entries" a:defaultValue="false">
+        <attribute name="text:combine-entries-with-pp">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="text-alphabetical-index-source-attrs" combine="interleave">
     <optional>
-        <attribute name="text:capitalize-entries" a:defaultValue="false">
+        <attribute name="text:use-keys-as-entries">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="text-alphabetical-index-source-attrs" combine="interleave">
     <optional>
-        <attribute name="text:comma-separated" a:defaultValue="false">
+        <attribute name="text:capitalize-entries">
+            <ref name="boolean"/>
+        </attribute>
+    </optional>
+</define>
+<define name="text-alphabetical-index-source-attrs" combine="interleave">
+    <optional>
+        <attribute name="text:comma-separated">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -3461,6 +3388,20 @@
 </define>
 <define name="text-alphabetical-index-source-attrs" combine="interleave">
     <optional>
+        <attribute name="fo:script">
+            <ref name="scriptCode"/>
+        </attribute>
+    </optional>
+</define>
+<define name="text-alphabetical-index-source-attrs" combine="interleave">
+    <optional>
+        <attribute name="style:rfc-language-tag">
+            <ref name="language"/>
+        </attribute>
+    </optional>
+</define>
+<define name="text-alphabetical-index-source-attrs" combine="interleave">
+    <optional>
         <attribute name="text:sort-algorithm">
             <ref name="string"/>
         </attribute>
@@ -3468,14 +3409,12 @@
 </define>
 <define name="text-alphabetical-index-auto-mark-file">
     <element name="text:alphabetical-index-auto-mark-file">
+		<attribute name="xlink:type">
+			<value>simple</value>
+		</attribute>
         <attribute name="xlink:href">
             <ref name="anyURI"/>
         </attribute>
-        <optional>
-            <attribute name="xlink:type" a:defaultValue="simple">
-                <value>simple</value>
-            </attribute>
-        </optional>
     </element>
 </define>
 <define name="text-alphabetical-index-entry-template">
@@ -3588,7 +3527,7 @@
 </define>
 <define name="text-index-entry-chapter-attrs">
     <optional>
-        <attribute name="text:display" a:defaultValue="number">
+        <attribute name="text:display">
             <choice>
                 <value>name</value>
                 <value>number</value>
@@ -3738,6 +3677,12 @@
     <element name="table:table">
         <ref name="table-table-attlist"/>
         <optional>
+            <ref name="table-title"/>
+        </optional>
+        <optional>
+            <ref name="table-desc"/>
+        </optional>
+        <optional>
             <ref name="table-table-source"/>
         </optional>
         <optional>
@@ -3857,35 +3802,35 @@
 </define>
 <define name="table-table-attlist" combine="interleave">
     <optional>
-        <attribute name="table:use-first-row-styles" a:defaultValue="false">
+        <attribute name="table:use-first-row-styles">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="table-table-attlist" combine="interleave">
     <optional>
-        <attribute name="table:use-last-row-styles" a:defaultValue="false">
+        <attribute name="table:use-last-row-styles">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="table-table-attlist" combine="interleave">
     <optional>
-        <attribute name="table:use-first-column-styles" a:defaultValue="false">
+        <attribute name="table:use-first-column-styles">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="table-table-attlist" combine="interleave">
     <optional>
-        <attribute name="table:use-last-column-styles" a:defaultValue="false">
+        <attribute name="table:use-last-column-styles">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="table-table-attlist" combine="interleave">
     <optional>
-        <attribute name="table:use-banding-rows-styles" a:defaultValue="false">
+        <attribute name="table:use-banding-rows-styles">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -3893,32 +3838,31 @@
 <define name="table-table-attlist" combine="interleave">
     <optional>
         <attribute name="table:use-banding-columns-styles"
-                   a:defaultValue="false">
+                  >
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="table-table-attlist" combine="interleave">
     <optional>
-        <attribute name="table:protected" a:defaultValue="false">
+        <attribute name="table:protected">
             <ref name="boolean"/>
         </attribute>
     </optional>
     <optional>
         <attribute name="table:protection-key">
-            <text/>
+            <ref name="string"/>
         </attribute>
     </optional>
     <optional>
-        <attribute name="table:protection-key-digest-algorithm"
-                   a:defaultValue="http://www.w3.org/2000/09/xmldsig#sha1">
+        <attribute name="table:protection-key-digest-algorithm">
             <ref name="anyURI"/>
         </attribute>
     </optional>
 </define>
 <define name="table-table-attlist" combine="interleave">
     <optional>
-        <attribute name="table:print" a:defaultValue="true">
+        <attribute name="table:print">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -3930,13 +3874,21 @@
         </attribute>
     </optional>
 </define>
-<!-- DRAFT7: new def start: ODF-Metadata-Proposal http://lists.oasis-open.org/archives/office/200708/msg00103.html -->
 <define name="table-table-attlist" combine="interleave">
 	<optional>
 	 	<ref name="xml-id"/>
 	</optional>
 </define>
-<!-- DRAFT7: new def end -->
+<define name="table-title">
+    <element name="table:title">
+        <text/>
+    </element>
+</define>
+<define name="table-desc">
+    <element name="table:desc">
+        <text/>
+    </element>
+</define>
 <define name="table-table-row">
     <element name="table:table-row">
         <ref name="table-table-row-attlist"/>
@@ -3950,7 +3902,7 @@
 </define>
 <define name="table-table-row-attlist" combine="interleave">
     <optional>
-        <attribute name="table:number-rows-repeated" a:defaultValue="1">
+        <attribute name="table:number-rows-repeated">
             <ref name="positiveInteger"/>
         </attribute>
     </optional>
@@ -3971,18 +3923,16 @@
 </define>
 <define name="table-table-row-attlist" combine="interleave">
     <optional>
-        <attribute name="table:visibility" a:defaultValue="visible">
+        <attribute name="table:visibility">
             <ref name="table-visibility-value"/>
         </attribute>
     </optional>
 </define>
-<!-- DRAFT7: new def start: ODF-Metadata-Proposal http://lists.oasis-open.org/archives/office/200708/msg00103.html -->
 <define name="table-table-row-attlist" combine="interleave">
 	<optional>
 	 	<ref name="xml-id"/>
 	</optional>
 </define>
-<!-- DRAFT7: new def end -->
 
 <define name="table-visibility-value">
     <choice>
@@ -4022,19 +3972,19 @@
 </define>
 <define name="table-table-cell-attlist" combine="interleave">
     <optional>
-        <attribute name="table:number-columns-repeated" a:defaultValue="1">
+        <attribute name="table:number-columns-repeated">
             <ref name="positiveInteger"/>
         </attribute>
     </optional>
 </define>
 <define name="table-table-cell-attlist-extra" combine="interleave">
     <optional>
-        <attribute name="table:number-columns-spanned" a:defaultValue="1">
+        <attribute name="table:number-columns-spanned">
             <ref name="positiveInteger"/>
         </attribute>
     </optional>
     <optional>
-        <attribute name="table:number-rows-spanned" a:defaultValue="1">
+        <attribute name="table:number-rows-spanned">
             <ref name="positiveInteger"/>
         </attribute>
     </optional>
@@ -4079,25 +4029,28 @@
 </define>
 <define name="table-table-cell-attlist" combine="interleave">
     <optional>
-        <attribute name="table:protect" a:defaultValue="false">
+        <attribute name="table:protect">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
-<!-- DRAFT7: new def start: ODF-Metadata-Proposal http://lists.oasis-open.org/archives/office/200708/msg00103.html -->
+<define name="table-table-cell-attlist" combine="interleave">
+    <optional>
+        <attribute name="table:protected">
+             <ref name="boolean"/>
+        </attribute>
+    </optional>
+</define>
 <define name="table-table-cell-attlist" combine="interleave">
 	<optional>
 	 	<ref name="xml-id"/>
 	</optional>
 </define>
-<!-- DRAFT7: new def end -->
-<!-- DRAFT7: new def start: ODF-Metadata-Proposal http://lists.oasis-open.org/archives/office/200708/msg00103.html -->
 <define name="table-table-cell-attlist" combine="interleave">
 	<optional>
 	 	<ref name="common-in-content-meta-attlist"/>
 	</optional>
 </define>
-<!-- DRAFT7: new def end -->
 <define name="table-table-column">
     <element name="table:table-column">
         <ref name="table-table-column-attlist"/>
@@ -4106,7 +4059,7 @@
 </define>
 <define name="table-table-column-attlist" combine="interleave">
     <optional>
-        <attribute name="table:number-columns-repeated" a:defaultValue="1">
+        <attribute name="table:number-columns-repeated">
             <ref name="positiveInteger"/>
         </attribute>
     </optional>
@@ -4120,7 +4073,7 @@
 </define>
 <define name="table-table-column-attlist" combine="interleave">
     <optional>
-        <attribute name="table:visibility" a:defaultValue="visible">
+        <attribute name="table:visibility">
             <ref name="table-visibility-value"/>
         </attribute>
     </optional>
@@ -4132,13 +4085,11 @@
         </attribute>
     </optional>
 </define>
-<!-- DRAFT7: new def start: ODF-Metadata-Proposal http://lists.oasis-open.org/archives/office/200708/msg00103.html -->
 <define name="table-table-column-attlist" combine="interleave">
 	<optional>
 	 	<ref name="xml-id"/>
 	</optional>
 </define>
-<!-- DRAFT7: new def end -->
 <define name="table-table-header-columns">
     <element name="table:table-header-columns">
         <oneOrMore>
@@ -4162,7 +4113,7 @@
 </define>
 <define name="table-table-column-group-attlist" combine="interleave">
     <optional>
-        <attribute name="table:display" a:defaultValue="true">
+        <attribute name="table:display">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -4196,14 +4147,14 @@
 </define>
 <define name="table-table-row-group-attlist" combine="interleave">
     <optional>
-        <attribute name="table:display" a:defaultValue="true">
+        <attribute name="table:display">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="table-table-attlist" combine="interleave">
     <optional>
-        <attribute name="table:is-sub-table" a:defaultValue="false">
+        <attribute name="table:is-sub-table">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -4246,7 +4197,7 @@
 </define>
 <define name="table-table-source-attlist" combine="interleave">
     <optional>
-        <attribute name="table:mode" a:defaultValue="copy-all">
+        <attribute name="table:mode">
             <choice>
                 <value>copy-all</value>
                 <value>copy-results-only</value>
@@ -4262,19 +4213,17 @@
     </optional>
 </define>
 <define name="table-linked-source-attlist" combine="interleave">
-    <optional>
-        <attribute name="xlink:type" a:defaultValue="simple">
-            <value>simple</value>
-        </attribute>
-    </optional>
-    <optional>
-        <attribute name="xlink:actuate" a:defaultValue="onRequest">
-            <value>onRequest</value>
-        </attribute>
-    </optional>
+	<attribute name="xlink:type">
+		<value>simple</value>
+	</attribute>
     <attribute name="xlink:href">
         <ref name="anyURI"/>
     </attribute>
+    <optional>
+        <attribute name="xlink:actuate">
+            <value>onRequest</value>
+        </attribute>
+    </optional>
 </define>
 <define name="table-linked-source-attlist" combine="interleave">
     <optional>
@@ -4315,7 +4264,7 @@
 </define>
 <define name="table-scenario-attlist" combine="interleave">
     <optional>
-        <attribute name="table:display-border" a:defaultValue="true">
+        <attribute name="table:display-border">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -4329,21 +4278,21 @@
 </define>
 <define name="table-scenario-attlist" combine="interleave">
     <optional>
-        <attribute name="table:copy-back" a:defaultValue="true">
+        <attribute name="table:copy-back">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="table-scenario-attlist" combine="interleave">
     <optional>
-        <attribute name="table:copy-styles" a:defaultValue="true">
+        <attribute name="table:copy-styles">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="table-scenario-attlist" combine="interleave">
     <optional>
-        <attribute name="table:copy-formulas" a:defaultValue="true">
+        <attribute name="table:copy-formulas">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -4452,7 +4401,7 @@
 </define>
 <define name="table-highlighted-range-attlist" combine="interleave">
     <optional>
-        <attribute name="table:contains-error" a:defaultValue="false">
+        <attribute name="table:contains-error">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -4464,7 +4413,7 @@
 </define>
 <define name="office-spreadsheet-attlist" combine="interleave">
     <optional>
-        <attribute name="table:structure-protected" a:defaultValue="false">
+        <attribute name="table:structure-protected">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -4474,8 +4423,7 @@
         </attribute>
     </optional>
     <optional>
-        <attribute name="table:protection-key-digest-algorithm"
-                   a:defaultValue="http://www.w3.org/2000/09/xmldsig#sha1">
+        <attribute name="table:protection-key-digest-algorithm">
             <ref name="anyURI"/>
         </attribute>
     </optional>
@@ -4493,14 +4441,14 @@
 </define>
 <define name="table-calculation-setting-attlist" combine="interleave">
     <optional>
-        <attribute name="table:case-sensitive" a:defaultValue="true">
+        <attribute name="table:case-sensitive">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="table-calculation-setting-attlist" combine="interleave">
     <optional>
-        <attribute name="table:precision-as-shown" a:defaultValue="false">
+        <attribute name="table:precision-as-shown">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -4508,14 +4456,14 @@
 <define name="table-calculation-setting-attlist" combine="interleave">
     <optional>
         <attribute name="table:search-criteria-must-apply-to-whole-cell"
-                     a:defaultValue="true">
+                    >
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="table-calculation-setting-attlist" combine="interleave">
     <optional>
-        <attribute name="table:automatic-find-labels" a:defaultValue="true">
+        <attribute name="table:automatic-find-labels">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -4523,21 +4471,21 @@
 <define name="table-calculation-setting-attlist" combine="interleave">
     <optional>
         <attribute name="table:use-regular-expressions"
-                   a:defaultValue="true">
+                  >
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="table-calculation-setting-attlist" combine="interleave">
     <optional>
-        <attribute name="table:use-wildcards" a:defaultValue="false">
+        <attribute name="table:use-wildcards">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="table-calculation-setting-attlist" combine="interleave">
     <optional>
-        <attribute name="table:null-year" a:defaultValue="1930">
+        <attribute name="table:null-year">
             <ref name="positiveInteger"/>
         </attribute>
     </optional>
@@ -4545,13 +4493,12 @@
 <define name="table-null-date">
     <element name="table:null-date">
         <optional>
-            <attribute name="table:value-type" a:defaultValue="date">
-                <ref name="valueType"/>
+            <attribute name="table:value-type">
+				<value>date</value>
             </attribute>
         </optional>
         <optional>
-            <attribute name="table:date-value"
-                         a:defaultValue="1899-12-30">
+            <attribute name="table:date-value">
                 <ref name="date"/>
             </attribute>
         </optional>
@@ -4561,7 +4508,7 @@
 <define name="table-iteration">
     <element name="table:iteration">
         <optional>
-            <attribute name="table:status" a:defaultValue="disable">
+            <attribute name="table:status">
                 <choice>
                     <value>enable</value>
                     <value>disable</value>
@@ -4569,13 +4516,13 @@
             </attribute>
         </optional>
         <optional>
-            <attribute name="table:steps" a:defaultValue="100">
+            <attribute name="table:steps">
                 <ref name="positiveInteger"/>
             </attribute>
         </optional>
         <optional>
             <attribute name="table:maximum-difference"
-                         a:defaultValue="0.001">
+                        >
                 <ref name="double"/>
             </attribute>
         </optional>
@@ -4630,14 +4577,14 @@
 </define>
 <define name="table-validation-attlist" combine="interleave">
     <optional>
-        <attribute name="table:allow-empty-cell" a:defaultValue="true">
+        <attribute name="table:allow-empty-cell">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="table-validation-attlist" combine="interleave">
     <optional>
-        <attribute name="table:display-list" a:defaultValue="unsorted">
+        <attribute name="table:display-list">
             <choice>
                 <value>none</value>
                 <value>unsorted</value>
@@ -4654,7 +4601,7 @@
             </attribute>
         </optional>
         <optional>
-            <attribute name="table:display" a:defaultValue="false">
+            <attribute name="table:display">
                 <ref name="boolean"/>
             </attribute>
         </optional>
@@ -4671,12 +4618,12 @@
             </attribute>
         </optional>
         <optional>
-            <attribute name="table:display" a:defaultValue="false">
+            <attribute name="table:display">
                 <ref name="boolean"/>
             </attribute>
         </optional>
         <optional>
-            <attribute name="table:message-type" a:defaultValue="stop">
+            <attribute name="table:message-type">
                 <choice>
                     <value>stop</value>
                     <value>warning</value>
@@ -4692,7 +4639,7 @@
 <define name="table-error-macro">
     <element name="table:error-macro">
         <optional>
-            <attribute name="table:execute" a:defaultValue="true">
+            <attribute name="table:execute">
                 <ref name="boolean"/>
             </attribute>
         </optional>
@@ -4761,7 +4708,7 @@
         </attribute>
     </optional>
     <optional>
-        <attribute name="table:range-usable-as" a:defaultValue="none">
+        <attribute name="table:range-usable-as">
             <choice>
                 <value>none</value>
                 <list>
@@ -4835,35 +4782,35 @@
 </define>
 <define name="table-database-range-attlist" combine="interleave">
     <optional>
-        <attribute name="table:is-selection" a:defaultValue="false">
+        <attribute name="table:is-selection">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="table-database-range-attlist" combine="interleave">
     <optional>
-        <attribute name="table:on-update-keep-styles" a:defaultValue="false">
+        <attribute name="table:on-update-keep-styles">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="table-database-range-attlist" combine="interleave">
     <optional>
-        <attribute name="table:on-update-keep-size" a:defaultValue="true">
+        <attribute name="table:on-update-keep-size">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="table-database-range-attlist" combine="interleave">
     <optional>
-        <attribute name="table:has-persistent-data" a:defaultValue="true">
+        <attribute name="table:has-persistent-data">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="table-database-range-attlist" combine="interleave">
     <optional>
-        <attribute name="table:orientation" a:defaultValue="row">
+        <attribute name="table:orientation">
             <choice>
                 <value>column</value>
                 <value>row</value>
@@ -4873,7 +4820,7 @@
 </define>
 <define name="table-database-range-attlist" combine="interleave">
     <optional>
-        <attribute name="table:contains-header" a:defaultValue="true">
+        <attribute name="table:contains-header">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -4881,7 +4828,7 @@
 <define name="table-database-range-attlist" combine="interleave">
     <optional>
         <attribute name="table:display-filter-buttons"
-                   a:defaultValue="false">
+                  >
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -4916,7 +4863,7 @@
 </define>
 <define name="table-database-source-sql-attlist" combine="interleave">
     <optional>
-        <attribute name="table:parse-sql-statement" a:defaultValue="false">
+        <attribute name="table:parse-sql-statement">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -4963,7 +4910,7 @@
 </define>
 <define name="table-sort-attlist" combine="interleave">
     <optional>
-        <attribute name="table:bind-styles-to-content" a:defaultValue="true">
+        <attribute name="table:bind-styles-to-content">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -4977,7 +4924,7 @@
 </define>
 <define name="table-sort-attlist" combine="interleave">
     <optional>
-        <attribute name="table:case-sensitive" a:defaultValue="false">
+        <attribute name="table:case-sensitive">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -4998,6 +4945,20 @@
 </define>
 <define name="table-sort-attlist" combine="interleave">
     <optional>
+        <attribute name="table:script">
+            <ref name="scriptCode"/>
+        </attribute>
+    </optional>
+</define>
+<define name="table-sort-attlist" combine="interleave">
+    <optional>
+        <attribute name="table:rfc-language-tag">
+            <ref name="language"/>
+        </attribute>
+    </optional>
+</define>
+<define name="table-sort-attlist" combine="interleave">
+    <optional>
         <attribute name="table:algorithm">
             <ref name="string"/>
         </attribute>
@@ -5012,7 +4973,7 @@
 <define name="table-sort-attlist" combine="interleave">
     <optional>
         <attribute name="table:embedded-number-behavior"
-                   a:defaultValue="alpha-numeric">
+                  >
             <choice>
                 <value>alpha-numeric</value>
                 <value>integer</value>
@@ -5028,7 +4989,7 @@
 </define>
 <define name="table-sort-by-attlist" combine="interleave">
     <optional>
-        <attribute name="table:data-type" a:defaultValue="automatic">
+        <attribute name="table:data-type">
             <choice>
                 <value>text</value>
                 <value>number</value>
@@ -5040,7 +5001,7 @@
 </define>
 <define name="table-sort-by-attlist" combine="interleave">
     <optional>
-        <attribute name="table:order" a:defaultValue="ascending">
+        <attribute name="table:order">
             <choice>
                 <value>ascending</value>
                 <value>descending</value>
@@ -5061,14 +5022,14 @@
 </define>
 <define name="table-subtotal-rules-attlist" combine="interleave">
     <optional>
-        <attribute name="table:bind-styles-to-content" a:defaultValue="true">
+        <attribute name="table:bind-styles-to-content">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="table-subtotal-rules-attlist" combine="interleave">
     <optional>
-        <attribute name="table:case-sensitive" a:defaultValue="false">
+        <attribute name="table:case-sensitive">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -5076,7 +5037,7 @@
 <define name="table-subtotal-rules-attlist" combine="interleave">
     <optional>
         <attribute name="table:page-breaks-on-group-change"
-                   a:defaultValue="false">
+                  >
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -5089,7 +5050,7 @@
 </define>
 <define name="table-sort-groups-attlist" combine="interleave">
     <optional>
-        <attribute name="table:data-type" a:defaultValue="automatic">
+        <attribute name="table:data-type">
             <choice>
                 <value>text</value>
                 <value>number</value>
@@ -5101,7 +5062,7 @@
 </define>
 <define name="table-sort-groups-attlist" combine="interleave">
     <optional>
-        <attribute name="table:order" a:defaultValue="ascending">
+        <attribute name="table:order">
             <choice>
                 <value>ascending</value>
                 <value>descending</value>
@@ -5171,7 +5132,7 @@
 </define>
 <define name="table-filter-attlist" combine="interleave">
     <optional>
-        <attribute name="table:condition-source" a:defaultValue="self">
+        <attribute name="table:condition-source">
             <choice>
                 <value>self</value>
                 <value>cell-range</value>
@@ -5188,7 +5149,7 @@
 </define>
 <define name="table-filter-attlist" combine="interleave">
     <optional>
-        <attribute name="table:display-duplicates" a:defaultValue="true">
+        <attribute name="table:display-duplicates">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -5241,14 +5202,14 @@
 </define>
 <define name="table-filter-condition-attlist" combine="interleave">
     <optional>
-        <attribute name="table:case-sensitive" a:defaultValue="false">    
+        <attribute name="table:case-sensitive">    
             <ref name="string"/>
         </attribute>
     </optional>
 </define>
 <define name="table-filter-condition-attlist" combine="interleave">
     <optional>
-        <attribute name="table:data-type" a:defaultValue="text">
+        <attribute name="table:data-type">
             <choice>
                 <value>text</value>
                 <value>number</value>
@@ -5302,7 +5263,7 @@
 </define>
 <define name="table-data-pilot-table-attlist" combine="interleave">
     <optional>
-        <attribute name="table:grand-total" a:defaultValue="both">
+        <attribute name="table:grand-total">
             <choice>
                 <value>none</value>
                 <value>row</value>
@@ -5314,14 +5275,14 @@
 </define>
 <define name="table-data-pilot-table-attlist" combine="interleave">
     <optional>
-        <attribute name="table:ignore-empty-rows" a:defaultValue="false">    
+        <attribute name="table:ignore-empty-rows">    
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="table-data-pilot-table-attlist" combine="interleave">
     <optional>
-        <attribute name="table:identify-categories" a:defaultValue="false">    
+        <attribute name="table:identify-categories">    
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -5340,7 +5301,7 @@
 </define>
 <define name="table-data-pilot-table-attlist" combine="interleave">
     <optional>
-        <attribute name="table:show-filter-button" a:defaultValue="true">    
+        <attribute name="table:show-filter-button">    
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -5348,7 +5309,7 @@
 <define name="table-data-pilot-table-attlist" combine="interleave">
     <optional>
         <attribute name="table:drill-down-on-double-click"
-                   a:defaultValue="true">    
+                  >    
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -5442,7 +5403,7 @@
 </define>
 <define name="table-data-pilot-field-attlist" combine="interleave">
     <optional>
-        <attribute name="table:is-data-layout-field" a:defaultValue="false">
+        <attribute name="table:is-data-layout-field">
             <ref name="string"/>
         </attribute>
     </optional>
@@ -5470,7 +5431,7 @@
 </define>
 <define name="table-data-pilot-field-attlist" combine="interleave">
     <optional>
-        <attribute name="table:used-hierarchy" a:defaultValue="-1">    
+        <attribute name="table:used-hierarchy">    
             <ref name="integer"/>
         </attribute>
     </optional>
@@ -5814,7 +5775,7 @@
 </define>
 <define name="table-consolidation-attlist" combine="interleave">
     <optional>
-        <attribute name="table:use-labels" a:defaultValue="none">
+        <attribute name="table:use-labels">
             <choice>
                 <value>none</value>
                 <value>row</value>
@@ -5826,7 +5787,7 @@
 </define>
 <define name="table-consolidation-attlist" combine="interleave">
     <optional>
-        <attribute name="table:link-to-source-data" a:defaultValue="false">
+        <attribute name="table:link-to-source-data">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -5853,7 +5814,7 @@
 </define>
 <define name="table-tracked-changes-attlist" combine="interleave">
     <optional>
-        <attribute name="table:track-changes" a:defaultValue="false">
+        <attribute name="table:track-changes">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -5887,7 +5848,7 @@
 </define>
 <define name="table-insertion-attlist" combine="interleave">
     <optional>
-        <attribute name="table:count" a:defaultValue="1">
+        <attribute name="table:count">
             <ref name="positiveInteger"/>
         </attribute>
     </optional>
@@ -6132,7 +6093,7 @@
 </define>
 <define name="table-change-track-table-cell-attlist" combine="interleave">
     <optional>
-        <attribute name="table:matrix-covered" a:defaultValue="false">
+        <attribute name="table:matrix-covered">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -6194,7 +6155,7 @@
 </define>
 <define name="common-table-change-attlist" combine="interleave">
     <optional>
-        <attribute name="table:acceptance-state" a:defaultValue="pending">
+        <attribute name="table:acceptance-state">
             <choice>
                 <value>accepted</value>
                 <value>rejected</value>
@@ -6263,14 +6224,14 @@
 </define>
 <define name="draw-layer-attlist" combine="interleave">
     <optional>
-        <attribute name="draw:protected" a:defaultValue="false">
+        <attribute name="draw:protected">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="draw-layer-attlist" combine="interleave">
     <optional>
-        <attribute name="draw:display" a:defaultValue="always">
+        <attribute name="draw:display">
             <choice>
                 <value>always</value>
                 <value>screen</value>
@@ -6284,19 +6245,15 @@
     <element name="draw:page">
         <ref name="common-presentation-header-footer-attlist"/>
         <ref name="draw-page-attlist"/>
-<!-- DRAFT7: new def start svg:desc and svg:title for drawing pages, http://lists.oasis-open.org/archives/office/200710/msg00065.html -->
 		<optional>
 			<ref name="svg-title"/>
 		</optional>
 		<optional>
 			<ref name="svg-desc"/>
 		</optional>
-<!-- DRAFT7: new def end -->
-<!-- DRAFT7: new def start: Layer set per page, http://lists.oasis-open.org/archives/office/200711/msg00026.html -->
 		<optional>
 			<ref name="draw-layer-set"/>
 		</optional>		
-<!-- DRAFT7: new def end -->
         <optional>
             <ref name="office-forms"/>
         </optional>
@@ -6364,9 +6321,7 @@
 <define name="draw-page-attlist" combine="interleave">
     <optional>
         <attribute name="draw:id">
-<!-- DRAFT7: changed def start: xml:id-Proposal http://lists.oasis-open.org/archives/office/200808/msg00093.html -->
             <ref name="NCName"/>
-<!-- DRAFT7: changed def end -->
         </attribute>
     </optional>
 </define>
@@ -6377,13 +6332,11 @@
         </attribute>
     </optional>
 </define>
-<!-- DRAFT7: new def start: ODF-Metadata-Proposal http://lists.oasis-open.org/archives/office/200708/msg00103.html -->
 <define name="draw-page-attlist" combine="interleave">
 	<optional>
 	 	<ref name="xml-id"/>
 	</optional>
 </define>
-<!-- DRAFT7: new def end -->
 <define name="shape">
     <choice>
         <ref name="shape-instance"/>
@@ -6657,7 +6610,7 @@
 </define>
 <define name="common-draw-circle-ellipse-attlist" combine="interleave">
     <optional>
-        <attribute name="draw:kind" a:defaultValue="full">
+        <attribute name="draw:kind">
             <choice>
                 <value>full</value>
                 <value>section</value>
@@ -6670,18 +6623,14 @@
 <define name="common-draw-circle-ellipse-attlist" combine="interleave">
     <optional>
         <attribute name="draw:start-angle">
-<!-- DRAFT7: changed def start: Angle units http://lists.oasis-open.org/archives/office/200804/msg00096.html -->
             <ref name="angle"/>
-<!-- DRAFT7: changed def end -->			
         </attribute>
     </optional>
 </define>
 <define name="common-draw-circle-ellipse-attlist" combine="interleave">
     <optional>
         <attribute name="draw:end-angle">
-<!-- DRAFT7: changed def start: Angle units http://lists.oasis-open.org/archives/office/200804/msg00096.html -->
             <ref name="angle"/>
-<!-- DRAFT7: changed def end -->			
         </attribute>
     </optional>
 </define>
@@ -6741,7 +6690,7 @@
 </define>
 <define name="draw-connector-attlist" combine="interleave">
     <optional>
-        <attribute name="draw:type" a:defaultValue="standard">
+        <attribute name="draw:type">
             <choice>
                 <value>standard</value>
                 <value>lines</value>
@@ -7068,27 +7017,22 @@
 <define name="common-draw-layer-name-attlist">
     <optional>
         <attribute name="draw:layer">
-            <data type="string"/>
+            <ref name="string"/>
         </attribute>
     </optional>
 </define>
-<!-- DRAFT7: changed def start: xml:id-Proposal http://lists.oasis-open.org/archives/office/200808/msg00093.html -->
 <define name="common-draw-id-attlist" combine="interleave">
-<!-- DRAFT7: changed def end -->
     <optional>
         <attribute name="draw:id">
             <ref name="NCName"/>
         </attribute>
     </optional>
 </define>
-<!-- DRAFT7: new def start: xml:id-Proposal http://lists.oasis-open.org/archives/office/200808/msg00093.html -->
-<!-- DRAFT7: Many individual definitions of the ODF-Metadata-Proposal http://lists.oasis-open.org/archives/office/200708/msg00103.html are covered by the new def for the xml:id proposal -->
 <define name="common-draw-id-attlist" combine="interleave">
     <optional>
 	 	<ref name="xml-id"/>
     </optional>
 </define>
-<!-- DRAFT7: new def end -->
 <define name="common-draw-z-index-attlist">
     <optional>
         <attribute name="draw:z-index">
@@ -7207,7 +7151,6 @@
     </optional>
 </define>
 <define name="draw-glue-point-attlist" combine="interleave">
-<!-- DRAFT7: the name of the defines was wrong -->
     <attribute name="draw:escape-direction">
         <choice>
             <value>auto</value>
@@ -7361,20 +7304,16 @@
 </define>
 <define name="draw-text-box-attlist" combine="interleave">
     <optional>
-<!-- DRAFT7: changed def start: xml:id-Proposal http://lists.oasis-open.org/archives/office/200808/msg00093.html -->
 		<attribute name="text:id">
 			<ref name="NCName"/>
 		</attribute>
-<!-- DRAFT7: changed def end -->
     </optional>
 </define>
-<!-- DRAFT7: new def start: xml:id-Proposal http://lists.oasis-open.org/archives/office/200808/msg00093.html -->
 <define name="draw-text-box-attlist" combine="interleave">
     <optional>
 	 	<ref name="xml-id"/>
     </optional>
 </define>
-<!-- DRAFT7: new def end -->
 <define name="draw-image">
     <element name="draw:image">
         <ref name="draw-image-attlist"/>
@@ -7387,28 +7326,20 @@
 </define>
 <define name="common-draw-data-attlist" combine="interleave">
     <group>
+		<attribute name="xlink:type">
+			<value>simple</value>
+		</attribute>
         <attribute name="xlink:href">
             <ref name="anyURI"/>
         </attribute>
         <optional>
-            <attribute name="xlink:type" a:defaultValue="simple">
-                <choice>
-                    <value>simple</value>
-                </choice>
+            <attribute name="xlink:show">
+				<value>embed</value>
             </attribute>
         </optional>
         <optional>
-            <attribute name="xlink:show" a:defaultValue="embed">
-                <choice>
-                    <value>embed</value>
-                </choice>
-            </attribute>
-        </optional>
-        <optional>
-            <attribute name="xlink:actuate" a:defaultValue="onLoad">
-                <choice>
-                    <value>onLoad</value>
-                </choice>
+            <attribute name="xlink:actuate">
+				<value>onLoad</value>
             </attribute>
         </optional>
     </group>
@@ -7426,6 +7357,12 @@
         </attribute>
     </optional>
 </define>
+<define name="draw-image-attlist" combine="interleave">
+    <optional>
+	 	<ref name="xml-id"/>
+    </optional>
+</define>
+
 <define name="draw-object">
     <element name="draw:object">
         <ref name="draw-object-attlist"/>
@@ -7449,13 +7386,28 @@
 <define name="draw-object-attlist" combine="interleave">
     <optional>
         <attribute name="draw:notify-on-update-of-ranges">
-            <ref name="string"/>
+			<choice>
+				<ref name="cellRangeAddressList"/>
+	            <ref name="string"/>
+			</choice>
         </attribute>
+    </optional>
+</define>
+<define name="draw-object-attlist" combine="interleave">
+    <optional>
+	 	<ref name="xml-id"/>
     </optional>
 </define>
 <define name="draw-object-ole-attlist" combine="interleave">
     <optional>
-        <attribute name="draw:class-id"/>
+        <attribute name="draw:class-id">
+			<ref name="string"/>
+		</attribute>
+    </optional>
+</define>
+<define name="draw-object-ole-attlist" combine="interleave">
+    <optional>
+	 	<ref name="xml-id"/>
     </optional>
 </define>
 <define name="draw-applet">
@@ -7471,24 +7423,35 @@
 </define>
 <define name="draw-applet-attlist" combine="interleave">
     <optional>
-        <attribute name="draw:code"/>
+        <attribute name="draw:code">
+			<ref name="string"/>
+		</attribute>
     </optional>
 </define>
 <define name="draw-applet-attlist" combine="interleave">
     <optional>
-        <attribute name="draw:object"/>
+        <attribute name="draw:object">
+			<ref name="string"/>
+		</attribute>
     </optional>
 </define>
 <define name="draw-applet-attlist" combine="interleave">
     <optional>
-        <attribute name="draw:archive"/>
+        <attribute name="draw:archive">
+			<ref name="string"/>
+		</attribute>
     </optional>
 </define>
 <define name="draw-applet-attlist" combine="interleave">
     <optional>
-        <attribute name="draw:may-script" a:defaultValue="false">
+        <attribute name="draw:may-script">
             <ref name="boolean"/>
         </attribute>
+    </optional>
+</define>
+<define name="draw-applet-attlist" combine="interleave">
+    <optional>
+	 	<ref name="xml-id"/>
     </optional>
 </define>
 <define name="draw-plugin">
@@ -7502,7 +7465,14 @@
 </define>
 <define name="draw-plugin-attlist" combine="interleave">
     <optional>
-        <attribute name="draw:mime-type"/>
+        <attribute name="draw:mime-type">
+			<ref name="string"/>
+		</attribute>
+    </optional>
+</define>
+<define name="draw-plugin-attlist" combine="interleave">
+    <optional>
+	 	<ref name="xml-id"/>
     </optional>
 </define>
 <define name="draw-param">
@@ -7538,6 +7508,11 @@
         </attribute>
     </optional>
 </define>
+<define name="draw-floating-frame-attlist" combine="interleave">
+    <optional>
+	 	<ref name="xml-id"/>
+    </optional>
+</define>
 <define name="draw-contour-polygon">
     <element name="draw:contour-polygon">
         <ref name="common-contour-attlist"/>
@@ -7569,19 +7544,15 @@
     </element>
 </define>
 <define name="draw-a-attlist" combine="interleave">
+	<attribute name="xlink:type">
+		<value>simple</value>
+	</attribute>
     <attribute name="xlink:href">
         <ref name="anyURI"/>
     </attribute>
     <optional>
-        <attribute name="xlink:type" a:defaultValue="simple">
-            <value>simple</value>
-        </attribute>
-    </optional>
-    <optional>
-        <attribute name="xlink:actuate" a:defaultValue="onRequest">
-            <choice>
-                <value>onRequest</value>
-            </choice>
+        <attribute name="xlink:actuate">
+			<value>onRequest</value>
         </attribute>
     </optional>
 </define>
@@ -7616,18 +7587,16 @@
 </define>
 <define name="draw-a-attlist" combine="interleave">
     <optional>
-        <attribute name="office:server-map" a:defaultValue="false">
+        <attribute name="office:server-map">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
-<!-- DRAFT7: new def start: ODF-Metadata-Proposal http://lists.oasis-open.org/archives/office/200708/msg00103.html -->
 <define name="draw-a-attlist" combine="interleave">
 	<optional>
 	 	<ref name="xml-id"/>
 	</optional>
 </define>
-<!-- DRAFT7: new def end -->
 <define name="draw-image-map">
     <element name="draw:image-map">
         <zeroOrMore>
@@ -7718,29 +7687,25 @@
 </define>
 <define name="common-draw-area-attlist" combine="interleave">
     <optional>
+        <attribute name="xlink:type">
+            <value>simple</value>
+        </attribute>
         <attribute name="xlink:href">
             <ref name="anyURI"/>
         </attribute>
-    </optional>
-    <optional>
-        <attribute name="xlink:type" a:defaultValue="simple">
-            <choice>
-                <value>simple</value>
-            </choice>
-        </attribute>
-    </optional>
-    <optional>
-        <attribute name="office:target-frame-name">
-            <ref name="targetFrameName"/>
-        </attribute>
-    </optional>
-    <optional>
-        <attribute name="xlink:show">
-            <choice>
-                <value>new</value>
-                <value>replace</value>
-            </choice>
-            </attribute>
+		<optional>
+			<attribute name="office:target-frame-name">
+				<ref name="targetFrameName"/>
+			</attribute>
+		</optional>
+		<optional>
+			<attribute name="xlink:show">
+				<choice>
+					<value>new</value>
+					<value>replace</value>
+				</choice>
+			</attribute>
+		</optional>
     </optional>
 </define>
 <define name="common-draw-area-attlist" combine="interleave">
@@ -7842,9 +7807,7 @@
 <define name="dr3d-scene-attlist" combine="interleave">
     <optional>
         <attribute name="dr3d:shadow-slant">
-<!-- DRAFT7: changed def start: Angle units http://lists.oasis-open.org/archives/office/200804/msg00096.html -->
             <ref name="angle"/>
-<!-- DRAFT7: changed def end -->			
         </attribute>
     </optional>
 </define>
@@ -7876,7 +7839,9 @@
 </define>
 <define name="common-dr3d-transform-attlist">
     <optional>
-        <attribute name="dr3d:transform"/>
+        <attribute name="dr3d:transform">
+			<ref name="string"/>
+		</attribute>
     </optional>
 </define>
 <define name="dr3d-light">
@@ -8035,7 +8000,7 @@
 </define>
 <define name="draw-enhanced-geometry-attlist" combine="interleave">
     <optional>
-        <attribute name="draw:type" a:defaultValue="non-primitive">
+        <attribute name="draw:type">
             <ref name="custom-shape-type"/>
         </attribute>
     </optional>
@@ -8061,35 +8026,33 @@
 </define>
 <define name="draw-enhanced-geometry-attlist" combine="interleave">
     <optional>
-        <attribute name="draw:mirror-vertical" a:defaultValue="false">
+        <attribute name="draw:mirror-vertical">
             <ref name="boolean"/>
         </attribute>
     </optional>
     <optional>
-        <attribute name="draw:mirror-horizontal" a:defaultValue="false">
+        <attribute name="draw:mirror-horizontal">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="draw-enhanced-geometry-attlist" combine="interleave">
     <optional>
-        <attribute name="draw:text-rotate-angle" a:defaultValue="0">
-<!-- DRAFT7: changed def start: Angle units http://lists.oasis-open.org/archives/office/200804/msg00096.html -->
+        <attribute name="draw:text-rotate-angle">
             <ref name="angle"/>
-<!-- DRAFT7: changed def end -->			
         </attribute>
     </optional>
 </define>
 <define name="draw-enhanced-geometry-attlist" combine="interleave">
     <optional>
-        <attribute name="draw:extrusion-allowed" a:defaultValue="false">
+        <attribute name="draw:extrusion-allowed">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="draw-enhanced-geometry-attlist" combine="interleave">
     <optional>
-        <attribute name="draw:text-path-allowed" a:defaultValue="false">
+        <attribute name="draw:text-path-allowed">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -8097,28 +8060,28 @@
 <define name="draw-enhanced-geometry-attlist" combine="interleave">
     <optional>
         <attribute name="draw:concentric-gradient-fill-allowed"
-                    a:defaultValue="false">
+                   >
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="draw-enhanced-geometry-attlist" combine="interleave">
     <optional>
-        <attribute name="draw:extrusion" a:defaultValue="false">
+        <attribute name="draw:extrusion">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="draw-enhanced-geometry-attlist" combine="interleave">
     <optional>
-        <attribute name="draw:extrusion-brightness" a:defaultValue="33%">
+        <attribute name="draw:extrusion-brightness">
             <ref name="percent"/>
         </attribute>
     </optional>
 </define>
 <define name="draw-enhanced-geometry-attlist" combine="interleave">
     <optional>
-        <attribute name="draw:extrusion-depth" a:defaultValue="36pt 0">
+        <attribute name="draw:extrusion-depth">
             <list>
                 <ref name="length"/>
                 <ref name="double"/>
@@ -8128,7 +8091,7 @@
 </define>
 <define name="draw-enhanced-geometry-attlist" combine="interleave">
     <optional>
-        <attribute name="draw:extrusion-diffusion" a:defaultValue="0%">
+        <attribute name="draw:extrusion-diffusion">
             <ref name="percent"/>
         </attribute>
     </optional>
@@ -8136,14 +8099,14 @@
 <define name="draw-enhanced-geometry-attlist" combine="interleave">
     <optional>
         <attribute name="draw:extrusion-number-of-line-segments"
-                   a:defaultValue="30">
+                  >
             <ref name="integer"/>
         </attribute>
     </optional>
 </define>
 <define name="draw-enhanced-geometry-attlist" combine="interleave">
     <optional>
-        <attribute name="draw:extrusion-light-face" a:defaultValue="true">
+        <attribute name="draw:extrusion-light-face">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -8151,7 +8114,7 @@
 <define name="draw-enhanced-geometry-attlist" combine="interleave">
     <optional>
         <attribute name="draw:extrusion-first-light-harsh"
-                   a:defaultValue="true">
+                  >
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -8159,7 +8122,7 @@
 <define name="draw-enhanced-geometry-attlist" combine="interleave">
     <optional>
         <attribute name="draw:extrusion-second-light-harsh"
-                   a:defaultValue="true">
+                  >
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -8167,7 +8130,7 @@
 <define name="draw-enhanced-geometry-attlist" combine="interleave">
     <optional>
         <attribute name="draw:extrusion-first-light-level"
-                   a:defaultValue="66%">
+                  >
             <ref name="percent"/>
         </attribute>
     </optional>
@@ -8175,7 +8138,7 @@
 <define name="draw-enhanced-geometry-attlist" combine="interleave">
     <optional>
         <attribute name="draw:extrusion-second-light-level"
-                   a:defaultValue="66%">
+                  >
             <ref name="percent"/>
         </attribute>
     </optional>
@@ -8183,7 +8146,7 @@
 <define name="draw-enhanced-geometry-attlist" combine="interleave">
     <optional>
         <attribute name="draw:extrusion-first-light-direction"
-                   a:defaultValue="(5 0 1)">
+                  >
             <ref name="vector3D"/>
         </attribute>
     </optional>
@@ -8191,21 +8154,21 @@
 <define name="draw-enhanced-geometry-attlist" combine="interleave">
     <optional>
         <attribute name="draw:extrusion-second-light-direction"
-                   a:defaultValue="(-5 0 1)">
+                  >
             <ref name="vector3D"/>
         </attribute>
     </optional>
 </define>
 <define name="draw-enhanced-geometry-attlist" combine="interleave">
     <optional>
-        <attribute name="draw:extrusion-metal" a:defaultValue="false">
+        <attribute name="draw:extrusion-metal">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="draw-enhanced-geometry-attlist" combine="interleave">
     <optional>
-        <attribute name="dr3d:shade-mode" a:defaultValue="flat">
+        <attribute name="dr3d:shade-mode">
             <choice>
                 <value>flat</value>
                 <value>phong</value>
@@ -8217,12 +8180,10 @@
 </define>
 <define name="draw-enhanced-geometry-attlist" combine="interleave">
     <optional>
-        <attribute name="draw:extrusion-rotation-angle" a:defaultValue="0 0">
+        <attribute name="draw:extrusion-rotation-angle">
             <list>
-<!-- DRAFT7: changed def start: Angle units http://lists.oasis-open.org/archives/office/200804/msg00096.html -->
 	            <ref name="angle"/>
 	            <ref name="angle"/>
-<!-- DRAFT7: changed def end -->			
             </list>
         </attribute>
     </optional>
@@ -8236,33 +8197,31 @@
 </define>
 <define name="draw-enhanced-geometry-attlist" combine="interleave">
     <optional>
-        <attribute name="draw:extrusion-shininess" a:defaultValue="50%">
+        <attribute name="draw:extrusion-shininess">
             <ref name="percent"/>
         </attribute>
     </optional>
 </define>
 <define name="draw-enhanced-geometry-attlist" combine="interleave">
     <optional>
-        <attribute name="draw:extrusion-skew" a:defaultValue="50 45">
+        <attribute name="draw:extrusion-skew">
             <list>
 	            <ref name="double"/>
-<!-- DRAFT7: changed def start: Angle units http://lists.oasis-open.org/archives/office/200804/msg00096.html -->
 	            <ref name="angle"/>
-<!-- DRAFT7: changed def end -->			
             </list>
         </attribute>
     </optional>
 </define>
 <define name="draw-enhanced-geometry-attlist" combine="interleave">
     <optional>
-        <attribute name="draw:extrusion-specularity" a:defaultValue="0%">
+        <attribute name="draw:extrusion-specularity">
             <ref name="percent"/>
         </attribute>
     </optional>
 </define>
 <define name="draw-enhanced-geometry-attlist" combine="interleave">
     <optional>
-        <attribute name="dr3d:projection" a:defaultValue="parallel">
+        <attribute name="dr3d:projection">
             <choice>
                 <value>parallel</value>
                 <value>perspective</value>
@@ -8273,7 +8232,7 @@
 <define name="draw-enhanced-geometry-attlist" combine="interleave">
     <optional>
         <attribute name="draw:extrusion-viewpoint"
-                   a:defaultValue="3.5cm -3.5cm 25cm">
+                  >
             <ref name="point3D"/>
         </attribute>
     </optional>
@@ -8288,7 +8247,7 @@
 </define>
 <define name="draw-enhanced-geometry-attlist" combine="interleave">
     <optional>
-        <attribute name="draw:extrusion-origin" a:defaultValue="0.5 -0.5">
+        <attribute name="draw:extrusion-origin">
             <list>
                 <ref name="extrusionOrigin"/>
                 <ref name="extrusionOrigin"/>
@@ -8305,7 +8264,7 @@
 </define>
 <define name="draw-enhanced-geometry-attlist" combine="interleave">
     <optional>
-        <attribute name="draw:extrusion-color" a:defaultValue="false">
+        <attribute name="draw:extrusion-color">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -8319,12 +8278,12 @@
 </define>
 <define name="draw-enhanced-geometry-attlist" combine="interleave">
     <optional>
-        <attribute name="draw:path-stretchpoint-x" a:defaultValue="0">
+        <attribute name="draw:path-stretchpoint-x">
             <ref name="double"/>
         </attribute>
     </optional>
     <optional>
-        <attribute name="draw:path-stretchpoint-y" a:defaultValue="0">
+        <attribute name="draw:path-stretchpoint-y">
             <ref name="double"/>
         </attribute>
     </optional>
@@ -8345,7 +8304,7 @@
 </define>
 <define name="draw-enhanced-geometry-attlist" combine="interleave">
     <optional>
-        <attribute name="draw:glue-point-type" a:defaultValue="none">
+        <attribute name="draw:glue-point-type">
             <choice>
                 <value>none</value>
                 <value>segments</value>
@@ -8356,23 +8315,21 @@
 </define>
 <define name="draw-enhanced-geometry-attlist" combine="interleave">
     <optional>
-<!-- DRAFT7: changed def start: Angle units http://lists.oasis-open.org/archives/office/200804/msg00096.html -->
         <attribute name="draw:glue-point-leaving-directions">
 			<ref name="string"/>
 		</attribute>
-<!-- DRAFT7: changed def end -->			
     </optional>
 </define>
 <define name="draw-enhanced-geometry-attlist" combine="interleave">
     <optional>
-        <attribute name="draw:text-path" a:defaultValue="false">
+        <attribute name="draw:text-path">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="draw-enhanced-geometry-attlist" combine="interleave">
     <optional>
-        <attribute name="draw:text-path-mode" a:defaultValue="normal">
+        <attribute name="draw:text-path-mode">
             <choice>
                 <value>normal</value>
                 <value>path</value>
@@ -8383,7 +8340,7 @@
 </define>
 <define name="draw-enhanced-geometry-attlist" combine="interleave">
     <optional>
-        <attribute name="draw:text-path-scale" a:defaultValue="path">
+        <attribute name="draw:text-path-scale">
             <choice>
                 <value>path</value>
                 <value>shape</value>
@@ -8394,7 +8351,7 @@
 <define name="draw-enhanced-geometry-attlist" combine="interleave">
     <optional>
         <attribute name="draw:text-path-same-letter-heights"
-                   a:defaultValue="false">
+                  >
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -8434,21 +8391,21 @@
 </define>
 <define name="draw-handle-attlist" combine="interleave">
     <optional>
-        <attribute name="draw:handle-mirror-vertical" a:defaultValue="false">
+        <attribute name="draw:handle-mirror-vertical">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="draw-handle-attlist" combine="interleave">
     <optional>
-        <attribute name="draw:handle-mirror-horizontal" a:defaultValue="false">
+        <attribute name="draw:handle-mirror-horizontal">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="draw-handle-attlist" combine="interleave">
     <optional>
-        <attribute name="draw:handle-switched" a:defaultValue="false">
+        <attribute name="draw:handle-switched">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -8571,21 +8528,15 @@
 <define name="presentation-sound">
     <element name="presentation:sound">
         <ref name="presentation-sound-attlist"/>
+		<attribute name="xlink:type">
+			<value>simple</value>
+		</attribute>
         <attribute name="xlink:href">
             <ref name="anyURI"/>
         </attribute>
         <optional>
-            <attribute name="xlink:type" a:defaultValue="simple">
-                <choice>
-                    <value>simple</value>
-                </choice>
-            </attribute>
-        </optional>
-        <optional>
-            <attribute name="xlink:actuate" a:defaultValue="onRequest">
-                <choice>
-                    <value>onRequest</value>
-                </choice>
+            <attribute name="xlink:actuate">
+				<value>onRequest</value>
             </attribute>
         </optional>
         <optional>
@@ -8606,13 +8557,11 @@
         </attribute>
     </optional>
 </define>
-<!-- DRAFT7: new def start: ODF-Metadata-Proposal http://lists.oasis-open.org/archives/office/200708/msg00103.html -->
 <define name="presentation-sound-attlist" combine="interleave">
 	<optional>
 	 	<ref name="xml-id"/>
 	</optional>
 </define>
-<!-- DRAFT7: new def end -->
 <define name="presentation-show-shape">
     <element name="presentation:show-shape">
         <ref name="common-presentation-effect-attlist"/>
@@ -8628,7 +8577,7 @@
 </define>
 <define name="common-presentation-effect-attlist" combine="interleave">
     <optional>
-        <attribute name="presentation:effect" a:defaultValue="none">
+        <attribute name="presentation:effect">
             <ref name="presentationEffects"/>
         </attribute>
     </optional>
@@ -8656,7 +8605,7 @@
 </define>
 <define name="common-presentation-effect-attlist" combine="interleave">
     <optional>
-        <attribute name="presentation:direction" a:defaultValue="none">
+        <attribute name="presentation:direction">
             <ref name="presentationEffectDirections"/>
         </attribute>
     </optional>
@@ -8695,7 +8644,7 @@
 </define>
 <define name="common-presentation-effect-attlist" combine="interleave">
     <optional>
-        <attribute name="presentation:speed" a:defaultValue="medium">
+        <attribute name="presentation:speed">
             <ref name="presentationSpeeds"/>
         </attribute>
     </optional>
@@ -8716,14 +8665,16 @@
 </define>
 <define name="common-presentation-effect-attlist" combine="interleave">
     <optional>
-        <attribute name="presentation:start-scale" a:defaultValue="100%">
+        <attribute name="presentation:start-scale">
             <ref name="percent"/>
         </attribute>
     </optional>
 </define>
 <define name="common-presentation-effect-attlist" combine="interleave">
     <optional>
-        <attribute name="presentation:path-id"/>
+        <attribute name="presentation:path-id">
+			<ref name="string"/>
+		</attribute>
     </optional>
 </define>
 <define name="presentation-show-text">
@@ -8779,7 +8730,7 @@
         <ref name="IDREF"/>
     </attribute>
     <optional>
-        <attribute name="presentation:speed" a:defaultValue="medium">
+        <attribute name="presentation:speed">
             <ref name="presentationSpeeds"/>
         </attribute>
     </optional>
@@ -8793,7 +8744,7 @@
 </define>
 <define name="common-anim-attlist" combine="interleave">
     <optional>
-        <attribute name="presentation:node-type" a:defaultValue="default">
+        <attribute name="presentation:node-type">
             <choice>
                 <value>default</value>
                 <value>on-click</value>
@@ -8822,7 +8773,7 @@
 </define>
 <define name="common-anim-attlist" combine="interleave">
     <optional>
-        <attribute name="presentation:preset-class" a:defaultValue="custom">
+        <attribute name="presentation:preset-class">
             <choice>
                 <value>custom</value>
                 <value>entrance</value>
@@ -8883,58 +8834,50 @@
 </define>
 <define name="presentation-event-listener-attlist" combine="interleave">
     <optional>
-        <attribute name="presentation:effect" a:defaultValue="none">
+        <attribute name="presentation:effect">
             <ref name="presentationEffects"/>
         </attribute>
     </optional>
 </define>
 <define name="presentation-event-listener-attlist" combine="interleave">
     <optional>
-        <attribute name="presentation:direction" a:defaultValue="none">
+        <attribute name="presentation:direction">
             <ref name="presentationEffectDirections"/>
         </attribute>
     </optional>
 </define>
 <define name="presentation-event-listener-attlist" combine="interleave">
     <optional>
-        <attribute name="presentation:speed" a:defaultValue="medium">
+        <attribute name="presentation:speed">
             <ref name="presentationSpeeds"/>
         </attribute>
     </optional>
 </define>
 <define name="presentation-event-listener-attlist" combine="interleave">
     <optional>
-        <attribute name="presentation:start-scale" a:defaultValue="100%">
+        <attribute name="presentation:start-scale">
             <ref name="percent"/>
         </attribute>
     </optional>
 </define>
 <define name="presentation-event-listener-attlist" combine="interleave">
     <optional>
+        <attribute name="xlink:type">
+			<value>simple</value>
+		</attribute>
         <attribute name="xlink:href">
             <ref name="anyURI"/>
         </attribute>
-    </optional>
-    <optional>
-        <attribute name="xlink:type" a:defaultValue="simple">
-            <choice>
-                <value>simple</value>
-            </choice>
-        </attribute>
-    </optional>
-    <optional>
-        <attribute name="xlink:show" a:defaultValue="embed">
-            <choice>
-                <value>embed</value>
-            </choice>
-        </attribute>
-    </optional>
-    <optional>
-        <attribute name="xlink:actuate" a:defaultValue="onRequest">
-            <choice>
-                <value>onRequest</value>
-            </choice>
-        </attribute>
+		<optional>
+			<attribute name="xlink:show">
+				<value>embed</value>
+			</attribute>
+		</optional>
+		<optional>
+			<attribute name="xlink:actuate">
+				<value>onRequest</value>
+			</attribute>
+		</optional>
     </optional>
 </define>
 <define name="presentation-event-listener-attlist" combine="interleave">
@@ -9038,14 +8981,14 @@
 </define>
 <define name="presentation-settings-attlist" combine="interleave">
     <optional>
-        <attribute name="presentation:full-screen" a:defaultValue="true">
+        <attribute name="presentation:full-screen">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="presentation-settings-attlist" combine="interleave">
     <optional>
-        <attribute name="presentation:endless" a:defaultValue="false">
+        <attribute name="presentation:endless">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -9059,28 +9002,28 @@
 </define>
 <define name="presentation-settings-attlist" combine="interleave">
     <optional>
-        <attribute name="presentation:show-logo" a:defaultValue="false">
+        <attribute name="presentation:show-logo">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="presentation-settings-attlist" combine="interleave">
     <optional>
-        <attribute name="presentation:force-manual" a:defaultValue="false">
+        <attribute name="presentation:force-manual">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="presentation-settings-attlist" combine="interleave">
     <optional>
-        <attribute name="presentation:mouse-visible" a:defaultValue="true">
+        <attribute name="presentation:mouse-visible">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="presentation-settings-attlist" combine="interleave">
     <optional>
-        <attribute name="presentation:mouse-as-pen" a:defaultValue="false">
+        <attribute name="presentation:mouse-as-pen">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -9088,14 +9031,14 @@
 <define name="presentation-settings-attlist" combine="interleave">
     <optional>
         <attribute name="presentation:start-with-navigator"
-                   a:defaultValue="false">
+                  >
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="presentation-settings-attlist" combine="interleave">
     <optional>
-        <attribute name="presentation:animations" a:defaultValue="enabled">
+        <attribute name="presentation:animations">
             <choice>
                 <value>enabled</value>
                 <value>disabled</value>
@@ -9106,7 +9049,7 @@
 <define name="presentation-settings-attlist" combine="interleave">
     <optional>
         <attribute name="presentation:transition-on-click"
-                   a:defaultValue="enabled">
+                  >
             <choice>
                 <value>enabled</value>
                 <value>disabled</value>
@@ -9116,7 +9059,7 @@
 </define>
 <define name="presentation-settings-attlist" combine="interleave">
     <optional>
-        <attribute name="presentation:stay-on-top" a:defaultValue="false">
+        <attribute name="presentation:stay-on-top">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -9124,7 +9067,7 @@
 <define name="presentation-settings-attlist" combine="interleave">
     <optional>
         <attribute name="presentation:show-end-of-presentation-slide"
-                   a:defaultValue="true">
+                  >
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -9141,7 +9084,9 @@
     </attribute>
 </define>
 <define name="presentation-show-attlist" combine="interleave">
-    <attribute name="presentation:pages"/>
+    <attribute name="presentation:pages">
+		<ref name="string"/>
+	</attribute>
 </define>
 <define name="chart-chart">
     <element name="chart:chart">
@@ -9193,27 +9138,23 @@
         </attribute>
     </optional>
 </define>
-<!-- DRAFT7: new def start: Source table for charts http://lists.oasis-open.org/archives/office/200802/msg00049.html -->
 <define name="chart-chart-attlist" combine="interleave">
      <optional>
          <group>
-             <attribute name="xlink:href">
-                 <ref name="anyURI"/>
-             </attribute>
              <attribute name="xlink:type">
                  <value>simple</value>
+             </attribute>
+             <attribute name="xlink:href">
+                 <ref name="anyURI"/>
              </attribute>
          </group>
      </optional>
 </define>
-<!-- DRAFT7: new def end -->
-<!-- DRAFT7: new def start: ODF-Metadata-Proposal http://lists.oasis-open.org/archives/office/200708/msg00103.html -->
 <define name="chart-chart-attlist" combine="interleave">
 	<optional>
 	 	<ref name="xml-id"/>
 	</optional>
 </define>
-<!-- DRAFT7: new def end -->
 <define name="chart-title">
     <element name="chart:title">
         <ref name="chart-title-attlist"/>
@@ -9258,12 +9199,9 @@
 <define name="chart-legend">
     <element name="chart:legend">
         <ref name="chart-legend-attlist"/>
-<!-- DRAFT7: changed def start: Chart legend title http://lists.oasis-open.org/archives/office/200802/msg00026.html  -->
-<!-- Note: the chart-legend-attlist ref was missing in the proposal. This seems to be an error in the proposal -->
 		<optional>
 			<ref name="text-p"/>
 		</optional>
-<!-- DRAFT7: changed def end -->
     </element>
 </define>
 <define name="chart-legend-attlist" combine="interleave">
@@ -9367,15 +9305,6 @@
             <ref name="styleNameRef"/>
         </attribute>
     </optional>
-<!-- DRAFT7: removed def start: Revision of chart:right-angled-axes http://lists.oasis-open.org/archives/office/200803/msg00009.html -->
-<!--
-    <optional>
-        <attribute name="chart:right-angled-axes" a:defaultValue="false">
-            <ref name="boolean"/>
-        </attribute>
-    </optional>
--->
-<!-- DRAFT7: removed def end -->
 </define>
 <define name="chart-plot-area-attlist" combine="interleave">
     <optional>
@@ -9386,7 +9315,7 @@
 </define>
 <define name="chart-plot-area-attlist" combine="interleave">
     <optional>
-        <attribute name="chart:data-source-has-labels" a:defaultValue="none">
+        <attribute name="chart:data-source-has-labels">
             <choice>
                 <value>none</value>
                 <value>row</value>
@@ -9400,17 +9329,11 @@
     <ref name="dr3d-scene-attlist"/>
     <ref name="common-dr3d-transform-attlist"/>
 </define>
-<!-- DRAFT7: new def start: ODF-Metadata-Proposal http://lists.oasis-open.org/archives/office/200708/msg00103.html -->
-<!-- Note: The following definition is not requires because xml:id is alreadys -->
-<!-- included in the dr3d-scene-attlist -->
-<!--
 <define name="chart-plot-area-attlist" combine="interleave">
 	<optional>
 	 	<ref name="xml-id"/>
 	</optional>
 </define>
--->
-<!-- DRAFT7: new def end -->
 <define name="chart-wall">
     <element name="chart:wall">
         <ref name="chart-wall-attlist"/>
@@ -9467,12 +9390,9 @@
 </define>
 <define name="chart-axis-attlist" combine="interleave">
     <attribute name="chart:dimension">
-<!-- DRAFT7: new def start: A few minor/editorial changes for charts in ODF 1.2, http://lists.oasis-open.org/archives/office/200709/msg00039.html -->
 		<ref name="chart-dimension"/>
-<!-- DRAFT7: new def end -->
     </attribute>
 </define>
-<!-- DRAFT7: new def start: A few minor/editorial changes for charts in ODF 1.2, http://lists.oasis-open.org/archives/office/200709/msg00039.html -->
 <define name="chart-dimension">
     <choice>
         <value>x</value>
@@ -9480,7 +9400,6 @@
         <value>z</value>
     </choice>
 </define>
-<!-- DRAFT7: new def end -->
 <define name="chart-axis-attlist" combine="interleave">
     <optional>
         <attribute name="chart:name">
@@ -9511,7 +9430,7 @@
 </define>
 <define name="chart-grid-attlist" combine="interleave">
     <optional>
-        <attribute name="chart:class" a:defaultValue="major">
+        <attribute name="chart:class">
             <choice>
                 <value>major</value>
                 <value>minor</value>
@@ -9538,21 +9457,15 @@
         <optional>
             <ref name="chart-regression-curve"/>
         </optional>
-<!-- DRAFT7: new def start: A few minor/editorial changes for charts in ODF 1.2, http://lists.oasis-open.org/archives/office/200709/msg00039.html -->
         <zeroOrMore>
-<!-- DRAFT7: new def end -->
             <ref name="chart-error-indicator"/>
-<!-- DRAFT7: new def start: A few minor/editorial changes for charts in ODF 1.2, http://lists.oasis-open.org/archives/office/200709/msg00039.html -->
         </zeroOrMore>
-<!-- DRAFT7: new def end -->
         <zeroOrMore>
             <ref name="chart-data-point"/>
         </zeroOrMore>
-<!-- DRAFT7: new def start -->
 		<optional>
 			<ref name="chart-data-label"/>
 		</optional>
-<!-- DRAFT7: new def end -->
     </element>
 </define>
 <define name="chart-series-attlist" combine="interleave">
@@ -9590,13 +9503,11 @@
         </attribute>
     </optional>
 </define>
-<!-- DRAFT7: new def start: ODF-Metadata-Proposal http://lists.oasis-open.org/archives/office/200708/msg00103.html -->
 <define name="chart-series-attlist" combine="interleave">
 	<optional>
 	 	<ref name="xml-id"/>
 	</optional>
 </define>
-<!-- DRAFT7: new def end -->
 <define name="chart-domain">
     <element name="chart:domain">
         <optional>
@@ -9609,11 +9520,9 @@
 <define name="chart-data-point">
     <element name="chart:data-point">
         <ref name="chart-data-point-attlist"/>
-<!-- DRAFT7: new def start: A few minor/editorial changes for charts in ODF 1.2, http://lists.oasis-open.org/archives/office/200709/msg00039.html -->
 		<optional>
 			<ref name="chart-data-label"/>
 		</optional>
-<!-- DRAFT7: new def end -->
     </element>
 </define>
 <define name="chart-data-point-attlist" combine="interleave">
@@ -9630,14 +9539,11 @@
         </attribute>
     </optional>
 </define>
-<!-- DRAFT7: new def start: ODF-Metadata-Proposal http://lists.oasis-open.org/archives/office/200708/msg00103.html -->
 <define name="chart-data-point-attlist" combine="interleave">
 	<optional>
 	 	<ref name="xml-id"/>
 	</optional>
 </define>
-<!-- DRAFT7: new def end -->
-<!-- DRAFT7: new def start: A few minor/editorial changes for charts in ODF 1.2, http://lists.oasis-open.org/archives/office/200709/msg00039.html -->
 <define name="chart-data-label">
 	<element name="chart:data-label">
 		<ref name="chart-data-label-attlist"/>
@@ -9656,7 +9562,6 @@
 		</attribute>
 	</optional>
 </define>
-<!-- DRAFT7: new def end -->
 <define name="chart-mean-value">
     <element name="chart:mean-value">
         <ref name="chart-mean-value-attlist"/>
@@ -9683,22 +9588,20 @@
         </attribute>
     </optional>
 </define>
-<!-- DRAFT7: new def start: A few minor/editorial changes for charts in ODF 1.2, http://lists.oasis-open.org/archives/office/200709/msg00039.html -->
 <define name="chart-error-indicator-attlist" combine="interleave">
 	<attribute name="chart:dimension">
 		<ref name="chart-dimension"/>
 	</attribute>
 </define>
 <define name="chart-error-indicator-attlist" combine="interleave">
-<!-- DRAFT7: new def end -->
     <optional>
         <attribute name="chart:error-lower-range">
-            <ref name="cellRangeAddress"/>
+            <ref name="cellRangeAddressList"/>
         </attribute>
     </optional>
     <optional>
         <attribute name="chart:error-upper-range">
-            <ref name="cellRangeAddress"/>
+            <ref name="cellRangeAddressList"/>
         </attribute>
     </optional>
 </define>
@@ -9727,27 +9630,25 @@
 </define>
 <define name="chart-equation-attlist" combine="interleave">
     <optional>
-        <attribute name="chart:automatic-content" a:defaultValue="true">
+        <attribute name="chart:automatic-content">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="chart-equation-attlist" combine="interleave">
     <optional>
-        <attribute name="chart:display-r-square" a:defaultValue="false">
+        <attribute name="chart:display-r-square">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
-<!-- DRAFT7: new def start Chart: Display Equation, http://lists.oasis-open.org/archives/office/200710/msg00055.html -->
 <define name="chart-equation-attlist" combine="interleave">
 	<optional>
-		<attribute name="chart:display-equation" a:defaultValue="true">
+		<attribute name="chart:display-equation">
 			<ref name="boolean"/>
 		</attribute>
 	</optional>
 </define>
-<!-- DRAFT7: new def end -->
 <define name="chart-equation-attlist" combine="interleave">
     <ref name="common-draw-position-attlist"/>
 </define>
@@ -9821,7 +9722,6 @@
         <choice>
             <ref name="db-database-description"/>
             <ref name="db-connection-resource"/>
-            <ref name="db-compound-database"/>
         </choice>
         <optional>
             <ref name="db-login"/>
@@ -9849,20 +9749,16 @@
     </element>
 </define>
 <define name="db-file-based-database-attlist" combine="interleave">
+	<attribute name="xlink:type">
+		<value>simple</value>
+	</attribute>
     <attribute name="xlink:href">
         <ref name="anyURI"/>
     </attribute>
-    <optional>
-        <attribute name="xlink:type" a:defaultValue="simple">
-            <choice>
-                <value>simple</value>
-            </choice>
-        </attribute>
-    </optional>
 </define>
 <define name="db-file-based-database-attlist" combine="interleave">
     <attribute name="db:media-type">
-        <data type="string"/>
+        <ref name="string"/>
     </attribute>
 </define>
 <define name="db-file-based-database-attlist" combine="interleave">
@@ -9920,39 +9816,22 @@
     </element>
 </define>
 <define name="db-connection-resource-attlist" combine="interleave">
+	<attribute name="xlink:type">
+		<value>simple</value>
+	</attribute>
     <attribute name="xlink:href">
         <ref name="anyURI"/>
     </attribute>
     <optional>
-        <attribute name="xlink:type" a:defaultValue="simple">
-            <choice>
-                <value>simple</value>
-            </choice>
+        <attribute name="xlink:show">
+			<value>none</value>
         </attribute>
     </optional>
     <optional>
-        <attribute name="xlink:show" a:defaultValue="none">
-            <choice>
-                <value>none</value>
-            </choice>
+        <attribute name="xlink:actuate">
+			<value>onRequest</value>
         </attribute>
     </optional>
-    <optional>
-        <attribute name="xlink:actuate" a:defaultValue="onRequest">
-            <choice>
-                <value>onRequest</value>
-            </choice>
-        </attribute>
-    </optional>
-</define>
-<define name="db-compound-database">
-    <element name="db:compound-database">
-        <ref name="db-compound-database-attlist"/>
-        <empty/>
-    </element>
-</define>
-<define name="db-compound-database-attlist" combine="interleave">
-    <empty/>
 </define>
 <define name="db-login">
     <element name="db:login">
@@ -9974,7 +9853,7 @@
 </define>
 <define name="db-login-attlist" combine="interleave">
     <optional>
-        <attribute name="db:is-password-required" a:defaultValue="false">
+        <attribute name="db:is-password-required">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -10018,7 +9897,7 @@
 </define>
 <define name="db-show-deleted">
     <optional>
-        <attribute name="db:show-deleted" a:defaultValue="false">
+        <attribute name="db:show-deleted">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -10042,14 +9921,14 @@
 </define>
 <define name="db-is-first-row-header-line">
     <optional>
-        <attribute name="db:is-first-row-header-line" a:defaultValue="true">
+        <attribute name="db:is-first-row-header-line">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="db-driver-settings-attlist" combine="interleave">
     <optional>
-        <attribute name="db:parameter-name-substitution" a:defaultValue="true">
+        <attribute name="db:parameter-name-substitution">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -10057,26 +9936,20 @@
 <define name="db-java-classpath">
     <oneOrMore>
         <element name="db:java-classpath">
+			<attribute name="xlink:type">
+				<value>simple</value>
+			</attribute>
             <attribute name="xlink:href">
                 <ref name="anyURI"/>
             </attribute>
             <optional>
-        <attribute name="xlink:type" a:defaultValue="simple">
-            <value>simple</value>
-        </attribute>
-        </optional>        
-            <optional>
-                <attribute name="xlink:show" a:defaultValue="none">
-                    <choice>
-                        <value>none</value>
-                    </choice>
+                <attribute name="xlink:show">
+					<value>none</value>
                 </attribute>
             </optional>
             <optional>
-                <attribute name="xlink:actuate" a:defaultValue="onRequest">
-                    <choice>
-                        <value>onRequest</value>
-                    </choice>
+                <attribute name="xlink:actuate">
+					<value>onRequest</value>
                 </attribute>
             </optional>
         </element>
@@ -10110,28 +9983,28 @@
 </define>
 <define name="db-delimiter-attlist" combine="interleave">
     <optional>
-        <attribute name="db:field" a:defaultValue=";">
+        <attribute name="db:field">
             <ref name="string"/>
         </attribute>
     </optional>
 </define>
 <define name="db-delimiter-attlist" combine="interleave">
     <optional>
-        <attribute name="db:string" a:defaultValue="&quot;">
+        <attribute name="db:string">
             <ref name="string"/>
         </attribute>
     </optional>
 </define>
 <define name="db-delimiter-attlist" combine="interleave">
     <optional>
-        <attribute name="db:decimal" a:defaultValue=".">
+        <attribute name="db:decimal">
             <ref name="string"/>
         </attribute>
     </optional>
 </define>
 <define name="db-delimiter-attlist" combine="interleave">
     <optional>
-        <attribute name="db:thousand" a:defaultValue=",">
+        <attribute name="db:thousand">
             <ref name="string"/>
         </attribute>
     </optional>
@@ -10144,7 +10017,7 @@
 </define>
 <define name="db-character-set-attlist" combine="interleave">
     <optional>
-        <attribute name="db:encoding" a:defaultValue="utf-8">
+        <attribute name="db:encoding">
             <ref name="textEncoding"/>
         </attribute>
     </optional>
@@ -10188,28 +10061,28 @@
 </define>
 <define name="db-application-connection-settings-attlist" combine="interleave">
     <optional>
-        <attribute name="db:is-table-name-length-limited" a:defaultValue="true">
+        <attribute name="db:is-table-name-length-limited">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="db-application-connection-settings-attlist" combine="interleave">
     <optional>
-        <attribute name="db:enable-sql92-check" a:defaultValue="false">
+        <attribute name="db:enable-sql92-check">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="db-application-connection-settings-attlist" combine="interleave">
     <optional>
-        <attribute name="db:append-table-alias-name" a:defaultValue="true">
+        <attribute name="db:append-table-alias-name">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="db-application-connection-settings-attlist" combine="interleave">
     <optional>
-        <attribute name="db:ignore-driver-privileges" a:defaultValue="true">
+        <attribute name="db:ignore-driver-privileges">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -10217,7 +10090,7 @@
 <define name="db-application-connection-settings-attlist" combine="interleave">
     <optional>
         <attribute name="db:boolean-comparison-mode"
-                   a:defaultValue="equal-integer">
+                  >
             <choice>
                 <value>equal-integer</value>
                 <value>is-boolean</value>
@@ -10229,7 +10102,7 @@
 </define>
 <define name="db-application-connection-settings-attlist" combine="interleave">
     <optional>
-        <attribute name="db:use-catalog" a:defaultValue="false">
+        <attribute name="db:use-catalog">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -10243,7 +10116,7 @@
 </define>
 <define name="db-application-connection-settings-attlist" combine="interleave">
     <optional>
-        <attribute name="db:suppress-version-columns" a:defaultValue="true">
+        <attribute name="db:suppress-version-columns">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -10429,30 +10302,22 @@
 </define>
 <define name="db-component-attlist" combine="interleave">
     <optional>
+        <attribute name="xlink:type">
+			<value>simple</value>
+        </attribute>
         <attribute name="xlink:href">
             <ref name="anyURI"/>
         </attribute>
-    </optional>
-    <optional>
-        <attribute name="xlink:type">
-            <choice>
-                <value>simple</value>
-            </choice>
-        </attribute>
-    </optional>
-    <optional>
-        <attribute name="xlink:show">
-            <choice>
-                <value>none</value>
-            </choice>
-        </attribute>
-    </optional>
-    <optional>
-        <attribute name="xlink:actuate">
-            <choice>
-                <value>onRequest</value>
-            </choice>
-        </attribute>
+		<optional>
+			<attribute name="xlink:show">
+				<value>none</value>
+			</attribute>
+		</optional>
+		<optional>
+			<attribute name="xlink:actuate">
+				<value>onRequest</value>
+			</attribute>
+		</optional>
     </optional>
 </define>
 <define name="db-component-attlist" combine="interleave">
@@ -10521,7 +10386,7 @@
 </define>
 <define name="db-query-attlist" combine="interleave">
     <optional>
-        <attribute name="db:escape-processing" a:defaultValue="true">
+        <attribute name="db:escape-processing">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -10599,7 +10464,7 @@
 </define>
 <define name="db-column-attlist" combine="interleave">    
     <optional>
-        <attribute name="db:visible" a:defaultValue="true">
+        <attribute name="db:visible">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -10625,7 +10490,7 @@
 </define>
 <define name="db-apply-command">
     <optional>
-        <attribute name="db:apply-command" a:defaultValue="false">
+        <attribute name="db:apply-command">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -10871,12 +10736,14 @@
 </define>
 <define name="db-key-attlist" combine="interleave">    
     <optional>
-        <attribute name="db:referenced-table-name"/>
+        <attribute name="db:referenced-table-name">
+			<ref name="string"/>
+		</attribute>
     </optional>
 </define>
 <define name="db-key-attlist" combine="interleave">    
     <optional>
-        <attribute name="db:update-rule" a:defaultValue="no-action">
+        <attribute name="db:update-rule">
             <choice>
                 <value>cascade</value>
                 <value>restrict</value>
@@ -10889,7 +10756,7 @@
 </define>
 <define name="db-key-attlist" combine="interleave">    
     <optional>
-        <attribute name="db:delete-rule" a:defaultValue="no-action">
+        <attribute name="db:delete-rule">
             <choice>
                 <value>cascade</value>
                 <value>restrict</value>
@@ -10995,9 +10862,11 @@
     </attribute>
 </define>
 <define name="db-index-column-attlist" combine="interleave">    
-    <attribute name="db:is-ascending">
-        <ref name="boolean"/>
-    </attribute>
+	<optional>
+	    <attribute name="db:is-ascending">
+    	    <ref name="boolean"/>
+	    </attribute>
+	</optional>		
 </define>
 <define name="office-forms">
     <optional>
@@ -11014,14 +10883,14 @@
 </define>
 <define name="office-forms-attlist" combine="interleave">
     <optional>
-        <attribute name="form:automatic-focus" a:defaultValue="false">
+        <attribute name="form:automatic-focus">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="office-forms-attlist" combine="interleave">
     <optional>
-        <attribute name="form:apply-design-mode" a:defaultValue="true">
+        <attribute name="form:apply-design-mode">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -11049,16 +10918,14 @@
 </define>
 <define name="form-form-attlist" combine="interleave">
     <optional>
+		<attribute name="xlink:type">
+			<value>simple</value>
+		</attribute>
         <attribute name="xlink:href">
             <ref name="anyURI"/>
         </attribute>
         <optional>
-            <attribute name="xlink:type" a:defaultValue="simple">
-                <value>simple</value>
-            </attribute>
-        </optional>
-        <optional>
-            <attribute name="xlink:actuate" a:defaultValue="onRequest">
+            <attribute name="xlink:actuate">
                 <value>onRequest</value>
             </attribute>
         </optional>
@@ -11066,14 +10933,14 @@
 </define>
 <define name="form-form-attlist" combine="interleave">
     <optional>
-        <attribute name="office:target-frame" a:defaultValue="_blank">
+        <attribute name="office:target-frame">
             <ref name="targetFrameName"/>
         </attribute>
     </optional>
 </define>
 <define name="form-form-attlist" combine="interleave">
     <optional>
-        <attribute name="form:method" a:defaultValue="get">
+        <attribute name="form:method">
             <choice>
                 <value>get</value>
                 <value>post</value>
@@ -11085,42 +10952,42 @@
 <define name="form-form-attlist" combine="interleave">
     <optional>
         <attribute name="form:enctype"
-                    a:defaultValue="application/x-www-form-urlencoded">
+                   >
             <ref name="string"/>
         </attribute>
     </optional>
 </define>
 <define name="form-form-attlist" combine="interleave">
     <optional>
-        <attribute name="form:allow-deletes" a:defaultValue="true">
+        <attribute name="form:allow-deletes">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="form-form-attlist" combine="interleave">
     <optional>
-        <attribute name="form:allow-inserts" a:defaultValue="true">
+        <attribute name="form:allow-inserts">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="form-form-attlist" combine="interleave">
     <optional>
-        <attribute name="form:allow-updates" a:defaultValue="true">
+        <attribute name="form:allow-updates">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="form-form-attlist" combine="interleave">
     <optional>
-        <attribute name="form:apply-filter" a:defaultValue="false">
+        <attribute name="form:apply-filter">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="form-form-attlist" combine="interleave">
     <optional>
-        <attribute name="form:command-type" a:defaultValue="command">
+        <attribute name="form:command-type">
             <choice>
                 <value>table</value>
                 <value>query</value>
@@ -11131,7 +10998,9 @@
 </define>
 <define name="form-form-attlist" combine="interleave">
     <optional>
-        <attribute name="form:command"/>
+        <attribute name="form:command">
+            <ref name="string"/>
+        </attribute>
     </optional>
 </define>
 <define name="form-form-attlist" combine="interleave">
@@ -11160,7 +11029,7 @@
 </define>
 <define name="form-form-attlist" combine="interleave">
     <optional>
-        <attribute name="form:escape-processing" a:defaultValue="true">
+        <attribute name="form:escape-processing">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -11174,7 +11043,7 @@
 </define>
 <define name="form-form-attlist" combine="interleave">
     <optional>
-        <attribute name="form:ignore-result" a:defaultValue="false">
+        <attribute name="form:ignore-result">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -11306,7 +11175,7 @@
 </define>
 <define name="form-password-attlist" combine="interleave">
     <optional>
-        <attribute name="form:echo-char" a:defaultValue="*">
+        <attribute name="form:echo-char">
             <ref name="character"/>
         </attribute>
     </optional>
@@ -11368,7 +11237,7 @@
 </define>
 <define name="form-formatted-text-attlist" combine="interleave">
     <optional>
-        <attribute name="form:validation" a:defaultValue="false">
+        <attribute name="form:validation">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -11517,7 +11386,7 @@
 </define>
 <define name="form-fixed-text-attlist" combine="interleave">
     <optional>
-        <attribute name="form:multi-line" a:defaultValue="false">
+        <attribute name="form:multi-line">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -11593,7 +11462,7 @@
 </define>
 <define name="form-listbox-attlist" combine="interleave">
     <optional>
-        <attribute name="form:multiple" a:defaultValue="false">
+        <attribute name="form:multiple">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -11651,14 +11520,14 @@
 </define>
 <define name="form-button-attlist" combine="interleave">
     <optional>
-        <attribute name="form:default-button" a:defaultValue="false">
+        <attribute name="form:default-button">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="form-button-attlist" combine="interleave">
     <optional>
-        <attribute name="form:toggle" a:default-value="false">
+        <attribute name="form:toggle">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -11730,14 +11599,14 @@
 </define>
 <define name="form-checkbox-attlist" combine="interleave">
     <optional>
-        <attribute name="form:is-tristate" a:defaultValue="false">
+        <attribute name="form:is-tristate">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="form-checkbox-attlist" combine="interleave">
     <optional>
-        <attribute name="form:state" a:defaultValue="unchecked">
+        <attribute name="form:state">
             <ref name="states"/>
         </attribute>
     </optional>
@@ -11872,7 +11741,7 @@
 </define>
 <define name="form-value-range-attlist" combine="interleave">
     <optional>
-        <attribute name="form:step-size" a:defaultName="1">
+        <attribute name="form:step-size">
             <ref name="positiveInteger"/>
         </attribute>
     </optional>
@@ -11934,12 +11803,11 @@
 </define>
 <define name="button-type">
     <optional>
-        <attribute name="form:button-type" a:defaultValue="push">
+        <attribute name="form:button-type">
             <ref name="types"/>
         </attribute>
     </optional>
 </define>
-<!-- DRAFT7: changed def start: xml:id-Proposal http://lists.oasis-open.org/archives/office/200808/msg00093.html -->
 <define name="common-control-id-attlist">
 	<choice>
 		<ref name="common-control-form-id-attlist"/>
@@ -11956,10 +11824,9 @@
         <ref name="NCName"/>
     </attribute>
 </define>
-<!-- DRAFT7: changed def end -->
 <define name="current-selected">
     <optional>
-        <attribute name="form:current-selected" a:defaultValue="false">
+        <attribute name="form:current-selected">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -11980,14 +11847,14 @@
 </define>
 <define name="common-disabled-attlist">
     <optional>
-        <attribute name="form:disabled" a:defaultValue="false">
+        <attribute name="form:disabled">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="dropdown">
     <optional>
-        <attribute name="form:dropdown" a:defaultValue="false">
+        <attribute name="form:dropdown">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -12022,21 +11889,21 @@
 </define>
 <define name="common-printable-attlist">
     <optional>
-        <attribute name="form:printable" a:defaultValue="true">
+        <attribute name="form:printable">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="common-readonly-attlist">
     <optional>
-        <attribute name="form:readonly" a:defaultValue="false">
+        <attribute name="form:readonly">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="selected">
     <optional>
-        <attribute name="form:selected" a:defaultValue="false">
+        <attribute name="form:selected">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -12050,21 +11917,21 @@
 </define>
 <define name="common-tab-attlist" combine="interleave">
     <optional>
-        <attribute name="form:tab-index" a:defaultValue="0">
+        <attribute name="form:tab-index">
             <ref name="nonNegativeInteger"/>
         </attribute>
     </optional>
 </define>
 <define name="common-tab-attlist" combine="interleave">
     <optional>
-        <attribute name="form:tab-stop" a:defaultValue="true">
+        <attribute name="form:tab-stop">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="target-frame">
     <optional>
-        <attribute name="office:target-frame" a:defaultValue="_blank">
+        <attribute name="office:target-frame">
             <ref name="targetFrameName"/>
         </attribute>
     </optional>
@@ -12078,7 +11945,9 @@
 </define>
 <define name="common-title-attlist">
     <optional>
-        <attribute name="form:title"/>
+        <attribute name="form:title">
+            <ref name="string"/>
+        </attribute>
     </optional>
 </define>
 <define name="common-form-visual-effect-attlist" combine="interleave">
@@ -12095,7 +11964,7 @@
         combine="interleave">
     <choice>
         <optional>
-            <attribute name="form:image-position" a:defaultValue="center">
+            <attribute name="form:image-position">
                 <value>center</value>
             </attribute>
         </optional>
@@ -12109,7 +11978,7 @@
                 </choice>
             </attribute>
             <optional>
-                <attribute name="form:image-align" a:defaultValue="center">
+                <attribute name="form:image-align">
                     <choice>
                         <value>start</value>
                         <value>center</value>
@@ -12129,7 +11998,7 @@
 </define>
 <define name="common-convert-empty-attlist">
     <optional>
-        <attribute name="form:convert-empty-to-null" a:defaultValue="false">
+        <attribute name="form:convert-empty-to-null">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -12184,7 +12053,7 @@
 </define>
 <define name="common-spin-button">
     <optional>
-        <attribute name="form:spin-button" a:defaultValue="false">
+        <attribute name="form:spin-button">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -12198,7 +12067,7 @@
 </define>
 <define name="common-delay-for-repeat">
     <optional>
-        <attribute name="form:delay-for-repeat" a:defaultValue="PT0.050S">
+        <attribute name="form:delay-for-repeat">
             <ref name="duration"/>
         </attribute>
     </optional>
@@ -12471,16 +12340,14 @@
             <ref name="string"/>
         </attribute>
         <group>
+			<attribute name="xlink:type">
+				<value>simple</value>
+			</attribute>
             <attribute name="xlink:href">
                 <ref name="anyURI"/>
             </attribute>
             <optional>
-                <attribute name="xlink:type" a:defaultValue="simple">
-                    <value>simple</value>
-                </attribute>
-            </optional>
-            <optional>
-                <attribute name="xlink:actuate" a:defaultValue="onRequest">
+                <attribute name="xlink:actuate">
                     <value>onRequest</value>
                 </attribute>
             </optional>
@@ -12537,7 +12404,7 @@
 </define>
 <define name="common-dde-connection-decl-attlist" combine="interleave">
     <optional>
-        <attribute name="office:automatic-update" a:defaultValue="true">
+        <attribute name="office:automatic-update">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -12564,7 +12431,7 @@
 <define name="office-dde-source-attlist" combine="interleave">
     <optional>
         <attribute name="office:conversion-mode"
-                    a:defaultValue="into-default-style-data-style">
+                   >
             <choice>
                 <value>into-default-style-data-style</value>
                 <value>into-english-number</value>
@@ -12620,7 +12487,7 @@
 </define>
 <define name="anim-animate-motion-attlist" combine="interleave">
     <optional>
-        <attribute name="smil:calcMode" a:defaultValue="paced">
+        <attribute name="smil:calcMode">
             <choice>
                 <value>discrete</value>
                 <value>linear</value>
@@ -12644,7 +12511,7 @@
 </define>
 <define name="anim-animate-color-attlist" combine="interleave">
     <optional>
-        <attribute name="anim:color-interpolation" a:defaultValue="rgb">
+        <attribute name="anim:color-interpolation">
             <choice>
                 <value>rgb</value>
                 <value>hsl</value>
@@ -12655,7 +12522,7 @@
 <define name="anim-animate-color-attlist" combine="interleave">
     <optional>
         <attribute name="anim:color-interpolation-direction"
-                   a:defaultValue="clockwise">
+                  >
             <choice>
                 <value>clockwise</value>
                 <value>counter-clockwise</value>
@@ -12689,7 +12556,7 @@
         <ref name="common-anim-target-attlist"/>
         <ref name="common-anim-add-accum-attlist"/>
         <ref name="common-anim-values-attlist"/>
-        <ref name="common-anim-spline-mode-attlist "/>
+        <ref name="common-anim-spline-mode-attlist"/>
         <ref name="anim-transition-filter-attlist"/>
         <ref name="common-timing-attlist"/>
     </element>
@@ -12708,7 +12575,7 @@
 </define>
 <define name="anim-transition-filter-attlist" combine="interleave">
     <optional>
-        <attribute name="smil:direction" a:defaultValue="forward">
+        <attribute name="smil:direction">
             <choice>
                 <value>forward</value>
                 <value>reverse</value>
@@ -12719,16 +12586,13 @@
 <define name="anim-transition-filter-attlist" combine="interleave">
     <optional>
         <attribute name="smil:fadeColor">
-            <choice>
-                <value>forward</value>
-                <value>reverse</value>
-            </choice>
+            <ref name="color"/>
         </attribute>
     </optional>
 </define>
 <define name="anim-transition-filter-attlist" combine="interleave">
     <optional>
-        <attribute name="smil:mode" a:defaultValue="in">
+        <attribute name="smil:mode">
             <choice>
                 <value>in</value>
                 <value>out</value>
@@ -12739,19 +12603,15 @@
 <define name="common-anim-attlist" combine="interleave">
     <optional>
         <attribute name="anim:id">
-<!-- DRAFT7: changed def start: xml:id-Proposal http://lists.oasis-open.org/archives/office/200808/msg00093.html -->
             <ref name="NCName"/>
-<!-- DRAFT7: changed def end -->
         </attribute>
     </optional>
 </define>
-<!-- DRAFT7: new def start: xml:id-Proposal http://lists.oasis-open.org/archives/office/200808/msg00093.html -->
 <define name="common-anim-attlist" combine="interleave">
     <optional>
 	 	<ref name="xml-id"/>
     </optional>
 </define>
-<!-- DRAFT7: new def end -->
 <define name="common-anim-target-attlist" combine="interleave">
     <optional>
         <attribute name="smil:targetElement">
@@ -12780,7 +12640,7 @@
 </define>
 <define name="common-anim-spline-mode-attlist" combine="interleave">
     <optional>
-        <attribute name="smil:calcMode" a:defaultValue="discrete">
+        <attribute name="smil:calcMode">
             <choice>
                 <value>discrete</value>
                 <value>linear</value>
@@ -12881,6 +12741,7 @@
                 <value>last</value>
                 <value>all</value>
                 <value>media</value>
+				<ref name="IDREF"/>
             </choice>
         </attribute>
     </optional>
@@ -12894,11 +12755,16 @@
     <optional>
         <attribute name="smil:repeatCount">
             <choice>
-                <ref name="nonNegativeInteger"/>
+                <ref name="nonNegativeDecimal"/>
                 <value>indefinite</value>
             </choice>
         </attribute>
     </optional>
+</define>
+<define name="nonNegativeDecimal">
+	<data type="decimal">
+		<param name="minInclusive">0.0</param>
+	</data>
 </define>
 <define name="common-fill-timing-attlist" combine="interleave">
     <optional>
@@ -12930,7 +12796,7 @@
 </define>
 <define name="common-restart-timing-attlist" combine="interleave">
     <optional>
-        <attribute name="smil:restart" a:defaultValue="default">
+        <attribute name="smil:restart">
             <choice>
                 <value>never</value>
                 <value>always</value>
@@ -12942,7 +12808,7 @@
 </define>
 <define name="common-restart-default-attlist" combine="interleave">
     <optional>
-        <attribute name="smil:restartDefault" a:defaultValue="inherit">
+        <attribute name="smil:restartDefault">
             <choice>
                 <value>never</value>
                 <value>always</value>
@@ -12954,21 +12820,27 @@
 </define>
 <define name="common-time-manip-attlist" combine="interleave">
     <optional>    
-        <attribute name="smil:accelerate" a:defaultValue="0.0">
-            <ref name="double"/>
+        <attribute name="smil:accelerate">
+            <ref name="zeroToOneDecimal"/>
         </attribute>
     </optional>
 </define>
 <define name="common-time-manip-attlist" combine="interleave">
     <optional>
-        <attribute name="smil:decelerate" a:defaultValue="0.0">
-            <ref name="double"/>
+        <attribute name="smil:decelerate">
+            <ref name="zeroToOneDecimal"/>
         </attribute>
     </optional>
 </define>
+<define name="zeroToOneDecimal">
+	<data type="decimal">
+		<param name="minInclusive">0</param>
+		<param name="maxInclusive">1</param>
+	</data>
+</define>
 <define name="common-time-manip-attlist" combine="interleave">
     <optional>
-        <attribute name="smil:autoReverse" a:defaultValue="false">
+        <attribute name="smil:autoReverse">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -13065,8 +12937,12 @@
         <ref name="common-anim-target-attlist"/>
         <zeroOrMore>
             <element name="anim:param">
-                <attribute name="anim:name"/>
-                <attribute name="anim:value"/>
+                <attribute name="anim:name">
+					<ref name="string"/>
+				</attribute>
+                <attribute name="anim:value">
+					<ref name="string"/>
+				</attribute>
             </element>
         </zeroOrMore>
     </element>
@@ -13085,34 +12961,32 @@
         </zeroOrMore>
     </element>
 </define>
-<!-- DRAFT7: new def start: ODF-Metadata-Proposal http://lists.oasis-open.org/archives/office/200708/msg00103.html -->
 <define name="common-in-content-meta-attlist" combine="interleave">
-	<attribute name="rdfa:about">
-		<ref name="anyURI"/>
+	<attribute name="xhtml:about">
+		<ref name="URIorSafeCURIE"/>
 	</attribute>
-	<attribute name="rdfa:property">
-		<ref name="anyURI"/>
+	<attribute name="xhtml:property">
+		<ref name="CURIEs"/>
 	</attribute>
-	<optional>
-		<ref name="common-meta-literal-attlist"/>
-	</optional>
+	<ref name="common-meta-literal-attlist"/>
 </define>
 <define name="common-meta-literal-attlist" combine="interleave">
-	<attribute name="rdfa:datatype">
-		<ref name="anyURI"/>
-	</attribute>
-	<attribute name="rdfa:content">
-		<ref name="string"/>
-	</attribute>
+    <optional>
+        <attribute name="xhtml:datatype">
+            <ref name="CURIE"/>
+        </attribute>
+	</optional>
+    <optional>
+		<attribute name="xhtml:content">
+			<ref name="string"/>
+		</attribute>
+	</optional>
 </define>
-<!-- DRAFT7: new def end -->
-<!-- DRAFT7: new def start: ODF-Metadata-Proposal http://lists.oasis-open.org/archives/office/200708/msg00103.html -->
 <define name="xml-id" combine="interleave">
 	<attribute name="xml:id">
 		<ref name="ID"/>
 	</attribute>
 </define>
-<!-- DRAFT7: new def end -->
 <define name="style-style-attlist" combine="interleave">
     <attribute name="style:name">
         <ref name="styleName"/>
@@ -13141,6 +13015,16 @@
 </define>
 <define name="style-style-attlist" combine="interleave">
     <optional>
+        <attribute name="style:list-level">
+            <choice>
+                <ref name="positiveInteger"/>
+                <empty/>
+            </choice>
+        </attribute>
+    </optional>
+</define>
+<define name="style-style-attlist" combine="interleave">
+    <optional>
         <attribute name="style:list-style-name">
             <choice>
                 <ref name="styleName"/>
@@ -13158,7 +13042,7 @@
 </define>
 <define name="style-style-attlist" combine="interleave">
     <optional>
-        <attribute name="style:auto-update" a:defaultValue="false">
+        <attribute name="style:auto-update">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -13247,7 +13131,7 @@
 </define>
 <define name="style-page-layout-attlist" combine="interleave">
     <optional>
-        <attribute name="style:page-usage" a:defaultValue="all">
+        <attribute name="style:page-usage">
             <choice>
                 <value>all</value>
                 <value>left</value>
@@ -13291,11 +13175,9 @@
                 <ref name="style-footer-left"/>
             </optional>
         </optional>
-<!-- DRAFT7: new def start: Layer set per page, http://lists.oasis-open.org/archives/office/200711/msg00026.html -->
 		<optional>
 			<ref name="draw-layer-set"/>
 		</optional>		
-<!-- DRAFT7: new def end -->
         <optional>
             <ref name="office-forms"/>
         </optional>
@@ -13407,7 +13289,7 @@
 </define>
 <define name="common-style-header-footer-attlist" combine="interleave">
     <optional>
-        <attribute name="style:display" a:defaultValue="true">
+        <attribute name="style:display">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -13475,18 +13357,14 @@
         <ref name="table-body"/>
         <optional>
             <ref name="table-even-rows"/>
-<!-- DRAFT7: new def start: Refinement of table templates, http://lists.oasis-open.org/archives/office/200711/msg00027.html -->
 		</optional>
 		<optional>
-<!-- DRAFT7: new def end -->
             <ref name="table-odd-rows"/>
         </optional>
         <optional>
             <ref name="table-even-columns"/>
-<!-- DRAFT7: new def start: Refinement of table templates, http://lists.oasis-open.org/archives/office/200711/msg00027.html -->
 		</optional>
 		<optional>
-<!-- DRAFT7: new def end -->
             <ref name="table-odd-columns"/>
         </optional>
         <optional>
@@ -13593,16 +13471,14 @@
 </define>
 
 <define name="common-table-template-attlist" combine="interleave">
-    <optional>
-        <attribute name="table:style-name">
+    <attribute name="table:style-name">
+        <ref name="styleNameRef"/>
+    </attribute>
+	<optional>
+		<attribute name="table:paragraph-style-name">
             <ref name="styleNameRef"/>
-        </attribute>
-    </optional>
-    <optional>
-        <attribute name="table:paragraph-style-name">
-                <ref name="styleNameRef"/>
-        </attribute>
-    </optional>
+		</attribute>
+	</optional>
 </define>
 
 <define name="table-background">
@@ -13670,7 +13546,9 @@
         </attribute>
     </optional>
     <optional>
-        <attribute name="svg:unicode-range"/>
+        <attribute name="svg:unicode-range">
+			<ref name="string"/>
+		</attribute>
     </optional>
     <optional>
         <attribute name="svg:units-per-em">
@@ -13678,7 +13556,9 @@
         </attribute>
     </optional>
     <optional>
-        <attribute name="svg:panose-1"/>
+        <attribute name="svg:panose-1">
+			<ref name="string"/>
+		</attribute>
     </optional>
     <optional>
         <attribute name="svg:stemv">
@@ -13721,10 +13601,14 @@
         </attribute>
     </optional>
     <optional>
-        <attribute name="svg:widths"/>
+        <attribute name="svg:widths">
+            <ref name="string"/>
+        </attribute>
     </optional>
     <optional>
-        <attribute name="svg:bbox"/>
+        <attribute name="svg:bbox">
+            <ref name="string"/>
+        </attribute>
     </optional>
     <optional>
         <attribute name="svg:ideographic">
@@ -13821,7 +13705,9 @@
 <define name="svg-font-face-format">
     <element name="svg:font-face-format">
         <optional>
-            <attribute name="svg:string"/>
+            <attribute name="svg:string">
+				<ref name="string"/>
+			</attribute>
         </optional>
         <empty/>
     </element>
@@ -13829,7 +13715,9 @@
 <define name="svg-font-face-name">
     <element name="svg:font-face-name">
         <optional>
-            <attribute name="svg:name"/>
+            <attribute name="svg:name">
+				<ref name="string"/>
+			</attribute>
         </optional>
         <empty/>
     </element>
@@ -13843,16 +13731,14 @@
 </define>
 
 <define name="common-svg-font-face-xlink-attlist" combine="interleave">
+	<attribute name="xlink:type">
+		<value>simple</value>
+	</attribute>
     <attribute name="xlink:href">
         <ref name="anyURI"/>
     </attribute>
     <optional>
-        <attribute name="xlink:type" a:defaultValue="simple">
-            <value>simple</value>
-        </attribute>
-    </optional>
-    <optional>
-        <attribute name="xlink:actuate" a:defaultValue="onRequest">
+        <attribute name="xlink:actuate">
             <value>onRequest</value>
         </attribute>
     </optional>
@@ -13931,12 +13817,14 @@
 </define>
 <define name="number-number-attlist" combine="interleave">
     <optional>
-        <attribute name="number:decimal-replacement"/>
+        <attribute name="number:decimal-replacement">
+			<ref name="string"/>
+		</attribute>
     </optional>
 </define>
 <define name="number-number-attlist" combine="interleave">
     <optional>
-        <attribute name="number:display-factor" a:defaultValue="1">
+        <attribute name="number:display-factor">
             <ref name="double"/>
         </attribute>
     </optional>
@@ -14056,6 +13944,16 @@
             <ref name="countryCode"/>
         </attribute>
     </optional>
+    <optional>
+        <attribute name="number:script">
+            <ref name="scriptCode"/>
+        </attribute>
+    </optional>
+    <optional>
+        <attribute name="number:rfc-language-tag">
+            <ref name="language"/>
+        </attribute>
+    </optional>
 </define>
 <define name="number-percentage-style">
     <element name="number:percentage-style">
@@ -14121,7 +14019,7 @@
 </define>
 <define name="number-day-attlist" combine="interleave">
     <optional>
-        <attribute name="number:style" a:defaultValue="short">
+        <attribute name="number:style">
             <choice>
                 <value>short</value>
                 <value>long</value>
@@ -14138,21 +14036,21 @@
 </define>
 <define name="number-month-attlist" combine="interleave">
     <optional>
-        <attribute name="number:textual" a:defaultValue="false">
+        <attribute name="number:textual">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="number-month-attlist" combine="interleave">
     <optional>
-        <attribute name="number:possessive-form" a:defaultValue="false">
+        <attribute name="number:possessive-form">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="number-month-attlist" combine="interleave">
     <optional>
-        <attribute name="number:style" a:defaultValue="short">
+        <attribute name="number:style">
             <choice>
                 <value>short</value>
                 <value>long</value>
@@ -14169,7 +14067,7 @@
 </define>
 <define name="number-year-attlist" combine="interleave">
     <optional>
-        <attribute name="number:style" a:defaultValue="short">
+        <attribute name="number:style">
             <choice>
                 <value>short</value>
                 <value>long</value>
@@ -14186,7 +14084,7 @@
 </define>
 <define name="number-era-attlist" combine="interleave">
     <optional>
-        <attribute name="number:style" a:defaultValue="short">
+        <attribute name="number:style">
             <choice>
                 <value>short</value>
                 <value>long</value>
@@ -14203,7 +14101,7 @@
 </define>
 <define name="number-day-of-week-attlist" combine="interleave">
     <optional>
-        <attribute name="number:style" a:defaultValue="short">
+        <attribute name="number:style">
             <choice>
                 <value>short</value>
                 <value>long</value>
@@ -14226,7 +14124,7 @@
 </define>
 <define name="number-quarter-attlist" combine="interleave">
     <optional>
-        <attribute name="number:style" a:defaultValue="short">
+        <attribute name="number:style">
             <choice>
                 <value>short</value>
                 <value>long</value>
@@ -14267,7 +14165,7 @@
 </define>
 <define name="number-time-style-attlist" combine="interleave">
     <optional>
-        <attribute name="number:truncate-on-overflow" a:defaultValue="true">
+        <attribute name="number:truncate-on-overflow">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -14280,7 +14178,7 @@
 </define>
 <define name="number-hours-attlist" combine="interleave">
     <optional>
-        <attribute name="number:style" a:defaultValue="short">
+        <attribute name="number:style">
             <choice>
                 <value>short</value>
                 <value>long</value>
@@ -14296,7 +14194,7 @@
 </define>
 <define name="number-minutes-attlist" combine="interleave">
     <optional>
-        <attribute name="number:style" a:defaultValue="short">
+        <attribute name="number:style">
             <choice>
                 <value>short</value>
                 <value>long</value>
@@ -14312,7 +14210,7 @@
 </define>
 <define name="number-seconds-attlist" combine="interleave">
     <optional>
-        <attribute name="number:style" a:defaultValue="short">
+        <attribute name="number:style">
             <choice>
                 <value>short</value>
                 <value>long</value>
@@ -14322,7 +14220,7 @@
 </define>
 <define name="number-seconds-attlist" combine="interleave">
     <optional>
-        <attribute name="number:decimal-places" a:defaultValue="0">
+        <attribute name="number:decimal-places">
             <ref name="integer"/>
         </attribute>
     </optional>
@@ -14415,7 +14313,23 @@
 </define>
 <define name="common-data-style-attlist" combine="interleave">
     <optional>
-        <attribute name="number:title"/>
+        <attribute name="number:script">
+            <ref name="scriptCode"/>
+        </attribute>
+    </optional>
+</define>
+<define name="common-data-style-attlist" combine="interleave">
+    <optional>
+        <attribute name="number:rfc-language-tag">
+            <ref name="language"/>
+        </attribute>
+    </optional>
+</define>
+<define name="common-data-style-attlist" combine="interleave">
+    <optional>
+        <attribute name="number:title">
+			<ref name="string"/>
+		</attribute>
     </optional>
 </define>
 <define name="common-data-style-attlist" combine="interleave">
@@ -14427,14 +14341,14 @@
 </define>
 <define name="common-auto-reorder-attlist" combine="interleave">
     <optional>
-        <attribute name="number:automatic-order" a:defaultValue="false">
+        <attribute name="number:automatic-order">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="common-format-source-attlist">
     <optional>
-        <attribute name="number:format-source" a:defaultValue="fixed">
+        <attribute name="number:format-source">
             <choice>
                 <value>fixed</value>
                 <value>language</value>
@@ -14444,7 +14358,7 @@
 </define>
 <define name="common-data-style-attlist" combine="interleave">
     <optional>
-        <attribute name="number:transliteration-format" a:defaultValue="1">
+        <attribute name="number:transliteration-format">
             <ref name="string"/>
         </attribute>
     </optional>
@@ -14465,7 +14379,7 @@
 </define>
 <define name="common-data-style-attlist" combine="interleave">
     <optional>
-        <attribute name="number:transliteration-style" a:defaultValue="short">
+        <attribute name="number:transliteration-style">
             <choice>
                 <value>short</value>
                 <value>medium</value>
@@ -14490,7 +14404,7 @@
 </define>
 <define name="common-number-attlist" combine="interleave">
     <optional>
-        <attribute name="number:grouping" a:defaultValue="false">
+        <attribute name="number:grouping">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -14565,7 +14479,7 @@
 </define>
 <define name="text-linenumbering-configuration-attlist" combine="interleave">
     <optional>
-        <attribute name="text:number-lines" a:defaultValue="true">
+        <attribute name="text:number-lines">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -14591,7 +14505,7 @@
 </define>
 <define name="text-linenumbering-configuration-attlist" combine="interleave">
     <optional>
-        <attribute name="text:number-position" a:defaultValue="left">
+        <attribute name="text:number-position">
             <choice>
                 <value>left</value>
                 <value>right</value>
@@ -14610,21 +14524,21 @@
 </define>
 <define name="text-linenumbering-configuration-attlist" combine="interleave">
     <optional>
-        <attribute name="text:count-empty-lines" a:defaultValue="true">
+        <attribute name="text:count-empty-lines">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="text-linenumbering-configuration-attlist" combine="interleave">
     <optional>
-        <attribute name="text:count-in-text-boxes" a:defaultValue="false">
+        <attribute name="text:count-in-text-boxes">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="text-linenumbering-configuration-attlist" combine="interleave">
     <optional>
-        <attribute name="text:restart-on-page" a:defaultValue="false">
+        <attribute name="text:restart-on-page">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -14677,7 +14591,7 @@
 </define>
 <define name="text-notes-configuration-content" combine="interleave">
     <optional>
-        <attribute name="text:start-value" a:defaultValue="1">
+        <attribute name="text:start-value">
             <ref name="nonNegativeInteger"/>
         </attribute>
     </optional>
@@ -14747,14 +14661,14 @@
 </define>
 <define name="text-bibliography-configuration-attlist" combine="interleave">
     <optional>
-        <attribute name="text:numbered-entries" a:defaultValue="false">
+        <attribute name="text:numbered-entries">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="text-bibliography-configuration-attlist" combine="interleave">
     <optional>
-        <attribute name="text:sort-by-position" a:defaultValue="true">
+        <attribute name="text:sort-by-position">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -14766,6 +14680,16 @@
     <optional>
         <attribute name="fo:country">
             <ref name="countryCode"/>
+        </attribute>
+    </optional>
+    <optional>
+        <attribute name="fo:script">
+            <ref name="scriptCode"/>
+        </attribute>
+    </optional>
+    <optional>
+        <attribute name="style:rfc-language-tag">
+            <ref name="language"/>
         </attribute>
     </optional>
     <optional>
@@ -14819,7 +14743,7 @@
         </choice>
     </attribute>
     <optional>
-        <attribute name="text:sort-ascending" a:defaultValue="true">
+        <attribute name="text:sort-ascending">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -14846,7 +14770,7 @@
 </define>
 <define name="text-list-style-attr" combine="interleave">
     <optional>
-        <attribute name="text:consecutive-numbering" a:defaultValue="false">
+        <attribute name="text:consecutive-numbering">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -14876,14 +14800,14 @@
 </define>
 <define name="text-list-level-style-number-attr" combine="interleave">
     <optional>
-        <attribute name="text:display-levels" a:defaultValue="1">
+        <attribute name="text:display-levels">
             <ref name="positiveInteger"/>
         </attribute>
     </optional>
 </define>
 <define name="text-list-level-style-number-attr" combine="interleave">
     <optional>
-        <attribute name="text:start-value" a:defaultValue="1">
+        <attribute name="text:start-value">
             <ref name="positiveInteger"/>
         </attribute>
     </optional>
@@ -14984,14 +14908,14 @@
 </define>
 <define name="text-outline-level-style-attlist" combine="interleave">
     <optional>
-        <attribute name="text:display-levels" a:defaultValue="1">
+        <attribute name="text:display-levels">
             <ref name="positiveInteger"/>
         </attribute>
     </optional>
 </define>
 <define name="text-outline-level-style-attlist" combine="interleave">
     <optional>
-        <attribute name="text:start-value" a:defaultValue="1">
+        <attribute name="text:start-value">
             <ref name="positiveInteger"/>
         </attribute>
     </optional>
@@ -15064,12 +14988,8 @@
 
 <define name="style-graphic-properties">
     <element name="style:graphic-properties">
-        <ref name="style-graphic-properties-content"/>
+        <ref name="style-graphic-properties-content-strict"/>
     </element>
-</define>
-
-<define name="style-graphic-properties-content">
-    <ref name="style-properties-content"/>
 </define>
 
 <define name="style-graphic-properties-content-strict">
@@ -15078,7 +14998,7 @@
     <ref name="style-graphic-properties-elements"/>
 </define>
 
-<define name=" style-graphic-properties-elements">
+<define name="style-graphic-properties-elements">
     <empty/>
 </define>
 <define name="style-style-content" combine="choice">
@@ -15094,12 +15014,8 @@
 
 <define name="style-drawing-page-properties">
     <element name="style:drawing-page-properties">
-        <ref name="style-drawing-page-properties-content"/>
+        <ref name="style-drawing-page-properties-content-strict"/>
     </element>
-</define>
-
-<define name="style-drawing-page-properties-content">
-    <ref name="style-properties-content"/>
 </define>
 
 <define name="style-drawing-page-properties-content-strict">
@@ -15182,9 +15098,7 @@
 <define name="common-draw-gradient-attlist" combine="interleave">
     <optional>
         <attribute name="draw:angle">
-<!-- DRAFT7: changed def start: Angle units http://lists.oasis-open.org/archives/office/200804/msg00096.html -->
 			<ref name="angle"/>
-<!-- DRAFT7: changed def end -->			
         </attribute>
     </optional>
 </define>
@@ -15199,7 +15113,7 @@
     <element name="svg:linearGradient">
         <ref name="common-svg-gradient-attlist"/>
         <optional>
-            <attribute name="svg:x1" a:defaultValue="0%">
+            <attribute name="svg:x1">
                 <choice>
                     <ref name="coordinate"/>
                     <ref name="percent"/>
@@ -15207,7 +15121,7 @@
             </attribute>
         </optional>
         <optional>
-            <attribute name="svg:y1" a:defaultValue="0%">
+            <attribute name="svg:y1">
                 <choice>
                     <ref name="coordinate"/>
                     <ref name="percent"/>
@@ -15215,7 +15129,7 @@
             </attribute>
         </optional>
         <optional>
-            <attribute name="svg:x2" a:defaultValue="100%">
+            <attribute name="svg:x2">
                 <choice>
                     <ref name="coordinate"/>
                     <ref name="percent"/>
@@ -15223,7 +15137,7 @@
             </attribute>
         </optional>
         <optional>
-            <attribute name="svg:y2" a:defaultValue="100%">
+            <attribute name="svg:y2">
                 <choice>
                     <ref name="coordinate"/>
                     <ref name="percent"/>
@@ -15240,7 +15154,7 @@
     <element name="svg:radialGradient">
         <ref name="common-svg-gradient-attlist"/>
         <optional>
-            <attribute name="svg:cx" a:defaultValue="50%">
+            <attribute name="svg:cx">
                 <choice>
                     <ref name="coordinate"/>
                     <ref name="percent"/>
@@ -15248,7 +15162,7 @@
             </attribute>
         </optional>
         <optional>
-            <attribute name="svg:cy" a:defaultValue="50%">
+            <attribute name="svg:cy">
                 <choice>
                     <ref name="coordinate"/>
                     <ref name="percent"/>
@@ -15256,7 +15170,7 @@
             </attribute>
         </optional>
         <optional>
-            <attribute name="svg:r" a:defaultValue="50%">
+            <attribute name="svg:r">
                 <choice>
                     <ref name="coordinate"/>
                     <ref name="percent"/>
@@ -15308,7 +15222,7 @@
 
 <define name="common-svg-gradient-attlist" combine="interleave">
     <optional>
-        <attribute name="svg:gradientUnits" a:defaultValue="objectBoundingBox">
+        <attribute name="svg:gradientUnits">
             <value>objectBoundingBox</value>
         </attribute>
     </optional>
@@ -15318,7 +15232,7 @@
         </attribute>
     </optional>
     <optional>
-        <attribute name="svg:spreadMethod" a:defaultValue="pad">
+        <attribute name="svg:spreadMethod">
             <choice>
                 <value>pad</value>
                 <value>reflect</value>
@@ -15383,37 +15297,27 @@
 <define name="draw-hatch-attlist" combine="interleave">
     <optional>
         <attribute name="draw:rotation">
-<!-- DRAFT7: changed def start: Angle units http://lists.oasis-open.org/archives/office/200804/msg00096.html -->
 			<ref name="angle"/>
-<!-- DRAFT7: changed def end -->			
         </attribute>
     </optional>
 </define>
 <define name="draw-fill-image">
     <element name="draw:fill-image">
         <ref name="draw-fill-image-attlist"/>
+		<attribute name="xlink:type">
+			<value>simple</value>
+		</attribute>
         <attribute name="xlink:href">
             <ref name="anyURI"/>
         </attribute>
         <optional>
-            <attribute name="xlink:type" a:defaultValue="simple">
-                <choice>
-                    <value>simple</value>
-                </choice>
+            <attribute name="xlink:show">
+				<value>embed</value>
             </attribute>
         </optional>
         <optional>
-            <attribute name="xlink:show" a:defaultValue="embed">
-                <choice>
-                    <value>embed</value>
-                </choice>
-            </attribute>
-        </optional>
-        <optional>
-            <attribute name="xlink:actuate" a:defaultValue="onLoad">
-                <choice>
-                    <value>onLoad</value>
-                </choice>
+            <attribute name="xlink:actuate">
+				<value>onLoad</value>
             </attribute>
         </optional>
         <empty/>
@@ -15541,12 +15445,10 @@
 <define name="draw-stroke-dash-attlist" combine="interleave">
     <optional>
         <attribute name="draw:distance">
-<!-- DRAFT7: changed def start: draw distance http://lists.oasis-open.org/archives/office/200808/msg00125.html  -->
             <choice>
 				<ref name="length"/>
 				<ref name="percent"/>
             </choice>
-<!-- DRAFT7: changed def end -->			
         </attribute>
     </optional>
 </define>
@@ -15616,17 +15518,10 @@
         </optional>
     </group>
 </define>
-<define name="style-properties-content">
-    <ref name="anyAttListOrElements"/>
-</define>
 <define name="style-page-layout-properties">
     <element name="style:page-layout-properties">
-        <ref name="style-page-layout-properties-content"/>
+        <ref name="style-page-layout-properties-content-strict"/>
     </element>
-</define>
-
-<define name="style-page-layout-properties-content">
-    <ref name="style-properties-content"/>
 </define>
 
 <define name="style-page-layout-properties-content-strict">
@@ -15812,7 +15707,7 @@
         </attribute>
     </optional>
     <optional>
-        <attribute name="style:adjustment" a:defaultValue="left">
+        <attribute name="style:adjustment">
             <choice>
                 <value>left</value>
                 <value>center</value>
@@ -15914,12 +15809,8 @@
 </define>
 <define name="style-header-footer-properties">
     <element name="style:header-footer-properties">
-        <ref name="style-header-footer-properties-content"/>
+        <ref name="style-header-footer-properties-content-strict"/>
     </element>
-</define>
-
-<define name="style-header-footer-properties-content">
-    <ref name="style-properties-content"/>
 </define>
 
 <define name="style-header-footer-properties-content-strict">
@@ -15970,12 +15861,8 @@
 </define>
 <define name="style-text-properties">
     <element name="style:text-properties">
-        <ref name="style-text-properties-content"/>
+        <ref name="style-text-properties-content-strict"/>
     </element>
-</define>
-
-<define name="style-text-properties-content">
-    <ref name="style-properties-content"/>
 </define>
 
 <define name="style-text-properties-content-strict">
@@ -16321,6 +16208,40 @@
 </define>
 <define name="style-text-properties-attlist" combine="interleave">
     <optional>
+        <attribute name="fo:script">
+            <ref name="scriptCode"/>
+        </attribute>
+    </optional>
+    <optional>
+        <attribute name="style:script-asian">
+            <ref name="scriptCode"/>
+        </attribute>
+    </optional>
+    <optional>
+        <attribute name="style:script-complex">
+            <ref name="scriptCode"/>
+        </attribute>
+    </optional>
+</define>
+<define name="style-text-properties-attlist" combine="interleave">
+    <optional>
+        <attribute name="style:rfc-language-tag">
+            <ref name="language"/>
+        </attribute>
+    </optional>
+    <optional>
+        <attribute name="style:rfc-language-tag-asian">
+            <ref name="language"/>
+        </attribute>
+    </optional>
+    <optional>
+        <attribute name="style:rfc-language-tag-complex">
+            <ref name="language"/>
+        </attribute>
+    </optional>
+</define>
+<define name="style-text-properties-attlist" combine="interleave">
+    <optional>
         <attribute name="fo:font-style">
             <ref name="fontStyle"/>
         </attribute>
@@ -16436,6 +16357,45 @@
         </attribute>
     </optional>
 </define>
+<define name="style-text-properties-attlist" combine="interleave">
+    <optional>
+        <attribute name="style:text-overline-type">
+            <ref name="lineType"/>
+        </attribute>
+    </optional>
+</define>
+<define name="style-text-properties-attlist" combine="interleave">
+    <optional>
+        <attribute name="style:text-overline-style">
+            <ref name="lineStyle"/>
+        </attribute>
+    </optional>
+</define>
+<define name="style-text-properties-attlist" combine="interleave">
+    <optional>
+        <attribute name="style:text-overline-width">
+            <ref name="lineWidth"/>
+        </attribute>
+    </optional>
+</define>
+<define name="style-text-properties-attlist" combine="interleave">
+    <optional>
+        <attribute name="style:text-overline-color">
+            <choice>
+                <value>font-color</value>
+                <ref name="color"/>
+            </choice>
+        </attribute>
+    </optional>
+</define>
+<define name="style-text-properties-attlist" combine="interleave">
+    <optional>
+        <attribute name="style:text-overline-mode">
+            <ref name="lineMode"/>
+        </attribute>
+    </optional>
+</define>
+
 <define name="style-text-properties-attlist" combine="interleave">
     <optional>
         <attribute name="fo:font-weight">
@@ -16566,9 +16526,7 @@
                 <value>0</value>
                 <value>90</value>
                 <value>270</value>
-<!-- DRAFT7: new def start: Angle units http://lists.oasis-open.org/archives/office/200804/msg00096.html -->
 	            <ref name="angle"/>
-<!-- DRAFT7: new def end -->			
             </choice>
         </attribute>
     </optional>
@@ -16625,12 +16583,8 @@
 </define>
 <define name="style-paragraph-properties">
     <element name="style:paragraph-properties">
-        <ref name="style-paragraph-properties-content"/>
+        <ref name="style-paragraph-properties-content-strict"/>
     </element>
-</define>
-
-<define name="style-paragraph-properties-content">
-    <ref name="style-properties-content"/>
 </define>
 
 <define name="style-paragraph-properties-content-strict">
@@ -16757,7 +16711,7 @@
 <define name="style-tab-stop-attlist" combine="interleave">
     <choice>
         <optional>
-            <attribute name="style:type" a:defaultValue="left">
+            <attribute name="style:type">
                 <choice>
                     <value>left</value>
                     <value>center</value>
@@ -16811,8 +16765,8 @@
 </define>
 <define name="style-tab-stop-attlist" combine="interleave">
     <optional>
-        <attribute name="style:leader-text" a:defaultValue=" ">
-            <ref name="string"/>
+        <attribute name="style:leader-text">
+            <ref name="character"/>
         </attribute>
     </optional>
 </define>
@@ -16864,7 +16818,7 @@
 </define>
 <define name="style-drop-cap-attlist" combine="interleave">
     <optional>
-        <attribute name="style:length" a:defaultValue="1">
+        <attribute name="style:length">
             <choice>
                 <value>word</value>
                 <ref name="positiveInteger"/>
@@ -16874,14 +16828,14 @@
 </define>
 <define name="style-drop-cap-attlist" combine="interleave">
     <optional>
-        <attribute name="style:lines" a:defaultValue="1">
+        <attribute name="style:lines">
             <ref name="positiveInteger"/>
         </attribute>
     </optional>
 </define>
 <define name="style-drop-cap-attlist" combine="interleave">
     <optional>
-        <attribute name="style:distance" a:defaultValue="0cm">
+        <attribute name="style:distance">
             <ref name="length"/>
         </attribute>
     </optional>
@@ -17031,7 +16985,7 @@
 </define>
 <define name="style-background-image-attlist" combine="interleave">
     <optional>
-        <attribute name="style:repeat" a:defaultValue="repeat">
+        <attribute name="style:repeat">
             <choice>
                 <value>no-repeat</value>
                 <value>repeat</value>
@@ -17042,7 +16996,7 @@
 </define>
 <define name="style-background-image-attlist" combine="interleave">
     <optional>
-        <attribute name="style:position" a:defaultValue="center">
+        <attribute name="style:position">
             <choice>
                 <value>left</value>
                 <value>center</value>
@@ -17086,7 +17040,7 @@
 <define name="style-background-image-attlist" combine="interleave">
     <optional>
         <attribute name="draw:opacity">
-            <ref name="percent"/>
+            <ref name="zeroToHundredPercent"/>
         </attribute>
     </optional>
 </define>
@@ -17160,7 +17114,6 @@
         <ref name="positiveLength"/>
     </list>
 </define> 
-<!-- DRAFT7: new def start style:join-border http://lists.oasis-open.org/archives/office/200805/msg00114.html -->
 <define name="style-paragraph-properties-attlist" combine="interleave">
       <optional>
           <attribute name="style:join-border">
@@ -17168,7 +17121,6 @@
           </attribute>
       </optional>
 </define>
-<!-- DRAFT7: new def end -->
 <define name="style-paragraph-properties-attlist" combine="interleave">
     <ref name="common-padding-attlist"/>
 </define>
@@ -17336,18 +17288,14 @@
 <define name="common-background-transparency-attlist">
     <optional>
         <attribute name="style:background-transparency">
-            <ref name="percent"/>
+            <ref name="zeroToHundredPercent"/>
         </attribute>
     </optional>
 </define>
 <define name="style-ruby-properties">
     <element name="style:ruby-properties">
-        <ref name="style-ruby-properties-content"/>
+        <ref name="style-ruby-properties-content-strict"/>
     </element>
-</define>
-
-<define name="style-ruby-properties-content">
-    <ref name="style-properties-content"/>
 </define>
 
 <define name="style-ruby-properties-content-strict">
@@ -17383,12 +17331,8 @@
 </define>
 <define name="style-section-properties">
     <element name="style:section-properties">
-        <ref name="style-section-properties-content"/>
+        <ref name="style-section-properties-content-strict"/>
     </element>
-</define>
-
-<define name="style-section-properties-content">
-    <ref name="style-properties-content"/>
 </define>
 
 <define name="style-section-properties-content-strict">
@@ -17445,28 +17389,28 @@
 </define>
 <define name="style-column-attlist" combine="interleave">
     <optional>
-        <attribute name="fo:start-indent" a:defaultValue="0cm">
+        <attribute name="fo:start-indent">
             <ref name="length"/>
         </attribute>
     </optional>
 </define>
 <define name="style-column-attlist" combine="interleave">
     <optional>
-        <attribute name="fo:end-indent" a:defaultValue="0cm">
+        <attribute name="fo:end-indent">
             <ref name="length"/>
         </attribute>
     </optional>
 </define>
 <define name="style-column-attlist" combine="interleave">
     <optional>
-        <attribute name="fo:space-before" a:defaultValue="0cm">
+        <attribute name="fo:space-before">
             <ref name="length"/>
         </attribute>
     </optional>
 </define>
 <define name="style-column-attlist" combine="interleave">
     <optional>
-        <attribute name="fo:space-after" a:defaultValue="0cm">
+        <attribute name="fo:space-after">
             <ref name="length"/>
         </attribute>
     </optional>
@@ -17478,7 +17422,7 @@
 </define>
 <define name="style-column-sep-attlist" combine="interleave">
     <optional>
-        <attribute name="style:style" a:defaultValue="solid">
+        <attribute name="style:style">
             <choice>
                 <value>none</value>
                 <value>solid</value>
@@ -17496,14 +17440,14 @@
 </define>
 <define name="style-column-sep-attlist" combine="interleave">
     <optional>
-        <attribute name="style:height" a:defaultValue="100%">
-            <ref name="percent"/>
+        <attribute name="style:height">
+            <ref name="zeroToHundredPercent"/>
         </attribute>
     </optional>
 </define>
 <define name="style-column-sep-attlist" combine="interleave">
     <optional>
-        <attribute name="style:vertical-align" a:defaultValue="top">
+        <attribute name="style:vertical-align">
             <choice>
                 <value>top</value>
                 <value>middle</value>
@@ -17514,7 +17458,7 @@
 </define>
 <define name="style-column-sep-attlist" combine="interleave">
     <optional>
-        <attribute name="style:color" a:defaultValue="#000000">
+        <attribute name="style:color">
             <ref name="color"/>
         </attribute>
     </optional>
@@ -17546,12 +17490,8 @@
 </define>
 <define name="style-table-properties">
     <element name="style:table-properties">
-        <ref name="style-table-properties-content"/>
+        <ref name="style-table-properties-content-strict"/>
     </element>
-</define>
-
-<define name="style-table-properties-content">
-    <ref name="style-properties-content"/>
 </define>
 
 <define name="style-table-properties-content-strict">
@@ -17638,12 +17578,8 @@
 </define>
 <define name="style-table-column-properties">
     <element name="style:table-column-properties">
-        <ref name="style-table-column-properties-content"/>
+        <ref name="style-table-column-properties-content-strict"/>
     </element>
-</define>
-
-<define name="style-table-column-properties-content">
-    <ref name="style-properties-content"/>
 </define>
 
 <define name="style-table-column-properties-content-strict">
@@ -17678,12 +17614,8 @@
 </define>
 <define name="style-table-row-properties">
     <element name="style:table-row-properties">
-        <ref name="style-table-row-properties-content"/>
+        <ref name="style-table-row-properties-content-strict"/>
     </element>
-</define>
-
-<define name="style-table-row-properties-content">
-    <ref name="style-properties-content"/>
 </define>
 
 <define name="style-table-row-properties-content-strict">
@@ -17730,12 +17662,8 @@
 </define>
 <define name="style-table-cell-properties">
     <element name="style:table-cell-properties">
-        <ref name="style-table-cell-properties-content"/>
+        <ref name="style-table-cell-properties-content-strict"/>
     </element>
-</define>
-
-<define name="style-table-cell-properties-content">
-    <ref name="style-properties-content"/>
 </define>
 
 <define name="style-table-cell-properties-content-strict">
@@ -17784,11 +17712,9 @@
             <choice>
                 <value>auto</value>
                 <value>0</value>
-<!-- DRAFT7: new def start: Angle units http://lists.oasis-open.org/archives/office/200804/msg00096.html -->
                 <value>0deg</value>
                 <value>0rad</value>
                 <value>0grad</value>
-<!-- DRAFT7: new def end -->			
             </choice>
         </attribute>
     </optional>
@@ -17853,9 +17779,7 @@
 <define name="common-rotation-angle-attlist">
     <optional>
         <attribute name="style:rotation-angle">
-<!-- DRAFT7: changed def start: Angle units http://lists.oasis-open.org/archives/office/200804/msg00096.html -->
             <ref name="angle"/>
-<!-- DRAFT7: changed def end -->			
         </attribute>
     </optional>
 </define>
@@ -17919,12 +17843,8 @@
 </define>
 <define name="style-list-level-properties">
     <element name="style:list-level-properties">
-        <ref name="style-list-level-properties-content"/>
+        <ref name="style-list-level-properties-content-strict"/>
     </element>
-</define>
-
-<define name="style-list-level-properties-content">
-    <ref name="style-properties-content"/>
 </define>
 
 <define name="style-list-level-properties-content-strict">
@@ -18016,13 +17936,12 @@
 <define name="style-list-level-label-alignment-attlist" combine="interleave">
     <optional>
         <attribute name="text:list-tab-stop-position">
-            <ref name="nonNegativeLength"/>
+            <ref name="length"/>
         </attribute>
     </optional>
 </define>
 <define name="style-list-level-label-alignment-attlist" combine="interleave">
     <optional>
-<!-- DRAFT7: text:text-indent actually must be fo:text-indent -->
         <attribute name="fo:text-indent">
             <ref name="length"/>
         </attribute>
@@ -18125,7 +18044,7 @@
                     <param name="minInclusive">0</param>
                     <param name="maxInclusive">1</param>
                 </data>
-                <ref name="percent"/>
+                <ref name="zeroToHundredPercent"/>
             </choice>
         </attribute>
     </optional>
@@ -18139,14 +18058,10 @@
                 <value>bevel</value>
                 <value>middle</value>
                 <value>none</value>
-<!-- DRAFT7: removed def start: new property to store cap-style http://lists.oasis-open.org/archives/office/200711/msg00033.html  -->
-                <!-- value>inherit</value -->
-<!-- DRAFT7: removed def end -->
             </choice>
         </attribute>
     </optional>
 </define>
-<!-- DRAFT7: new def start: new property to store cap-style http://lists.oasis-open.org/archives/office/200711/msg00033.html  -->
 <define name="style-graphic-properties-attlist" combine="interleave">
     <optional>
         <attribute name="svg:stroke-linecap">
@@ -18158,7 +18073,6 @@
         </attribute>
     </optional>
 </define>
-<!-- DRAFT7: new def end -->
 <define name="style-graphic-fill-properties-attlist" combine="interleave">
     <optional>
         <attribute name="draw:fill">
@@ -18279,7 +18193,15 @@
 </define>
 <define name="style-graphic-fill-properties-attlist" combine="interleave">
     <optional>
-        <attribute name="draw:tile-repeat-offset"/>
+        <attribute name="draw:tile-repeat-offset">
+			<list>
+				<ref name="zeroToHundredPercent"/>
+				<choice>
+					<value>horizontal</value>
+					<value>vertical</value>
+				</choice>
+			</list>
+		</attribute>
     </optional>
 </define>
 <define name="style-graphic-fill-properties-attlist" combine="interleave">
@@ -18434,7 +18356,7 @@
 </define>
 <define name="style-graphic-properties-attlist" combine="interleave">
     <optional>
-        <attribute name="draw:shrink-to-fit">
+        <attribute name="style:shrink-to-fit">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -18466,7 +18388,7 @@
 <define name="style-graphic-properties-attlist" combine="interleave">
     <optional>
         <attribute name="draw:luminance">
-            <ref name="percent"/>
+            <ref name="zeroToHundredPercent"/>
         </attribute>
     </optional>
 </define>
@@ -18487,21 +18409,21 @@
 <define name="style-graphic-properties-attlist" combine="interleave">
     <optional>
         <attribute name="draw:red">
-            <ref name="percent"/>
+            <ref name="signedZeroToHundredPercent"/>
         </attribute>
     </optional>
 </define>
 <define name="style-graphic-properties-attlist" combine="interleave">
     <optional>
         <attribute name="draw:green">
-            <ref name="percent"/>
+            <ref name="signedZeroToHundredPercent"/>
         </attribute>
     </optional>
 </define>
 <define name="style-graphic-properties-attlist" combine="interleave">
     <optional>
         <attribute name="draw:blue">
-            <ref name="percent"/>
+            <ref name="signedZeroToHundredPercent"/>
         </attribute>
     </optional>
 </define>
@@ -18544,7 +18466,7 @@
 <define name="style-graphic-properties-attlist" combine="interleave">
     <optional>
         <attribute name="draw:shadow-opacity">
-            <ref name="percent"/>
+            <ref name="zeroToHundredPercent"/>
         </attribute>
     </optional>
 </define>
@@ -18702,9 +18624,7 @@
 <define name="style-graphic-properties-attlist" combine="interleave">
     <optional>
         <attribute name="draw:caption-angle">
-<!-- DRAFT7: changed def start: Angle units http://lists.oasis-open.org/archives/office/200804/msg00096.html -->
             <ref name="angle"/>
-<!-- DRAFT7: changed def end -->			
         </attribute>
     </optional>
 </define>
@@ -18808,9 +18728,7 @@
 <define name="style-graphic-properties-attlist" combine="interleave">
     <optional>
         <attribute name="dr3d:end-angle">
-<!-- DRAFT7: changed def start: Angle units http://lists.oasis-open.org/archives/office/200804/msg00096.html -->
             <ref name="angle"/>
-<!-- DRAFT7: changed def end -->			
         </attribute>
     </optional>
 </define>
@@ -19258,7 +19176,6 @@
 </define>
 
 <define name="clipShape">
-	<!-- DRAFT7: There had to be spaces before the , -->
     <data type="string">
         <param name="pattern">rect\([ ]*((-?([0-9]+(\.[0-9]*)?|\.[0-9]+)((cm)|(mm)|(in)|(pt)|(pc)))|(auto))([ ]*,[ ]*((-?([0-9]+(\.[0-9]*)?|\.[0-9]+)((cm)|(mm)|(in)|(pt)|(pc))))|(auto)){3}[ ]*\)</param>
 
@@ -19354,12 +19271,8 @@
 </define>
 <define name="style-chart-properties">
     <element name="style:chart-properties">
-        <ref name="style-chart-properties-content"/>
+        <ref name="style-chart-properties-content-strict"/>
     </element>
-</define>
-
-<define name="style-chart-properties-content">
-    <ref name="style-properties-content"/>
 </define>
 
 <define name="style-chart-properties-content-strict">
@@ -19391,7 +19304,6 @@
         </attribute>
     </optional>
 </define>
-<!-- DRAFT7: new def start: Revision of chart:right-angled-axes http://lists.oasis-open.org/archives/office/200803/msg00009.html -->
 <define name="style-chart-properties-attlist" combine="interleave">
     <optional>
         <attribute name="chart:right-angled-axes">
@@ -19399,7 +19311,6 @@
         </attribute>
     </optional>
 </define>
-<!-- DRAFT7: new def end -->
 <define name="style-chart-properties-attlist" combine="interleave">
     <choice>
         <attribute name="chart:symbol-type">
@@ -19531,9 +19442,7 @@
     </optional>
     <optional>
         <attribute name="chart:angle-offset">
-<!-- DRAFT7: changed def start: Angle units http://lists.oasis-open.org/archives/office/200804/msg00096.html -->
             <ref name="angle"/>
-<!-- DRAFT7: changed def end -->			
         </attribute>
     </optional>
     <optional>
@@ -19687,7 +19596,7 @@
 <define name="style-chart-properties-attlist" combine="interleave">
     <optional>
         <attribute name="chart:data-label-number"
-                   a:defaultValue="none">
+                  >
             <choice>
                 <value>none</value>
                 <value>value</value>
@@ -19718,7 +19627,6 @@
         </element>
     </optional>
 </define>
-<!-- DRAFT7: new def start: Chart Data Label Auto-Positions , http://lists.oasis-open.org/archives/office/200710/msg00005.html -->
 <define name="style-chart-properties-attlist" combine="interleave">
 	<optional>
 		<attribute name="chart:label-position">
@@ -19751,22 +19659,21 @@
 	</optional>
 </define>
 
-<!-- DRAFT7: new def end -->
 <define name="style-chart-properties-attlist" combine="interleave">
     <optional>
-        <attribute name="chart:visible" a:defaultValue="true">
+        <attribute name="chart:visible">
             <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
 <define name="style-chart-properties-attlist" combine="interleave">
     <optional>
-        <attribute name="chart:auto-position" a:defaultValue="false">
+        <attribute name="chart:auto-position">
             <ref name="boolean"/>
         </attribute>
     </optional>
     <optional>
-        <attribute name="chart:auto-size" a:defaultValue="false">
+        <attribute name="chart:auto-size">
             <ref name="boolean"/>
         </attribute>
     </optional>
@@ -19781,7 +19688,7 @@
 <define name="style-chart-properties-attlist" combine="interleave">
     <optional>
         <attribute name="chart:error-category"
-                   a:defaultValue="none">
+                  >
             <choice>
                 <value>none</value>
                 <value>variance</value>
@@ -19789,9 +19696,7 @@
                 <value>percentage</value>
                 <value>error-margin</value>
                 <value>constant</value>
-<!-- DRAFT7: new def start: Error bar category standard-error http://lists.oasis-open.org/archives/office/200802/msg00002.html -->
 				<value>standard-error</value>
-<!-- DRFT7: new def end -->
                 <value>cell-range</value>
             </choice>
         </attribute>
@@ -19855,6 +19760,47 @@
                 <value>exponential</value>
                 <value>power</value>
             </choice>
+        </attribute>
+    </optional>
+</define>
+<define name="style-chart-properties-attlist" combine="interleave">
+    <optional>
+        <attribute name="chart:axis-position">
+            <choice>
+                <value>start</value>
+                <value>end</value>
+                <ref name="double"/>
+            </choice>
+        </attribute>
+    </optional>
+</define>
+<define name="style-chart-properties-attlist" combine="interleave">
+    <optional>
+        <attribute name="chart:axis-label-position">
+            <choice>
+                <value>near-axis</value>
+                <value>near-axis-other-side</value>
+                <value>outside-start</value>
+                <value>outside-end</value>
+            </choice>
+        </attribute>
+    </optional>
+</define>
+<define name="style-chart-properties-attlist" combine="interleave">
+    <optional>
+        <attribute name="chart:tick-mark-position">
+            <choice>
+                <value>at-labels</value>
+                <value>at-axis</value>
+                <value>at-labels-and-axis</value>
+            </choice>
+        </attribute>
+    </optional>
+</define>
+<define name="style-chart-properties-attlist" combine="interleave">
+    <optional>
+        <attribute name="chart:include-hidden-cells">
+            <ref name="boolean"/>
         </attribute>
     </optional>
 </define>
@@ -19952,7 +19898,7 @@
         </attribute>
     </optional>
 </define>
-<define name="style-drawing-page-properties-attlist " combine="interleave">
+<define name="style-drawing-page-properties-attlist" combine="interleave">
     <optional>
         <attribute name="smil:type">
             <ref name="string"/>
@@ -20105,11 +20051,9 @@
 <define name="IDREFS">
     <data type="IDREFS"/>
 </define>
-<!-- DRAFT7: new def start: xml:id-Proposal http://lists.oasis-open.org/archives/office/200808/msg00093.html -->
 <define name="NCName">
     <data type="NCName"/>
 </define>
-<!-- DRAFT7: new def end -->
 <define name="boolean">
     <choice>
         <value>true</value>
@@ -20141,6 +20085,11 @@
         <param name="pattern">[A-Za-z]{1,8}</param>
     </data>
 </define>
+<define name="scriptCode">
+    <data type="token">
+        <param name="pattern">[A-Za-z0-9]{1,8}</param>
+    </data>
+</define>
 <define name="character">
     <data type="string">
         <param name="length">1</param>
@@ -20169,6 +20118,16 @@
         <param name="pattern">-?([0-9]+(\.[0-9]*)?|\.[0-9]+)%</param>
     </data>
 </define>
+<define name="zeroToHundredPercent">
+    <data type="string">
+        <param name="pattern">([0-9]?[0-9](\.[0-9]*)?|100(\.0*)?|\.[0-9]+)%</param>
+    </data>
+</define>
+<define name="signedZeroToHundredPercent">
+    <data type="string">
+        <param name="pattern">-?([0-9]?[0-9](\.[0-9]*)?|100(\.0*)?|\.[0-9]+)%</param>
+    </data>
+</define>
 <define name="relativeLength">
     <data type="string">
         <param name="pattern">[0-9]+\*</param>
@@ -20185,11 +20144,35 @@
         <param name="pattern">#[0-9a-fA-F]{6}</param>
     </data>
 </define>
-<!-- DRAFT7: new def start: Angle units http://lists.oasis-open.org/archives/office/200804/msg00096.html -->
 <define name="angle">
     <data type="string"/>
 </define>
-<!-- DRAFT7: new def end -->			
+<define name="CURIE">
+    <data type="string">
+        <param name="pattern">(([\i-[:]][\c-[:]]*)?:)?.+</param>
+        <param name="minLength">1</param>
+	</data>
+</define>
+<define name="CURIEs">
+    <list>
+        <oneOrMore>
+            <ref name="CURIE"/>
+        </oneOrMore>
+    </list>
+</define>
+<define name="SafeCURIE">
+    <data type="string">
+        <param name="pattern">\[(([\i-[:]][\c-[:]]*)?:)?.+\]</param>
+        <param name="minLength">3</param>
+	</data>
+</define>
+<define name="URIorSafeCURIE">
+    <choice>
+        <ref name="anyURI"/>
+        <ref name="SafeCURIE"/>
+    </choice>
+</define>
+
 <define name="styleName">
     <data type="NCName"/>
 </define>
