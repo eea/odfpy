@@ -1,10 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
     OASIS OpenDocument v1.2
-	Committee Draft 03, 30 July 2009
+	Committee Draft 04, 15 December 2009
     Relax-NG Schema
 
-    © 2002-2009 OASIS Open
+	Copyright © OASIS Open 2002-2009. All Rights Reserved.
+
+	All capitalized terms in the following text have the meanings assigned to them
+   	in the OASIS Intellectual Property Rights Policy (the "OASIS IPR Policy"). The
+	full Policy may be found at the OASIS website.
+
+	This document and translations of it may be copied and furnished to others, and
+	derivative works that comment on or otherwise explain it or assist in its
+	implementation may be prepared, copied, published, and distributed, in whole or
+	in part, without restriction of any kind, provided that the above copyright
+	notice and this section are included on all such copies and derivative works.
+	However, this document itself may not be modified in any way, including by
+	removing the copyright notice or references to OASIS, except as needed for the
+	purpose of developing any document or deliverable produced by an OASIS
+	Technical Committee (in which case the rules applicable to copyrights, as set
+	forth in the OASIS IPR Policy, must be followed) or as required to translate it
+	into languages other than English.
+
+	The limited permissions granted above are perpetual and will not be revoked by
+	OASIS or its successors or assigns.
+
+	This document and the information contained herein is provided on an "AS IS"
+	basis and OASIS DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT
+	LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL NOT
+	INFRINGE ANY OWNERSHIP RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR
+	FITNESS FOR A PARTICULAR PURPOSE. 
 -->
 
 <grammar
@@ -873,7 +898,7 @@
             <ref name="text-number"/>
         </optional>
         <zeroOrMore>
-            <ref name="paragraph-content"/>
+            <ref name="paragraph-content-or-hyperlink"/>
         </zeroOrMore>
     </element>
 </define>
@@ -912,7 +937,7 @@
     <element name="text:p">
         <ref name="paragraph-attrs"/>
         <zeroOrMore>
-            <ref name="paragraph-content"/>
+            <ref name="paragraph-content-or-hyperlink"/>
         </zeroOrMore>
     </element>
 </define>
@@ -1318,6 +1343,12 @@
         <ref name="text-alphabetical-index-auto-mark-file"/>
     </optional>
 </define>
+<define name="paragraph-content-or-hyperlink">
+	<choice>
+		<ref name="paragraph-content"/>
+		<ref name="text-a"/>
+	</choice>
+</define>
 <define name="paragraph-content" combine="choice">
     <text/>
 </define>
@@ -1363,11 +1394,11 @@
             </attribute>
         </optional>
         <zeroOrMore>
-            <ref name="paragraph-content"/>
+            <ref name="paragraph-content-or-hyperlink"/>
         </zeroOrMore>
     </element>
 </define>
-<define name="paragraph-content" combine="choice">
+<define name="text-a" combine="choice">
     <element name="text:a">
         <ref name="text-a-attlist"/>
         <optional>
@@ -1436,7 +1467,7 @@
 	<element name="text:meta">
 	 	<ref name="text-meta-attlist"/>
 	 	<zeroOrMore>
-	 	 	<ref name="paragraph-content"/>
+	 	 	<ref name="paragraph-content-or-hyperlink"/>
 	 	</zeroOrMore>
 	</element>
 </define>
@@ -1566,7 +1597,7 @@
         </optional>
         <element name="text:ruby-base">
 			<zeroOrMore>
-                <ref name="paragraph-content"/>
+                <ref name="paragraph-content-or-hyperlink"/>
 			</zeroOrMore>
         </element>
         <element name="text:ruby-text">
@@ -2561,7 +2592,7 @@
 	<element name="text:meta-field">
 	 	<ref name="text-meta-field-attlist"/>
 	 	<zeroOrMore>
-	 	 	<ref name="paragraph-content"/>
+	 	 	<ref name="paragraph-content-or-hyperlink"/>
 	 	</zeroOrMore>
 	</element>
 </define>
@@ -2944,9 +2975,7 @@
 <define name="text-table-of-content-source-attlist" combine="interleave">
     <optional>
         <attribute name="text:outline-level">
-            <choice>
-                <ref name="positiveInteger"/>
-            </choice>
+			<ref name="positiveInteger"/>
         </attribute>
     </optional>
 </define>
@@ -3699,6 +3728,9 @@
         </optional>
         <ref name="table-columns-and-groups"/>
         <ref name="table-rows-and-groups"/>
+		<optional>
+			<ref name="table-named-expressions"/>    
+		</optional>
     </element>
 </define>
 <define name="table-columns-and-groups">
@@ -6570,10 +6602,17 @@
 </define>
 <define name="draw-circle">
     <element name="draw:circle">
-        <ref name="draw-circle-attlist"/>
-        <ref name="common-draw-circle-ellipse-attlist"/>
-        <ref name="common-draw-position-attlist"/>
-        <ref name="common-draw-size-attlist"/>
+		<choice>
+			<group>
+		        <ref name="draw-circle-attlist"/>
+       			<ref name="common-draw-circle-ellipse-pos-attlist"/>
+			</group>
+			<group>
+		        <ref name="common-draw-position-attlist"/>
+       			<ref name="common-draw-size-attlist"/>
+			 </group>
+	 	</choice>
+		<ref name="common-draw-circle-ellipse-attlist"/>
         <ref name="common-draw-shape-with-text-and-styles-attlist"/>
         <ref name="common-draw-caption-id-attlist"/>
         <optional>
@@ -6591,22 +6630,18 @@
         <ref name="draw-text"/>
     </element>
 </define>
-<define name="common-draw-circle-ellipse-attlist" combine="interleave">
-    <optional>
-        <attribute name="svg:cx">
-            <ref name="coordinate"/>
-        </attribute>
-        <attribute name="svg:cy">
-            <ref name="coordinate"/>
-        </attribute>
-    </optional>
+<define name="common-draw-circle-ellipse-pos-attlist" combine="interleave">
+	<attribute name="svg:cx">
+		<ref name="coordinate"/>
+	</attribute>
+	<attribute name="svg:cy">
+		<ref name="coordinate"/>
+	</attribute>
 </define>
 <define name="draw-circle-attlist" combine="interleave">
-    <optional>
-        <attribute name="svg:r">
-            <ref name="length"/>
-        </attribute>
-    </optional>
+	<attribute name="svg:r">
+		<ref name="length"/>
+	</attribute>
 </define>
 <define name="common-draw-circle-ellipse-attlist" combine="interleave">
     <optional>
@@ -6636,10 +6671,17 @@
 </define>
 <define name="draw-ellipse">
     <element name="draw:ellipse">
+		<choice>
+			<group>
+				<ref name="draw-ellipse-attlist"/>
+				<ref name="common-draw-circle-ellipse-pos-attlist"/>
+			</group>
+			<group>
+				<ref name="common-draw-position-attlist"/>
+				<ref name="common-draw-size-attlist"/>
+			</group>
+		</choice>
         <ref name="common-draw-circle-ellipse-attlist"/>
-        <ref name="draw-ellipse-attlist"/>
-        <ref name="common-draw-position-attlist"/>
-        <ref name="common-draw-size-attlist"/>
         <ref name="common-draw-shape-with-text-and-styles-attlist"/>
         <ref name="common-draw-caption-id-attlist"/>
         <optional>
@@ -6658,14 +6700,12 @@
     </element>
 </define>
 <define name="draw-ellipse-attlist" combine="interleave">
-    <optional>
-        <attribute name="svg:rx">
-            <ref name="length"/>
-        </attribute>
-        <attribute name="svg:ry">
-            <ref name="length"/>
-        </attribute>
-    </optional>
+	<attribute name="svg:rx">
+		<ref name="length"/>
+	</attribute>
+	<attribute name="svg:ry">
+		<ref name="length"/>
+	</attribute>
 </define>
 <define name="draw-connector">
     <element name="draw:connector">
@@ -7718,9 +7758,7 @@
 <define name="common-draw-area-attlist" combine="interleave">
     <optional>
         <attribute name="draw:nohref">
-            <choice>
-                <value>nohref</value>
-            </choice>
+			<value>nohref</value>
         </attribute>
     </optional>
 </define>
@@ -9869,9 +9907,6 @@
     <element name="db:driver-settings">
         <ref name="db-driver-settings-attlist"/>
         <optional>
-            <ref name="db-java-classpath"/>
-        </optional>
-        <optional>
             <ref name="db-auto-increment"/>
         </optional>
         <optional>
@@ -9884,13 +9919,6 @@
             <ref name="db-table-settings"/>
         </optional>
     </element>
-</define>
-<define name="db-driver-settings-attlist" combine="interleave">
-    <optional>
-        <attribute name="db:java-driver-class">
-            <ref name="string"/>
-        </attribute>
-    </optional>
 </define>
 <define name="db-driver-settings-attlist" combine="interleave">
     <ref name="db-show-deleted"/>
@@ -9932,28 +9960,6 @@
             <ref name="boolean"/>
         </attribute>
     </optional>
-</define>
-<define name="db-java-classpath">
-    <oneOrMore>
-        <element name="db:java-classpath">
-			<attribute name="xlink:type">
-				<value>simple</value>
-			</attribute>
-            <attribute name="xlink:href">
-                <ref name="anyURI"/>
-            </attribute>
-            <optional>
-                <attribute name="xlink:show">
-					<value>none</value>
-                </attribute>
-            </optional>
-            <optional>
-                <attribute name="xlink:actuate">
-					<value>onRequest</value>
-                </attribute>
-            </optional>
-        </element>
-    </oneOrMore>
 </define>
 <define name="db-auto-increment">
     <element name="db:auto-increment">
@@ -13182,9 +13188,6 @@
             <ref name="office-forms"/>
         </optional>
         <zeroOrMore>
-            <ref name="style-style"/>
-        </zeroOrMore>
-        <zeroOrMore>
             <ref name="shape"/>
         </zeroOrMore>
         <optional>
@@ -15086,12 +15089,12 @@
 <define name="draw-gradient-attlist" combine="interleave">
     <optional>
         <attribute name="draw:start-intensity">
-            <ref name="percent"/>
+            <ref name="zeroToHundredPercent"/>
         </attribute>
     </optional>
     <optional>
         <attribute name="draw:end-intensity">
-            <ref name="percent"/>
+            <ref name="zeroToHundredPercent"/>
         </attribute>
     </optional>
 </define>
@@ -15357,12 +15360,12 @@
 <define name="draw-opacity-attlist" combine="interleave">
     <optional>
         <attribute name="draw:start">
-            <ref name="percent"/>
+            <ref name="zeroToHundredPercent"/>
         </attribute>
     </optional>
     <optional>
         <attribute name="draw:end">
-            <ref name="percent"/>
+            <ref name="zeroToHundredPercent"/>
         </attribute>
     </optional>
 </define>
@@ -16339,7 +16342,6 @@
         <value>normal</value>
         <value>bold</value>
         <value>thin</value>
-        <value>dash</value>
         <value>medium</value>
         <value>thick</value>
         <ref name="positiveInteger"/>
@@ -18430,7 +18432,7 @@
 <define name="style-graphic-properties-attlist" combine="interleave">
     <optional>
         <attribute name="draw:image-opacity">
-            <ref name="percent"/>
+            <ref name="zeroToHundredPercent"/>
         </attribute>
     </optional>
 </define>
@@ -20237,9 +20239,7 @@
 </define>
 
 <define name="namespacedToken">
-    <data type="string">
-        <param name="pattern">[0-9a-zA-Z_]+:[0-9a-zA-Z._\-]+</param>
-    </data>
+    <data type="QName"/>
 </define>
 <define name="anyAttListOrElements">
     <zeroOrMore>
