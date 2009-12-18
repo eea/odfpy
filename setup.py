@@ -60,18 +60,15 @@ setup(name='odfpy',
       description='Python API and tools to manipulate OpenDocument files',
       long_description = (
 """
-Odfpy aims to be a complete API for OpenDocument in Python. Unlike
-other more convenient APIs, this one is essentially an abstraction
-layer just above the XML format. The main focus has been to prevent
-the programmer from creating invalid documents. It has checks that
-raise an exception if the programmer adds an invalid element, adds an
-attribute unknown to the grammar, forgets to add a required attribute
-or adds text to an element that doesn't allow it.
+Odfpy is a library to read and write OpenDocument v. 1.1 files.
+The main focus has been to prevent the programmer from creating invalid
+documents. It has checks that raise an exception if the programmer adds
+an invalid element, adds an attribute unknown to the grammar, forgets to
+add a required attribute or adds text to an element that doesn't allow it.
 
 These checks and the API itself were generated from the RelaxNG
 schema, and then hand-edited. Therefore the API is complete and can
-handle all ODF constructions, but could be improved in its
-understanding of data types.
+handle all ODF constructions.
 
 In addition to the API, there are a few scripts:
 
@@ -87,7 +84,7 @@ In addition to the API, there are a few scripts:
 - odfuserfield - List or change the user-field declarations in an ODF file
 - xml2odf - Create OD? package from OpenDocument in XML form
 
-Take also a look at the contrib folder."""
+Visit http://odfpy.forge.osor.eu/ for documentation and examples."""
 ),
       author='Soren Roug',
       author_email='soren.roug@eea.europa.eu',
