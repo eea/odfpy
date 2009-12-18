@@ -367,6 +367,8 @@ class ODF2XHTML(handler.ContentHandler):
         (OFFICENS, "text"):(self.s_office_text, self.e_office_text),
         (OFFICENS, "scripts"):(self.s_ignorexml, None),
         (PRESENTATIONNS, "notes"):(self.s_ignorexml, None),
+#       (STYLENS, "default-page-layout"):(self.s_style_default_page_layout, self.e_style_page_layout),
+        (STYLENS, "default-page-layout"):(self.s_ignorexml, None),
         (STYLENS, "default-style"):(self.s_style_default_style, self.e_style_default_style),
         (STYLENS, "drawing-page-properties"):(self.s_style_handle_properties, None),
         (STYLENS, "font-face"):(self.s_style_font_face, None),
@@ -823,8 +825,17 @@ class ODF2XHTML(handler.ContentHandler):
         self.stylestack.append(self.currentstyle)
         self.styledict[self.currentstyle] = {}
 
+    def s_style_default_page_layout(self, tag, attrs):
+        """ Collect the formatting for the default page layout style.
+        """
+        self.currentstyle = "@page"
+        self.stylestack.append(self.currentstyle)
+        self.styledict[self.currentstyle] = {}
+
     def s_style_page_layout(self, tag, attrs):
         """ Collect the formatting for the page layout style.
+            This won't work in CSS 2.1, as page identifiers are not allowed.
+            It is legal in CSS3, but the rest of the application doesn't specify when to use what page layout
         """
         name = attrs[(STYLENS,'name')]
         name = name.replace(".","_")
