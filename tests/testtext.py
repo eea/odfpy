@@ -19,7 +19,8 @@
 #
 
 import unittest
-from odf.opendocument import OpenDocumentText
+import os
+from odf.opendocument import OpenDocumentText, load
 from odf import text
 from odf.namespaces import TEXTNS
 
@@ -31,6 +32,15 @@ class TestText(unittest.TestCase):
         spb = text.SoftPageBreak()
         textdoc.text.addElement(spb)
         self.assertEquals(1, 1)
+
+    def test_1stpara(self):
+        """ Grab 1st paragraph and convert to string value """
+        poem_odt = os.path.join(
+            os.path.dirname(__file__), "examples", "serious_poem.odt")
+        d = load(poem_odt)
+        shouldbe = u"The boy stoodon the burning deck,Whence allbuthim had fled.The flamesthat litthe battle'swreck,Shone o'er him, round the dead."
+        self.assertEquals(shouldbe, unicode(d.body))
+        self.assertEquals(shouldbe, str(d.body))
 
 
 if __name__ == '__main__':

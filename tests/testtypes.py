@@ -19,14 +19,10 @@
 #
 
 import unittest, os
-import cStringIO
-import zipfile
-from odf import teletype
-from odf.opendocument import OpenDocumentText, load
+from odf.opendocument import load
 from odf import office, text
 
 class TestTypes(unittest.TestCase):
-    
 
 
     def test_paras(self):
