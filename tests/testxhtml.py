@@ -153,6 +153,21 @@ class TestExampleDocs(unittest.TestCase):
         assert has_rules(result,".L1_3","list-style-type: square;")
         self.assertNotEqual(-1, result.find(u"""<p class="P-Standard">Line 1</p>\n<ul class="L1_1"><li><p class="P-P1">Item A</p>"""))
 
+    def test_mixedlist(self):
+        """ Check CSS has list styles """
+        simplelist_odt = os.path.join(
+            os.path.dirname(__file__), "examples", "ol.odp")
+        odhandler = ODF2XHTML()
+        result = odhandler.odf2xhtml(simplelist_odt)
+        assert has_rules(result,".L2_1","list-style-type: decimal;")
+        assert has_rules(result,".L2_2","list-style-type: circle;")
+        assert has_rules(result,".L2_3","list-style-type: square;")
+        assert has_rules(result,".L3_1","list-style-type: disc;")
+        assert has_rules(result,".L3_2","list-style-type: decimal;")
+        assert has_rules(result,".L3_3","list-style-type: square;")
+        self.assertNotEqual(-1, result.find(u"""<ol class="L2_1">"""))
+        self.assertNotEqual(-1, result.find(u"""<ol class="L3_2">"""))
+
     def test_simpletable(self):
         """ Check CSS has table styles """
         simpletable_odt = os.path.join(
