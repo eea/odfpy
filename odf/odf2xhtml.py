@@ -341,6 +341,7 @@ class ODF2XHTML(handler.ContentHandler):
         (DCNS, 'creator'): (self.s_processcont, self.e_dc_metatag),
         (DCNS, 'description'): (self.s_processcont, self.e_dc_metatag),
         (DCNS, 'date'): (self.s_processcont, self.e_dc_metatag),
+        (DRAWNS, 'custom-shape'): (self.s_custom_shape, self.e_custom_shape),
         (DRAWNS, 'frame'): (self.s_draw_frame, self.e_draw_frame),
         (DRAWNS, 'image'): (self.s_draw_image, None),
         (DRAWNS, 'fill-image'): (self.s_draw_fill_image, None),
@@ -381,8 +382,8 @@ class ODF2XHTML(handler.ContentHandler):
 #       (STYLENS, "header-style"):(self.s_style_header_style, None),
         (STYLENS, "master-page"):(self.s_style_master_page, None),
         (STYLENS, "page-layout-properties"):(self.s_style_handle_properties, None),
-#       (STYLENS, "page-layout"):(self.s_style_page_layout, self.e_style_page_layout),
-        (STYLENS, "page-layout"):(self.s_ignorexml, None),
+        (STYLENS, "page-layout"):(self.s_style_page_layout, self.e_style_page_layout),
+#       (STYLENS, "page-layout"):(self.s_ignorexml, None),
         (STYLENS, "paragraph-properties"):(self.s_style_handle_properties, None),
         (STYLENS, "style"):(self.s_style_style, self.e_style_style),
         (STYLENS, "table-cell-properties"):(self.s_style_handle_properties, None),
@@ -550,10 +551,46 @@ class ODF2XHTML(handler.ContentHandler):
         self.metatags.append('<meta http-equiv="content-language" content="%s"/>\n' % ''.join(self.data))
         self.data = []
 
+    def s_custom_shape(self, tag, attrs):
+        """ A <draw:custom-shape> is made into a <div> in HTML which is then styled
+        """
+        anchor_type = attrs.get((TEXTNS,'anchor-type'),'notfound')
+        htmltag = 'div'
+        name = "G-" + attrs.get( (DRAWNS,'style-name'), "")
+        if name == 'G-':
+            name = "PR-" + attrs.get( (PRESENTATIONNS,'style-name'), "")
+        name = name.replace(".","_")
+        if anchor_type == "paragraph":
+            style = 'position:absolute;'
+        elif anchor_type == 'char':
+            style = "position:absolute;"
+        elif anchor_type == 'as-char':
+            htmltag = 'div'
+            style = ''
+        else:
+            style = "position: absolute;"
+        if attrs.has_key( (SVGNS,"width") ):
+            style = style + "width:" + attrs[(SVGNS,"width")] + ";"
+        if attrs.has_key( (SVGNS,"height") ):
+            style = style + "height:" +  attrs[(SVGNS,"height")] + ";"
+        if attrs.has_key( (SVGNS,"x") ):
+            style = style + "left:" +  attrs[(SVGNS,"x")] + ";"
+        if attrs.has_key( (SVGNS,"y") ):
+            style = style + "top:" +  attrs[(SVGNS,"y")] + ";"
+        if self.generate_css:
+            self.opentag(htmltag, {'class': name, 'style': style})
+        else:
+            self.opentag(htmltag)
+
+    def e_custom_shape(self, tag, attrs):
+        """ End the <draw:frame>
+        """
+        self.closetag('div')
+
     def s_draw_frame(self, tag, attrs):
         """ A <draw:frame> is made into a <div> in HTML which is then styled
         """
-        anchor_type = attrs.get((TEXTNS,'anchor-type'),'char')
+        anchor_type = attrs.get((TEXTNS,'anchor-type'),'notfound')
         htmltag = 'div'
         name = "G-" + attrs.get( (DRAWNS,'style-name'), "")
         if name == 'G-':
@@ -567,7 +604,7 @@ class ODF2XHTML(handler.ContentHandler):
             htmltag = 'div'
             style = ''
         else:
-            style = "position: absolute;"
+            style = "position:absolute;"
         if attrs.has_key( (SVGNS,"width") ):
             style = style + "width:" + attrs[(SVGNS,"width")] + ";"
         if attrs.has_key( (SVGNS,"height") ):
@@ -839,7 +876,7 @@ class ODF2XHTML(handler.ContentHandler):
         """
         name = attrs[(STYLENS,'name')]
         name = name.replace(".","_")
-        self.currentstyle = "@page " + name
+        self.currentstyle = ".PL-" + name
         self.stylestack.append(self.currentstyle)
         self.styledict[self.currentstyle] = {}
 

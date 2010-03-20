@@ -165,8 +165,10 @@ class TestExampleDocs(unittest.TestCase):
         assert has_rules(result,".L3_1","list-style-type: disc;")
         assert has_rules(result,".L3_2","list-style-type: decimal;")
         assert has_rules(result,".L3_3","list-style-type: square;")
+        assert has_rules(result,".MP-Default","height: 19.05cm; width: 25.4cm; position: relative;")
         self.assertNotEqual(-1, result.find(u"""<ol class="L2_1">"""))
         self.assertNotEqual(-1, result.find(u"""<ol class="L3_2">"""))
+        self.assertNotEqual(-1, result.find(u"""position:absolute;width:22.86cm;height:3.176cm;left:1.27cm;top:0.762cm;"""))
 
     def test_simpletable(self):
         """ Check CSS has table styles """
@@ -215,6 +217,15 @@ class TestExampleDocs(unittest.TestCase):
         assert has_rules(result,".G-fr5","margin-right: auto;margin-left: auto;")
         assert has_rules(result,".G-fr7","margin-right: auto;margin-left: auto;")
         assert has_rules(result,".P-Illustration","font-size: 10pt;")
+
+    def test_positioned_shapes(self):
+        """ Test positioned custom-shapes """
+        odt = os.path.join(os.path.dirname(__file__), "examples", "cols.odp")
+        odhandler = ODF2XHTML()
+        result = odhandler.odf2xhtml(odt)
+        self.assertNotEqual(-1, result.find(u'''<div style="position: absolute;width:5.503cm;height:1.905cm;left:2.117cm;top:3.175cm;" class="G-gr1">'''))
+        assert has_rules(result,".MP-Default","height: 19.05cm; width: 25.4cm; position: relative;")
+
 
 if __name__ == '__main__':
     unittest.main()
