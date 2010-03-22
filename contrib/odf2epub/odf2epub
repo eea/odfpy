@@ -1,0 +1,177 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+# Copyright (C) 2010 Søren Roug, European Environment Agency
+#
+# This is free software.  You may redistribute it under the terms
+# of the Apache license and the GNU General Public License Version
+# 2 or at your option any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public
+# License along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+#
+# Contributor(s):
+#
+from odf.odf2xhtml import ODF2XHTML
+import sys, getopt, time, zipfile
+from StringIO import StringIO
+from cgi import escape
+
+UNIXPERMS = 0100644 << 16L  # -rw-r--r--
+
+def escaped(string):
+   return escape(string.encode('us-ascii','xmlcharrefreplace'))
+
+def usage():
+   sys.stderr.write("Usage: %s [-p] inputfile\n" % sys.argv[0])
+
+
+class EPublication:
+
+    mimetype = "application/epub+zip"
+    container = """<?xml version="1.0"?>
+<container version="1.0" xmlns="urn:oasis:names:tc:opendocument:xmlns:container">
+    <rootfiles>
+        <rootfile full-path="OEBPS/content.opf" media-type="application/oebps-package+xml"/>
+    </rootfiles>
+</container>"""
+
+    content_opf_head = """<?xml version="1.0"?>
+<package xmlns="http://www.idpf.org/2007/opf" unique-identifier="BookID" version="2.0">
+    <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf">
+      <dc:title>%s</dc:title>
+      <dc:language>%s</dc:language>
+      <dc:identifier id="BookID" opf:scheme="URI">%s</dc:identifier>
+      <dc:creator>%s</dc:creator>
+    </metadata>
+    <manifest>
+        <item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml"/>
+        <item id="book.xhtml" href="book.xhtml" media-type="application/xhtml+xml"/>
+"""
+    content_opf_foot = """</manifest>
+    <spine toc="ncx">
+        <itemref idref="book.xhtml"/>
+    </spine>
+</package>
+"""
+
+    toc_ncx = """<?xml version="1.0"?>
+<!DOCTYPE ncx PUBLIC "-//NISO//DTD ncx 2005-1//EN"
+   "http://www.daisy.org/z3986/2005/ncx-2005-1.dtd">
+
+<ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1">
+       <head>
+        <meta name="dtb:uid" content="d922af8e-452f-4fac-b372-a70c54fe218d"/>
+        <meta name="dtb:depth" content="0"/>
+        <meta name="dtb:totalPageCount" content="0"/>
+        <meta name="dtb:maxPageNumber" content="0"/>
+    </head>
+    <docTitle>
+        <text>%s</text>
+    </docTitle>
+    <navMap>
+        <navPoint id="navPoint-1" playOrder="1">
+            <navLabel>
+                <text>Start</text>
+            </navLabel>
+            <content src="book.xhtml"/>
+        </navPoint>
+    </navMap>
+</ncx>"""
+
+    def __init__(self, filename):
+        self.filename = filename
+        self.odhandler = ODF2XHTML(True, False)
+        self.odhandler.load(filename)
+
+    def _zipwrite(self, outputfp):
+        """ Write the document to an open file pointer """
+        now = time.localtime()[:6]
+
+        # Write mimetype
+        zout = zipfile.ZipInfo('mimetype', now)
+        zout.compress_type = zipfile.ZIP_STORED
+        zout.external_attr = UNIXPERMS
+        outputfp.writestr(zout, self.mimetype)
+
+        zout = zipfile.ZipInfo('META-INF/container.xml', now)
+        zout.compress_type = zipfile.ZIP_DEFLATED
+        zout.external_attr = UNIXPERMS
+        outputfp.writestr(zout, self.container)
+
+        zout = zipfile.ZipInfo('OEBPS/book.xhtml', now)
+        zout.compress_type = zipfile.ZIP_DEFLATED
+        zout.external_attr = UNIXPERMS
+        xhtml = self.odhandler.xhtml().encode('us-ascii','xmlcharrefreplace')
+        outputfp.writestr(zout, xhtml)
+
+        z = zipfile.ZipFile(self.filename)
+        for zinfo in z.infolist():
+            if zinfo.filename[0:9] == 'Pictures/':
+                zipinfo = zipfile.ZipInfo("OEBPS/" + zinfo.filename, now)
+                zipinfo.external_attr = UNIXPERMS
+                outputfp.writestr(zipinfo, z.read(zinfo.filename))
+
+        zout = zipfile.ZipInfo('OEBPS/content.opf', now)
+        zout.compress_type = zipfile.ZIP_DEFLATED
+        zout.external_attr = UNIXPERMS
+        opf = []
+        opf.append(self.content_opf_head % (escaped(self.odhandler.title), escaped(self.odhandler.language),
+                escaped(args[0]), escaped(self.odhandler.creator)))
+        for zname in z.namelist():
+            opf.append("""<item id="%s" href="%s" media-type="image/jpeg"/>""" % (zname, zname))
+        opf.append(self.content_opf_foot)
+        outputfp.writestr(zout, '\n'.join(opf))
+
+        z.close()
+
+        zout = zipfile.ZipInfo('OEBPS/toc.ncx', now)
+        zout.compress_type = zipfile.ZIP_DEFLATED
+        zout.external_attr = UNIXPERMS
+        opf = []
+        opf.append(self.toc_ncx % (escaped(self.odhandler.title)))
+        outputfp.writestr(zout, '\n'.join(opf))
+
+#        zout = zipfile.ZipInfo('OEBPS/styles.css', now)
+#        zout.compress_type = zipfile.ZIP_DEFLATED
+#        zout.external_attr = UNIXPERMS
+#        css = self.odhandler.css().encode('us-ascii','xmlcharrefreplace')
+#        outputfp.writestr(zout, css)
+
+    def save(self, outputfile):
+        """ Save the document under the filename """
+        if outputfile == '-':
+            outputfp = zipfile.ZipFile(sys.stdout,"w")
+        else:
+            outputfp = zipfile.ZipFile(outputfile, "w")
+        self._zipwrite(outputfp)
+        outputfp.close()
+
+try:
+    opts, args = getopt.getopt(sys.argv[1:], "e", ["plain"])
+except getopt.GetoptError:
+    usage()
+    sys.exit(2)
+
+generatecss = True
+embedable = False
+for o, a in opts:
+    if o in ("-p", "--plain"):
+        generatecss = False
+
+if len(args) != 1:
+    usage()
+    sys.exit(2)
+
+#try:
+epub = EPublication(args[0])
+epub.save("test.epub")
+#except:
+#    sys.stderr.write("Unable to open file %s or file is not OpenDocument\n" % sys.argv[1])
+#    sys.exit(1)
+
