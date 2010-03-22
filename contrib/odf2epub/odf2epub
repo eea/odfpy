@@ -51,14 +51,13 @@ class EPublication:
     </metadata>
     <manifest>
         <item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml"/>
-        <item id="book.xhtml" href="book.xhtml" media-type="application/xhtml+xml"/>
-"""
+        <item id="book.xhtml" href="book.xhtml" media-type="application/xhtml+xml"/>"""
+
     content_opf_foot = """</manifest>
     <spine toc="ncx">
         <itemref idref="book.xhtml"/>
     </spine>
-</package>
-"""
+</package>"""
 
     toc_ncx = """<?xml version="1.0"?>
 <!DOCTYPE ncx PUBLIC "-//NISO//DTD ncx 2005-1//EN"
@@ -124,7 +123,7 @@ class EPublication:
         opf.append(self.content_opf_head % (escaped(self.odhandler.title), escaped(self.odhandler.language),
                 escaped(args[0]), escaped(self.odhandler.creator)))
         for zname in z.namelist():
-            opf.append("""<item id="%s" href="%s" media-type="image/jpeg"/>""" % (zname, zname))
+            opf.append("""        <item id="%s" href="%s" media-type="image/jpeg"/>""" % (zname, zname))
         opf.append(self.content_opf_foot)
         outputfp.writestr(zout, '\n'.join(opf))
 
