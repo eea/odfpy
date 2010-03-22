@@ -153,25 +153,29 @@ class EPublication:
         outputfp.close()
 
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "e", ["plain"])
+    opts, args = getopt.getopt(sys.argv[1:], "po:", ["plain","output"])
 except getopt.GetoptError:
     usage()
     sys.exit(2)
 
 generatecss = True
 embedable = False
+outputfilename = "-"
+
 for o, a in opts:
     if o in ("-p", "--plain"):
         generatecss = False
+    if o in ("-o", "--output"):
+        outputfilename = a
 
 if len(args) != 1:
     usage()
     sys.exit(2)
 
-#try:
-epub = EPublication(args[0])
-epub.save("test.epub")
-#except:
-#    sys.stderr.write("Unable to open file %s or file is not OpenDocument\n" % sys.argv[1])
-#    sys.exit(1)
+try:
+    epub = EPublication(args[0])
+    epub.save(outputfilename)
+except:
+    sys.stderr.write("Unable to open file %s or file is not OpenDocument\n" % sys.argv[1])
+    sys.exit(1)
 

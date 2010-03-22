@@ -20,6 +20,7 @@
     <cmdsynopsis>
       <command>odf2epub</command>
       <arg choice="opt">-p </arg>
+      <arg choice="opt">-o <replaceable>outputfile</replaceable></arg>
       <arg choice="plain">
         <replaceable>path</replaceable>
       </arg>
@@ -28,7 +29,7 @@
   <refsect1>
     <title>Description</title>
     <para><command>odf2epub</command> is a program that will create 
-an ebook (.epub) from the input file and will write the webpage to stdout.
+an ebook (.epub) from the input file and will write the ebook to stdout or a file specified by -o.
 </para>
     <para>
 "Path" is assumed to be an
@@ -44,6 +45,14 @@ OpenDocument file of text, spreadsheet or presentation type.
         <listitem>
           <para>
 The -p flag will generate HTML without CSS.
+</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>-o, --output</term>
+        <listitem>
+          <para>
+Specify the output file with this flag. "-" implies standard out.
 </para>
         </listitem>
       </varlistentry>

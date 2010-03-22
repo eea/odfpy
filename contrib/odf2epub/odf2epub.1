@@ -22,11 +22,11 @@
 odf2epub \- Convert ODF to an ePub ebook
 .SH "SYNOPSIS"
 .HP \w'\fBodf2epub\fR\ 'u
-\fBodf2epub\fR [\-p] \fIpath\fR
+\fBodf2epub\fR [\-p] [\-o\ \fIoutputfile\fR] \fIpath\fR
 .SH "DESCRIPTION"
 .PP
 \fBodf2epub\fR
-is a program that will create an ebook (\&.epub) from the input file and will write the webpage to stdout\&.
+is a program that will create an ebook (\&.epub) from the input file and will write the ebook to stdout or a file specified by \-o\&.
 .PP
 "Path" is assumed to be an OpenDocument file of text, spreadsheet or presentation type\&.
 .SH "OPTIONS"
@@ -34,6 +34,11 @@ is a program that will create an ebook (\&.epub) from the input file and will wr
 \-p, \-\-plain
 .RS 4
 The \-p flag will generate HTML without CSS\&.
+.RE
+.PP
+\-o, \-\-output
+.RS 4
+Specify the output file with this flag\&. "\-" implies standard out\&.
 .RE
 .SH "EXAMPLE"
 .sp
