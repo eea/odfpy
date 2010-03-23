@@ -338,7 +338,7 @@ class ODF2XHTML(handler.ContentHandler):
         self.elements = {
         (DCNS, 'title'): (self.s_processcont, self.e_dc_title),
         (DCNS, 'language'): (self.s_processcont, self.e_dc_contentlanguage),
-        (DCNS, 'creator'): (self.s_processcont, self.e_dc_metatag),
+        (DCNS, 'creator'): (self.s_processcont, self.e_dc_creator),
         (DCNS, 'description'): (self.s_processcont, self.e_dc_metatag),
         (DCNS, 'date'): (self.s_processcont, self.e_dc_metatag),
         (DRAWNS, 'custom-shape'): (self.s_custom_shape, self.e_custom_shape),
@@ -517,6 +517,7 @@ class ODF2XHTML(handler.ContentHandler):
         return c
 
     def get_anchor(self, name):
+        """ Create a unique anchor id for a href name """
         if not self.anchors.has_key(name):
             self.anchors[name] = "anchor%03d" % (len(self.anchors) + 1)
         return self.anchors.get(name)
@@ -535,8 +536,8 @@ class ODF2XHTML(handler.ContentHandler):
     def e_dc_title(self, tag, attrs):
         """ Get the title from the meta data and create a HTML <title>
         """
-        self.metatags.append('<title>%s</title>\n' % escape(''.join(self.data)))
         self.title = ''.join(self.data)
+        self.metatags.append('<title>%s</title>\n' % escape(self.title))
         self.data = []
 
     def e_dc_metatag(self, tag, attrs):
@@ -548,7 +549,15 @@ class ODF2XHTML(handler.ContentHandler):
     def e_dc_contentlanguage(self, tag, attrs):
         """ Set the content language. Identifies the targeted audience
         """
-        self.metatags.append('<meta http-equiv="content-language" content="%s"/>\n' % ''.join(self.data))
+        self.language = ''.join(self.data)
+        self.metatags.append('<meta http-equiv="content-language" content="%s"/>\n' % escape(self.language))
+        self.data = []
+
+    def e_dc_creator(self, tag, attrs):
+        """ Set the content creator. Identifies the targeted audience
+        """
+        self.creator = ''.join(self.data)
+        self.metatags.append('<meta http-equiv="creator" content="%s"/>\n' % escape(self.creator))
         self.data = []
 
     def s_custom_shape(self, tag, attrs):
@@ -1278,6 +1287,8 @@ class ODF2XHTML(handler.ContentHandler):
     def parseodf(self):
         self.xmlfile = ''
         self.title = ''
+        self.language = ''
+        self.creator = ''
         self.data = []
         self.tagstack = TagStack()
         self.pstack = []

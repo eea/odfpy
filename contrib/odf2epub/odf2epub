@@ -18,6 +18,7 @@
 # Contributor(s):
 #
 from odf.odf2xhtml import ODF2XHTML
+from odf.namespaces import TEXTNS, XLINKNS
 import sys, getopt, time, zipfile
 from StringIO import StringIO
 from cgi import escape
@@ -29,6 +30,34 @@ def escaped(string):
 
 def usage():
    sys.stderr.write("Usage: %s [-p] inputfile\n" % sys.argv[0])
+
+class NavpointEntry:
+    def __init__(self, anchor, title):
+        self.anchor = anchor
+        self.title = title
+
+class ODF2EPUB(ODF2XHTML):
+
+    in_toc = False
+    navpoint_list = []
+
+    def __init__(self, generate_css=True, embedable=False):
+        ODF2XHTML.__init__(self, generate_css, embedable)
+        self.elements[(TEXTNS, "table-of-content")] = (self.s_text_table_of_content, self.e_text_table_of_content)
+
+    def s_text_table_of_content(self, tag, attrs):
+        self.in_toc = True
+
+    def e_text_table_of_content(self, tag, attrs):
+        self.in_toc = False
+
+    def s_text_a(self, tag, attrs):
+        if self.in_toc:
+            href = attrs[(XLINKNS,"href")].split("|")[0]
+            if href[0] == "#":
+                n = NavpointEntry("#" + self.get_anchor(href[1:]), href[1:])
+                self.navpoint_list.append(n)
+        return ODF2XHTML.s_text_a(self, tag, attrs)
 
 
 class EPublication:
@@ -59,7 +88,7 @@ class EPublication:
     </spine>
 </package>"""
 
-    toc_ncx = """<?xml version="1.0"?>
+    toc_ncx_head = """<?xml version="1.0"?>
 <!DOCTYPE ncx PUBLIC "-//NISO//DTD ncx 2005-1//EN"
    "http://www.daisy.org/z3986/2005/ncx-2005-1.dtd">
 
@@ -79,13 +108,13 @@ class EPublication:
                 <text>Start</text>
             </navLabel>
             <content src="book.xhtml"/>
-        </navPoint>
-    </navMap>
+        </navPoint>"""
+    toc_ncx_foot = """    </navMap>
 </ncx>"""
 
     def __init__(self, filename):
         self.filename = filename
-        self.odhandler = ODF2XHTML(True, False)
+        self.odhandler = ODF2EPUB(True, False)
         self.odhandler.load(filename)
 
     def _zipwrite(self, outputfp):
@@ -133,7 +162,17 @@ class EPublication:
         zout.compress_type = zipfile.ZIP_DEFLATED
         zout.external_attr = UNIXPERMS
         opf = []
-        opf.append(self.toc_ncx % (escaped(self.odhandler.title)))
+        opf.append(self.toc_ncx_head % (escaped(self.odhandler.title)))
+        np_inx = 2
+        for np in self.odhandler.navpoint_list:
+            opf.append("""        <navPoint id="navPoint-%d" playOrder="%d">
+            <navLabel>
+                <text>%s</text>
+            </navLabel>
+            <content src="book.xhtml%s"/>
+        </navPoint>""" % (np_inx, np_inx, escaped(np.title), np.anchor))
+            np_inx += 1
+        opf.append(self.toc_ncx_foot)
         outputfp.writestr(zout, '\n'.join(opf))
 
 #        zout = zipfile.ZipInfo('OEBPS/styles.css', now)
@@ -171,6 +210,9 @@ if len(args) != 1:
     usage()
     sys.exit(2)
 
+epub = EPublication(args[0])
+epub.save(outputfilename)
+sys.exit(0)
 try:
     epub = EPublication(args[0])
     epub.save(outputfilename)
