@@ -552,6 +552,11 @@ def OpenDocumentText():
     doc.body.addElement(doc.text)
     return doc
 
+def OpenDocumentTextMaster():
+    doc = OpenDocument('application/vnd.oasis.opendocument.text-master')
+    doc.text = Text()
+    doc.body.addElement(doc.text)
+    return doc
 
 def load(odffile):
     from load import LoadParser
