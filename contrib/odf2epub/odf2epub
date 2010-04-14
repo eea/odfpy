@@ -26,20 +26,25 @@ from cgi import escape
 UNIXPERMS = 0100644 << 16L  # -rw-r--r--
 
 def escaped(string):
-   return escape(string.encode('us-ascii','xmlcharrefreplace'))
+    return escape(string).encode('us-ascii','xmlcharrefreplace')
 
 def usage():
-   sys.stderr.write("Usage: %s [-p] inputfile\n" % sys.argv[0])
+    sys.stderr.write("Usage: %s [-p] inputfile\n" % sys.argv[0])
 
 class NavpointEntry:
-    def __init__(self, anchor, title):
+    def __init__(self, anchor, title, chapter, level):
         self.anchor = anchor
         self.title = title
+        self.chapter = chapter
+        self.level = level
 
 class ODF2EPUB(ODF2XHTML):
 
     in_toc = False
     navpoint_list = []
+    chapters = []
+    headerpart = []
+    cur_html_name = 'chapter0.xhtml'
 
     def __init__(self, generate_css=True, embedable=False):
         ODF2XHTML.__init__(self, generate_css, embedable)
@@ -51,14 +56,47 @@ class ODF2EPUB(ODF2XHTML):
     def e_text_table_of_content(self, tag, attrs):
         self.in_toc = False
 
-    def s_text_a(self, tag, attrs):
-        if self.in_toc:
-            href = attrs[(XLINKNS,"href")].split("|")[0]
-            if href[0] == "#":
-                n = NavpointEntry("#" + self.get_anchor(href[1:]), href[1:])
-                self.navpoint_list.append(n)
-        return ODF2XHTML.s_text_a(self, tag, attrs)
+#   def s_text_a(self, tag, attrs):
+#       if self.in_toc:
+#           href = attrs[(XLINKNS,"href")].split("|")[0]
+#           if href[0] == "#":
+#               n = NavpointEntry(self.get_anchor(href[1:]), href[1:])
+#               self.navpoint_list.append(n)
+#       return ODF2XHTML.s_text_a(self, tag, attrs)
 
+#   def e_text_a(self, tag, attrs):
+#       pass
+
+    def s_text_h(self, tag, attrs):
+        level = int(attrs[(TEXTNS,'outline-level')])
+        if level == 1:
+            self.closetag('body')
+            self.closetag('html')
+            self.chapters.append(''.join(self.headerpart + self.lines))
+            self.lines = []
+        return ODF2XHTML.s_text_h(self, tag, attrs)
+
+    def e_text_h(self, tag, attrs):
+        """ Headings end """
+        level = int(attrs[(TEXTNS,'outline-level')])
+        if level > 6: level = 6 # Heading levels go only to 6 in XHTML
+        if level < 1: level = 1
+        lev = self.headinglevels[1:level+1]
+        outline = '.'.join(map(str,lev) )
+        anchor = self.get_anchor("%s.%s" % ( outline, ''.join(self.data)))
+        n = NavpointEntry(anchor, ''.join(self.data), len(self.chapters), level)
+        self.navpoint_list.append(n)
+        return ODF2XHTML.e_text_h(self, tag, attrs)
+
+    def s_office_text(self, tag, attrs):
+        ODF2XHTML.s_office_text(self, tag, attrs)
+        self.headerpart = self.lines
+        self.lines = []
+        
+    def e_office_document_content(self, tag, attrs):
+        ODF2XHTML.e_office_document_content(self, tag, attrs)
+        self.chapters.append(''.join(self.headerpart + self.lines))
+        self.lines = []
 
 class EPublication:
 
@@ -79,14 +117,7 @@ class EPublication:
       <dc:creator>%s</dc:creator>
     </metadata>
     <manifest>
-        <item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml"/>
-        <item id="book.xhtml" href="book.xhtml" media-type="application/xhtml+xml"/>"""
-
-    content_opf_foot = """</manifest>
-    <spine toc="ncx">
-        <itemref idref="book.xhtml"/>
-    </spine>
-</package>"""
+        <item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml"/>"""
 
     toc_ncx_head = """<?xml version="1.0"?>
 <!DOCTYPE ncx PUBLIC "-//NISO//DTD ncx 2005-1//EN"
@@ -95,7 +126,7 @@ class EPublication:
 <ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1">
        <head>
         <meta name="dtb:uid" content="d922af8e-452f-4fac-b372-a70c54fe218d"/>
-        <meta name="dtb:depth" content="0"/>
+        <meta name="dtb:depth" content="2"/>
         <meta name="dtb:totalPageCount" content="0"/>
         <meta name="dtb:maxPageNumber" content="0"/>
     </head>
@@ -107,7 +138,7 @@ class EPublication:
             <navLabel>
                 <text>Start</text>
             </navLabel>
-            <content src="book.xhtml"/>
+            <content src="chapter0.xhtml"/>
         </navPoint>"""
     toc_ncx_foot = """    </navMap>
 </ncx>"""
@@ -120,6 +151,7 @@ class EPublication:
     def _zipwrite(self, outputfp):
         """ Write the document to an open file pointer """
         now = time.localtime()[:6]
+        xhtml = self.odhandler.xhtml()
 
         # Write mimetype
         zout = zipfile.ZipInfo('mimetype', now)
@@ -132,11 +164,12 @@ class EPublication:
         zout.external_attr = UNIXPERMS
         outputfp.writestr(zout, self.container)
 
-        zout = zipfile.ZipInfo('OEBPS/book.xhtml', now)
-        zout.compress_type = zipfile.ZIP_DEFLATED
-        zout.external_attr = UNIXPERMS
-        xhtml = self.odhandler.xhtml().encode('us-ascii','xmlcharrefreplace')
-        outputfp.writestr(zout, xhtml)
+        for chapter in range(len(self.odhandler.chapters)):
+            zout = zipfile.ZipInfo('OEBPS/chapter%d.xhtml' % chapter, now)
+            zout.compress_type = zipfile.ZIP_DEFLATED
+            zout.external_attr = UNIXPERMS
+            xhtml = self.odhandler.chapters[chapter].encode('us-ascii','xmlcharrefreplace')
+            outputfp.writestr(zout, xhtml)
 
         z = zipfile.ZipFile(self.filename)
         for zinfo in z.infolist():
@@ -151,9 +184,16 @@ class EPublication:
         opf = []
         opf.append(self.content_opf_head % (escaped(self.odhandler.title), escaped(self.odhandler.language),
                 escaped(args[0]), escaped(self.odhandler.creator)))
+        for chapter in range(len(self.odhandler.chapters)):
+            opf.append("""        <item id="chapter%d.xhtml" href="chapter%d.xhtml" media-type="application/xhtml+xml"/>""" % (chapter, chapter))
         for zname in z.namelist():
             opf.append("""        <item id="%s" href="%s" media-type="image/jpeg"/>""" % (zname, zname))
-        opf.append(self.content_opf_foot)
+        opf.append('</manifest>')
+        opf.append('<spine toc="ncx">')
+        for chapter in range(len(self.odhandler.chapters)):
+            opf.append("""        <itemref idref="chapter%d.xhtml"/>""" % chapter)
+        opf.append('</spine>')
+        opf.append('</package>')
         outputfp.writestr(zout, '\n'.join(opf))
 
         z.close()
@@ -164,14 +204,23 @@ class EPublication:
         opf = []
         opf.append(self.toc_ncx_head % (escaped(self.odhandler.title)))
         np_inx = 2
+        np_level = 1
         for np in self.odhandler.navpoint_list:
+            if np_inx != 2 and np.level <= np_level:
+                opf.append("""        </navPoint> <!-- same level -->""");
+            if np_inx != 2 and np.level < np_level:
+                opf.append("""        </navPoint>""");
             opf.append("""        <navPoint id="navPoint-%d" playOrder="%d">
             <navLabel>
                 <text>%s</text>
             </navLabel>
-            <content src="book.xhtml%s"/>
-        </navPoint>""" % (np_inx, np_inx, escaped(np.title), np.anchor))
+            <content src="chapter%d.xhtml#%s"/>
+        """ % (np_inx, np_inx, escaped(np.title), np.chapter, np.anchor))
             np_inx += 1
+            np_level = np.level
+        opf.append("""        </navPoint>""");
+        if np_level > 1:
+            opf.append("""        </navPoint>""");
         opf.append(self.toc_ncx_foot)
         outputfp.writestr(zout, '\n'.join(opf))
 
