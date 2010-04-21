@@ -101,6 +101,21 @@ class ODF2EPUB(ODF2XHTML):
 class EPublication:
 
     mimetype = "application/epub+zip"
+    coverimage = None
+
+    coverhtml = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Cover</title>
+    <style type="text/css"> img { max-width: 100%; } </style>
+  </head>
+  <body>
+    <div id="cover-image">
+      <img src="Pictures/cover.jpg" alt="Cover image"/>
+    </div>
+  </body>
+</html>"""
+
     container = """<?xml version="1.0"?>
 <container version="1.0" xmlns="urn:oasis:names:tc:opendocument:xmlns:container">
     <rootfiles>
@@ -125,7 +140,7 @@ class EPublication:
 
 <ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1">
        <head>
-        <meta name="dtb:uid" content="d922af8e-452f-4fac-b372-a70c54fe218d"/>
+        <meta name="dtb:uid" content="%s"/>
         <meta name="dtb:depth" content="2"/>
         <meta name="dtb:totalPageCount" content="0"/>
         <meta name="dtb:maxPageNumber" content="0"/>
@@ -143,8 +158,9 @@ class EPublication:
     toc_ncx_foot = """    </navMap>
 </ncx>"""
 
-    def __init__(self, filename):
+    def __init__(self, filename, coverimage):
         self.filename = filename
+        self.coverimage = coverimage
         self.odhandler = ODF2EPUB(True, False)
         self.odhandler.load(filename)
 
@@ -153,17 +169,19 @@ class EPublication:
         now = time.localtime()[:6]
         xhtml = self.odhandler.xhtml()
 
-        # Write mimetype
+        # Write mimetype - uncompressed
         zout = zipfile.ZipInfo('mimetype', now)
         zout.compress_type = zipfile.ZIP_STORED
         zout.external_attr = UNIXPERMS
         outputfp.writestr(zout, self.mimetype)
 
+        # Write META-INF/container.xml
         zout = zipfile.ZipInfo('META-INF/container.xml', now)
         zout.compress_type = zipfile.ZIP_DEFLATED
         zout.external_attr = UNIXPERMS
         outputfp.writestr(zout, self.container)
 
+        # Write HTML parts
         for chapter in range(len(self.odhandler.chapters)):
             zout = zipfile.ZipInfo('OEBPS/chapter%d.xhtml' % chapter, now)
             zout.compress_type = zipfile.ZIP_DEFLATED
@@ -171,6 +189,7 @@ class EPublication:
             xhtml = self.odhandler.chapters[chapter].encode('us-ascii','xmlcharrefreplace')
             outputfp.writestr(zout, xhtml)
 
+        # Copy images over to output
         z = zipfile.ZipFile(self.filename)
         for zinfo in z.infolist():
             if zinfo.filename[0:9] == 'Pictures/':
@@ -178,34 +197,55 @@ class EPublication:
                 zipinfo.external_attr = UNIXPERMS
                 outputfp.writestr(zipinfo, z.read(zinfo.filename))
 
+        # Write content.opf
         zout = zipfile.ZipInfo('OEBPS/content.opf', now)
         zout.compress_type = zipfile.ZIP_DEFLATED
         zout.external_attr = UNIXPERMS
         opf = []
         opf.append(self.content_opf_head % (escaped(self.odhandler.title), escaped(self.odhandler.language),
                 escaped(args[0]), escaped(self.odhandler.creator)))
+        if self.coverimage:
+            opf.append("""        <item id="cover"       href="cover.xhtml"    media-type="application/xhtml+xml"/>""")
+            opf.append("""        <item id="cover-image" href="Pictures/cover.jpg" media-type="image/jpeg"/>""")
         for chapter in range(len(self.odhandler.chapters)):
             opf.append("""        <item id="chapter%d.xhtml" href="chapter%d.xhtml" media-type="application/xhtml+xml"/>""" % (chapter, chapter))
+        # Write manifest of images.
+        # FIXME: Set correct media-type
+        # FIXME: Provide a valid identifier
         for zname in z.namelist():
-            opf.append("""        <item id="%s" href="%s" media-type="image/jpeg"/>""" % (zname, zname))
-        opf.append('</manifest>')
-        opf.append('<spine toc="ncx">')
+            if zname[0:9] == 'Pictures/':
+                opf.append("""        <item id="%s" href="%s" media-type="image/jpeg"/>""" % (zname, zname))
+        opf.append("""</manifest>""")
+        opf.append("""<spine toc="ncx">""")
+        if self.coverimage:
+            opf.append("""        <itemref idref="cover" linear="no"/>""")
         for chapter in range(len(self.odhandler.chapters)):
             opf.append("""        <itemref idref="chapter%d.xhtml"/>""" % chapter)
-        opf.append('</spine>')
+        opf.append("""</spine>""")
+
+        if self.coverimage:
+            opf.append("""<guide>""")
+            opf.append("""    <reference type="cover" title="Cover" href="cover.xhtml"/>""")
+            opf.append("""</guide>""")
+
         opf.append('</package>')
         outputfp.writestr(zout, '\n'.join(opf))
 
         z.close()
 
+        # Write toc.ncx
         zout = zipfile.ZipInfo('OEBPS/toc.ncx', now)
         zout.compress_type = zipfile.ZIP_DEFLATED
         zout.external_attr = UNIXPERMS
         opf = []
-        opf.append(self.toc_ncx_head % (escaped(self.odhandler.title)))
+        opf.append(self.toc_ncx_head % (escaped(args[0]), escaped(self.odhandler.title)))
+        # We basically force the first navpoint to be a level 1 heading, no
+        # matter what it was in reality. Then all other headings are either level 1 or 2.
         np_inx = 2
         np_level = 1
         for np in self.odhandler.navpoint_list:
+            if np_inx == 2:
+                np.level = 1
             if np_inx != 2 and np.level <= np_level:
                 opf.append("""        </navPoint> <!-- same level -->""");
             if np_inx != 2 and np.level < np_level:
@@ -224,6 +264,14 @@ class EPublication:
         opf.append(self.toc_ncx_foot)
         outputfp.writestr(zout, '\n'.join(opf))
 
+        # Write cover image
+        if self.coverimage:
+            outputfp.write(coverimage,'OEBPS/Pictures/cover.jpg', zipfile.ZIP_STORED)
+            zout = zipfile.ZipInfo('OEBPS/cover.xhtml', now)
+            zout.compress_type = zipfile.ZIP_DEFLATED
+            zout.external_attr = UNIXPERMS
+            outputfp.writestr(zout, self.coverhtml)
+
 #        zout = zipfile.ZipInfo('OEBPS/styles.css', now)
 #        zout.compress_type = zipfile.ZIP_DEFLATED
 #        zout.external_attr = UNIXPERMS
@@ -240,7 +288,7 @@ class EPublication:
         outputfp.close()
 
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "po:", ["plain","output"])
+    opts, args = getopt.getopt(sys.argv[1:], "c:po:", ["cover", "plain","output"])
 except getopt.GetoptError:
     usage()
     sys.exit(2)
@@ -248,8 +296,11 @@ except getopt.GetoptError:
 generatecss = True
 embedable = False
 outputfilename = "-"
+coverimage = None
 
 for o, a in opts:
+    if o in ("-c", "--cover"):
+        coverimage = a
     if o in ("-p", "--plain"):
         generatecss = False
     if o in ("-o", "--output"):
@@ -259,11 +310,11 @@ if len(args) != 1:
     usage()
     sys.exit(2)
 
-epub = EPublication(args[0])
+epub = EPublication(args[0], coverimage)
 epub.save(outputfilename)
 sys.exit(0)
 try:
-    epub = EPublication(args[0])
+    epub = EPublication(args[0], coverimage)
     epub.save(outputfilename)
 except:
     sys.stderr.write("Unable to open file %s or file is not OpenDocument\n" % sys.argv[1])
