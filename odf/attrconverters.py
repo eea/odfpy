@@ -76,6 +76,7 @@ def cnv_duration(attribute, arg, element):
     return str(arg)
 
 def cnv_family(attribute, arg, element):
+    """ A style family """
     if str(arg) not in ("text", "paragraph", "section", "ruby", "table", "table-column", "table-row", "table-cell",
       "graphic", "presentation", "drawing-page", "chart"):
         raise ValueError, "'%s' not allowed" % str(arg)
@@ -1465,6 +1466,9 @@ attrconverters = {
 
 class AttrConverters:
     def convert(self, attribute, value, element):
+        """ Based on the element, figures out how to check/convert the attribute value
+            All values are converted to string
+        """
         conversion = attrconverters.get((attribute, element.qname), None)
         if conversion is not None:
             return conversion(attribute, value, element)

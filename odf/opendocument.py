@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2006-2009 Søren Roug, European Environment Agency
+# Copyright (C) 2006-2010 Søren Roug, European Environment Agency
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -344,7 +344,7 @@ class OpenDocument:
             self.thumbnail = filecontent
 
     def addObject(self, document, objectname=None):
-        """ Add an object. The object must be an OpenDocument class
+        """ Adds an object (subdocument). The object must be an OpenDocument class
             The return value will be the folder in the zipfile the object is stored in
         """
         self.childobjects.append(document)
@@ -385,7 +385,9 @@ class OpenDocument:
         self.meta.addElement(meta.Generator(text=TOOLSVERSION))
 
     def save(self, outputfile, addsuffix=False):
-        """ Save the document under the filename """
+        """ Save the document under the filename.
+            If the filename is '-' then save to stdout
+        """
         if outputfile == '-':
             outputfp = zipfile.ZipFile(sys.stdout,"w")
         else:
@@ -396,11 +398,16 @@ class OpenDocument:
         outputfp.close()
 
     def write(self, outputfp):
+        """ User API to write the ODF file to an open file descriptor
+            Writes the ZIP format
+        """
         zipoutputfp = zipfile.ZipFile(outputfp,"w")
         self._zipwrite(zipoutputfp)
 
     def _zipwrite(self, outputfp):
-        """ Write the document to an open file pointer """
+        """ Write the document to an open file pointer
+            This is where the real work is done
+        """
         self._z = outputfp
         self._now = time.localtime()[:6]
         self.manifest = manifest.Manifest()
@@ -497,6 +504,7 @@ class OpenDocument:
         return element.Text(data)
 
     def createCDATASection(self, data):
+        """ Method to create a CDATA section """
         return element.CDATASection(cdata)
 
     def getMediaType(self):
@@ -504,12 +512,14 @@ class OpenDocument:
         return self.mimetype
 
     def getStyleByName(self, name):
+        """ Finds a style object based on the name """
         ncname = make_NCName(name)
         if self._styles_dict == {}:
             self.rebuild_caches()
         return self._styles_dict.get(ncname, None)
 
     def getElementsByType(self, element):
+        """ Gets elements based on the type, which is function from text.py, draw.py etc. """
         obj = element(check_grammar=False)
         if self.element_dict == {}:
             self.rebuild_caches()
@@ -517,48 +527,58 @@ class OpenDocument:
 
 # Convenience functions
 def OpenDocumentChart():
+    """ Creates a chart document """
     doc = OpenDocument('application/vnd.oasis.opendocument.chart')
     doc.chart = Chart()
     doc.body.addElement(doc.chart)
     return doc
 
 def OpenDocumentDrawing():
+    """ Creates a drawing document """
     doc = OpenDocument('application/vnd.oasis.opendocument.graphics')
     doc.drawing = Drawing()
     doc.body.addElement(doc.drawing)
     return doc
 
 def OpenDocumentImage():
+    """ Creates an image document """
     doc = OpenDocument('application/vnd.oasis.opendocument.image')
     doc.image = Image()
     doc.body.addElement(doc.image)
     return doc
 
 def OpenDocumentPresentation():
+    """ Creates a presentation document """
     doc = OpenDocument('application/vnd.oasis.opendocument.presentation')
     doc.presentation = Presentation()
     doc.body.addElement(doc.presentation)
     return doc
 
 def OpenDocumentSpreadsheet():
+    """ Creates a spreadsheet document """
     doc = OpenDocument('application/vnd.oasis.opendocument.spreadsheet')
     doc.spreadsheet = Spreadsheet()
     doc.body.addElement(doc.spreadsheet)
     return doc
 
 def OpenDocumentText():
+    """ Creates a text document """
     doc = OpenDocument('application/vnd.oasis.opendocument.text')
     doc.text = Text()
     doc.body.addElement(doc.text)
     return doc
 
 def OpenDocumentTextMaster():
+    """ Creates a text master document """
     doc = OpenDocument('application/vnd.oasis.opendocument.text-master')
     doc.text = Text()
     doc.body.addElement(doc.text)
     return doc
 
 def load(odffile):
+    """ Load an ODF file into memory
+        Returns a reference to the structure
+    """
     from load import LoadParser
     from xml.sax import make_parser, handler
     z = zipfile.ZipFile(odffile)
