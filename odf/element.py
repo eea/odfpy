@@ -310,6 +310,12 @@ class Element(Node):
                 if self.getAttrNS(r[0],r[1]) is None:
                     raise AttributeError, "Required attribute missing: %s in <%s>" % (r[1].lower().replace('-',''), self.tagName)
 
+    def get_knownns(self, prefix):
+        global nsdict
+        for ns,p in nsdict.items():
+            if p == prefix: return ns
+        return None
+        
     def get_nsprefix(self, namespace):
         if namespace is None: namespace = ""
         prefix = _nsassign(namespace)
@@ -403,7 +409,7 @@ class Element(Node):
 #       if allowed_attrs and (namespace, localpart) not in allowed_attrs:
 #           raise AttributeError, "Attribute %s:%s is not allowed in element <%s>" % ( prefix, localpart, self.tagName)
         c = AttrConverters()
-        self.attributes[prefix + ":" + localpart] = c.convert((namespace, localpart), value, self.qname)
+        self.attributes[prefix + ":" + localpart] = c.convert((namespace, localpart), value, self)
 
     def getAttrNS(self, namespace, localpart):
         prefix = self.get_nsprefix(namespace)

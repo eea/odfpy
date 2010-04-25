@@ -83,8 +83,8 @@ class TestQattributes(unittest.TestCase):
         textdoc.styles.addElement(standard)
         s = unicode(textdoc.stylesxml(),'UTF-8')
         s.index(u"""<?xml version='1.0' encoding='UTF-8'?>\n""")
-        s.index(u'xmlns:ns30="http://foreignuri.com"')
-        s.index(u'<style:paragraph-properties ns30:enable-numbering="true"/>')
+        s.index(u'xmlns:ns35="http://foreignuri.com"')
+        s.index(u'<style:paragraph-properties ns35:enable-numbering="true"/>')
         s.index(u'<office:styles><style:style style:name="Standard" style:display-name="Standard" style:family="paragraph">')
 
 

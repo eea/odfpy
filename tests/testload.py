@@ -118,5 +118,24 @@ class TestExampleDocs(unittest.TestCase):
         self.assertNotEqual(-1, result.find(u"""<style:header><text:p text:style-name="MP1">Header<text:tab/>"""))
         self.assertNotEqual(-1, result.find(u"""<style:footer><text:p text:style-name="MP2">Footer<text:tab/>"""))
 
+    def test_formulas_ooo(self):
+        """ Check that formula prefixes are preserved """
+        pythagoras_odt = os.path.join(
+            os.path.dirname(__file__), "examples", "pythagoras.ods")
+        d = load(pythagoras_odt)
+        result = unicode(d.contentxml(),'utf-8')
+        self.assertNotEqual(-1, result.find(u'''xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2"'''))
+        self.assertNotEqual(-1, result.find(u'''table:formula="of:=SQRT([.A1]*[.A1]+[.A2]*[.A2])"'''))
+        self.assertNotEqual(-1, result.find(u'''table:formula="of:=SUM([.A1:.A2])"'''))
+
+    def test_formulas_ooo(self):
+        """ Check that formulas are understood when there are no prefixes"""
+        pythagoras_odt = os.path.join(
+            os.path.dirname(__file__), "examples", "pythagoras-kspread.ods")
+        d = load(pythagoras_odt)
+        result = unicode(d.contentxml(),'utf-8')
+        self.assertNotEqual(-1, result.find(u'''table:formula="=SQRT([.A1]*[.A1]+[.A2]*[.A2])"'''))
+        self.assertNotEqual(-1, result.find(u'''table:formula="=SUM([.A1]:[.A2])"'''))
+
 if __name__ == '__main__':
     unittest.main()
