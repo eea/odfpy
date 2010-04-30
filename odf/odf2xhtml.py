@@ -25,6 +25,7 @@ import xml.sax
 from xml.sax import handler, expatreader
 from xml.sax.xmlreader import InputSource
 from xml.sax.saxutils import escape, quoteattr
+from xml.dom import Node
 from cStringIO import StringIO
 
 from namespaces import ANIMNS, CHARTNS, CONFIGNS, DCNS, DR3DNS, DRAWNS, FONS, \
@@ -358,6 +359,7 @@ class ODF2XHTML(handler.ContentHandler):
         (NUMBERNS, "number-style"):(self.s_ignorexml, None),
         (NUMBERNS, "text-style"):(self.s_ignorexml, None),
         (OFFICENS, "automatic-styles"):(self.s_office_automatic_styles, None),
+        (OFFICENS, "document"):(self.s_office_document_content, self.e_office_document_content),
         (OFFICENS, "document-content"):(self.s_office_document_content, self.e_office_document_content),
         (OFFICENS, "forms"):(self.s_ignorexml, None),
         (OFFICENS, "master-styles"):(self.s_office_master_styles, None),
@@ -367,6 +369,7 @@ class ODF2XHTML(handler.ContentHandler):
         (OFFICENS, "styles"):(self.s_office_styles, None),
         (OFFICENS, "text"):(self.s_office_text, self.e_office_text),
         (OFFICENS, "scripts"):(self.s_ignorexml, None),
+        (OFFICENS, "settings"):(self.s_ignorexml, None),
         (PRESENTATIONNS, "notes"):(self.s_ignorexml, None),
 #       (STYLENS, "default-page-layout"):(self.s_style_default_page_layout, self.e_style_page_layout),
         (STYLENS, "default-page-layout"):(self.s_ignorexml, None),
@@ -427,6 +430,37 @@ class ODF2XHTML(handler.ContentHandler):
             self.elements[(OFFICENS, u"spreadsheet")] = (None,None)
             self.elements[(OFFICENS, u"presentation")] = (None,None)
             self.elements[(OFFICENS, u"document-content")] = (None,None)
+        self._resetobject()
+
+    def _resetobject(self):
+        self.lines = []
+        self._wfunc = self._wlines
+        self.xmlfile = ''
+        self.title = ''
+        self.language = ''
+        self.creator = ''
+        self.data = []
+        self.tagstack = TagStack()
+        self.pstack = []
+        self.processelem = True
+        self.processcont = True
+        self.listtypes = {}
+        self.headinglevels = [0, 0,0,0,0,0, 0,0,0,0,0] # level 0 to 10
+        self.cs = StyleToCSS()
+        self.anchors = {}
+
+        # Style declarations
+        self.stylestack = []
+        self.styledict = {}
+        self.currentstyle = None
+
+        # Footnotes and endnotes
+        self.notedict = {}
+        self.currentnote = 0
+        self.notebody = ''
+
+        # Tags from meta.xml
+        self.metatags = []
 
 
     def writeout(self, s):
@@ -462,15 +496,11 @@ class ODF2XHTML(handler.ContentHandler):
         self.writeout("<%s %s/>\n" % (tag, " ".join(a)))
 
 #--------------------------------------------------
+# Interface to parser
+#--------------------------------------------------
     def characters(self, data):
         if self.processelem and self.processcont:
             self.data.append(data)
-
-    def handle_starttag(self, tag, method, attrs):
-        method(tag,attrs)
-
-    def handle_endtag(self, tag, attrs, method):
-        method(tag, attrs)
 
     def startElementNS(self, tag, qname, attrs):
         self.pstack.append( (self.processelem, self.processcont) )
@@ -491,6 +521,13 @@ class ODF2XHTML(handler.ContentHandler):
             else:
                 self.unknown_endtag(tag, attrs)
         self.processelem, self.processcont = self.pstack.pop()
+
+#--------------------------------------------------
+    def handle_starttag(self, tag, method, attrs):
+        method(tag,attrs)
+
+    def handle_endtag(self, tag, attrs, method):
+        method(tag, attrs)
 
     def unknown_starttag(self, tag, attrs):
         pass
@@ -1284,34 +1321,34 @@ class ODF2XHTML(handler.ContentHandler):
     def load(self, odffile):
         self._odffile = odffile
 
+    def newcss(self, doc):
+        self._wfunc = self._writenothing
+        self._walknode(doc.topnode)
+        self._csslines = []
+        self._wfunc = self._writecss
+        self.generate_stylesheet()
+        res = ''.join(self._csslines)
+        del self._csslines
+        return res
+
+    def newxhtml(self, doc):
+        """ Takes a document opened with load() and parses it
+            The return value is the xhtml output
+        """
+        self._walknode(doc.topnode)
+        return ''.join(self.lines)
+        
+    def _walknode(self, node):
+        if node.nodeType == Node.ELEMENT_NODE:
+            self.startElementNS(node.qname, node.tagName, node.attributes)
+            for c in node.childNodes:
+                self._walknode(c)
+            self.endElementNS(node.qname, node.tagName)
+        if node.nodeType == Node.TEXT_NODE or node.nodeType == Node.CDATA_SECTION_NODE:
+            self.characters(unicode(node))
+
     def parseodf(self):
-        self.xmlfile = ''
-        self.title = ''
-        self.language = ''
-        self.creator = ''
-        self.data = []
-        self.tagstack = TagStack()
-        self.pstack = []
-        self.processelem = True
-        self.processcont = True
-        self.listtypes = {}
-        self.headinglevels = [0, 0,0,0,0,0, 0,0,0,0,0] # level 0 to 10
-        self.cs = StyleToCSS()
-        self.anchors = {}
-
-        # Style declarations
-        self.stylestack = []
-        self.styledict = {}
-        self.currentstyle = None
-
-        # Footnotes and endnotes
-        self.notedict = {}
-        self.currentnote = 0
-        self.notebody = ''
-
-        # Tags from meta.xml
-        self.metatags = []
-
+        self._resetobject()
         # Extract the interesting files
         z = zipfile.ZipFile(self._odffile)
 

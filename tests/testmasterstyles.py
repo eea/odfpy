@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# Copyright (C) 2007 Søren Roug, European Environment Agency
+# Copyright (C) 2007-2010 Søren Roug, European Environment Agency
 #
 # This is free software.  You may redistribute it under the terms
 # of the Apache license and the GNU General Public License Version
@@ -24,6 +24,7 @@ from odf import style, text
 from odf.table import Table, TableColumn, TableRow, TableCell
 from odf.element import IllegalChild
 from odf.namespaces import TEXTNS
+from elementparser import ElementParser
 
 class TestMasterStyles(unittest.TestCase):
     
@@ -57,10 +58,24 @@ class TestMasterStyles(unittest.TestCase):
         presdoc.styles.addElement(titlestyle)
 
         s = unicode(presdoc.stylesxml(),'UTF-8')
-        # Not a good test: the attributes can come in a different order
-        self.assertContains(s, u'<style:page-layout style:name="MyLayout"><style:page-layout-properties fo:margin="0cm" fo:page-width="28cm" fo:page-height="21cm" style:print-orientation="landscape"/></style:page-layout>')
-        self.assertContains(s, u'<office:styles><style:style style:name="MyMaster-title" style:display-name="MyMaster-title" style:family="presentation"><style:paragraph-properties fo:text-align="center"/><style:text-properties fo:font-size="34pt"/><style:graphic-properties draw:fill-color="#ffff99"/></style:style></office:styles>')
-        self.assertContains(s, u'<office:master-styles><style:master-page style:name="MyMaster" style:display-name="MyMaster" style:page-layout-name="MyLayout"/></office:master-styles>')
+        self.assertContains(s, u'<style:page-layout style:name="MyLayout"><style:page-layout-properties ')
+        e = ElementParser(s,'style:page-layout-properties')
+        self.assertEqual(e.element,'style:page-layout-properties')
+        self.assertTrue(e.has_value("fo:margin","0cm"))
+        self.assertTrue(e.has_value("fo:page-width","28cm"))
+        self.assertTrue(e.has_value("fo:page-height","21cm"))
+        self.assertTrue(e.has_value("style:print-orientation","landscape"))
+
+        e = ElementParser(s,'style:style')
+        self.assertTrue(e.has_value("style:name","MyMaster-title"))
+        self.assertTrue(e.has_value("style:display-name","MyMaster-title"))
+        self.assertTrue(e.has_value("style:family","presentation"))
+
+        self.assertContains(s, u'<style:paragraph-properties fo:text-align="center"/><style:text-properties fo:font-size="34pt"/><style:graphic-properties draw:fill-color="#ffff99"/></style:style></office:styles>')
+        e = ElementParser(s,'style:master-page')
+        self.assertTrue(e.has_value("style:name","MyMaster"))
+        self.assertTrue(e.has_value("style:display-name","MyMaster"))
+        self.assertTrue(e.has_value("style:page-layout-name","MyLayout"))
 
     def testMasterWithHeader(self):
         """ Create a text document with a page layout called "pagelayout"

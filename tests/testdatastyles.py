@@ -25,7 +25,7 @@ from odf.number import Text,PercentageStyle, Number
 from odf.table import Table,TableRow,TableCell
 
 
-class TestHeadings(unittest.TestCase):
+class TestDatastyles(unittest.TestCase):
     
     saved = False
 

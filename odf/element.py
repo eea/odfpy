@@ -437,15 +437,14 @@ class Element(Node):
 #       if allowed_attrs and (namespace, localpart) not in allowed_attrs:
 #           raise AttributeError, "Attribute %s:%s is not allowed in element <%s>" % ( prefix, localpart, self.tagName)
         c = AttrConverters()
-        self.attributes[prefix + ":" + localpart] = c.convert((namespace, localpart), value, self)
+        self.attributes[(namespace, localpart)] = c.convert((namespace, localpart), value, self)
 
     def getAttrNS(self, namespace, localpart):
         prefix = self.get_nsprefix(namespace)
-        return self.attributes.get(prefix + ":" + localpart)
+        return self.attributes.get((namespace, localpart))
 
     def removeAttrNS(self, namespace, localpart):
-        prefix = self.get_nsprefix(namespace)
-        del self.attributes[prefix + ":" + localpart]
+        del self.attributes[(namespace, localpart)]
 
     def getAttribute(self, attr):
         """ Get an attribute value. The method knows which namespace the attribute is in
@@ -468,8 +467,9 @@ class Element(Node):
         if level == 0:
             for namespace, prefix in self.namespaces.items():
                 f.write(' xmlns:' + prefix + '="'+ _escape(str(namespace))+'"')
-        for attkey in self.attributes.keys():
-            f.write(' '+_escape(str(attkey))+'='+_quoteattr(unicode(self.attributes[attkey]).encode('utf-8')))
+        for qname in self.attributes.keys():
+            prefix = self.get_nsprefix(qname[0])
+            f.write(' '+_escape(str(prefix+':'+qname[1]))+'='+_quoteattr(unicode(self.attributes[qname]).encode('utf-8')))
         f.write('>')
 
     def write_close_tag(self, level, f):
@@ -481,8 +481,9 @@ class Element(Node):
         if level == 0:
             for namespace, prefix in self.namespaces.items():
                 f.write(' xmlns:' + prefix + '="'+ _escape(str(namespace))+'"')
-        for attkey in self.attributes.keys():
-            f.write(' '+_escape(str(attkey))+'='+_quoteattr(unicode(self.attributes[attkey]).encode('utf-8')))
+        for qname in self.attributes.keys():
+            prefix = self.get_nsprefix(qname[0])
+            f.write(' '+_escape(str(prefix+':'+qname[1]))+'='+_quoteattr(unicode(self.attributes[qname]).encode('utf-8')))
         if self.childNodes:
             f.write('>')
             for element in self.childNodes:

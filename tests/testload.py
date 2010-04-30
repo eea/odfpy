@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# Copyright (C) 2008 Søren Roug, European Environment Agency
+# Copyright (C) 2008-2010 Søren Roug, European Environment Agency
 #
 # This is free software.  You may redistribute it under the terms
 # of the Apache license and the GNU General Public License Version
@@ -22,7 +22,7 @@ import unittest, os, os.path
 from odf.opendocument import OpenDocumentText, load
 from odf import style, text
 from odf.text import P, H, LineBreak
-
+from elementparser import ElementParser
 
 class TestSimple(unittest.TestCase):
     
@@ -104,8 +104,13 @@ class TestExampleDocs(unittest.TestCase):
             os.path.dirname(__file__), "examples", "simpletable.odt")
         d = load(simpletable_odt)
         result = unicode(d.contentxml(),'utf-8')
-        self.assertNotEqual(-1, result.find(u"""<text:sequence-decl text:name="Text" text:display-outline-level="0"/>"""))
-        self.assertNotEqual(-1, result.find(u"""<table:table table:name="Tabel1" table:style-name="Tabel1"><table:table-column table:number-columns-repeated="2" table:style-name="Tabel1.A"/>"""))
+        e = ElementParser(result,'text:sequence-decl')
+        self.assertTrue(e.has_value("text:name","Drawing")) # Last sequence
+        self.assertTrue(e.has_value("text:display-outline-level","0"))
+
+        e = ElementParser(result,'table:table-column')
+        self.assertTrue(e.has_value("table:number-columns-repeated","2"))
+        self.assertTrue(e.has_value("table:style-name","Tabel1.A"))
 
     def test_headerfooter(self):
         """ Test that styles referenced from master pages are renamed in OOo 2.x documents """
@@ -113,8 +118,8 @@ class TestExampleDocs(unittest.TestCase):
             os.path.dirname(__file__), "examples", "headerfooter.odt")
         d = load(simplelist_odt)
         result = unicode(d.stylesxml(),'utf-8')
-        self.assertNotEqual(-1, result.find(u"""style:name="MP1" """))
-        self.assertNotEqual(-1, result.find(u"""style:name="MP2" """))
+        self.assertNotEqual(-1, result.find(u'''style:name="MP1"'''))
+        self.assertNotEqual(-1, result.find(u'''style:name="MP2"'''))
         self.assertNotEqual(-1, result.find(u"""<style:header><text:p text:style-name="MP1">Header<text:tab/>"""))
         self.assertNotEqual(-1, result.find(u"""<style:footer><text:p text:style-name="MP2">Footer<text:tab/>"""))
 

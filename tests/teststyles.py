@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# Copyright (C) 2007 Søren Roug, European Environment Agency
+# Copyright (C) 2007-2010 Søren Roug, European Environment Agency
 #
 # This is free software.  You may redistribute it under the terms
 # of the Apache license and the GNU General Public License Version
@@ -24,6 +24,8 @@ from odf import style, text
 from odf.table import Table, TableColumn, TableRow, TableCell
 from odf.element import IllegalChild
 from odf.namespaces import TEXTNS
+from elementparser import ElementParser
+
 
 class TestStyles(unittest.TestCase):
     
@@ -85,7 +87,13 @@ class TestQattributes(unittest.TestCase):
         s.index(u"""<?xml version='1.0' encoding='UTF-8'?>\n""")
         s.index(u'xmlns:ns35="http://foreignuri.com"')
         s.index(u'<style:paragraph-properties ns35:enable-numbering="true"/>')
-        s.index(u'<office:styles><style:style style:name="Standard" style:display-name="Standard" style:family="paragraph">')
+        e = ElementParser(s,'style:style')
+#        e = ElementParser(u'<style:style style:name="Standard" style:display-name="Standard" style:family="paragraph">')
+        self.assertEqual(e.element,'style:style')
+        self.assertTrue(e.has_value("style:display-name","Standard"))
+        self.assertTrue(e.has_value("style:name","Standard"))
+        self.assertTrue(e.has_value("style:family","paragraph"))
+
 
 
 if __name__ == '__main__':

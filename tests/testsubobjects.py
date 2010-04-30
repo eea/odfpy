@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# Copyright (C) 2007 Søren Roug, European Environment Agency
+# Copyright (C) 2007-2010 Søren Roug, European Environment Agency
 #
 # This is free software.  You may redistribute it under the terms
 # of the Apache license and the GNU General Public License Version
@@ -22,6 +22,7 @@ import unittest, os, zipfile
 from odf.opendocument import OpenDocumentText
 from odf import draw, text
 from odf.element import IllegalChild
+from elementparser import ElementParser
 
 def _getxmlpart(odffile, xmlfile):
     """ Get the content out of the ODT file"""
@@ -57,7 +58,14 @@ class TestUnicode(unittest.TestCase):
         self.assertEqual(subsubloc,'./Object 1/Object 1')
 
         c = unicode(self.textdoc.contentxml(),'UTF-8')
-        c.index(u'<office:body><office:text><draw:frame svg:width="476pt" text:anchor-type="paragraph" svg:height="404pt"><draw:object xlink:href="./Object 1"/></draw:frame></office:text></office:body>')
+        c.index(u'<office:body><office:text><draw:frame ')
+        e = ElementParser(c, 'draw:frame')
+#       e = ElementParser('<draw:frame svg:width="476pt" text:anchor-type="paragraph" svg:height="404pt">')
+        self.assertTrue(e.has_value('svg:width',"476pt"))
+        self.assertTrue(e.has_value('svg:height',"404pt"))
+        self.assertTrue(e.has_value('text:anchor-type',"paragraph"))
+        self.assertFalse(e.has_value('svg:height',"476pt"))
+        c.index(u'<draw:object xlink:href="./Object 1"/></draw:frame></office:text></office:body>')
         c.index(u'xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"')
         self.textdoc.save("TEST.odt")
         self.saved = True
