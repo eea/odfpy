@@ -21,6 +21,7 @@
       <command>odf2epub</command>
       <arg choice="opt">-p </arg>
       <arg choice="opt">-o <replaceable>outputfile</replaceable></arg>
+      <arg choice="opt">-c <replaceable>cover_image</replaceable></arg>
       <arg choice="plain">
         <replaceable>path</replaceable>
       </arg>
@@ -40,6 +41,16 @@ OpenDocument file of text, spreadsheet or presentation type.
   <refsect1>
     <title>Options</title>
     <variablelist>
+      <varlistentry>
+        <term>-c, --cover</term>
+        <listitem>
+          <para>
+The -c argument add a cover image to the EPUB file.
+Make sure the cover image itself is scaled to less than 1000px in width and height. Best practice
+is to use an image in JPG or PNG format at 600 pixels wide by 800 pixels in height.
+</para>
+        </listitem>
+      </varlistentry>
       <varlistentry>
         <term>-p, --plain</term>
         <listitem>
@@ -62,8 +73,16 @@ Specify the output file with this flag. "-" implies standard out.
   <refsect1>
     <title>Example</title>
     <screen>
-odf2epub odf-file
+odf2epub -o example.epub odf-file.odt
 </screen>
+  </refsect1>
+  <refsect1>
+    <title>Bugs</title>
+    <para>The EPUB format has the following limitations when running on a mobile  device.
+    If these limits are not adhered to, EPUB files <emphasis>might</emphasis> not work on mobile devices. Image Size: 10MB uncompressed.
+    Individual XHTML file sizes: 300k uncompressed/100k compressed. Odf2epub does not ensure
+    that these limits are adhered to.
+              </para>
   </refsect1>
   <refsect1>
     <title>See Also</title>

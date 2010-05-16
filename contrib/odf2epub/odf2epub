@@ -30,7 +30,7 @@ def escaped(string):
     return escape(string).encode('us-ascii','xmlcharrefreplace')
 
 def usage():
-    sys.stderr.write("Usage: %s [-p] inputfile\n" % sys.argv[0])
+    sys.stderr.write("Usage: %s [-c cover-image] [-o output-file] [-p] inputfile\n" % sys.argv[0])
 
 class NavpointEntry:
     def __init__(self, anchor, title, chapter, level):
@@ -340,13 +340,11 @@ if len(args) != 1:
     usage()
     sys.exit(2)
 
-epub = EPublication(args[0], coverimage)
-epub.save(outputfilename)
-sys.exit(0)
 try:
     epub = EPublication(args[0], coverimage)
     epub.save(outputfilename)
 except:
     sys.stderr.write("Unable to open file %s or file is not OpenDocument\n" % sys.argv[1])
     sys.exit(1)
+sys.exit(0)
 
