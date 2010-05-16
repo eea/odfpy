@@ -31,10 +31,11 @@
     <title>Description</title>
     <para><command>odf2epub</command> is a program that will create 
 an ebook (.epub) from the input file and will write the ebook to stdout or a file specified by -o.
-</para>
-    <para>
 "Path" is assumed to be an
 OpenDocument file of text, spreadsheet or presentation type.
+</para>
+    <para>
+If the document doesn't have a title in the properties, then the first heading of any level is used.
 </para>
   </refsect1>
 
