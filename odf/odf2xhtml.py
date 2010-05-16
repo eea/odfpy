@@ -20,13 +20,11 @@
 #
 #import pdb
 #pdb.set_trace()
-import zipfile
-import xml.sax
-from xml.sax import handler, expatreader
-from xml.sax.xmlreader import InputSource
+from xml.sax import handler
 from xml.sax.saxutils import escape, quoteattr
 from xml.dom import Node
-from cStringIO import StringIO
+
+from opendocument import load
 
 from namespaces import ANIMNS, CHARTNS, CONFIGNS, DCNS, DR3DNS, DRAWNS, FONS, \
   FORMNS, MATHNS, METANS, NUMBERNS, OFFICENS, PRESENTATIONNS, SCRIPTNS, \
@@ -358,6 +356,7 @@ class ODF2XHTML(handler.ContentHandler):
         (NUMBERNS, "date-style"):(self.s_ignorexml, None),
         (NUMBERNS, "number-style"):(self.s_ignorexml, None),
         (NUMBERNS, "text-style"):(self.s_ignorexml, None),
+        (OFFICENS, "annotation"):(self.s_ignorexml, None),
         (OFFICENS, "automatic-styles"):(self.s_office_automatic_styles, None),
         (OFFICENS, "document"):(self.s_office_document_content, self.e_office_document_content),
         (OFFICENS, "document-content"):(self.s_office_document_content, self.e_office_document_content),
@@ -432,6 +431,12 @@ class ODF2XHTML(handler.ContentHandler):
             self.elements[(OFFICENS, u"document-content")] = (None,None)
         self._resetobject()
 
+    def _resetfootnotes(self):
+        # Footnotes and endnotes
+        self.notedict = {}
+        self.currentnote = 0
+        self.notebody = ''
+
     def _resetobject(self):
         self.lines = []
         self._wfunc = self._wlines
@@ -441,11 +446,13 @@ class ODF2XHTML(handler.ContentHandler):
         self.creator = ''
         self.data = []
         self.tagstack = TagStack()
+        self.htmlstack = []
         self.pstack = []
         self.processelem = True
         self.processcont = True
         self.listtypes = {}
         self.headinglevels = [0, 0,0,0,0,0, 0,0,0,0,0] # level 0 to 10
+        self.use_internal_css = True
         self.cs = StyleToCSS()
         self.anchors = {}
 
@@ -454,10 +461,7 @@ class ODF2XHTML(handler.ContentHandler):
         self.styledict = {}
         self.currentstyle = None
 
-        # Footnotes and endnotes
-        self.notedict = {}
-        self.currentnote = 0
-        self.notebody = ''
+        self._resetfootnotes()
 
         # Tags from meta.xml
         self.metatags = []
@@ -474,6 +478,7 @@ class ODF2XHTML(handler.ContentHandler):
 
     def opentag(self, tag, attrs={}, block=False):
         """ Create an open HTML tag """
+        self.htmlstack.append((tag,attrs,block))
         a = []
         for key,val in attrs.items():
             a.append('''%s=%s''' % (key, quoteattr(val)))
@@ -485,6 +490,8 @@ class ODF2XHTML(handler.ContentHandler):
             self.writeout("\n")
 
     def closetag(self, tag, block=True):
+        """ Close an open HTML tag """
+        self.htmlstack.pop()
         self.writeout("</%s>" % tag)
         if block == True:
             self.writeout("\n")
@@ -574,7 +581,7 @@ class ODF2XHTML(handler.ContentHandler):
         """ Get the title from the meta data and create a HTML <title>
         """
         self.title = ''.join(self.data)
-        self.metatags.append('<title>%s</title>\n' % escape(self.title))
+        #self.metatags.append('<title>%s</title>\n' % escape(self.title))
         self.data = []
 
     def e_dc_metatag(self, tag, attrs):
@@ -729,19 +736,22 @@ class ODF2XHTML(handler.ContentHandler):
 
     def html_body(self, tag, attrs):
         self.writedata()
-        if self.generate_css:
+        if self.generate_css and self.use_internal_css:
             self.opentag('style', {'type':"text/css"}, True)
             self.writeout('/*<![CDATA[*/\n')
-            self.writeout('\nimg { width: 100%; height: 100%; }\n')
-            self.writeout('* { padding: 0; margin: 0;  background-color:white; }\n')
-            self.writeout('body { margin: 0 1em; }\n')
-            self.writeout('ol, ul { padding-left: 2em; }\n')
             self.generate_stylesheet()
             self.writeout('/*]]>*/\n')
             self.closetag('style')
         self.purgedata()
         self.closetag('head')
         self.opentag('body', block=True)
+
+    default_styles = """
+img { width: 100%; height: 100%; }
+* { padding: 0; margin: 0;  background-color:white; }
+body { margin: 0 1em; }
+ol, ul { padding-left: 2em; }
+"""
 
     def generate_stylesheet(self):
         for name in self.stylestack:
@@ -762,6 +772,7 @@ class ODF2XHTML(handler.ContentHandler):
                 styles = parentstyle
             self.styledict[name] = styles
         # Write the styles to HTML
+        self.writeout(self.default_styles)
         for name in self.stylestack:
             styles = self.styledict.get(name)
             css2 = self.cs.convert_styles(styles)
@@ -803,6 +814,7 @@ class ODF2XHTML(handler.ContentHandler):
         self.emptytag('meta', { 'http-equiv':"Content-Type", 'content':"text/html;charset=UTF-8"})
         for metaline in self.metatags:
             self.writeout(metaline)
+        self.writeout('<title>%s</title>\n' % escape(self.title))
 
     def e_office_document_content(self, tag, attrs):
         """ Last tag """
@@ -1090,20 +1102,26 @@ class ODF2XHTML(handler.ContentHandler):
         self.purgedata()
 
     def e_text_h(self, tag, attrs):
-        """ Headings end """
+        """ Headings end
+            Side-effect: If there is no title in the metadata, then it is taken
+            from the first heading of any level.
+        """
         self.writedata()
         level = int(attrs[(TEXTNS,'outline-level')])
         if level > 6: level = 6 # Heading levels go only to 6 in XHTML
         if level < 1: level = 1
         lev = self.headinglevels[1:level+1]
         outline = '.'.join(map(str,lev) )
-        anchor = self.get_anchor("%s.%s" % ( outline, ''.join(self.data)))
+        heading = ''.join(self.data)
+        if self.title == '': self.title = heading
+        anchor = self.get_anchor("%s.%s" % ( outline, heading))
         self.opentag('a', {'id': anchor} )
         self.closetag('a', False)
         self.closetag('h%s' % level)
         self.purgedata()
 
     def s_text_line_break(self, tag, attrs):
+        """ Force a line break (<br/>) """
         self.writedata()
         self.emptytag('br')
         self.purgedata()
@@ -1123,9 +1141,9 @@ class ODF2XHTML(handler.ContentHandler):
             name = self.tagstack.rfindattr( (TEXTNS,'style-name') )
         list_class = "%s_%d" % (name, level)
         if self.generate_css:
-            self.opentag('%s' % self.listtypes.get(list_class,'UL'), {'class': list_class })
+            self.opentag('%s' % self.listtypes.get(list_class,'ul'), {'class': list_class })
         else:
-            self.opentag('%s' % self.listtypes.get(list_class,'UL'))
+            self.opentag('%s' % self.listtypes.get(list_class,'ul'))
         self.purgedata()
 
     def e_text_list(self, tag, attrs):
@@ -1140,7 +1158,7 @@ class ODF2XHTML(handler.ContentHandler):
             # textbox itself may be nested within another list.
             name = self.tagstack.rfindattr( (TEXTNS,'style-name') )
         list_class = "%s_%d" % (name, level)
-        self.closetag(self.listtypes.get(list_class,'UL'))
+        self.closetag(self.listtypes.get(list_class,'ul'))
         self.purgedata()
 
     def s_text_list_item(self, tag, attrs):
@@ -1319,25 +1337,14 @@ class ODF2XHTML(handler.ContentHandler):
 #-----------------------------------------------------------------------------
 
     def load(self, odffile):
-        self._odffile = odffile
-
-    def newcss(self, doc):
-        self._wfunc = self._writenothing
+        self.lines = []
+        self._wfunc = self._wlines
+        if isinstance(odffile, basestring):
+            doc = load(odffile)
+        else:
+            doc = odffile
         self._walknode(doc.topnode)
-        self._csslines = []
-        self._wfunc = self._writecss
-        self.generate_stylesheet()
-        res = ''.join(self._csslines)
-        del self._csslines
-        return res
 
-    def newxhtml(self, doc):
-        """ Takes a document opened with load() and parses it
-            The return value is the xhtml output
-        """
-        self._walknode(doc.topnode)
-        return ''.join(self.lines)
-        
     def _walknode(self, node):
         if node.nodeType == Node.ELEMENT_NODE:
             self.startElementNS(node.qname, node.tagName, node.attributes)
@@ -1347,26 +1354,6 @@ class ODF2XHTML(handler.ContentHandler):
         if node.nodeType == Node.TEXT_NODE or node.nodeType == Node.CDATA_SECTION_NODE:
             self.characters(unicode(node))
 
-    def parseodf(self):
-        self._resetobject()
-        # Extract the interesting files
-        z = zipfile.ZipFile(self._odffile)
-
-        # For some reason Trac has trouble when xml.sax.make_parser() is used.
-        # Could it be because PyXML is installed, and therefore a different parser
-        # might be chosen? By calling expatreader directly we avoid this issue
-        parser = expatreader.create_parser()
-        parser.setFeature(handler.feature_namespaces, 1)
-        parser.setContentHandler(self)
-        parser.setErrorHandler(handler.ErrorHandler())
-        inpsrc = InputSource()
-
-        for xmlfile in ('meta.xml', 'styles.xml', 'content.xml'):
-            self.xmlfile = xmlfile
-            content = z.read(xmlfile)
-            inpsrc.setByteStream(StringIO(content))
-            parser.parse(inpsrc)
-        z.close()
 
     def odf2xhtml(self, odffile):
         """ Load a file and return XHTML
@@ -1378,9 +1365,13 @@ class ODF2XHTML(handler.ContentHandler):
         if s != '': self.lines.append(s)
 
     def xhtml(self):
-        self.lines = []
-        self._wfunc = self._wlines
-        self.parseodf()
+        """ Parses the document and returns the HTML content """
+        return ''.join(self.lines)
+
+    def newxhtml(self, doc):
+        """ Takes a document opened with load() and parses it
+            The return value is the xhtml output
+        """
         return ''.join(self.lines)
 
     def _writecss(self, s):
@@ -1389,12 +1380,28 @@ class ODF2XHTML(handler.ContentHandler):
     def _writenothing(self, s):
         pass
 
-    def css(self):
-        self._wfunc = self._writenothing
-        self.parseodf()
+    def newcss(self, doc):
         self._csslines = []
         self._wfunc = self._writecss
         self.generate_stylesheet()
         res = ''.join(self._csslines)
+        self._wfunc = self._wlines
         del self._csslines
         return res
+
+    def css(self):
+        """ Parses the document and returns the CSS content """
+        self._csslines = []
+        self._wfunc = self._writecss
+        self.generate_stylesheet()
+        res = ''.join(self._csslines)
+        self._wfunc = self._wlines
+        del self._csslines
+        return res
+
+    def set_style_file(self, stylefilename, media=None):
+        self.use_internal_css = False
+        if media:
+            self.metatags.append('<link rel="stylesheet" type="text/css" href="%s" media="%s"/>\n' % (stylefilename,media))
+        else:
+            self.metatags.append('<link rel="stylesheet" type="text/css" href="%s"/>\n' % (stylefilename))

@@ -19,6 +19,7 @@
 #
 from odf.odf2xhtml import ODF2XHTML
 from odf.namespaces import TEXTNS, XLINKNS
+from odf.opendocument import load
 import sys, getopt, time, zipfile
 from StringIO import StringIO
 from cgi import escape
@@ -68,12 +69,27 @@ class ODF2EPUB(ODF2XHTML):
 #       pass
 
     def s_text_h(self, tag, attrs):
+        """ Handle a heading
+            If the heading is a level 1 heading, then split the HTML file.
+            We have to be careful, because the heading can be inside a frame or a table.
+        """
         level = int(attrs[(TEXTNS,'outline-level')])
         if level == 1:
-            self.closetag('body')
-            self.closetag('html')
+            tags_to_keep = self.htmlstack[:]
+            tags_to_close = self.htmlstack[:]
+            tags_to_close.reverse()
+            for htag,hattrs,hblock in tags_to_close:
+                if htag == 'body':
+                    self.generate_footnotes()
+                    self._resetfootnotes()
+                self.closetag(htag)
+            # I have to do this rather ugly, as the saved header part doesn't
+            # go through the self.opentag() method
             self.chapters.append(''.join(self.headerpart + self.lines))
             self.lines = []
+            self.htmlstack = tags_to_keep[:2] # Only <html> and <body>
+            for htag,hattrs,hblock in tags_to_keep[2:]:
+                self.opentag(htag,hattrs,hblock)
         return ODF2XHTML.s_text_h(self, tag, attrs)
 
     def e_text_h(self, tag, attrs):
@@ -83,12 +99,16 @@ class ODF2EPUB(ODF2XHTML):
         if level < 1: level = 1
         lev = self.headinglevels[1:level+1]
         outline = '.'.join(map(str,lev) )
-        anchor = self.get_anchor("%s.%s" % ( outline, ''.join(self.data)))
-        n = NavpointEntry(anchor, ''.join(self.data), len(self.chapters), level)
+        heading = ''.join(self.data)
+        anchor = self.get_anchor("%s.%s" % ( outline, heading))
+        n = NavpointEntry(anchor, heading, len(self.chapters), level)
         self.navpoint_list.append(n)
         return ODF2XHTML.e_text_h(self, tag, attrs)
 
     def s_office_text(self, tag, attrs):
+        """ Save all the lines up to and including the <body> tag
+            so I can split the file into more files
+        """
         ODF2XHTML.s_office_text(self, tag, attrs)
         self.headerpart = self.lines
         self.lines = []
@@ -130,16 +150,18 @@ class EPublication:
       <dc:language>%s</dc:language>
       <dc:identifier id="BookID" opf:scheme="URI">%s</dc:identifier>
       <dc:creator>%s</dc:creator>
+      %s
     </metadata>
     <manifest>
-        <item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml"/>"""
+        <item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml"/>
+        <item id="styles-css" href="styles.css" media-type="text/css"/>"""
 
     toc_ncx_head = """<?xml version="1.0"?>
 <!DOCTYPE ncx PUBLIC "-//NISO//DTD ncx 2005-1//EN"
    "http://www.daisy.org/z3986/2005/ncx-2005-1.dtd">
 
 <ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1">
-       <head>
+    <head>
         <meta name="dtb:uid" content="%s"/>
         <meta name="dtb:depth" content="2"/>
         <meta name="dtb:totalPageCount" content="0"/>
@@ -159,10 +181,11 @@ class EPublication:
 </ncx>"""
 
     def __init__(self, filename, coverimage):
-        self.filename = filename
+        self.doc = load(filename)
         self.coverimage = coverimage
         self.odhandler = ODF2EPUB(True, False)
-        self.odhandler.load(filename)
+        self.odhandler.set_style_file("styles.css")
+        self.odhandler.load(self.doc)
 
     def _zipwrite(self, outputfp):
         """ Write the document to an open file pointer """
@@ -181,6 +204,12 @@ class EPublication:
         zout.external_attr = UNIXPERMS
         outputfp.writestr(zout, self.container)
 
+        # Write CSS part
+        zout = zipfile.ZipInfo('OEBPS/styles.css', now)
+        zout.compress_type = zipfile.ZIP_DEFLATED
+        zout.external_attr = UNIXPERMS
+        outputfp.writestr(zout, self.odhandler.css())
+
         # Write HTML parts
         for chapter in range(len(self.odhandler.chapters)):
             zout = zipfile.ZipInfo('OEBPS/chapter%d.xhtml' % chapter, now)
@@ -190,35 +219,37 @@ class EPublication:
             outputfp.writestr(zout, xhtml)
 
         # Copy images over to output
-        z = zipfile.ZipFile(self.filename)
-        for zinfo in z.infolist():
-            if zinfo.filename[0:9] == 'Pictures/':
-                zipinfo = zipfile.ZipInfo("OEBPS/" + zinfo.filename, now)
-                zipinfo.external_attr = UNIXPERMS
-                outputfp.writestr(zipinfo, z.read(zinfo.filename))
+        for arcname, picturerec in self.doc.Pictures.items():
+            what_it_is, fileobj, mediatype = picturerec
+            zi = zipfile.ZipInfo("OEBPS/" + str(arcname), now)
+            zi.compress_type = zipfile.ZIP_STORED
+            zi.external_attr = UNIXPERMS
+            outputfp.writestr(zi, fileobj)
 
         # Write content.opf
         zout = zipfile.ZipInfo('OEBPS/content.opf', now)
         zout.compress_type = zipfile.ZIP_DEFLATED
         zout.external_attr = UNIXPERMS
         opf = []
-        opf.append(self.content_opf_head % (escaped(self.odhandler.title), escaped(self.odhandler.language),
-                escaped(args[0]), escaped(self.odhandler.creator)))
         if self.coverimage:
-            opf.append("""        <item id="cover"       href="cover.xhtml"    media-type="application/xhtml+xml"/>""")
+            covermeta = """<meta name="cover" content="cover-image"/>"""
+        else:
+            covermeta = ""
+        opf.append(self.content_opf_head % (escaped(self.odhandler.title), escaped(self.odhandler.language),
+                escaped(args[0]), escaped(self.odhandler.creator), covermeta))
+        if self.coverimage:
+            opf.append("""        <item id="cover-page"       href="cover.xhtml"    media-type="application/xhtml+xml"/>""")
             opf.append("""        <item id="cover-image" href="Pictures/cover.jpg" media-type="image/jpeg"/>""")
         for chapter in range(len(self.odhandler.chapters)):
             opf.append("""        <item id="chapter%d.xhtml" href="chapter%d.xhtml" media-type="application/xhtml+xml"/>""" % (chapter, chapter))
         # Write manifest of images.
-        # FIXME: Set correct media-type
-        # FIXME: Provide a valid identifier
-        for zname in z.namelist():
-            if zname[0:9] == 'Pictures/':
-                opf.append("""        <item id="%s" href="%s" media-type="image/jpeg"/>""" % (zname, zname))
+        for arcname, picturerec in self.doc.Pictures.items():
+            what_it_is, fileobj, mediatype = picturerec
+            opf.append("""        <item id="%s" href="%s" media-type="%s"/>""" % (arcname.replace('/','_'), arcname, mediatype))
         opf.append("""</manifest>""")
         opf.append("""<spine toc="ncx">""")
         if self.coverimage:
-            opf.append("""        <itemref idref="cover" linear="no"/>""")
+            opf.append("""        <itemref idref="cover-page" linear="no"/>""")
         for chapter in range(len(self.odhandler.chapters)):
             opf.append("""        <itemref idref="chapter%d.xhtml"/>""" % chapter)
         opf.append("""</spine>""")
@@ -230,8 +261,6 @@ class EPublication:
 
         opf.append('</package>')
         outputfp.writestr(zout, '\n'.join(opf))
-
-        z.close()
 
         # Write toc.ncx
         zout = zipfile.ZipInfo('OEBPS/toc.ncx', now)
@@ -246,16 +275,17 @@ class EPublication:
         for np in self.odhandler.navpoint_list:
             if np_inx == 2:
                 np.level = 1
+            if np.level > 2: np.level = 2
             if np_inx != 2 and np.level <= np_level:
-                opf.append("""        </navPoint> <!-- same level -->""");
+                opf.append("""        </navPoint>""");
             if np_inx != 2 and np.level < np_level:
                 opf.append("""        </navPoint>""");
-            opf.append("""        <navPoint id="navPoint-%d" playOrder="%d">
+            opf.append("""        <navPoint id="navPoint-%d" playOrder="%d"> <!-- L%d -->
             <navLabel>
                 <text>%s</text>
             </navLabel>
             <content src="chapter%d.xhtml#%s"/>
-        """ % (np_inx, np_inx, escaped(np.title), np.chapter, np.anchor))
+        """ % (np_inx, np_inx, np.level, escaped(np.title), np.chapter, np.anchor))
             np_inx += 1
             np_level = np.level
         opf.append("""        </navPoint>""");
