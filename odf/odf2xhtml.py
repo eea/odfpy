@@ -425,11 +425,26 @@ class ODF2XHTML(handler.ContentHandler):
         (TEXTNS, "user-index-source"):(self.s_text_x_source, self.e_text_x_source),
         }
         if embedable:
-            self.elements[(OFFICENS, u"text")] = (None,None)
-            self.elements[(OFFICENS, u"spreadsheet")] = (None,None)
-            self.elements[(OFFICENS, u"presentation")] = (None,None)
-            self.elements[(OFFICENS, u"document-content")] = (None,None)
+            self.make_embedable()
         self._resetobject()
+
+    def set_embedable(self):
+        """ Tells the converter to only output the parts inside the <body>"""
+        self.elements[(OFFICENS, u"text")] = (None,None)
+        self.elements[(OFFICENS, u"spreadsheet")] = (None,None)
+        self.elements[(OFFICENS, u"presentation")] = (None,None)
+        self.elements[(OFFICENS, u"document-content")] = (None,None)
+
+
+    def add_style_file(self, stylefilename, media=None):
+        """ Add a link to an external style file.
+            Also turns of the embedding of styles in the HTML
+        """
+        self.use_internal_css = False
+        if media:
+            self.metatags.append('<link rel="stylesheet" type="text/css" href="%s" media="%s"/>\n' % (stylefilename,media))
+        else:
+            self.metatags.append('<link rel="stylesheet" type="text/css" href="%s"/>\n' % (stylefilename))
 
     def _resetfootnotes(self):
         # Footnotes and endnotes
@@ -1398,10 +1413,3 @@ ol, ul { padding-left: 2em; }
         self._wfunc = self._wlines
         del self._csslines
         return res
-
-    def set_style_file(self, stylefilename, media=None):
-        self.use_internal_css = False
-        if media:
-            self.metatags.append('<link rel="stylesheet" type="text/css" href="%s" media="%s"/>\n' % (stylefilename,media))
-        else:
-            self.metatags.append('<link rel="stylesheet" type="text/css" href="%s"/>\n' % (stylefilename))
