@@ -38,7 +38,7 @@ class TestText(unittest.TestCase):
         poem_odt = os.path.join(
             os.path.dirname(__file__), "examples", "serious_poem.odt")
         d = load(poem_odt)
-        shouldbe = u"The boy stoodon the burning deck,Whence allbuthim had fled.The flamesthat litthe battle'swreck,Shone o'er him, round the dead."
+        shouldbe = u"The boy stood on the burning deck,Whence allbuthim had fled.The flames that litthe battle'swreck,Shone o'er him, round the dead. "
         self.assertEquals(shouldbe, unicode(d.body))
         self.assertEquals(shouldbe, str(d.body))
 

@@ -51,9 +51,9 @@ class TestWhite(unittest.TestCase):
             os.path.dirname(__file__), "examples", "serious_poem.odt")
         d = load(poem_odt)
         allparas = d.getElementsByType(P)
-        content = """<text:p text:style-name="Standard">The boy stood<text:s text:c="3"/>on the burning deck,<text:line-break/><text:tab/>Whence all<text:tab/>but<text:tab/><text:tab/>him had fled.<text:line-break/>The flames<text:s text:c="2"/>that lit<text:tab/>the battle's<text:tab/>wreck,<text:line-break/><text:s text:c="11"/>Shone o'er him, round the dead.<text:s text:c="2"/></text:p>"""
+        content = """<text:p text:style-name="Standard">The boy stood <text:s text:c="3"/>on the burning deck,<text:line-break/><text:tab/>Whence all<text:tab/>but<text:tab/><text:tab/>him had fled.<text:line-break/>The flames <text:s text:c="2"/>that lit<text:tab/>the battle's<text:tab/>wreck,<text:line-break/> <text:s text:c="11"/>Shone o'er him, round the dead. <text:s text:c="2"/></text:p>"""
 
-        self.assertEqual(u"The boy stood   on the burning deck,\n\tWhence all\tbut\t\thim had fled.\nThe flames  that lit\tthe battle's\twreck,\n           Shone o'er him, round the dead.  ", teletype.extractText(allparas[0]))
+        self.assertEqual(u"The boy stood    on the burning deck,\n\tWhence all\tbut\t\thim had fled.\nThe flames   that lit\tthe battle's\twreck,\n           Shone o'er him, round the dead.   ", teletype.extractText(allparas[0]))
 
     def test_extract_with_span(self):
         """ Extract a text with a bold/italic span """
