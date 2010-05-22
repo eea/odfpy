@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-# Copyright (C) 2006-2007 Søren Roug, European Environment Agency
+# Copyright (C) 2006-2010 Søren Roug, European Environment Agency
 # 
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -428,6 +428,10 @@ class ODF2XHTML(handler.ContentHandler):
             self.make_embedable()
         self._resetobject()
 
+    def set_plain(self):
+        """ Tell the parser to not generate CSS """
+        self.generate_css = False
+
     def set_embedable(self):
         """ Tells the converter to only output the parts inside the <body>"""
         self.elements[(OFFICENS, u"text")] = (None,None)
@@ -441,6 +445,7 @@ class ODF2XHTML(handler.ContentHandler):
             Also turns of the embedding of styles in the HTML
         """
         self.use_internal_css = False
+        self.stylefilename = stylefilename
         if media:
             self.metatags.append('<link rel="stylesheet" type="text/css" href="%s" media="%s"/>\n' % (stylefilename,media))
         else:
@@ -564,9 +569,11 @@ class ODF2XHTML(handler.ContentHandler):
         self.processelem = False
 
     def s_ignorecont(self, tag, attrs):
+        """ Stop processing the text nodes """
         self.processcont = False
 
     def s_processcont(self, tag, attrs):
+        """ Start processing the text nodes """
         self.processcont = True
 
     def classname(self, attrs):
@@ -898,7 +905,7 @@ ol, ul { padding-left: 2em; }
     def s_style_font_face(self, tag, attrs):
         """ It is possible that the HTML browser doesn't know how to
             show a particular font. Luckily ODF provides generic fallbacks
-            Unluckily they are not the same as CSS2.
+            Unfortunately they are not the same as CSS2.
             CSS2: serif, sans-serif, cursive, fantasy, monospace
             ODF: roman, swiss, modern, decorative, script, system
         """
@@ -980,7 +987,7 @@ ol, ul { padding-left: 2em; }
         self.s_ignorexml(tag, attrs)
 
     # Short prefixes for class selectors
-    familyshort = {'drawing-page':'DP', 'paragraph':'P', 'presentation':'PR',
+    _familyshort = {'drawing-page':'DP', 'paragraph':'P', 'presentation':'PR',
         'text':'S', 'section':'D',
          'table':'T', 'table-cell':'TD', 'table-column':'TC',
          'table-row':'TR', 'graphic':'G' }
@@ -996,7 +1003,7 @@ ol, ul { padding-left: 2em; }
         name = name.replace(".","_")
         family = attrs[(STYLENS,'family')]
         htmlfamily = self.familymap.get(family,'unknown')
-        sfamily = self.familyshort.get(family,'X')
+        sfamily = self._familyshort.get(family,'X')
         name = "%s%s-%s" % (self.autoprefix, sfamily, name)
         parent = attrs.get( (STYLENS,'parent-style-name') )
         self.currentstyle = special_styles.get(name,"."+name)
@@ -1041,6 +1048,7 @@ ol, ul { padding-left: 2em; }
         self.purgedata()
 
     def s_table_table_cell(self, tag, attrs):
+        """ Start a table cell """
         #FIXME: number-columns-repeated § 8.1.3
         #repeated = int(attrs.get( (TABLENS,'number-columns-repeated'), 1))
         htmlattrs = {}
@@ -1058,11 +1066,13 @@ ol, ul { padding-left: 2em; }
         self.purgedata()
 
     def e_table_table_cell(self, tag, attrs):
+        """ End a table cell """
         self.writedata()
         self.closetag('td')
         self.purgedata()
 
     def s_table_table_column(self, tag, attrs):
+        """ Start a table column """
         c = attrs.get( (TABLENS,'style-name'), None)
         repeated = int(attrs.get( (TABLENS,'number-columns-repeated'), 1))
         htmlattrs = {}
@@ -1073,6 +1083,7 @@ ol, ul { padding-left: 2em; }
         self.purgedata()
 
     def s_table_table_row(self, tag, attrs):
+        """ Start a table row """
         #FIXME: table:number-rows-repeated
         c = attrs.get( (TABLENS,'style-name'), None)
         htmlattrs = {}
@@ -1082,6 +1093,7 @@ ol, ul { padding-left: 2em; }
         self.purgedata()
 
     def e_table_table_row(self, tag, attrs):
+        """ End a table row """
         self.writedata()
         self.closetag('tr')
         self.purgedata()
@@ -1142,7 +1154,8 @@ ol, ul { padding-left: 2em; }
         self.purgedata()
 
     def s_text_list(self, tag, attrs):
-        """ To know which level we're at, we have to count the number
+        """ Start a list (<ul> or <ol>)
+            To know which level we're at, we have to count the number
             of <text:list> elements on the tagstack.
         """
         name = attrs.get( (TEXTNS,'style-name') )
@@ -1162,6 +1175,7 @@ ol, ul { padding-left: 2em; }
         self.purgedata()
 
     def e_text_list(self, tag, attrs):
+        """ End a list """
         self.writedata()
         name = attrs.get( (TEXTNS,'style-name') )
         level = self.tagstack.count_tags(tag) + 1
@@ -1177,10 +1191,12 @@ ol, ul { padding-left: 2em; }
         self.purgedata()
 
     def s_text_list_item(self, tag, attrs):
+        """ Start list item """
         self.opentag('li')
         self.purgedata()
 
     def e_text_list_item(self, tag, attrs):
+        """ End list item """
         self.writedata()
         self.closetag('li')
         self.purgedata()
@@ -1352,6 +1368,9 @@ ol, ul { padding-left: 2em; }
 #-----------------------------------------------------------------------------
 
     def load(self, odffile):
+        """ Loads a document into the parser and parses it.
+            The argument can either be a filename or a document in memory.
+        """
         self.lines = []
         self._wfunc = self._wlines
         if isinstance(odffile, basestring):
@@ -1371,7 +1390,7 @@ ol, ul { padding-left: 2em; }
 
 
     def odf2xhtml(self, odffile):
-        """ Load a file and return XHTML
+        """ Load a file and return the XHTML
         """
         self.load(odffile)
         return self.xhtml()
@@ -1380,12 +1399,7 @@ ol, ul { padding-left: 2em; }
         if s != '': self.lines.append(s)
 
     def xhtml(self):
-        """ Parses the document and returns the HTML content """
-        return ''.join(self.lines)
-
-    def newxhtml(self, doc):
-        """ Takes a document opened with load() and parses it
-            The return value is the xhtml output
+        """ Returns the xhtml
         """
         return ''.join(self.lines)
 
@@ -1395,7 +1409,8 @@ ol, ul { padding-left: 2em; }
     def _writenothing(self, s):
         pass
 
-    def newcss(self, doc):
+    def css(self):
+        """ Returns the CSS content """
         self._csslines = []
         self._wfunc = self._writecss
         self.generate_stylesheet()
@@ -1404,12 +1419,17 @@ ol, ul { padding-left: 2em; }
         del self._csslines
         return res
 
-    def css(self):
-        """ Parses the document and returns the CSS content """
-        self._csslines = []
-        self._wfunc = self._writecss
-        self.generate_stylesheet()
-        res = ''.join(self._csslines)
-        self._wfunc = self._wlines
-        del self._csslines
-        return res
+    def save(self, outputfile, addsuffix=False):
+        """ Save the HTML under the filename.
+            If the filename is '-' then save to stdout
+            We have the last style filename in self.stylefilename
+        """
+        if outputfile == '-':
+            outputfp = sys.stdout
+        else:
+            if addsuffix:
+                outputfile = outputfile + ".html"
+            outputfp = file(outputfile, "w")
+        outputfp.write(self.xhtml().encode('us-ascii','xmlcharrefreplace'))
+        outputfp.close()
+
