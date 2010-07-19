@@ -613,6 +613,9 @@ def load(odffile):
             doc.addThumbnail(z.read(mentry))
         elif mentry in ('settings.xml', 'meta.xml', 'content.xml', 'styles.xml'):
             pass
+#FIXME: Load subobjects into structure
+#       elif mentry[:7] == "Object " and len(mentry) > 8:
+#           self.childobjects ...
         else:
             if mvalue['full-path'][-1] == '/':
                 doc._extra.append(OpaqueObject(mvalue['full-path'], mvalue['media-type'], None))

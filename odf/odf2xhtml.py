@@ -345,6 +345,8 @@ class ODF2XHTML(handler.ContentHandler):
         (DRAWNS, 'image'): (self.s_draw_image, None),
         (DRAWNS, 'fill-image'): (self.s_draw_fill_image, None),
         (DRAWNS, "layer-set"):(self.s_ignorexml, None),
+        (DRAWNS, 'object'): (self.s_draw_object, None),
+        (DRAWNS, 'object-ole'): (self.s_draw_object_ole, None),
         (DRAWNS, 'page'): (self.s_draw_page, self.e_draw_page),
         (DRAWNS, 'text-box'): (self.s_draw_textbox, self.e_draw_textbox),
         (METANS, 'creation-date'):(self.s_processcont, self.e_dc_metatag),
@@ -722,6 +724,28 @@ class ODF2XHTML(handler.ContentHandler):
             if anchor_type != "char":
                 htmlattrs['style'] = "display: block;"
         self.emptytag('img', htmlattrs)
+
+    def s_draw_object(self, tag, attrs):
+        """ A <draw:object> is embedded object in the document (e.g. spreadsheet in presentation).
+        """
+        objhref = attrs[(XLINKNS,"href")]
+        # Remove leading "./": from "./Object 1" to "Object 1"
+        objhref = objhref [2:]
+       
+        # Not using os.path.join since it fails to find the file on Windows.
+        objcontentpath = '/'.join([objhref, 'content.xml'])
+
+        #FIXME: There is no parsexml method any longer.
+        self.parsexml(contenthandler=ODF2XHTMLembedded(self.lines), xmlpathlist=[objcontentpath])
+
+    def s_draw_object_ole(self, tag, attrs):
+        """ A <draw:object-ole> is embedded OLE object in the document (e.g. MS Graph).
+        """
+        class_id = attrs[(DRAWNS,"class-id")]
+        if class_id and class_id.lower() == "00020803-0000-0000-c000-000000000046": ## Microsoft Graph 97 Chart
+            tagattrs = { 'name':'object_ole_graph', 'class':'ole-graph' }
+            self.opentag('a', tagattrs)
+            self.closetag('a', tagattrs)
 
     def s_draw_page(self, tag, attrs):
         """ A <draw:page> is a slide in a presentation. We use a <fieldset> element in HTML.
@@ -1432,4 +1456,104 @@ ol, ul { padding-left: 2em; }
             outputfp = file(outputfile, "w")
         outputfp.write(self.xhtml().encode('us-ascii','xmlcharrefreplace'))
         outputfp.close()
+
+
+class ODF2XHTMLembedded(ODF2XHTML):
+    """ The ODF2XHTML parses an ODF file and produces XHTML"""
+
+    def __init__(self, lines, generate_css=True, embedable=False):
+        self._resetobject()
+        self.lines = lines
+
+        # Tags
+        self.generate_css = generate_css
+        self.elements = {
+#        (DCNS, 'title'): (self.s_processcont, self.e_dc_title),
+#        (DCNS, 'language'): (self.s_processcont, self.e_dc_contentlanguage),
+#        (DCNS, 'creator'): (self.s_processcont, self.e_dc_metatag),
+#        (DCNS, 'description'): (self.s_processcont, self.e_dc_metatag),
+#        (DCNS, 'date'): (self.s_processcont, self.e_dc_metatag),
+        (DRAWNS, 'frame'): (self.s_draw_frame, self.e_draw_frame),
+        (DRAWNS, 'image'): (self.s_draw_image, None),
+        (DRAWNS, 'fill-image'): (self.s_draw_fill_image, None),
+        (DRAWNS, "layer-set"):(self.s_ignorexml, None),
+        (DRAWNS, 'page'): (self.s_draw_page, self.e_draw_page),
+        (DRAWNS, 'object'): (self.s_draw_object, None),
+        (DRAWNS, 'object-ole'): (self.s_draw_object_ole, None),
+        (DRAWNS, 'text-box'): (self.s_draw_textbox, self.e_draw_textbox),
+#        (METANS, 'creation-date'):(self.s_processcont, self.e_dc_metatag),
+#        (METANS, 'generator'):(self.s_processcont, self.e_dc_metatag),
+#        (METANS, 'initial-creator'): (self.s_processcont, self.e_dc_metatag),
+#        (METANS, 'keyword'): (self.s_processcont, self.e_dc_metatag),
+        (NUMBERNS, "boolean-style"):(self.s_ignorexml, None),
+        (NUMBERNS, "currency-style"):(self.s_ignorexml, None),
+        (NUMBERNS, "date-style"):(self.s_ignorexml, None),
+        (NUMBERNS, "number-style"):(self.s_ignorexml, None),
+        (NUMBERNS, "text-style"):(self.s_ignorexml, None),
+#        (OFFICENS, "automatic-styles"):(self.s_office_automatic_styles, None),
+#        (OFFICENS, "document-content"):(self.s_office_document_content, self.e_office_document_content),
+        (OFFICENS, "forms"):(self.s_ignorexml, None),
+#        (OFFICENS, "master-styles"):(self.s_office_master_styles, None),
+        (OFFICENS, "meta"):(self.s_ignorecont, None),
+#        (OFFICENS, "presentation"):(self.s_office_presentation, self.e_office_presentation),
+#        (OFFICENS, "spreadsheet"):(self.s_office_spreadsheet, self.e_office_spreadsheet),
+#        (OFFICENS, "styles"):(self.s_office_styles, None),
+#        (OFFICENS, "text"):(self.s_office_text, self.e_office_text),
+        (OFFICENS, "scripts"):(self.s_ignorexml, None),
+        (PRESENTATIONNS, "notes"):(self.s_ignorexml, None),
+##       (STYLENS, "default-page-layout"):(self.s_style_default_page_layout, self.e_style_page_layout),
+#        (STYLENS, "default-page-layout"):(self.s_ignorexml, None),
+#        (STYLENS, "default-style"):(self.s_style_default_style, self.e_style_default_style),
+#        (STYLENS, "drawing-page-properties"):(self.s_style_handle_properties, None),
+#        (STYLENS, "font-face"):(self.s_style_font_face, None),
+##       (STYLENS, "footer"):(self.s_style_footer, self.e_style_footer),
+##       (STYLENS, "footer-style"):(self.s_style_footer_style, None),
+#        (STYLENS, "graphic-properties"):(self.s_style_handle_properties, None),
+#        (STYLENS, "handout-master"):(self.s_ignorexml, None),
+##       (STYLENS, "header"):(self.s_style_header, self.e_style_header),
+##       (STYLENS, "header-footer-properties"):(self.s_style_handle_properties, None),
+##       (STYLENS, "header-style"):(self.s_style_header_style, None),
+#        (STYLENS, "master-page"):(self.s_style_master_page, None),
+#        (STYLENS, "page-layout-properties"):(self.s_style_handle_properties, None),
+##       (STYLENS, "page-layout"):(self.s_style_page_layout, self.e_style_page_layout),
+#        (STYLENS, "page-layout"):(self.s_ignorexml, None),
+#        (STYLENS, "paragraph-properties"):(self.s_style_handle_properties, None),
+#        (STYLENS, "style"):(self.s_style_style, self.e_style_style),
+#        (STYLENS, "table-cell-properties"):(self.s_style_handle_properties, None),
+#        (STYLENS, "table-column-properties"):(self.s_style_handle_properties, None),
+#        (STYLENS, "table-properties"):(self.s_style_handle_properties, None),
+#        (STYLENS, "text-properties"):(self.s_style_handle_properties, None),
+        (SVGNS, 'desc'): (self.s_ignorexml, None),
+        (TABLENS, 'covered-table-cell'): (self.s_ignorexml, None),
+        (TABLENS, 'table-cell'): (self.s_table_table_cell, self.e_table_table_cell),
+        (TABLENS, 'table-column'): (self.s_table_table_column, None),
+        (TABLENS, 'table-row'): (self.s_table_table_row, self.e_table_table_row),
+        (TABLENS, 'table'): (self.s_table_table, self.e_table_table),
+        (TEXTNS, 'a'): (self.s_text_a, self.e_text_a),
+        (TEXTNS, "alphabetical-index-source"):(self.s_text_x_source, self.e_text_x_source),
+        (TEXTNS, "bibliography-configuration"):(self.s_ignorexml, None),
+        (TEXTNS, "bibliography-source"):(self.s_text_x_source, self.e_text_x_source),
+        (TEXTNS, 'h'): (self.s_text_h, self.e_text_h),
+        (TEXTNS, "illustration-index-source"):(self.s_text_x_source, self.e_text_x_source),
+        (TEXTNS, 'line-break'):(self.s_text_line_break, None),
+        (TEXTNS, "linenumbering-configuration"):(self.s_ignorexml, None),
+        (TEXTNS, "list"):(self.s_text_list, self.e_text_list),
+        (TEXTNS, "list-item"):(self.s_text_list_item, self.e_text_list_item),
+        (TEXTNS, "list-level-style-bullet"):(self.s_text_list_level_style_bullet, self.e_text_list_level_style_bullet),
+        (TEXTNS, "list-level-style-number"):(self.s_text_list_level_style_number, self.e_text_list_level_style_number),
+        (TEXTNS, "list-style"):(None, None),
+        (TEXTNS, "note"):(self.s_text_note, None),
+        (TEXTNS, "note-body"):(self.s_text_note_body, self.e_text_note_body),
+        (TEXTNS, "note-citation"):(None, self.e_text_note_citation),
+        (TEXTNS, "notes-configuration"):(self.s_ignorexml, None),
+        (TEXTNS, "object-index-source"):(self.s_text_x_source, self.e_text_x_source),
+        (TEXTNS, 'p'): (self.s_text_p, self.e_text_p),
+        (TEXTNS, 's'): (self.s_text_s, None),
+        (TEXTNS, 'span'): (self.s_text_span, self.e_text_span),
+        (TEXTNS, 'tab'): (self.s_text_tab, None),
+        (TEXTNS, "table-index-source"):(self.s_text_x_source, self.e_text_x_source),
+        (TEXTNS, "table-of-content-source"):(self.s_text_x_source, self.e_text_x_source),
+        (TEXTNS, "user-index-source"):(self.s_text_x_source, self.e_text_x_source),
+        (TEXTNS, "page-number"):(None, None),
+        }
 
