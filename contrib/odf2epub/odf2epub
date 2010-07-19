@@ -184,7 +184,7 @@ class EPublication:
         self.doc = load(filename)
         self.coverimage = coverimage
         self.odhandler = ODF2EPUB(True, False)
-        self.odhandler.set_style_file("styles.css")
+        self.odhandler.add_style_file("styles.css")
         self.odhandler.load(self.doc)
 
     def save(self, outputfile):
