@@ -82,12 +82,7 @@ def cnv_family(attribute, arg, element):
         raise ValueError, "'%s' not allowed" % str(arg)
     return str(arg)
 
-def cnv_formula(attribute, arg, element):
-    """ A string containing a formula. Formulas do not have a predefined syntax, but the string should
-        begin with a namespace prefix, followed by a “:” (COLON, U+003A) separator, followed by the text
-        of the formula. The namespace bound to the prefix determines the syntax and semantics of the
-        formula.
-    """
+def __save_prefix(attribute, arg, element):
     prefix = arg.split(':',1)[0]
     if prefix == arg:
         return unicode(arg)
@@ -97,6 +92,14 @@ def cnv_formula(attribute, arg, element):
         return unicode(arg)
     p = element.get_nsprefix(namespace)
     return unicode(arg)
+
+def cnv_formula(attribute, arg, element):
+    """ A string containing a formula. Formulas do not have a predefined syntax, but the string should
+        begin with a namespace prefix, followed by a “:” (COLON, U+003A) separator, followed by the text
+        of the formula. The namespace bound to the prefix determines the syntax and semantics of the
+        formula.
+    """
+    return __save_prefix(attribute, arg, element)
 
 def cnv_ID(attribute, arg, element):
     return str(arg)
@@ -149,7 +152,7 @@ def cnv_namespacedToken(attribute, arg, element):
 
     if not pattern_namespacedToken.match(arg):
         raise ValueError, "'%s' is not a valid namespaced token" % arg
-    return arg
+    return __save_prefix(attribute, arg, element)
 
 def cnv_NCName(attribute, arg, element):
     """ NCName is defined in http://www.w3.org/TR/REC-xml-names/#NT-NCName
@@ -255,6 +258,7 @@ attrconverters = {
 	((ANIMNS,u'name'), None): cnv_string,
 	((ANIMNS,u'sub-item'), None): cnv_string,
 	((ANIMNS,u'value'), None): cnv_string,
+#	((DBNS,u'type'), None): cnv_namespacedToken,
 	((CHARTNS,u'attached-axis'), None): cnv_string,
 	((CHARTNS,u'class'), (CHARTNS,u'grid')): cnv_major_minor,
 	((CHARTNS,u'class'), None): cnv_namespacedToken,
@@ -412,7 +416,7 @@ attrconverters = {
 	((DRAWNS,u'end-line-spacing-horizontal'), None): cnv_string,
 	((DRAWNS,u'end-line-spacing-vertical'), None): cnv_string,
 	((DRAWNS,u'end-shape'), None): cnv_IDREF,
-	((DRAWNS,u'engine'), None): cnv_string,
+	((DRAWNS,u'engine'), None): cnv_namespacedToken,
 	((DRAWNS,u'enhanced-path'), None): cnv_string,
 	((DRAWNS,u'escape-direction'), None): cnv_string,
 	((DRAWNS,u'extrusion-allowed'), None): cnv_boolean,
@@ -633,7 +637,7 @@ attrconverters = {
 	((FORMNS,u'button-type'), None): cnv_string,
 	((FORMNS,u'command'), None): cnv_string,
 	((FORMNS,u'command-type'), None): cnv_string,
-	((FORMNS,u'control-implementation'), None): cnv_string,
+	((FORMNS,u'control-implementation'), None): cnv_namespacedToken,
 	((FORMNS,u'convert-empty-to-null'), None): cnv_boolean,
 	((FORMNS,u'current-selected'), None): cnv_boolean,
 	((FORMNS,u'current-state'), None): cnv_string,
