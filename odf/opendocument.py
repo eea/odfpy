@@ -128,12 +128,12 @@ class OpenDocument:
             self.element_dict[element.qname] = []
         self.element_dict[element.qname].append(element)
         if element.qname == (STYLENS, u'style'):
-            self._register_stylename(element) # Add to style dictionary
+            self.__register_stylename(element) # Add to style dictionary
         styleref = element.getAttrNS(TEXTNS,u'style-name')
         if styleref is not None and self._styles_ooo_fix.has_key(styleref):
             element.setAttrNS(TEXTNS,u'style-name', self._styles_ooo_fix[styleref])
 
-    def _register_stylename(self, element):
+    def __register_stylename(self, element):
         ''' Register a style. But there are three style dictionaries:
             office:styles, office:automatic-styles and office:master-styles
             Chapter 14
@@ -165,7 +165,7 @@ class OpenDocument:
         """ Generates the full document as an XML file
             Always written as a bytestream in UTF-8 encoding
         """
-        self._replaceGenerator()
+        self.__replaceGenerator()
         xml=StringIO()
         xml.write(_XMLPROLOGUE)
         self.topnode.toXml(0, xml)
@@ -197,8 +197,10 @@ class OpenDocument:
         x.write_close_tag(0, xml)
         return xml.getvalue()
 
-    def manifestxml(self):
-        """ Generates the manifest.xml file """
+    def __manifestxml(self):
+        """ Generates the manifest.xml file
+            The self.manifest isn't avaible unless the document is being saved
+        """
         xml=StringIO()
         xml.write(_XMLPROLOGUE)
         self.manifest.toXml(0,xml)
@@ -206,7 +208,7 @@ class OpenDocument:
 
     def metaxml(self):
         """ Generates the meta.xml file """
-        self._replaceGenerator()
+        self.__replaceGenerator()
         x = DocumentMeta()
         x.addElement(self.meta)
         xml=StringIO()
@@ -368,14 +370,14 @@ class OpenDocument:
                 zi.external_attr = UNIXPERMS
                 self._z.writestr(zi, fileobj)
         if hasPictures:
-            self.manifest.addElement(manifest.FileEntry(fullpath="%sPictures/" % folder,mediatype=""))
+            self.manifest.addElement(manifest.FileEntry(fullpath="%sPictures/" % folder, mediatype=""))
         # Look in subobjects
         subobjectnum = 1
         for subobject in object.childobjects:
             self._savePictures(subobject,'%sObject %d/' % (folder, subobjectnum))
             subobjectnum += 1
 
-    def _replaceGenerator(self):
+    def __replaceGenerator(self):
         """ Section 3.1.1: The application MUST NOT export the original identifier
             belonging to the application that created the document.
         """
@@ -394,7 +396,7 @@ class OpenDocument:
             if addsuffix:
                 outputfile = outputfile + odmimetypes.get(self.mimetype,'.xxx')
             outputfp = zipfile.ZipFile(outputfile, "w")
-        self._zipwrite(outputfp)
+        self.__zipwrite(outputfp)
         outputfp.close()
 
     def write(self, outputfp):
@@ -402,9 +404,9 @@ class OpenDocument:
             Writes the ZIP format
         """
         zipoutputfp = zipfile.ZipFile(outputfp,"w")
-        self._zipwrite(zipoutputfp)
+        self.__zipwrite(zipoutputfp)
 
-    def _zipwrite(self, outputfp):
+    def __zipwrite(self, outputfp):
         """ Write the document to an open file pointer
             This is where the real work is done
         """
@@ -445,7 +447,7 @@ class OpenDocument:
         zi = zipfile.ZipInfo("META-INF/manifest.xml", self._now)
         zi.compress_type = zipfile.ZIP_DEFLATED
         zi.external_attr = UNIXPERMS
-        self._z.writestr(zi, self.manifestxml() )
+        self._z.writestr(zi, self.__manifestxml() )
         del self._z
         del self._now
         del self.manifest
@@ -471,8 +473,8 @@ class OpenDocument:
         self._z.writestr(zi, object.contentxml() )
 
         # Write settings
-        if self == object and self.settings.hasChildNodes():
-            self.manifest.addElement(manifest.FileEntry(fullpath="settings.xml",mediatype="text/xml"))
+        if object.settings.hasChildNodes():
+            self.manifest.addElement(manifest.FileEntry(fullpath="%ssettings.xml" % folder, mediatype="text/xml"))
             zi = zipfile.ZipInfo("%ssettings.xml" % folder, self._now)
             zi.compress_type = zipfile.ZIP_DEFLATED
             zi.external_attr = UNIXPERMS
@@ -480,7 +482,7 @@ class OpenDocument:
 
         # Write meta
         if self == object:
-            self.manifest.addElement(manifest.FileEntry(fullpath="meta.xml",mediatype="text/xml"))
+            self.manifest.addElement(manifest.FileEntry(fullpath="meta.xml", mediatype="text/xml"))
             zi = zipfile.ZipInfo("meta.xml", self._now)
             zi.compress_type = zipfile.ZIP_DEFLATED
             zi.external_attr = UNIXPERMS
@@ -575,20 +577,11 @@ def OpenDocumentTextMaster():
     doc.body.addElement(doc.text)
     return doc
 
-def load(odffile):
-    """ Load an ODF file into memory
-        Returns a reference to the structure
-    """
+def __loadxmlparts(z, manifest, doc, objectpath):
     from load import LoadParser
     from xml.sax import make_parser, handler
-    z = zipfile.ZipFile(odffile)
-    mimetype = z.read('mimetype')
-    doc = OpenDocument(mimetype, add_generator=False)
 
-    # Look in the manifest file to see if which of the four files there are
-    manifestpart = z.read('META-INF/manifest.xml')
-    manifest =  manifestlist(manifestpart)
-    for xmlfile in ('settings.xml', 'meta.xml', 'content.xml', 'styles.xml'):
+    for xmlfile in (objectpath+'settings.xml', objectpath+'meta.xml', objectpath+'content.xml', objectpath+'styles.xml'):
         if not manifest.has_key(xmlfile):
             continue
         try:
@@ -605,7 +598,19 @@ def load(odffile):
             parser.parse(inpsrc)
             del doc._parsing
         except KeyError, v: pass
-    # FIXME: Add subobjects correctly here
+
+def load(odffile):
+    """ Load an ODF file into memory
+        Returns a reference to the structure
+    """
+    z = zipfile.ZipFile(odffile)
+    mimetype = z.read('mimetype')
+    doc = OpenDocument(mimetype, add_generator=False)
+
+    # Look in the manifest file to see if which of the four files there are
+    manifestpart = z.read('META-INF/manifest.xml')
+    manifest =  manifestlist(manifestpart)
+    __loadxmlparts(z, manifest, doc, '')
     for mentry,mvalue in manifest.items():
         if mentry[:9] == "Pictures/" and len(mentry) > 9:
             doc.addPicture(mvalue['full-path'], mvalue['media-type'], z.read(mentry))
@@ -613,9 +618,14 @@ def load(odffile):
             doc.addThumbnail(z.read(mentry))
         elif mentry in ('settings.xml', 'meta.xml', 'content.xml', 'styles.xml'):
             pass
-#FIXME: Load subobjects into structure
-#       elif mentry[:7] == "Object " and len(mentry) > 8:
-#           self.childobjects ...
+        # Load subobjects into structure
+        elif mentry[:7] == "Object " and len(mentry) < 11 and mentry[-1] == "/":
+            mimetype = mvalue['media-type']
+            subdoc = OpenDocument(mimetype, add_generator=False)
+            doc.addObject(subdoc, "/" + mentry[:-1])
+            __loadxmlparts(z, manifest, subdoc, mentry)
+        elif mentry[:7] == "Object ":
+            pass # Don't load subobjects as opaque objects
         else:
             if mvalue['full-path'][-1] == '/':
                 doc._extra.append(OpaqueObject(mvalue['full-path'], mvalue['media-type'], None))
@@ -640,4 +650,5 @@ def load(odffile):
     elif mimetype[:42] == 'application/vnd.oasis.opendocument.formula':
         doc.formula = b[0].firstChild
     return doc
+
 # vim: set expandtab sw=4 :

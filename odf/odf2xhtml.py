@@ -730,13 +730,14 @@ class ODF2XHTML(handler.ContentHandler):
         """
         objhref = attrs[(XLINKNS,"href")]
         # Remove leading "./": from "./Object 1" to "Object 1"
-        objhref = objhref [2:]
+#       objhref = objhref [2:]
        
         # Not using os.path.join since it fails to find the file on Windows.
-        objcontentpath = '/'.join([objhref, 'content.xml'])
+#       objcontentpath = '/'.join([objhref, 'content.xml'])
 
-        #FIXME: There is no parsexml method any longer.
-        self.parsexml(contenthandler=ODF2XHTMLembedded(self.lines), xmlpathlist=[objcontentpath])
+        for c in self.document.childnodes:
+            if c.folder == objhref:
+                self._walknode(c.topnode)
 
     def s_draw_object_ole(self, tag, attrs):
         """ A <draw:object-ole> is embedded OLE object in the document (e.g. MS Graph).
@@ -1398,10 +1399,10 @@ ol, ul { padding-left: 2em; }
         self.lines = []
         self._wfunc = self._wlines
         if isinstance(odffile, basestring):
-            doc = load(odffile)
+            self.document = load(odffile)
         else:
-            doc = odffile
-        self._walknode(doc.topnode)
+            self.document = odffile
+        self._walknode(self.document.topnode)
 
     def _walknode(self, node):
         if node.nodeType == Node.ELEMENT_NODE:

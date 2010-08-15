@@ -142,5 +142,31 @@ class TestExampleDocs(unittest.TestCase):
         self.assertNotEqual(-1, result.find(u'''table:formula="=SQRT([.A1]*[.A1]+[.A2]*[.A2])"'''))
         self.assertNotEqual(-1, result.find(u'''table:formula="=SUM([.A1]:[.A2])"'''))
 
+class TestExampleDocs(unittest.TestCase):
+
+    def test_metagenerator(self):
+        """ Check that meta:generator is the original one """
+        parastyles_odt = os.path.join(
+            os.path.dirname(__file__), "examples", "emb_spreadsheet.odp")
+        d = load(parastyles_odt)
+        meta = unicode(d.metaxml(),'utf-8')
+        self.assertNotEqual(-1, meta.find(u"""<meta:generator>ODFPY"""), "Must not use the original generator string")
+
+
+    def test_spreadsheet(self):
+        """ Load a document containing subobjects """
+        spreadsheet_odt = os.path.join(
+            os.path.dirname(__file__), "examples", "emb_spreadsheet.odp")
+        d = load(spreadsheet_odt)
+        self.assertEqual(1, len(d.childobjects))
+        for s in d.childobjects:
+            print s.folder
+#        mani = unicode(d.manifestxml(),'utf-8')
+#        self.assertNotEqual(-1, mani.find(u''' manifest:full-path="Object 1/"'''), "Must contain the subobject")
+#        self.assertNotEqual(-1, mani.find(u''' manifest:full-path="Object 1/settings.xml"'''), "Must contain the subobject settings.xml")
+
+#        d.save("subobject.odp")
+
+
 if __name__ == '__main__':
     unittest.main()
