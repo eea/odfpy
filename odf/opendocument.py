@@ -369,8 +369,9 @@ class OpenDocument:
                 zi.compress_type = zipfile.ZIP_STORED
                 zi.external_attr = UNIXPERMS
                 self._z.writestr(zi, fileobj)
-        if hasPictures:
-            self.manifest.addElement(manifest.FileEntry(fullpath="%sPictures/" % folder, mediatype=""))
+        # According to section 17.7.3 in ODF 1.1, the pictures folder should not have a manifest entry
+#       if hasPictures:
+#           self.manifest.addElement(manifest.FileEntry(fullpath="%sPictures/" % folder, mediatype=""))
         # Look in subobjects
         subobjectnum = 1
         for subobject in object.childobjects:
@@ -620,8 +621,7 @@ def load(odffile):
             pass
         # Load subobjects into structure
         elif mentry[:7] == "Object " and len(mentry) < 11 and mentry[-1] == "/":
-            mimetype = mvalue['media-type']
-            subdoc = OpenDocument(mimetype, add_generator=False)
+            subdoc = OpenDocument(mvalue['media-type'], add_generator=False)
             doc.addObject(subdoc, "/" + mentry[:-1])
             __loadxmlparts(z, manifest, subdoc, mentry)
         elif mentry[:7] == "Object ":
