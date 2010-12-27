@@ -1,0 +1,184 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# Copyright (C) 2010 Kartikaya Gupta, https://staktrace.com/
+#
+# This is free software.  You may redistribute it under the terms
+# of the Apache license and the GNU General Public License Version
+# 2 or at your option any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public
+# License along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+#
+# Contributor(s):
+#
+
+from odf import opendocument
+from odf.element import Text
+from odf.table import *
+from odf.text import P
+from optparse import OptionParser
+import sys,csv,re
+
+def getSheet( file, sheetIndex ):
+    doc = opendocument.load( file )
+    try:
+        spreadsheet = doc.spreadsheet
+    except NameError:
+        sys.stderr.write("Error: file is not a spreadsheet\n")
+        return (None, None)
+
+    sheets = spreadsheet.getElementsByType( Table )
+    if sheetIndex > len( sheets ):
+        sys.stderr.write( "Error: spreadsheet has only %d sheets; requested invalid sheet %d\n" % (len( sheets ), sheetIndex + 1) )
+        return (None, None)
+
+    sheet = sheets[sheetIndex]
+    return (doc, sheet)
+
+def displayCells( file, sheetIndex, rowIndex, colIndex, rowCount, colCount ):
+    (doc, sheet) = getSheet( file, sheetIndex )
+    if (doc == None or sheet == None):
+        return 1
+
+    rows = sheet.getElementsByType( TableRow )
+    if rowIndex + rowCount > len( rows ):
+        sys.stderr.write( "Error: sheet has only %d rows; requested invalid row %d\n" % (len( rows ), rowIndex + rowCount) )
+        return 1
+
+    csv_writer = csv.writer( sys.stdout )
+    for i in range( rowIndex, rowIndex + rowCount ):
+        row = rows[ i ]
+        cells = row.getElementsByType( TableCell )
+        if colIndex + colCount > len( cells ):
+            sys.stderr.write( "Error: row has only %d cells; requested invalid column %d\n" % (len( cells ), colIndex + colCount) )
+            return 1
+        for j in range( colIndex, colIndex + colCount ):
+            cells[ j ] = unicode( cells[ j ] )
+        csv_writer.writerow( cells[ colIndex : colIndex + colCount ] )
+    return 0
+
+def updateCells( file, sheetIndex, rowIndex, colIndex, rowCount, colCount ):
+    (doc, sheet) = getSheet( file, sheetIndex )
+    if (doc == None or sheet == None):
+        return 1
+
+    data = sys.stdin.readlines()
+    if rowCount < 0:
+        rowCount = len( data )
+    elif len( data ) < rowCount:
+        sys.stderr.write( "Error: not enough rows in input\n" )
+        return 1
+
+    # add table rows as necessary
+    rows = sheet.getElementsByType( TableRow )
+    if rowIndex + rowCount > len( rows ):
+        for i in range( rowIndex + rowCount - len( rows ) ):
+            sheet.addElement( TableRow() )
+        rows = sheet.getElementsByType( TableRow )
+
+    csv_reader = csv.reader( data )
+    for i in range( rowIndex, rowIndex + rowCount ):
+        row = rows[ i ]
+        dataRow = csv_reader.next()
+        rowColCount = colCount
+        if rowColCount < 0:
+            rowColCount = len( dataRow )
+        elif len( dataRow ) < rowColCount:
+            sys.stderr.write( "Error: not enough columns in input on row %d\n" % (rowIndex - i + 1) )
+            return 1
+
+        cells = row.getElementsByType( TableCell )
+        if colIndex > len( cells ):
+            for j in range( len( cells ), colIndex ):
+                row.addElement( TableCell() )
+            cells = row.getElementsByType( TableCell )
+
+        for j in range( colIndex, colIndex + rowColCount ):
+            if j < len( cells ):
+                row.insertBefore( TableCell(), cells[ j ].nextSibling );
+                row.removeChild( cells[ j ] )
+            else:
+                row.addElement( TableCell() )
+
+            cells = row.getElementsByType( TableCell )
+            value = dataRow[ j - colIndex ]
+            if re.match( r'^[-]?\d+(\.\d+)?$', value.strip() ):
+                cells[ j ].setAttribute( 'valuetype', 'float' )
+                cells[ j ].setAttribute( 'value', value )
+            else:
+                cells[ j ].setAttribute( 'valuetype', 'string' )
+            cells[ j ].addElement( P( text = dataRow[ j - colIndex ] ) )
+
+    doc.save( file )
+    return 0
+
+def parseCell( cell ):
+    cellmatch = re.match( r'^([A-Z]+)([0-9]+)$', cell )
+    if cellmatch == None:
+        sys.stderr.write( "Error: the cell specified was not in the required format of <column><row> (e.g. A1)" )
+        exit( 1 )
+
+    cellcol = cellmatch.group( 1 )
+    colIndex = 0
+    for i in range( len( cellcol ) ):
+        colIndex = (colIndex * 26) + (ord( cellcol[i] ) - ord( 'A' ) + 1)
+    colIndex = colIndex - 1
+
+    rowIndex = int( cellmatch.group( 2 ) ) - 1
+
+    return (colIndex, rowIndex)
+
+def getCount( value, write, label ):
+    if value == None:
+        if write:
+            return -1
+        else:
+            return 1
+
+    value = int( value )
+    if value <= 0:
+        sys.stderr.write( "Error: illegal value specified for %s\n" % label )
+        exit( 1 )
+    return value
+
+if __name__ == "__main__":
+    usage = "%prog file.ods cell"
+    parser = OptionParser( usage=usage, version="%prog 0.1" )
+    parser.add_option( '-r', '--rows', action='store', dest='rows', help=
+'''Specify the height of the block of cells, in rows. Must be greater than zero. Defaults to 1 when
+the -w option is not present. Defaults to the number of input rows when the -w option is present.''', default=None )
+    parser.add_option( '-c', '--cols', action='store', dest='cols', help=
+'''Specify the width of the block of cells, in columns. Must be greater than zero. Defaults to 1 when
+the -w option is not present. Defaults to the number of input columns when the -w option is present.''', default=None )
+    parser.add_option( '-s', '--sheet', action='store', dest='sheet', help='The sheet in the ODS file to read/modify. Must be greater than zero; defaults to 1.', default=1 )
+    parser.add_option( '-w', '--write', action='store_true', dest='write', help=
+'''If specified, the spreadsheet will be modified with data from standard input. If not specified,
+the cells from the spreadsheet will be written to standard output.''' )
+
+    (options, args) = parser.parse_args()
+
+    if len( args ) != 2:
+        parser.print_help()
+        exit( 1 )
+
+    file = args[0]
+    (colIndex, rowIndex) = parseCell( args[1] )
+
+    rowCount = getCount( options.rows, options.write, 'rows' )
+    colCount = getCount( options.cols, options.write, 'cols' )
+    sheet = int( options.sheet ) - 1
+
+    if sheet < 0:
+        sys.stderr.write( "Error: illegal value specified for sheet\n" )
+        exit( 1 )
+
+    if options.write:
+        exit( updateCells( file, sheet, rowIndex, colIndex, rowCount, colCount ) )
+    else:
+        exit( displayCells( file, sheet, rowIndex, colIndex, rowCount, colCount ) )
