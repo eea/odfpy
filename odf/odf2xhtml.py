@@ -404,6 +404,7 @@ class ODF2XHTML(handler.ContentHandler):
         (TEXTNS, "alphabetical-index-source"):(self.s_text_x_source, self.e_text_x_source),
         (TEXTNS, "bibliography-configuration"):(self.s_ignorexml, None),
         (TEXTNS, "bibliography-source"):(self.s_text_x_source, self.e_text_x_source),
+        (TEXTNS, 'bookmark'): (self.s_text_bookmark, None),
         (TEXTNS, 'h'): (self.s_text_h, self.e_text_h),
         (TEXTNS, "illustration-index-source"):(self.s_text_x_source, self.e_text_x_source),
         (TEXTNS, 'line-break'):(self.s_text_line_break, None),
@@ -580,7 +581,7 @@ class ODF2XHTML(handler.ContentHandler):
 
     def classname(self, attrs):
         """ Generate a class name from a style name """
-        c = attrs[(TEXTNS,'style-name')]
+        c = attrs.get((TEXTNS,'style-name'),'')
         c = c.replace(".","_")
         return c
 
@@ -1136,6 +1137,16 @@ ol, ul { padding-left: 2em; }
         self.writedata()
         self.closetag('a', False)
         self.purgedata()
+
+    def s_text_bookmark(self, tag, attrs):
+        """ Bookmark definition """
+        name = attrs[(TEXTNS,'name')]
+        html_id = self.get_anchor(name)
+        self.writedata()
+        self.opentag('span', {'id':html_id})
+        self.closetag('span', False)
+        self.purgedata()
+
 
     def s_text_h(self, tag, attrs):
         """ Headings start """
