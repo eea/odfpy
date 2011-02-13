@@ -35,6 +35,15 @@ except ImportError:
 
 extension_attributes = {
 	 "OpenDocument 1.2" : {
+		(OFFICENS,u'document-content'):(
+			(GRDDLNS,u'transformation'),
+		),
+		(OFFICENS,u'document-meta'):(
+			(GRDDLNS,u'transformation'),
+		),
+		(OFFICENS,u'document-styles'):(
+			(GRDDLNS,u'transformation'),
+		),
 		(STYLENS,u'section-properties'): (
 			(STYLENS,u'editable'),
 		),

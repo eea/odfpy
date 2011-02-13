@@ -31,6 +31,7 @@ DRAWNS         = u"urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
 FIELDNS        = u"urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0"
 FONS           = u"urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
 FORMNS         = u"urn:oasis:names:tc:opendocument:xmlns:form:1.0"
+GRDDLNS        = u"http://www.w3.org/2003/g/data-view#"
 KOFFICENS      = u"http://www.koffice.org/2005/"
 MANIFESTNS     = u"urn:oasis:names:tc:opendocument:xmlns:manifest:1.0"
 MATHNS         = u"http://www.w3.org/1998/Math/MathML"
@@ -68,6 +69,7 @@ nsdict = {
    FIELDNS: u'field',
    FONS: u'fo',
    FORMNS: u'form',
+   GRDDLNS: u'grddl',
    KOFFICENS: u'koffice',
    MANIFESTNS: u'manifest',
    MATHNS: u'math',

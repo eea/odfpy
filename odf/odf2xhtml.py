@@ -405,6 +405,9 @@ class ODF2XHTML(handler.ContentHandler):
         (TEXTNS, "bibliography-configuration"):(self.s_ignorexml, None),
         (TEXTNS, "bibliography-source"):(self.s_text_x_source, self.e_text_x_source),
         (TEXTNS, 'bookmark'): (self.s_text_bookmark, None),
+        (TEXTNS, 'bookmark-start'): (self.s_text_bookmark, None),
+        (TEXTNS, 'bookmark-ref'): (self.s_text_bookmark_ref, self.e_text_a),
+        (TEXTNS, 'bookmark-ref-start'): (self.s_text_bookmark_ref, None),
         (TEXTNS, 'h'): (self.s_text_h, self.e_text_h),
         (TEXTNS, "illustration-index-source"):(self.s_text_x_source, self.e_text_x_source),
         (TEXTNS, 'line-break'):(self.s_text_line_break, None),
@@ -1134,6 +1137,7 @@ ol, ul { padding-left: 2em; }
         self.purgedata()
 
     def e_text_a(self, tag, attrs):
+        """ End an anchor or bookmark reference """
         self.writedata()
         self.closetag('a', False)
         self.purgedata()
@@ -1147,6 +1151,13 @@ ol, ul { padding-left: 2em; }
         self.closetag('span', False)
         self.purgedata()
 
+    def s_text_bookmark_ref(self, tag, attrs):
+        """ Bookmark reference """
+        name = attrs[(TEXTNS,'ref-name')]
+        html_id = "#" + self.get_anchor(name)
+        self.writedata()
+        self.opentag('a', {'href':html_id})
+        self.purgedata()
 
     def s_text_h(self, tag, attrs):
         """ Headings start """
