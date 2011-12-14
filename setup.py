@@ -49,11 +49,13 @@ setup(name='odfpy',
         'Intended Audience :: End Users/Desktop',
         'Intended Audience :: Developers',
         'Intended Audience :: System Administrators',
+        'License :: OSI Approved :: Apache Software License',
         'License :: OSI Approved :: GNU General Public License (GPL)',
+        'License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)'
         'Operating System :: MacOS :: MacOS X',
         'Operating System :: Microsoft :: Windows',
         'Operating System :: POSIX',
-        'Programming Language :: Python',
+        'Programming Language :: Python :: 2 :: Only',
         'Topic :: Office/Business',
         'Topic :: Software Development :: Libraries :: Python Modules',
       ],
@@ -84,11 +86,11 @@ In addition to the API, there are a few scripts:
 - odfuserfield - List or change the user-field declarations in an ODF file
 - xml2odf - Create OD? package from OpenDocument in XML form
 
-Visit http://odfpy.forge.osor.eu/ for documentation and examples."""
+Visit https://joinup.ec.europa.eu/software/odfpy/home for documentation and examples."""
 ),
       author='Soren Roug',
       author_email='soren.roug@eea.europa.eu',
-      url='http://opendocumentfellowship.com/development/projects/odfpy',
+      url='https://joinup.ec.europa.eu/software/odfpy/home',
       packages=['odf'],
       scripts=[
           'csv2ods/csv2ods',

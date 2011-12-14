@@ -70,7 +70,14 @@ class TestXMLGenerator(unittest.TestCase):
 <a:greetings xmlns:a="http://example.com/ns">
   <a:greet xml:lang="en">Hello world</a:greet>
 </a:greetings>"""
-        self.assertRaises(KeyError, parser.feed, testcontent)
+        parser.feed(testcontent)
+        parser.close()
+        expectedresult="""<?xml version="1.0" encoding="utf-8"?>
+<a:greetings xmlns:a="http://example.com/ns">
+  <a:greet xml:lang="en">Hello world</a:greet>
+</a:greetings>"""
+        self.assertEqual( outfp.getvalue(), expectedresult)
+#       self.assertRaises(KeyError, parser.feed, testcontent)
 
     def test_myxml(self):
         """ Test that my patch works """
