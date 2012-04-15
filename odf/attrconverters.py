@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2006-2010 Søren Roug, European Environment Agency
+# Copyright (C) 2006-2012 Søren Roug, European Environment Agency
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -32,11 +32,15 @@ def cnv_anyURI(attribute, arg, element):
     return unicode(arg)
 
 def cnv_boolean(attribute, arg, element):
-    if arg.lower() in ("false","no"):
+    """ XML Schema Part 2: Datatypes Second Edition
+        An instance of a datatype that is defined as boolean can have the
+        following legal literals {true, false, 1, 0}
+    """
+    if str(arg).lower() in ("0","false","no"):
         return "false"
-    if arg:
+    if str(arg).lower() in ("1","true","yes"):
         return "true"
-    return "false"
+    raise ValueError, "'%s' not allowed as Boolean value for %s" % (str(arg), attribute)
 
 # Potentially accept color values
 def cnv_color(attribute, arg, element):
@@ -454,7 +458,7 @@ attrconverters = {
 	((DRAWNS,u'fill-image-width'), None): cnv_lengthorpercent,
 	((DRAWNS,u'filter-name'), None): cnv_string,
 	((DRAWNS,u'fit-to-contour'), None): cnv_boolean,
-	((DRAWNS,u'fit-to-size'), None): cnv_boolean,
+	((DRAWNS,u'fit-to-size'), None): cnv_string,  # ODF 1.2 says boolean
 	((DRAWNS,u'formula'), None): cnv_string,
 	((DRAWNS,u'frame-display-border'), None): cnv_boolean,
 	((DRAWNS,u'frame-display-scrollbar'), None): cnv_boolean,
@@ -989,7 +993,9 @@ attrconverters = {
 	((STYLENS,u'print-content'), None): cnv_boolean,
 	((STYLENS,u'print-orientation'), None): cnv_string,
 	((STYLENS,u'print-page-order'), None): cnv_string,
-	((STYLENS,u'protect'), None): cnv_boolean,
+	((STYLENS,u'protect'), (STYLENS,u'section-properties')): cnv_boolean,
+	((STYLENS,u'protect'), (STYLENS,u'graphic-properties')): cnv_string,
+#	((STYLENS,u'protect'), None): cnv_boolean,
 	((STYLENS,u'punctuation-wrap'), None): cnv_string,
 	((STYLENS,u'register-true'), None): cnv_boolean,
 	((STYLENS,u'register-truth-ref-style-name'), None): cnv_string,

@@ -53,6 +53,20 @@ class TestConverters(unittest.TestCase):
             else:
                 self.assertEquals(self.allqattrs[(attr, elem)], 1)
 
+    def testBooleanConverter(self):
+        """ Check that the boolean converter understands the values """
+        self.assertEquals(attrconverters.cnv_boolean("usesoftpagebreak", 'false', None), 'false')
+        self.assertEquals(attrconverters.cnv_boolean("usesoftpagebreak", 'true', None), 'true')
+        self.assertEquals(attrconverters.cnv_boolean("usesoftpagebreak", True, None), 'true')
+        self.assertEquals(attrconverters.cnv_boolean("usesoftpagebreak", False, None), 'false')
+        self.assertEquals(attrconverters.cnv_boolean("usesoftpagebreak", 1, None), 'true')
+        self.assertEquals(attrconverters.cnv_boolean("usesoftpagebreak", 0, None), 'false')
+        self.assertRaises(ValueError, attrconverters.cnv_boolean, "usesoftpagebreak", '', None)
+        self.assertRaises(ValueError, attrconverters.cnv_boolean, "usesoftpagebreak", 'on', None)
+        self.assertRaises(ValueError, attrconverters.cnv_boolean, "usesoftpagebreak", None, None)
+#       self.assertEquals(attrconverters.cnv_boolean("usesoftpagebreak", '', None), 'false')
+#       self.assertEquals(attrconverters.cnv_boolean("usesoftpagebreak", 'on', None), 'true')
+
 
 if __name__ == '__main__':
     unittest.main()

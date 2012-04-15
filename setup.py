@@ -21,7 +21,7 @@
 import platform
 from distutils.core import setup
 
-version = '0.9.4dev'
+version = '0.9.5dev'
 
 if platform.system() in ('Linux','Unix'):
     man1pages = [('share/man/man1', [
@@ -51,7 +51,7 @@ setup(name='odfpy',
         'Intended Audience :: System Administrators',
         'License :: OSI Approved :: Apache Software License',
         'License :: OSI Approved :: GNU General Public License (GPL)',
-        'License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)'
+        'License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)',
         'Operating System :: MacOS :: MacOS X',
         'Operating System :: Microsoft :: Windows',
         'Operating System :: POSIX',
