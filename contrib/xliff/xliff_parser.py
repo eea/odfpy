@@ -1,7 +1,7 @@
-# -*- coding: ISO-8859-1 -*-
-# Copyright (C) 2000-2004  Juan David Ibáñez Palomar <jdavid@itaapy.com>
+# -*- coding: utf-8 -*-
+# Copyright (C) 2000-2004  Juan David IbÃ¡Ã±ez Palomar <jdavid@itaapy.com>
 #               2003  Roberto Quero, Eduardo Corrales
-#               2004  Søren Roug
+#               2004  SÃ¸ren Roug
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
