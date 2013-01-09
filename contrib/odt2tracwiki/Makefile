@@ -2,10 +2,10 @@ all: odf odt2tracwiki.1
 
 txt: odt2tracwiki.txt
 
-%.1: %.xml 
+%.1: %.docbook 
 	xmlto man $<
 
-%.txt: %.xml 
+%.txt: %.docbook 
 	xmlto txt $<
 
 clean:

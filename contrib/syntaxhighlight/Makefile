@@ -2,10 +2,10 @@ all: odf syntaxhighlight.1
 
 txt: syntaxhighlight.txt
 
-%.1: %.xml 
+%.1: %.docbook 
 	xmlto man $<
 
-%.txt: %.xml 
+%.txt: %.docbook 
 	xmlto txt $<
 
 clean:

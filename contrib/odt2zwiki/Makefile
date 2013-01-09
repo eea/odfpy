@@ -1,11 +1,11 @@
-all: odf odt2moinmoin.1 
+all: odf odf2zwikimoin.1 
 
-txt: odt2moinmoin.txt
+txt: odf2zwikimoin.txt
 
-%.1: %.xml 
+%.1: %.docbook 
 	xmlto man $<
 
-%.txt: %.xml 
+%.txt: %.docbook 
 	xmlto txt $<
 
 clean:

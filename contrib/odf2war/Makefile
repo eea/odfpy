@@ -2,10 +2,10 @@ all: odf odf2war.1
 
 txt: odf2war.txt
 
-%.1: %.xml 
+%.1: %.docbok 
 	xmlto man $<
 
-%.txt: %.xml 
+%.txt: %.docbok 
 	xmlto txt $<
 
 clean:

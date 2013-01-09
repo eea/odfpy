@@ -2,10 +2,10 @@ all: odf odfuserfield.1
 
 txt: odfuserfield.txt
 
-%.1: %.xml 
+%.1: %.docbook 
 	xmlto man $<
 
-%.txt: %.xml 
+%.txt: %.docbook 
 	xmlto txt $<
 
 clean:

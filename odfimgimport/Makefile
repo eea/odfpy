@@ -2,10 +2,10 @@ all: odf odfimgimport.1
 
 txt: odfimgimport.txt
 
-%.1: %.xml 
+%.1: %.docbook 
 	xmlto man $<
 
-%.txt: %.xml 
+%.txt: %.docbook 
 	xmlto txt $<
 
 clean:
