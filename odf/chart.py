@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2006-2007 Søren Roug, European Environment Agency
+# Copyright (C) 2006-2013 Søren Roug, European Environment Agency
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -31,11 +31,17 @@ def Categories(**args):
 def Chart(**args):
     return Element(qname = (CHARTNS,'chart'), **args)
 
+def DataLabel(**args):
+    return Element(qname = (CHARTNS,'data-label'), **args)
+
 def DataPoint(**args):
     return Element(qname = (CHARTNS,'data-point'), **args)
 
 def Domain(**args):
     return Element(qname = (CHARTNS,'domain'), **args)
+
+def Equation(**args):
+    return Element(qname = (CHARTNS,'equation'), **args)
 
 def ErrorIndicator(**args):
     return Element(qname = (CHARTNS,'error-indicator'), **args)
@@ -48,6 +54,9 @@ def Footer(**args):
 
 def Grid(**args):
     return Element(qname = (CHARTNS,'grid'), **args)
+
+def LabelSeparator(**args):
+    return Element(qname = (CHARTNS,'label-separator'), **args)
 
 def Legend(**args):
     return Element(qname = (CHARTNS,'legend'), **args)

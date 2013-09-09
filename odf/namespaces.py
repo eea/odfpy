@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2006-2010 Søren Roug, European Environment Agency
+# Copyright (C) 2006-2013 Søren Roug, European Environment Agency
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -17,7 +17,7 @@
 #
 # Contributor(s):
 #
-TOOLSVERSION = u"ODFPY/0.9.6dev"
+TOOLSVERSION = u"ODFPY/1.2.0dev"
 
 ANIMNS         = u"urn:oasis:names:tc:opendocument:xmlns:animation:1.0"
 CHARTNS        = u"urn:oasis:names:tc:opendocument:xmlns:chart:1.0"

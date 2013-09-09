@@ -47,7 +47,7 @@ class TestDrawElements(unittest.TestCase):
     def testCalls(self):
         """ Simple calls """
         self.assertRaises(TypeError, draw.FillImage, "x", href="y")
-        draw.FillImage(name="x",href="y")
+        draw.FillImage(name="x", href="y", type="simple")
         self.assertRaises(TypeError, draw.Gradient, "x", style="y")
         self.assertRaises(TypeError, draw.Hatch, "x", style="y")
         self.assertRaises(TypeError, draw.Marker, "x",d="y",viewbox="0 0 100 100")

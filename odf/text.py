@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2006-2007 Søren Roug, European Environment Agency
+# Copyright (C) 2006-2013 Søren Roug, European Environment Agency
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -262,6 +262,12 @@ def ListStyle(**args):
 
 def Measure(**args):
     return Element(qname = (TEXTNS,'measure'), **args)
+
+def Meta(**args):
+    return Element(qname = (TEXTNS,'meta'), **args)
+
+def MetaField(**args):
+    return Element(qname = (TEXTNS,'meta-field'), **args)
 
 def ModificationDate(**args):
     return Element(qname = (TEXTNS,'modification-date'), **args)

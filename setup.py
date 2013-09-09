@@ -21,7 +21,7 @@
 import platform
 from distutils.core import setup
 
-version = '0.9.6dev'
+version = '1.2.0dev'
 
 if platform.system() in ('Linux','Unix'):
     man1pages = [('share/man/man1', [

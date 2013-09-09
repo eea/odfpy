@@ -24,11 +24,6 @@ import grammarnew
 
 from odf.namespaces import *
 
-# Bug in simplification.xsl
-grammarnew.allowed_children[(STYLENS,u'chart-properties')] = (
-                        (CHARTNS,u'symbol-image'),
-                                )
-
 class TestAllowedAtts(unittest.TestCase):
     def testNewAllowedAtts(self):
         "Testing grammarnew keys"

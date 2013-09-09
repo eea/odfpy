@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2006-2007 Søren Roug, European Environment Agency
+# Copyright (C) 2006-2013 Søren Roug, European Environment Agency
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -44,6 +44,9 @@ def ColumnSep(**args):
 def Columns(**args):
     return Element(qname = (STYLENS,'columns'), **args)
 
+def DefaultPageLayout(**args):
+    return Element(qname = (STYLENS,'default-page-layout'), **args)
+
 def DefaultStyle(**args):
     return Element(qname = (STYLENS,'default-style'), **args)
 
@@ -85,6 +88,9 @@ def HeaderLeft(**args):
 
 def HeaderStyle(**args):
     return Element(qname = (STYLENS,'header-style'), **args)
+
+def ListLevelLabelAlignment(**args):
+    return Element(qname = (STYLENS,'list-level-label-alignment'), **args)
 
 def ListLevelProperties(**args):
     return Element(qname = (STYLENS,'list-level-properties'), **args)

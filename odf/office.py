@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2006-2007 Søren Roug, European Environment Agency
+# Copyright (C) 2006-2013 Søren Roug, European Environment Agency
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -26,6 +26,9 @@ from draw import StyleRefElement
 def Annotation(**args):
     return StyleRefElement(qname = (OFFICENS,'annotation'), **args)
 
+def AnnotationEnd(**args):
+    return StyleRefElement(qname = (OFFICENS,'annotation-end'), **args)
+
 def AutomaticStyles(**args):
     return Element(qname = (OFFICENS, 'automatic-styles'), **args)
 
@@ -44,19 +47,19 @@ def Chart(**args):
 def DdeSource(**args):
     return Element(qname = (OFFICENS,'dde-source'), **args)
 
-def Document(version="1.1", **args):
+def Document(version="1.2", **args):
     return Element(qname = (OFFICENS,'document'), version=version, **args)
 
-def DocumentContent(version="1.1", **args):
+def DocumentContent(version="1.2", **args):
     return Element(qname = (OFFICENS, 'document-content'), version=version, **args)
 
-def DocumentMeta(version="1.1", **args):
+def DocumentMeta(version="1.2", **args):
     return Element(qname = (OFFICENS, 'document-meta'), version=version, **args)
 
-def DocumentSettings(version="1.1", **args):
+def DocumentSettings(version="1.2", **args):
     return Element(qname = (OFFICENS, 'document-settings'), version=version, **args)
 
-def DocumentStyles(version="1.1", **args):
+def DocumentStyles(version="1.2", **args):
     return Element(qname = (OFFICENS, 'document-styles'), version=version, **args)
 
 def Drawing(**args):

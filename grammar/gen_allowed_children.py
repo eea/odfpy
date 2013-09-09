@@ -144,17 +144,19 @@ from odf.namespaces import *'''
     print "allowed_children = {"
     for key in keys:
         definition = definitions[key]
-        for elmname in definition['elements']:
+        for elmname in sorted(definition['elements']):
             if elmname == u'__ANYNAME__':
                 continue
             ns = definition.get('ns','UNKNOWN')
+            if ns == DBNS: continue
             refs = definition['refs']
+            print "# allowed_children"
             if len(refs) == 1 and u'__ANYNAME__' in definitions[refs[0]]['elements']:
                 print "\t(%sNS,u'%s') : " % (nsdict.get(ns,'unknown').upper(), elmname)
                 print "\t\tNone,"
             else:
                 print "\t(%sNS,u'%s') : (" % (nsdict.get(ns,'unknown').upper(), elmname)
-                for r in refs:
+                for r in sorted(refs):
                     ns = definitions[r].get('ns','UNKNOWN')
                     for elmref in definitions[r]['elements']:
                         print "\t\t(%sNS,u'%s'), " % (nsdict.get(ns,'unknown').upper(), elmref)

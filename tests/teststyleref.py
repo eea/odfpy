@@ -69,7 +69,7 @@ class TestStyleRefs(unittest.TestCase):
             dr3d.Sphere(stylename=boldstyle)
             draw.Caption(stylename=boldstyle)
             draw.Circle(stylename=boldstyle)
-            draw.Connector(stylename=boldstyle)
+            draw.Connector(stylename=boldstyle, viewbox="0 0 1000 1000")
             draw.Control(stylename=boldstyle, control="x")
             draw.CustomShape(stylename=boldstyle)
             draw.Ellipse(stylename=boldstyle)

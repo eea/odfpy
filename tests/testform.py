@@ -63,5 +63,28 @@ class TestForm(unittest.TestCase):
         result = unicode(calcdoc.contentxml(),'utf-8')
         self.assertNotEqual(-1, result.find(u'''xmlns:ooo="http://openoffice.org/2004/office"'''))
 
+    def test_form_controls(self):
+        odf.form.Button(id="Button")
+        odf.form.Checkbox(id="Checkbox")
+        odf.form.Combobox(id="Combobox")
+        odf.form.Date(id="Date")
+        odf.form.File(id="File")
+        odf.form.FixedText(id="FixedText")
+        odf.form.FormattedText(id="FormattedText")
+        odf.form.Frame(id="Frame")
+        odf.form.GenericControl(id="GenericControl")
+        odf.form.Grid(id="Grid")
+        odf.form.Hidden(id="Hidden")
+        odf.form.Image(id="Image")
+        odf.form.ImageFrame(id="ImageFrame")
+        odf.form.Listbox(id="Listbox")
+        odf.form.Number(id="Number")
+        odf.form.Password(id="Password")
+        odf.form.Radio(id="Radio")
+        odf.form.Text(id="Text")
+        odf.form.Textarea(id="Textarea")
+        odf.form.Time(id="Time")
+        odf.form.ValueRange(id="ValueRange")
+
 if __name__ == '__main__':
     unittest.main()

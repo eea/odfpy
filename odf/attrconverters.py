@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2006-2012 Søren Roug, European Environment Agency
+# Copyright (C) 2006-2013 Søren Roug, European Environment Agency
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -27,6 +27,9 @@ def make_NCName(arg):
     for c in (':',' '):
         arg = arg.replace(c,"_%x_" % ord(c))
     return arg
+
+def cnv_angle(attribute, arg, element):
+    return unicode(arg)
 
 def cnv_anyURI(attribute, arg, element):
     return unicode(arg)
@@ -76,6 +79,11 @@ def cnv_dateTime(attribute, arg, element):
 def cnv_double(attribute, arg, element):
     return str(arg)
 
+def cnv_draw_aspect(attribute, arg, element):
+    if str(arg) not in ("content", "thumbnail", "icon", "print-view"):
+        raise ValueError, "'%s' not allowed" % str(arg)
+    return str(arg)
+
 def cnv_duration(attribute, arg, element):
     return str(arg)
 
@@ -114,6 +122,14 @@ def cnv_IDREF(attribute, arg, element):
 def cnv_integer(attribute, arg, element):
     return str(arg)
 
+pattern_language = re.compile(r'[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*')
+
+def cnv_language(attribute, arg, element):
+    global pattern_language
+    if not pattern_language.match(arg):
+        raise ValueError, "'%s' is not a valid language token" % arg
+    return arg
+
 def cnv_legend_position(attribute, arg, element):
     if str(arg) not in ("start", "end", "top", "bottom", "top-start", "bottom-start", "top-end", "bottom-end"):
         raise ValueError, "'%s' not allowed" % str(arg)
@@ -140,6 +156,11 @@ def cnv_lengthorpercent(attribute, arg, element):
         raise ValueError, "'%s' is not a valid length or percent" % arg
     return arg
 
+def cnv_list_linkage_type(attribute, arg, element):
+    if arg not in ('selection','selection-indices'):
+        raise ValueError, "'%s' is not either 'selection' or 'selection-indices'" % arg
+    return str(arg)
+
 def cnv_metavaluetype(attribute, arg, element):
     if str(arg) not in ("float", "date", "time", "boolean", "string"):
         raise ValueError, "'%s' not allowed" % str(arg)
@@ -148,6 +169,7 @@ def cnv_metavaluetype(attribute, arg, element):
 def cnv_major_minor(attribute, arg, element):
     if arg not in ('major','minor'):
         raise ValueError, "'%s' is not either 'minor' or 'major'" % arg
+    return str(arg)
 
 pattern_namespacedToken = re.compile(r'[0-9a-zA-Z_]+:[0-9a-zA-Z._\-]+')
 
@@ -221,8 +243,18 @@ def cnv_points(attribute, arg, element):
 def cnv_positiveInteger(attribute, arg, element):
     return str(arg)
 
+def cnv_rowOrCol(attribute, arg, element):
+    if str(arg) not in ("row","column"):
+        raise ValueError, "'%s' not allowed" % str(arg)
+    return str(arg)
+
 def cnv_string(attribute, arg, element):
     return unicode(arg)
+
+def cnv_stroke_linecap(attribute, arg, element):
+    if str(arg) not in ("butt", "square", "round"):
+        raise ValueError, "'%s' not allowed" % str(arg)
+    return str(arg)
 
 def cnv_textnoteclass(attribute, arg, element):
     if str(arg) not in ("footnote", "endnote"):
@@ -263,6 +295,12 @@ attrconverters = {
 	((ANIMNS,u'sub-item'), None): cnv_string,
 	((ANIMNS,u'value'), None): cnv_string,
 #	((DBNS,u'type'), None): cnv_namespacedToken,
+	((CHARTNS,u'angle-offset'), None): cnv_angle,
+	((CHARTNS,u'automatic-content'), None): cnv_boolean,
+	((CHARTNS,u'auto-position'), None): cnv_boolean,
+	((CHARTNS,u'auto-size'), None): cnv_boolean,
+	((CHARTNS,u'axis-label-position'), None): cnv_string, # Multi-value
+	((CHARTNS,u'axis-position'), None): cnv_string, # Multi-value
 	((CHARTNS,u'attached-axis'), None): cnv_string,
 	((CHARTNS,u'class'), (CHARTNS,u'grid')): cnv_major_minor,
 	((CHARTNS,u'class'), None): cnv_namespacedToken,
@@ -274,21 +312,30 @@ attrconverters = {
 	((CHARTNS,u'data-source-has-labels'), None): cnv_data_source_has_labels,
 	((CHARTNS,u'deep'), None): cnv_boolean,
 	((CHARTNS,u'dimension'), None): cnv_string,
+	((CHARTNS,u'display-equation'), None): cnv_boolean,
 	((CHARTNS,u'display-label'), None): cnv_boolean,
+	((CHARTNS,u'display-r-square'), None): cnv_boolean,
 	((CHARTNS,u'error-category'), None): cnv_string,
 	((CHARTNS,u'error-lower-indicator'), None): cnv_boolean,
 	((CHARTNS,u'error-lower-limit'), None): cnv_string,
 	((CHARTNS,u'error-margin'), None): cnv_string,
 	((CHARTNS,u'error-percentage'), None): cnv_string,
+	((CHARTNS,u'error-lower-range'), None): cnv_string,
 	((CHARTNS,u'error-upper-indicator'), None): cnv_boolean,
 	((CHARTNS,u'error-upper-limit'), None): cnv_string,
+	((CHARTNS,u'error-upper-range'), None): cnv_string,
 	((CHARTNS,u'gap-width'), None): cnv_string,
+	((CHARTNS,u'group-bars-per-axis'), None): cnv_boolean,
+	((CHARTNS,u'hole-size'), None): cnv_percent,
+	((CHARTNS,u'include-hidden-cells'), None): cnv_boolean,
 	((CHARTNS,u'interpolation'), None): cnv_string,
 	((CHARTNS,u'interval-major'), None): cnv_string,
 	((CHARTNS,u'interval-minor-divisor'), None): cnv_string,
 	((CHARTNS,u'japanese-candle-stick'), None): cnv_boolean,
 	((CHARTNS,u'label-arrangement'), None): cnv_string,
 	((CHARTNS,u'label-cell-address'), None): cnv_string,
+	((CHARTNS,u'label-position'), None): cnv_string, # Multi-value
+	((CHARTNS,u'label-position-negative'), None): cnv_string, # Multi-value
 	((CHARTNS,u'legend-align'), None): cnv_string,
 	((CHARTNS,u'legend-position'), None): cnv_legend_position,
 	((CHARTNS,u'lines'), None): cnv_boolean,
@@ -304,10 +351,13 @@ attrconverters = {
 	((CHARTNS,u'pie-offset'), None): cnv_string,
 	((CHARTNS,u'regression-type'), None): cnv_string,
 	((CHARTNS,u'repeated'), None): cnv_nonNegativeInteger,
+	((CHARTNS,u'reverse-direction'), None): cnv_boolean,
+	((CHARTNS,u'right-angled-axes'), None): cnv_boolean,
 	((CHARTNS,u'row-mapping'), None): cnv_string,
 	((CHARTNS,u'scale-text'), None): cnv_boolean,
 	((CHARTNS,u'series-source'), None): cnv_string,
 	((CHARTNS,u'solid-type'), None): cnv_string,
+	((CHARTNS,u'sort-by-x-values'), None): cnv_boolean,
 	((CHARTNS,u'spline-order'), None): cnv_string,
 	((CHARTNS,u'spline-resolution'), None): cnv_string,
 	((CHARTNS,u'stacked'), None): cnv_boolean,
@@ -318,10 +368,12 @@ attrconverters = {
 	((CHARTNS,u'symbol-width'), None): cnv_string,
 	((CHARTNS,u'text-overlap'), None): cnv_boolean,
 	((CHARTNS,u'three-dimensional'), None): cnv_boolean,
+	((CHARTNS,u'tick-mark-position'), None): cnv_string, # Multi-value
 	((CHARTNS,u'tick-marks-major-inner'), None): cnv_boolean,
 	((CHARTNS,u'tick-marks-major-outer'), None): cnv_boolean,
 	((CHARTNS,u'tick-marks-minor-inner'), None): cnv_boolean,
 	((CHARTNS,u'tick-marks-minor-outer'), None): cnv_boolean,
+	((CHARTNS,u'treat-empty-cells'), None): cnv_string, # Multi-value
 	((CHARTNS,u'values-cell-range-address'), None): cnv_string,
 	((CHARTNS,u'vertical'), None): cnv_boolean,
 	((CHARTNS,u'visible'), None): cnv_boolean,
@@ -411,7 +463,8 @@ attrconverters = {
 	((DRAWNS,u'dots1-length'), None): cnv_lengthorpercent,
 	((DRAWNS,u'dots2'), None): cnv_integer,
 	((DRAWNS,u'dots2-length'), None): cnv_lengthorpercent,
-	((DRAWNS,u'end-angle'), None): cnv_double,
+	((DRAWNS,u'draw-aspect'), None): cnv_draw_aspect,
+	((DRAWNS,u'end-angle'), None): cnv_angle,
 	((DRAWNS,u'end'), None): cnv_string,
 	((DRAWNS,u'end-color'), None): cnv_string,
 	((DRAWNS,u'end-glue-point'), None): cnv_nonNegativeInteger,
@@ -535,7 +588,7 @@ attrconverters = {
 	((DRAWNS,u'shape-id'), None): cnv_IDREF,
 	((DRAWNS,u'sharpness'), None): cnv_string,
 	((DRAWNS,u'show-unit'), None): cnv_boolean,
-	((DRAWNS,u'start-angle'), None): cnv_double,
+	((DRAWNS,u'start-angle'), None): cnv_angle,
 	((DRAWNS,u'start'), None): cnv_string,
 	((DRAWNS,u'start-color'), None): cnv_string,
 	((DRAWNS,u'start-glue-point'), None): cnv_nonNegativeInteger,
@@ -619,6 +672,7 @@ attrconverters = {
 	((FONS,u'padding-top'), None): cnv_string,
 	((FONS,u'page-height'), None): cnv_length,
 	((FONS,u'page-width'), None): cnv_length,
+	((FONS,u'script'), None): cnv_token,
 	((FONS,u'space-after'), None): cnv_length,
 	((FONS,u'space-before'), None): cnv_length,
 	((FONS,u'start-indent'), None): cnv_length,
@@ -669,6 +723,8 @@ attrconverters = {
 	((FORMNS,u'image-position'), None): cnv_string,
 	((FORMNS,u'is-tristate'), None): cnv_boolean,
 	((FORMNS,u'label'), None): cnv_string,
+	((FORMNS,u'linked-cell'), None): cnv_string,
+	((FORMNS,u'list-linkage-type'), None): cnv_list_linkage_type,
 	((FORMNS,u'list-source'), None): cnv_string,
 	((FORMNS,u'list-source-type'), None): cnv_string,
 	((FORMNS,u'master-fields'), None): cnv_string,
@@ -692,8 +748,11 @@ attrconverters = {
 	((FORMNS,u'printable'), None): cnv_boolean,
 	((FORMNS,u'property-name'), None): cnv_string,
 	((FORMNS,u'readonly'), None): cnv_boolean,
+	((FORMNS,u'repeat'), None): cnv_boolean,
 	((FORMNS,u'selected'), None): cnv_boolean,
 	((FORMNS,u'size'), None): cnv_nonNegativeInteger,
+	((FORMNS,u'source-cell-range'), None): cnv_string,
+	((FORMNS,u'spin-button'), None): cnv_boolean,
 	((FORMNS,u'state'), None): cnv_string,
 	((FORMNS,u'step-size'), None): cnv_positiveInteger,
 	((FORMNS,u'tab-cycle'), None): cnv_string,
@@ -710,16 +769,19 @@ attrconverters = {
 	((FORMNS,u'visual-effect'), None): cnv_string,
 	((FORMNS,u'xforms-list-source'), None): cnv_string,
 	((FORMNS,u'xforms-submission'), None): cnv_string,
-	((MANIFESTNS,'algorithm-name'), None): cnv_string,
-	((MANIFESTNS,'checksum'), None): cnv_string,
-	((MANIFESTNS,'checksum-type'), None): cnv_string,
-	((MANIFESTNS,'full-path'), None): cnv_string,
-	((MANIFESTNS,'initialisation-vector'), None): cnv_string,
-	((MANIFESTNS,'iteration-count'), None): cnv_nonNegativeInteger,
-	((MANIFESTNS,'key-derivation-name'), None): cnv_string,
-	((MANIFESTNS,'media-type'), None): cnv_string,
-	((MANIFESTNS,'salt'), None): cnv_string,
-	((MANIFESTNS,'size'), None): cnv_nonNegativeInteger,
+        ((GRDDLNS,u'transformation'), None): cnv_string,
+	((MANIFESTNS,u'algorithm-name'), None): cnv_string,
+	((MANIFESTNS,u'checksum'), None): cnv_string,
+	((MANIFESTNS,u'checksum-type'), None): cnv_string,
+	((MANIFESTNS,u'full-path'), None): cnv_string,
+	((MANIFESTNS,u'initialisation-vector'), None): cnv_string,
+	((MANIFESTNS,u'iteration-count'), None): cnv_nonNegativeInteger,
+	((MANIFESTNS,u'key-derivation-name'), None): cnv_string,
+	((MANIFESTNS,u'media-type'), None): cnv_string,
+	((MANIFESTNS,u'preferred-view-mode'), None): cnv_string,
+	((MANIFESTNS,u'salt'), None): cnv_string,
+	((MANIFESTNS,u'size'), None): cnv_nonNegativeInteger,
+	((MANIFESTNS,u'version'), None): cnv_string,
 	((METANS,u'cell-count'), None): cnv_nonNegativeInteger,
 	((METANS,u'character-count'), None): cnv_nonNegativeInteger,
 	((METANS,u'date'), None): cnv_dateTime,
@@ -755,6 +817,8 @@ attrconverters = {
 	((NUMBERNS,u'min-numerator-digits'), None): cnv_integer,
 	((NUMBERNS,u'position'), None): cnv_integer,
 	((NUMBERNS,u'possessive-form'), None): cnv_boolean,
+	((NUMBERNS,u'rfc-language-tag'), None): cnv_language,
+	((NUMBERNS,u'script'), None): cnv_token,
 	((NUMBERNS,u'style'), None): cnv_string,
 	((NUMBERNS,u'textual'), None): cnv_boolean,
 	((NUMBERNS,u'title'), None): cnv_string,
@@ -941,10 +1005,12 @@ attrconverters = {
 	((STYLENS,u'height'), None): cnv_string,
 	((STYLENS,u'horizontal-pos'), None): cnv_string,
 	((STYLENS,u'horizontal-rel'), None): cnv_string,
+	((STYLENS,u'join-border'), None): cnv_boolean,
 	((STYLENS,u'justify-single-word'), None): cnv_boolean,
 	((STYLENS,u'language-asian'), None): cnv_string,
 	((STYLENS,u'language-complex'), None): cnv_string,
 	((STYLENS,u'layout-grid-base-height'), None): cnv_length,
+	((STYLENS,u'layout-grid-base-width'), None): cnv_length,
 	((STYLENS,u'layout-grid-color'), None): cnv_string,
 	((STYLENS,u'layout-grid-display'), None): cnv_boolean,
 	((STYLENS,u'layout-grid-lines'), None): cnv_string,
@@ -952,6 +1018,8 @@ attrconverters = {
 	((STYLENS,u'layout-grid-print'), None): cnv_boolean,
 	((STYLENS,u'layout-grid-ruby-below'), None): cnv_boolean,
 	((STYLENS,u'layout-grid-ruby-height'), None): cnv_length,
+	((STYLENS,u'layout-grid-snap-to'), None): cnv_boolean,
+	((STYLENS,u'layout-grid-standard-mode'), None): cnv_boolean,
 	((STYLENS,u'leader-char'), None): cnv_string,
 	((STYLENS,u'leader-color'), None): cnv_string,
 	((STYLENS,u'leader-style'), None): cnv_string,
@@ -968,6 +1036,7 @@ attrconverters = {
 	((STYLENS,u'line-spacing'), None): cnv_length,
 	((STYLENS,u'line-style'), None): cnv_string,
 	((STYLENS,u'lines'), None): cnv_positiveInteger,
+	((STYLENS,u'list-level'), None): cnv_positiveInteger,
 	((STYLENS,u'list-style-name'), None): cnv_StyleNameRef,
 	((STYLENS,u'master-page-name'), None): cnv_StyleNameRef,
 	((STYLENS,u'may-break-between-rows'), None): cnv_boolean,
@@ -987,6 +1056,7 @@ attrconverters = {
 	((STYLENS,u'page-usage'), None): cnv_string,
 	((STYLENS,u'paper-tray-name'), None): cnv_string,
 	((STYLENS,u'parent-style-name'), None): cnv_StyleNameRef,
+	((STYLENS,u'percentage-data-style-name'), None): cnv_StyleNameRef,
 	((STYLENS,u'position'), (STYLENS,u'tab-stop')): cnv_length,
 	((STYLENS,u'position'), None): cnv_string,
 	((STYLENS,u'print'), None): cnv_string,
@@ -1004,6 +1074,9 @@ attrconverters = {
 	((STYLENS,u'rel-width'), None): cnv_string,
 	((STYLENS,u'repeat'), None): cnv_string,
 	((STYLENS,u'repeat-content'), None): cnv_boolean,
+	((STYLENS,u'rfc-language-tag'), None): cnv_language,
+	((STYLENS,u'rfc-language-tag-asian'), None): cnv_language,
+	((STYLENS,u'rfc-language-tag-complex'), None): cnv_language,
 	((STYLENS,u'rotation-align'), None): cnv_string,
 	((STYLENS,u'rotation-angle'), None): cnv_string,
 	((STYLENS,u'row-height'), None): cnv_string,
@@ -1012,6 +1085,8 @@ attrconverters = {
 	((STYLENS,u'run-through'), None): cnv_string,
 	((STYLENS,u'scale-to'), None): cnv_string,
 	((STYLENS,u'scale-to-pages'), None): cnv_string,
+	((STYLENS,u'script-asian'), None): cnv_string,
+	((STYLENS,u'script-complex'), None): cnv_string,
 	((STYLENS,u'script-type'), None): cnv_string,
 	((STYLENS,u'shadow'), None): cnv_string,
 	((STYLENS,u'shrink-to-fit'), None): cnv_boolean,
@@ -1035,6 +1110,11 @@ attrconverters = {
 	((STYLENS,u'text-line-through-type'), None): cnv_string,
 	((STYLENS,u'text-line-through-width'), None): cnv_string,
 	((STYLENS,u'text-outline'), None): cnv_boolean,
+	((STYLENS,u'text-overline-color'), None): cnv_string,
+	((STYLENS,u'text-overline-mode'), None): cnv_string,
+	((STYLENS,u'text-overline-style'), None): cnv_string,
+	((STYLENS,u'text-overline-type'), None): cnv_string,
+	((STYLENS,u'text-overline-width'), None): cnv_string,
 	((STYLENS,u'text-position'), None): cnv_string,
 	((STYLENS,u'text-rotation-angle'), None): cnv_string,
 	((STYLENS,u'text-rotation-scale'), None): cnv_string,
@@ -1103,6 +1183,7 @@ attrconverters = {
 	((SVGNS,u'strikethrough-thickness'), None): cnv_integer,
 	((SVGNS,u'string'), None): cnv_string,
 	((SVGNS,u'stroke-color'), None): cnv_string,
+	((SVGNS,u'stroke-linecap'), None): cnv_stroke_linecap,
 	((SVGNS,u'stroke-opacity'), None): cnv_string,
 	((SVGNS,u'stroke-width'), None): cnv_length,
 	((SVGNS,u'type'), None): cnv_string,
@@ -1173,6 +1254,7 @@ attrconverters = {
 	((TABLENS,u'display-list'), None): cnv_string,
 	((TABLENS,u'display-member-mode'), None): cnv_string,
 	((TABLENS,u'drill-down-on-double-click'), None): cnv_boolean,
+	((TABLENS,u'embedded-number-behavior'), None): cnv_string,
 	((TABLENS,u'enabled'), None): cnv_boolean,
 	((TABLENS,u'end-cell-address'), None): cnv_string,
 	((TABLENS,u'end'), None): cnv_string,
@@ -1189,6 +1271,8 @@ attrconverters = {
 	((TABLENS,u'field-number'), None): cnv_string,
 	((TABLENS,u'filter-name'), None): cnv_string,
 	((TABLENS,u'filter-options'), None): cnv_string,
+	((TABLENS,u'first-row-end-column'), None): cnv_rowOrCol,
+	((TABLENS,u'first-row-start-column'), None): cnv_rowOrCol,
 	((TABLENS,u'formula'), None): cnv_formula,
 	((TABLENS,u'function'), None): cnv_string,
 	((TABLENS,u'function'), None): cnv_string,
@@ -1208,7 +1292,9 @@ attrconverters = {
 	((TABLENS,u'language'), None): cnv_token,
 	((TABLENS,u'language'), None): cnv_token,
 	((TABLENS,u'last-column-spanned'), None): cnv_positiveInteger,
+	((TABLENS,u'last-row-end-column'), None): cnv_rowOrCol,
 	((TABLENS,u'last-row-spanned'), None): cnv_positiveInteger,
+	((TABLENS,u'last-row-start-column'), None): cnv_rowOrCol,
 	((TABLENS,u'layout-mode'), None): cnv_string,
 	((TABLENS,u'link-to-source-data'), None): cnv_boolean,
 	((TABLENS,u'marked-invalid'), None): cnv_boolean,
@@ -1238,6 +1324,7 @@ attrconverters = {
 	((TABLENS,u'orientation'), None): cnv_string,
 	((TABLENS,u'orientation'), None): cnv_string,
 	((TABLENS,u'page-breaks-on-group-change'), None): cnv_boolean,
+	((TABLENS,u'paragraph-style-name'), None): cnv_StyleNameRef,
 	((TABLENS,u'parse-sql-statement'), None): cnv_boolean,
 	((TABLENS,u'password'), None): cnv_string,
 	((TABLENS,u'position'), None): cnv_integer,
@@ -1247,13 +1334,16 @@ attrconverters = {
 	((TABLENS,u'protect'), None): cnv_boolean,
 	((TABLENS,u'protected'), None): cnv_boolean,
 	((TABLENS,u'protection-key'), None): cnv_string,
+	((TABLENS,u'protection-key-digest-algorithm'), None): cnv_anyURI,
 	((TABLENS,u'query-name'), None): cnv_string,
 	((TABLENS,u'range-usable-as'), None): cnv_string,
+	((TABLENS,u'rfc-language-tag'), None): cnv_language,
 	((TABLENS,u'refresh-delay'), None): cnv_boolean,
 	((TABLENS,u'refresh-delay'), None): cnv_duration,
 	((TABLENS,u'rejecting-change-id'), None): cnv_string,
 	((TABLENS,u'row'), None): cnv_integer,
 	((TABLENS,u'scenario-ranges'), None): cnv_string,
+	((TABLENS,u'script'), None): cnv_string,
 	((TABLENS,u'search-criteria-must-apply-to-whole-cell'), None): cnv_boolean,
 	((TABLENS,u'selected-page'), None): cnv_string,
 	((TABLENS,u'show-details'), None): cnv_boolean,
@@ -1284,11 +1374,19 @@ attrconverters = {
 	((TABLENS,u'target-cell-address'), None): cnv_string,
 	((TABLENS,u'target-range-address'), None): cnv_string,
 	((TABLENS,u'target-range-address'), None): cnv_string,
+	((TABLENS,u'template-name'), None): cnv_string,
 	((TABLENS,u'title'), None): cnv_string,
 	((TABLENS,u'track-changes'), None): cnv_boolean,
 	((TABLENS,u'type'), None): cnv_string,
+	((TABLENS,u'use-banding-columns-styles'), None): cnv_boolean,
+	((TABLENS,u'use-banding-rows-styles'), None): cnv_boolean,
+	((TABLENS,u'use-first-column-styles'), None): cnv_boolean,
+	((TABLENS,u'use-first-row-styles'), None): cnv_boolean,
 	((TABLENS,u'use-labels'), None): cnv_string,
+	((TABLENS,u'use-last-column-styles'), None): cnv_boolean,
+	((TABLENS,u'use-last-row-styles'), None): cnv_boolean,
 	((TABLENS,u'use-regular-expressions'), None): cnv_boolean,
+	((TABLENS,u'use-wildcards'), None): cnv_boolean,
 	((TABLENS,u'used-hierarchy'), None): cnv_integer,
 	((TABLENS,u'user-name'), None): cnv_string,
 	((TABLENS,u'value'), None): cnv_string,
@@ -1332,6 +1430,7 @@ attrconverters = {
 	((TEXTNS,u'condition'), None): cnv_formula,
 	((TEXTNS,u'connection-name'), None): cnv_string,
 	((TEXTNS,u'consecutive-numbering'), None): cnv_boolean,
+	((TEXTNS,u'continue-list'), None): cnv_IDREF,
 	((TEXTNS,u'continue-numbering'), None): cnv_boolean,
 	((TEXTNS,u'copy-outline-levels'), None): cnv_boolean,
 	((TEXTNS,u'count-empty-lines'), None): cnv_boolean,
@@ -1356,8 +1455,6 @@ attrconverters = {
 	((TEXTNS,u'edition'), None): cnv_string,
 	((TEXTNS,u'editor'), None): cnv_string,
 	((TEXTNS,u'filter-name'), None): cnv_string,
-	((TEXTNS,u'first-row-end-column'), None): cnv_string,
-	((TEXTNS,u'first-row-start-column'), None): cnv_string,
 	((TEXTNS,u'fixed'), None): cnv_boolean,
 	((TEXTNS,u'footnotes-position'), None): cnv_string,
 	((TEXTNS,u'formula'), None): cnv_formula,
@@ -1384,11 +1481,13 @@ attrconverters = {
 	((TEXTNS,u'key2-phonetic'), None): cnv_string,
 	((TEXTNS,u'kind'), None): cnv_string,
 	((TEXTNS,u'label'), None): cnv_string,
-	((TEXTNS,u'last-row-end-column'), None): cnv_string,
-	((TEXTNS,u'last-row-start-column'), None): cnv_string,
+	((TEXTNS,u'label-followed-by'), None): cnv_string,
 	((TEXTNS,u'level'), None): cnv_positiveInteger,
 	((TEXTNS,u'line-break'), None): cnv_boolean,
 	((TEXTNS,u'line-number'), None): cnv_string,
+	((TEXTNS,u'list-id'), None): cnv_NCName,
+	((TEXTNS,u'list-level-position-and-space-mode'), None): cnv_string,
+	((TEXTNS,u'list-tab-stop-position'), None): cnv_length,
 	((TEXTNS,u'main-entry'), None): cnv_boolean,
 	((TEXTNS,u'main-entry-style-name'), None): cnv_StyleNameRef,
 	((TEXTNS,u'master-page-name'), None): cnv_StyleNameRef,
@@ -1407,11 +1506,11 @@ attrconverters = {
 	((TEXTNS,u'outline-level'), None): cnv_string,
 	((TEXTNS,u'page-adjust'), None): cnv_integer,
 	((TEXTNS,u'pages'), None): cnv_string,
-	((TEXTNS,u'paragraph-style-name'), None): cnv_StyleNameRef,
 	((TEXTNS,u'placeholder-type'), None): cnv_string,
 	((TEXTNS,u'prefix'), None): cnv_string,
 	((TEXTNS,u'protected'), None): cnv_boolean,
 	((TEXTNS,u'protection-key'), None): cnv_string,
+	((TEXTNS,u'protection-key-digest-algorithm'), None): cnv_anyURI,
 	((TEXTNS,u'publisher'), None): cnv_string,
 	((TEXTNS,u'ref-name'), None): cnv_string,
 	((TEXTNS,u'reference-format'), None): cnv_string,
@@ -1437,6 +1536,7 @@ attrconverters = {
 	((TEXTNS,u'string-value-if-true'), None): cnv_string,
 	((TEXTNS,u'string-value-phonetic'), None): cnv_string,
 	((TEXTNS,u'style-name'), None): cnv_StyleNameRef,
+	((TEXTNS,u'style-override'), None): cnv_StyleNameRef,
 	((TEXTNS,u'suffix'), None): cnv_string,
 	((TEXTNS,u'tab-ref'), None): cnv_nonNegativeInteger,
 	((TEXTNS,u'table-name'), None): cnv_string,
@@ -1467,11 +1567,16 @@ attrconverters = {
 	((TEXTNS,u'volume'), None): cnv_string,
 	((TEXTNS,u'year'), None): cnv_string,
 	((XFORMSNS,u'bind'), None): cnv_string,
+	((XHTMLNS,u'about'), None): cnv_anyURI,
+	((XHTMLNS,u'content'), None): cnv_string,
+	((XHTMLNS,u'datatype'), None): cnv_anyURI,
+	((XHTMLNS,u'property'), None): cnv_anyURI,
 	((XLINKNS,u'actuate'), None): cnv_string,
 	((XLINKNS,u'href'), None): cnv_anyURI,
 	((XLINKNS,u'show'), None): cnv_xlinkshow,
 	((XLINKNS,u'title'), None): cnv_string,
 	((XLINKNS,u'type'), None): cnv_string,
+	((XMLNS,u'id'), None): cnv_NCName,
 }
 
 class AttrConverters:

@@ -102,6 +102,7 @@ if __name__ == "__main__":
         e = elements[s]
         if e.name == u'__ANYNAME__':
             continue
+        if e.ns == DBNS: continue
         print "# allowed_attributes"
         if len(e.attrs.keys()) == 1 and e.attrs.values()[0].name == u'__ANYNAME__':
             print "\t(%sNS,u'%s'): None," % (nsdict.get(e.ns,'unknown').upper(), e.name)

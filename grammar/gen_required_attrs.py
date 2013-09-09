@@ -107,7 +107,9 @@ if __name__ == "__main__":
     print "required_attributes = {"
     for s in slist:
         e = elements[s]
+        if e.ns == DBNS: continue
         if len(e.attrs) > 0:
+            print "# required_attributes"
             print "\t(%sNS,u'%s'):" % (nsdict.get(e.ns,'unknown').upper(), e.name),
             print "("
             for a in e.attrs.values():

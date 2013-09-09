@@ -121,7 +121,8 @@ if __name__ == "__main__":
         if val.get('type') is None:
             continue
         ns = val.get('ns','UNKNOWN')
-        for elmname in val['elements']:
+        if ns == DBNS: continue
+        for elmname in sorted(val['elements']):
             if elmname == u'__ANYNAME__':
                 continue
             print "\t(%sNS,u'%s')," % (nsdict.get(ns,'unknown').upper(), elmname)
