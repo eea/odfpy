@@ -229,7 +229,11 @@ else:
         exitwithusage()
     zin = zipfile.ZipFile(args[0], 'r')
 
-content = zin.read('meta.xml')
+try:
+    content = zin.read('meta.xml')
+except:
+    sys.stderr.write("File has no meta data\n")
+    sys.exit(1)
 parser.parse(StringIO(content))
 
 if writemeta:

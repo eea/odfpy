@@ -602,12 +602,28 @@ def __loadxmlparts(z, manifest, doc, objectpath):
             del doc._parsing
         except KeyError, v: pass
 
+def __detectmimetype(zipfd, odffile):
+    try:
+        mimetype = zipfd.read('mimetype')
+        return mimetype
+    except:
+        pass
+    # Fall-through to next mechanism
+    manifestpart = zipfd.read('META-INF/manifest.xml')
+    manifest =  manifestlist(manifestpart)
+    for mentry,mvalue in manifest.items():
+        if mentry == "/":
+            return mvalue['media-type']
+
+    # Fall-through to last mechanism
+    return 'application/vnd.oasis.opendocument.text'
+
 def load(odffile):
     """ Load an ODF file into memory
         Returns a reference to the structure
     """
     z = zipfile.ZipFile(odffile)
-    mimetype = z.read('mimetype')
+    mimetype = __detectmimetype(z, odffile)
     doc = OpenDocument(mimetype, add_generator=False)
 
     # Look in the manifest file to see if which of the four files there are

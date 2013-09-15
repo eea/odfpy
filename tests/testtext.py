@@ -42,6 +42,28 @@ class TestText(unittest.TestCase):
         self.assertEquals(shouldbe, unicode(d.body))
         self.assertEquals(shouldbe, str(d.body))
 
+    def test_link(self):
+        """ Create a link """
+        textdoc = OpenDocumentText()
+        para = text.P()
+        anchor = text.A(href="http://www.com/", text="A link label")
+        para.addElement(anchor)
+        textdoc.text.addElement(para)
+        self.assertEquals(1, 1)
+
+    def test_simple_link(self):
+        """ Create a link """
+        textdoc = OpenDocumentText()
+        para = text.P()
+        anchor = text.A(href="http://www.com/", type="simple", text="A link label")
+        para.addElement(anchor)
+        textdoc.text.addElement(para)
+
+    def test_extended_link(self):
+        """ Create a link """
+        textdoc = OpenDocumentText()
+        para = text.P()
+        self.assertRaises(ValueError, text.A, href="http://www.com/", type="extended", text="A link label")
 
 if __name__ == '__main__':
     unittest.main()

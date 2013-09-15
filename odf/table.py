@@ -42,6 +42,7 @@ def CellContentDeletion(**args):
     return Element(qname = (TABLENS,'cell-content-deletion'), **args)
 
 def CellRangeSource(**args):
+    args.setdefault('type', 'simple')
     return Element(qname = (TABLENS,'cell-range-source'), **args)
 
 def ChangeDeletion(**args):
@@ -303,6 +304,7 @@ def TableRows(**args):
     return Element(qname = (TABLENS,'table-rows'), **args)
 
 def TableSource(**args):
+    args.setdefault('type', 'simple')
     return Element(qname = (TABLENS,'table-source'), **args)
 
 def TableTemplate(**args):

@@ -43,7 +43,7 @@ def cnv_boolean(attribute, arg, element):
         return "false"
     if str(arg).lower() in ("1","true","yes"):
         return "true"
-    raise ValueError, "'%s' not allowed as Boolean value for %s" % (str(arg), attribute)
+    raise ValueError, "'%s' not allowed as Boolean value for %s" % (str(arg), attribute[1])
 
 # Potentially accept color values
 def cnv_color(attribute, arg, element):
@@ -280,6 +280,11 @@ def cnv_xlinkshow(attribute, arg, element):
     if str(arg) not in ("new", "replace", "embed"):
         raise ValueError, "'%s' not allowed" % str(arg)
     return str(arg)
+
+def cnv_xlinktype(attribute, arg, element):
+    if arg != "simple":
+        raise ValueError, "Value of '%s' must be 'simple'" % attribute[1]
+    return arg
 
 
 attrconverters = {
@@ -1575,7 +1580,7 @@ attrconverters = {
 	((XLINKNS,u'href'), None): cnv_anyURI,
 	((XLINKNS,u'show'), None): cnv_xlinkshow,
 	((XLINKNS,u'title'), None): cnv_string,
-	((XLINKNS,u'type'), None): cnv_string,
+	((XLINKNS,u'type'), None): cnv_xlinktype,
 	((XMLNS,u'id'), None): cnv_NCName,
 }
 

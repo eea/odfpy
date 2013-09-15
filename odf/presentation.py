@@ -81,5 +81,6 @@ def ShowText(**args):
     return Element(qname = (PRESENTATIONNS,'show-text'), **args)
 
 def Sound(**args):
+    args.setdefault('type', 'simple')
     return Element(qname = (PRESENTATIONNS,'sound'), **args)
 

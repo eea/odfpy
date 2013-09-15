@@ -59,6 +59,7 @@ def PrintedBy(**args):
     return Element(qname = (METANS,'printed-by'), **args)
 
 def Template(**args):
+    args.setdefault('type', 'simple')
     return Element(qname = (METANS,'template'), **args)
 
 def UserDefined(**args):
