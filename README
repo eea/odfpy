@@ -1,3 +1,5 @@
+# ODFPY
+
 This is a collection of utility programs written in Python to manipulate
 OpenDocument files.
 
@@ -8,19 +10,19 @@ make a symbolic link like this: ln -s ../odf odf
 
 For your own use of the odf library, see api-for-odfpy.odt
 
-                             -o- INSTALLATION -o-
+## INSTALLATION
 
 First you get the package.
 
-$ svn export https://svn.forge.osor.eu/svn/odfpy/trunk odfpy
+    $ git clone https://github.com/eea/odfpy.git
 
-$ python setup.py build
-$ su
-# python setup.py install
+    $ python setup.py build
+    $ su
+    # python setup.py install
 
 The library is incompatible with PyXML.
 
-                            -o- TODO / IDEAS -o-
+## TODO / IDEAS
 
 * html2odf
   Alex Hudson has been contracted to produce a command-line html2odf 
