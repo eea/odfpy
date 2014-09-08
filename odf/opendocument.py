@@ -408,6 +408,7 @@ class OpenDocument:
         """
         zipoutputfp = zipfile.ZipFile(outputfp,"w")
         self.__zipwrite(zipoutputfp)
+        zipoutputfp.close()
 
     def __zipwrite(self, outputfp):
         """ Write the document to an open file pointer
