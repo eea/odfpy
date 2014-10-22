@@ -41,7 +41,7 @@ class TestSimple(unittest.TestCase):
         """ Check that a simple load works """
         d = load("TEST.odt")
         result = d.contentxml()
-        self.assertNotEqual(-1, result.find(u"""Hello World!"""))
+        self.assertNotEqual(-1, result.find(b"""Hello World!"""))
 
 
 class TestHeadings(unittest.TestCase):
@@ -62,7 +62,7 @@ class TestHeadings(unittest.TestCase):
         self.saved = True
         d = load("TEST.odt")
         result = d.contentxml()
-        self.assertNotEqual(-1, result.find(u"""<text:h text:outline-level="1">Heading 1</text:h><text:p>Hello World!</text:p><text:h text:outline-level="2">Heading 2</text:h>"""))
+        self.assertNotEqual(-1, result.find(b"""<text:h text:outline-level="1">Heading 1</text:h><text:p>Hello World!</text:p><text:h text:outline-level="2">Heading 2</text:h>"""))
 
     def test_linebreak(self):
         """ Test that a line break (empty) element show correctly """
@@ -75,7 +75,7 @@ class TestHeadings(unittest.TestCase):
         self.saved = True
         d = load("TEST.odt")
         result = d.contentxml()
-        self.assertNotEqual(-1, result.find(u"""<text:p>Hello World!<text:line-break/>Line 2</text:p>"""))
+        self.assertNotEqual(-1, result.find(b"""<text:p>Hello World!<text:line-break/>Line 2</text:p>"""))
 
 
 class TestExampleDocs(unittest.TestCase):
@@ -149,8 +149,8 @@ class TestExampleDocs(unittest.TestCase):
         parastyles_odt = os.path.join(
             os.path.dirname(__file__), "examples", "emb_spreadsheet.odp")
         d = load(parastyles_odt)
-        meta = unicode(d.metaxml(),'utf-8')
-        self.assertNotEqual(-1, meta.find(u"""<meta:generator>ODFPY"""), "Must not use the original generator string")
+        meta = d.metaxml()
+        self.assertNotEqual(-1, meta.find(b"""<meta:generator>ODFPY"""), "Must not use the original generator string")
 
 
     def test_spreadsheet(self):
@@ -160,7 +160,7 @@ class TestExampleDocs(unittest.TestCase):
         d = load(spreadsheet_odt)
         self.assertEqual(1, len(d.childobjects))
         for s in d.childobjects:
-            print s.folder
+            print (s.folder)
 #        mani = unicode(d.manifestxml(),'utf-8')
 #        self.assertNotEqual(-1, mani.find(u''' manifest:full-path="Object 1/"'''), "Must contain the subobject")
 #        self.assertNotEqual(-1, mani.find(u''' manifest:full-path="Object 1/settings.xml"'''), "Must contain the subobject settings.xml")

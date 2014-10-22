@@ -39,7 +39,7 @@ class TestSimple(unittest.TestCase):
         
     def test_simple(self):
         result = odf2moinmoin.ODF2MoinMoin("TEST.odt")
-        self.assertEquals(u'Hello World!\n', result.toString())
+        self.assertEqual('Hello World!\n', result.toString())
 
 
 class TestHeadings(unittest.TestCase):
@@ -58,7 +58,7 @@ class TestHeadings(unittest.TestCase):
         textdoc.save("TEST.odt")
         self.saved = True
         result = odf2moinmoin.ODF2MoinMoin("TEST.odt")
-        self.assertEquals(u'= Heading 1 =\n\nHello World!\n== Heading 2 ==\n\n', result.toString())
+        self.assertEqual('= Heading 1 =\n\nHello World!\n== Heading 2 ==\n\n', result.toString())
 
     def test_linebreak(self):
         textdoc = OpenDocumentText()
@@ -69,7 +69,7 @@ class TestHeadings(unittest.TestCase):
         textdoc.save("TEST.odt")
         self.saved = True
         result = odf2moinmoin.ODF2MoinMoin("TEST.odt")
-        self.assertEquals(u'Hello World![[BR]]Line 2\n', result.toString())
+        self.assertEqual('Hello World![[BR]]Line 2\n', result.toString())
 
 class TestExampleDocs(unittest.TestCase):
 
@@ -79,7 +79,7 @@ class TestExampleDocs(unittest.TestCase):
             os.path.dirname(__file__), "examples", "twolevellist.odt")
         result = odf2moinmoin.ODF2MoinMoin(twolevellist_odt)
         #FIXME: Item c must only have one newline before
-        self.assertEquals(u"Line 1\n * Item A\n * Item B\n    * Subitem B.1\n    * '''Subitem B.2 (bold)'''\n\n * Item C\n\nLine 4\n", result.toString())
+        self.assertEqual("Line 1\n * Item A\n * Item B\n    * Subitem B.1\n    * '''Subitem B.2 (bold)'''\n\n * Item C\n\nLine 4\n", result.toString())
 
     def test_simplestyles(self):
         """ The simplestyles.odt has BOLD set in the paragraph style which is
@@ -90,10 +90,10 @@ class TestExampleDocs(unittest.TestCase):
             os.path.dirname(__file__), "examples", "simplestyles.odt")
         result = odf2moinmoin.ODF2MoinMoin(simplestyles_odt)
         # The correct expected:
-        #expected = u"\nPlain text\n\n'''Bold'''\n\n''Italic''\n\n'''''Bold italic'''''\n\n__Underline__\n\n''__Underline italic__''\n\n'''''__Underline bold italic__'''''\n\nKm^2^ - superscript\n\nH,,2,,O - subscript\n\n~~Strike-through~~\n"
+        #expected = "\nPlain text\n\n'''Bold'''\n\n''Italic''\n\n'''''Bold italic'''''\n\n__Underline__\n\n''__Underline italic__''\n\n'''''__Underline bold italic__'''''\n\nKm^2^ - superscript\n\nH,,2,,O - subscript\n\n~~Strike-through~~\n"
         # The simple-minded expected
-        expected = u"Plain text\n\n'''Bold'''\n\n'''''Italic'''''\n\n'''''Bold italic'''''\n\n'''''__Underline__'''''\n\n'''''__Underline italic__'''''\n\n'''''__Underline bold italic__'''''\n\nKm^2^ - superscript\n\nH,,2,,O - subscript\n\n\n"
-        self.assertEquals(expected, result.toString())
+        expected = "Plain text\n\n'''Bold'''\n\n'''''Italic'''''\n\n'''''Bold italic'''''\n\n'''''__Underline__'''''\n\n'''''__Underline italic__'''''\n\n'''''__Underline bold italic__'''''\n\nKm^2^ - superscript\n\nH,,2,,O - subscript\n\n\n"
+        self.assertEqual(expected, result.toString())
 
 
 
@@ -101,8 +101,8 @@ class TestExampleDocs(unittest.TestCase):
         parastyles_odt = os.path.join(
             os.path.dirname(__file__), "examples", "parastyles.odt")
         result = odf2moinmoin.ODF2MoinMoin(parastyles_odt)
-        expected = u"Plain text\n\n'''Bold'''\n\n''Italic''\n\n'''''Bold italic'''''\n\n__Underline__\n\n''__Underline italic__''\n\n'''''__Underline bold italic__'''''\n\nKm^2^ - superscript\n\nH,,2,,O - subscript\n\n~~Strike-through~~\n"
-        self.assertEquals(expected, result.toString())
+        expected = "Plain text\n\n'''Bold'''\n\n''Italic''\n\n'''''Bold italic'''''\n\n__Underline__\n\n''__Underline italic__''\n\n'''''__Underline bold italic__'''''\n\nKm^2^ - superscript\n\nH,,2,,O - subscript\n\n~~Strike-through~~\n"
+        self.assertEqual(expected, result.toString())
 
 
 
@@ -110,7 +110,7 @@ class TestExampleDocs(unittest.TestCase):
         simplelist_odt = os.path.join(
             os.path.dirname(__file__), "examples", "simplelist.odt")
         result = odf2moinmoin.ODF2MoinMoin(simplelist_odt)
-        self.assertEquals(u"Line 1\n * Item A\n * Item B\n\nLine 4\n", result.toString())
+        self.assertEqual("Line 1\n * Item A\n * Item B\n\nLine 4\n", result.toString())
 
 
 
@@ -118,7 +118,7 @@ class TestExampleDocs(unittest.TestCase):
         simpletable_odt = os.path.join(
             os.path.dirname(__file__), "examples", "simpletable.odt")
         result = odf2moinmoin.ODF2MoinMoin(simpletable_odt)
-        self.assertEquals(u"\n||Cell 1||Cell 2||\n||'''Cell 3 (bold)'''||''Cell 4 (italic)''||\n", result.toString())
+        self.assertEqual("\n||Cell 1||Cell 2||\n||'''Cell 3 (bold)'''||''Cell 4 (italic)''||\n", result.toString())
 
 if __name__ == '__main__':
     unittest.main()

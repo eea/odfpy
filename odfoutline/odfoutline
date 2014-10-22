@@ -17,6 +17,7 @@
 #
 # Contributor(s):
 #
+from __future__ import print_function
 import zipfile
 from xml.sax import make_parser,handler
 from xml.sax.xmlreader import InputSource
@@ -27,7 +28,7 @@ from odf.namespaces import TEXTNS, TABLENS, DRAWNS
 try:
     from cStringIO import StringIO
 except ImportError:
-    from StringIO import StringIO
+    from io import StringIO
 
 
 def getxmlpart(odffile, xmlfile):
@@ -107,6 +108,8 @@ def odtheadings(odtfile):
     lines = []
     parser = make_parser()
     parser.setFeature(handler.feature_namespaces, 1)
+    if not isinstance(mimetype, str):
+        mimetype=mimetype.decode("utf-8")
     if mimetype in ('application/vnd.oasis.opendocument.text',
       'application/vnd.oasis.opendocument.text-template'):
         parser.setContentHandler(ODTHeadingHandler(lines))
@@ -117,11 +120,13 @@ def odtheadings(odtfile):
       'application/vnd.oasis.opendocument.presentation-template'):
         parser.setContentHandler(ODTSlideHandler(lines))
     else:
-        print "Unsupported fileformat"
+        print ("Unsupported fileformat")
         sys.exit(2)
     parser.setErrorHandler(handler.ErrorHandler())
 
     inpsrc = InputSource()
+    if not isinstance(content, str):
+        content=content.decode("utf-8")
     inpsrc.setByteStream(StringIO(content))
     parser.parse(inpsrc)
     return lines
@@ -130,5 +135,5 @@ def odtheadings(odtfile):
 if __name__ == "__main__":
     filler = "          "
     for heading in odtheadings(sys.argv[1]):
-        print heading
+        print (heading)
 

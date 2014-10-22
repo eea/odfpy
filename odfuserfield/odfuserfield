@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 # Copyright (C) 2006-2007 Søren Roug, European Environment Agency
 #
@@ -77,18 +77,18 @@ user_fields = odf.userfield.UserFields(inputfile, outputfile)
 
 if xfields:
     for value in user_fields.list_values(xfields):
-        print value
+        print (value)
 
 if Listfields or Xfields:
     if Listfields:
         Xfields = None
     for field_name, value_type, value in user_fields.list_fields_and_values(
         Xfields):
-        print "%s#%s:%s" % (field_name, value_type, value)
+        print ("%s#%s:%s" % (field_name, value_type, value))
     
 if listfields:
     for value in user_fields.list_fields():
-        print value
+        print (value)
 
 if setfields:
     user_fields.update(setfields)

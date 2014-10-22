@@ -60,8 +60,8 @@ class TestForm(unittest.TestCase):
         table.addElement(tr)
 
         calcdoc.spreadsheet.addElement(table)
-        result = unicode(calcdoc.contentxml(),'utf-8')
-        self.assertNotEqual(-1, result.find(u'''xmlns:ooo="http://openoffice.org/2004/office"'''))
+        result = calcdoc.contentxml()
+        self.assertNotEqual(-1, result.find(b'''xmlns:ooo="http://openoffice.org/2004/office"'''))
 
     def test_form_controls(self):
         odf.form.Button(id="Button")

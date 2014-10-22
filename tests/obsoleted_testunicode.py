@@ -25,7 +25,7 @@ from odf.text import P, H
 from odf.element import IllegalChild
 
 class TestUnicode(unittest.TestCase):
-    
+
     def setUp(self):
         self.textdoc = OpenDocumentText()
         self.saved = False

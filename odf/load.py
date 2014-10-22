@@ -29,7 +29,10 @@ from xml.sax.xmlreader import InputSource
 import xml.sax.saxutils
 from element import Element
 from namespaces import OFFICENS
-from cStringIO import StringIO
+try:
+    from cStringIO import StringIO
+except ImportError:
+    from io import StringIO
 
 #
 # Parse the XML files
@@ -74,8 +77,8 @@ class LoadParser(handler.ContentHandler):
         try:
             e = Element(qname = tag, qattributes=attrdict, check_grammar=False)
             self.curr = e
-        except AttributeError, v:
-            print "Error: %s" % v
+        except AttributeError as v:
+            print ("Error: %s" % v)
 
         if tag == (OFFICENS, 'automatic-styles'):
             e = self.doc.automaticstyles

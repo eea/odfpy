@@ -19,7 +19,7 @@
 #
 
 import unittest, os
-import cStringIO
+import io
 import zipfile
 from odf.opendocument import OpenDocumentText
 from odf import style, text
@@ -29,7 +29,7 @@ class TestWrite(unittest.TestCase):
 
     def test_write(self):
         """ document's write method """
-        outfp = cStringIO.StringIO()
+        outfp = io.BytesIO()
         textdoc = OpenDocumentText()
         p = P(text=u"Æblegrød")
         p.addText(u' Blåbærgrød')

@@ -1,5 +1,6 @@
 #!/bin/sh
 for file in test*.py
 do
-    python $file
+    python2  $file; echo '========= end of `python2  '$file'` =========='
+    python3 $file; echo '========= end of `python3  '$file'` =========='
 done

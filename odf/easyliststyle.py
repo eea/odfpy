@@ -19,7 +19,8 @@
 # Contributor(s):
 #
 
-import re
+import re, sys, os.path
+sys.path.append(os.path.dirname(__file__))
 from style import Style, TextProperties, ListLevelProperties
 from text import ListStyle,ListLevelStyleNumber,ListLevelStyleBullet
 

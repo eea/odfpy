@@ -33,7 +33,7 @@ class TestDatastyles(unittest.TestCase):
 
     def tearDown(self):
         if self.saved:
-            os.unlink("TEST.odt")
+            os.unlink("TEST.ods")
         
     def test_percentage(self):
         """ Test that an automatic style can refer to a PercentageStyle as a datastylename """
@@ -53,13 +53,13 @@ class TestDatastyles(unittest.TestCase):
         tr.addElement(tc)
         table.addElement(tr)
         doc.spreadsheet.addElement(table)
-        doc.save("TEST.odt")
+        doc.save("TEST.ods")
         self.saved = True
-        d = load("TEST.odt")
+        d = load("TEST.ods")
         result = d.contentxml()
-        self.assertNotEqual(-1, result.find(u'''<number:percentage-style'''))
-        self.assertNotEqual(-1, result.find(u'''style:data-style-name="N11"'''))
-        self.assertNotEqual(-1, result.find(u'''style:name="pourcent"'''))
+        self.assertNotEqual(-1, result.find(b'''<number:percentage-style'''))
+        self.assertNotEqual(-1, result.find(b'''style:data-style-name="N11"'''))
+        self.assertNotEqual(-1, result.find(b'''style:name="pourcent"'''))
 
     def test_chart_style(self):
         """ Test that chart:style-name reference is seen in content.xml """
@@ -133,7 +133,7 @@ class TestDatastyles(unittest.TestCase):
         yt.addElement(text.P(text="y_axis"))
 
         result = doc.contentxml()
-        self.assertNotEqual(-1, result.find(u'''style:family="chart"'''))
+        self.assertNotEqual(-1, result.find(b'''style:family="chart"'''))
 
 if __name__ == '__main__':
     unittest.main()

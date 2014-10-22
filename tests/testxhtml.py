@@ -22,7 +22,7 @@ import unittest
 import sys
 import os
 import os.path
-import StringIO
+import io
 from odf.odf2xhtml import ODF2XHTML
 
 from odf.opendocument import OpenDocumentText
@@ -97,7 +97,6 @@ class TestXHTML(unittest.TestCase):
         p.addElement(boldpart)
         p.addText("This is after bold.")
 
-        #   print d.contentxml()
         d.save("TEST.odt")
 
     def tearDown(self):
@@ -106,11 +105,11 @@ class TestXHTML(unittest.TestCase):
     def testParsing(self):
         """ Parse the test file """
         odhandler = ODF2XHTML()
-        outf = StringIO.StringIO()
+        outf = io.BytesIO()
 
         result = odhandler.odf2xhtml("TEST.odt")
         outf.write(result.encode('utf-8'))
-        strresult = outf.getvalue()
+        strresult = outf.getvalue().decode('utf-8')
         #self.assertEqual(strresult, htmlout)
         self.assertNotEqual(-1, strresult.find(u"""<p>The earth's climate has \
 not changed many times in the course of its long history. \
@@ -185,7 +184,7 @@ class TestExampleDocs(unittest.TestCase):
         odt = os.path.join(os.path.dirname(__file__), "examples", "images.odt")
         odhandler = ODF2XHTML()
         result = odhandler.odf2xhtml(odt)
-        assert has_rules(result,".G-fr1","margin-left: 0px; margin-right: auto;")
+        assert has_rules(result,".G-fr1","margin-left: 0cm; margin-right: 0cm;")
         assert has_rules(result,".G-fr2","margin-left: auto; margin-right: 0px;")
         assert has_rules(result,".G-fr3","float: left")
         assert has_rules(result,".G-fr4","margin-right: auto;margin-left: auto;")
@@ -196,12 +195,12 @@ class TestExampleDocs(unittest.TestCase):
         odt = os.path.join(os.path.dirname(__file__), "examples", "imageslabels.odt")
         odhandler = ODF2XHTML()
         result = odhandler.odf2xhtml(odt)
-        assert has_rules(result,".G-fr1","margin-left: 0px; margin-right: auto;")
-        assert has_rules(result,".G-fr2","margin-left: auto; margin-right: 0px;")
+        assert has_rules(result,".G-fr1","margin-left: 0cm; margin-right: 0cm;")
+        assert has_rules(result,".G-fr2","margin-left: 0cm; margin-right: 0cm;")
         assert has_rules(result,".G-fr3","float: left")
         assert has_rules(result,".G-fr4","float: right")
         assert has_rules(result,".G-fr5","margin-right: auto;margin-left: auto;")
-        assert has_rules(result,".G-fr7","margin-right: auto;margin-left: auto;")
+        assert has_rules(result,".G-fr7","margin-right: 0cm;margin-left: 0cm;")
         assert has_rules(result,".P-Illustration","font-size: 10pt;")
 
     def test_css(self):
@@ -210,12 +209,12 @@ class TestExampleDocs(unittest.TestCase):
         odhandler = ODF2XHTML()
         odhandler.load(odt)
         result = odhandler.css()
-        assert has_rules(result,".G-fr1","margin-left: 0px; margin-right: auto;")
-        assert has_rules(result,".G-fr2","margin-left: auto; margin-right: 0px;")
+        assert has_rules(result,".G-fr1","margin-left: 0cm;margin-right:auto")
+        assert has_rules(result,".G-fr2","margin-left: 0cm;margin-right: 0cm")
         assert has_rules(result,".G-fr3","float: left")
         assert has_rules(result,".G-fr4","float: right")
-        assert has_rules(result,".G-fr5","margin-right: auto;margin-left: auto;")
-        assert has_rules(result,".G-fr7","margin-right: auto;margin-left: auto;")
+        assert has_rules(result,".G-fr5","margin-right: auto;margin-left: 0cm")
+        assert has_rules(result,".G-fr7","margin-right: 0cm;margin-left: 0cm")
         assert has_rules(result,".P-Illustration","font-size: 10pt;")
 
     def test_positioned_shapes(self):

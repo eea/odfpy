@@ -17,6 +17,9 @@
 #
 # Contributor(s):
 #
+import re, sys, os.path
+sys.path.append(os.path.dirname(__file__))
+
 
 from namespaces import TEXTNS
 from element import Element

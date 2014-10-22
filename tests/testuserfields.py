@@ -24,10 +24,8 @@ import os.path
 import odf.userfield
 import tempfile
 import zipfile
-try:
-    from cStringIO import StringIO
-except InputError:
-    from StringIO import StringIO
+
+from io import BytesIO
 
 
 def get_file_path(file_name):
@@ -62,7 +60,7 @@ class TestUserFields(unittest.TestCase):
         """ Find the expected fields in the file """
         self.assertEqual([],
                          get_user_fields(self.no_userfields_odt).list_fields())
-        self.assertEqual(['username', 'firstname', 'lastname', 'address'],
+        self.assertEqual([b'username', b'firstname', b'lastname', b'address'],
                          get_user_fields(self.userfields_odt).list_fields())
 
     def test_list_fields_and_values(self):
@@ -73,8 +71,8 @@ class TestUserFields(unittest.TestCase):
         self.assertEqual([],
                          no_user_fields.list_fields_and_values(['username']))
         user_fields = get_user_fields(self.userfields_odt)
-        self.assertEqual([('username', 'string', ''),
-                          ('lastname', 'string', '<none>')],
+        self.assertEqual([(b'username', b'string', b''),
+                          (b'lastname', b'string', b'<none>')],
                          user_fields.list_fields_and_values(['username',
                                                              'lastname']))
         self.assertEqual(4, len(user_fields.list_fields_and_values()))
@@ -84,7 +82,7 @@ class TestUserFields(unittest.TestCase):
             [],
             get_user_fields(self.no_userfields_odt).list_values(['username']))
         self.assertEqual(
-            ['', '<none>'],
+            [b'', b'<none>'],
             get_user_fields(self.userfields_odt).list_values(
                 ['username', 'lastname']))
 
@@ -93,8 +91,8 @@ class TestUserFields(unittest.TestCase):
         self.assertEqual(
             None,
             get_user_fields(self.no_userfields_odt).get('username'))
-        self.assertEqual('', user_fields.get('username'))
-        self.assertEqual('<none>', user_fields.get('lastname'))
+        self.assertEqual(b'', user_fields.get('username'))
+        self.assertEqual(b'<none>', user_fields.get('lastname'))
         self.assertEqual(None, user_fields.get('street'))
 
     def test_get_type_and_value(self):
@@ -104,9 +102,9 @@ class TestUserFields(unittest.TestCase):
                 'username'))
         user_fields = get_user_fields(self.userfields_odt)
         self.assertEqual(
-            ('string', ''), user_fields.get_type_and_value('username'))
+            (b'string', b''), user_fields.get_type_and_value('username'))
         self.assertEqual(
-            ('string', '<none>'),
+            (b'string', b'<none>'),
             user_fields.get_type_and_value('lastname'))
         self.assertEqual(None, user_fields.get_type_and_value('street'))
 
@@ -125,10 +123,10 @@ class TestUserFields(unittest.TestCase):
                             'firstname': u'André',
                             'street': 'I do not exist'})
         dest = odf.userfield.UserFields(user_fields.dest_file)
-        self.assertEqual([('username', 'string', 'mac'),
-                          ('firstname', 'string', 'André'),
-                          ('lastname', 'string', '<none>'),
-                          ('address', 'string', '')],
+        self.assertEqual([(b'username', b'string', b'mac'),
+                          (b'firstname', b'string', u'André'.encode('utf-8')),
+                          (b'lastname', b'string', b'<none>'),
+                          (b'address', b'string', b'')],
                          dest.list_fields_and_values())
 
     def test_update_open_office_version_3(self):
@@ -139,16 +137,17 @@ class TestUserFields(unittest.TestCase):
                             'firstname': u'Lukas',
                             'street': 'I might exist.'})
         dest = odf.userfield.UserFields(user_fields.dest_file)
-        self.assertEqual([('username', 'string', 'mari'),
-                          ('firstname', 'string', 'Lukas'),
-                          ('lastname', 'string', '<none>'),
-                          ('address', 'string', '')],
+        self.assertEqual([(b'username', b'string', b'mari'),
+                          (b'firstname', b'string', b'Lukas'),
+                          (b'lastname', b'string', b'<none>'),
+                          (b'address', b'string', b'')],
                          dest.list_fields_and_values())
 
     def test_stringio(self):
         # test wether it is possible to use a StringIO as src and dest
-        src = StringIO(file(self.userfields_odt).read())
-        dest = StringIO()
+        with open(self.userfields_odt,'rb') as infile:
+            src = BytesIO(infile.read())
+        dest = BytesIO()
         # update fields
         user_fields = odf.userfield.UserFields(src, dest)
         user_fields.update({'username': 'mac',
@@ -156,10 +155,10 @@ class TestUserFields(unittest.TestCase):
                             'street': 'I do not exist'})
         # reread dest StringIO to get field values
         dest_user_fields = odf.userfield.UserFields(dest)
-        self.assertEqual([('username', 'string', 'mac'),
-                          ('firstname', 'string', 'André'),
-                          ('lastname', 'string', '<none>'),
-                          ('address', 'string', '')],
+        self.assertEqual([(b'username', b'string', b'mac'),
+                          (b'firstname', b'string', u'André'.encode('utf-8')),
+                          (b'lastname', b'string', b'<none>'),
+                          (b'address', b'string', b'')],
                          dest_user_fields.list_fields_and_values())
 
     def test_newlines_in_values(self):
@@ -172,11 +171,11 @@ class TestUserFields(unittest.TestCase):
                             'lastname': 'mac',
                             'address': 'Hall-Platz 3\n01234 Testheim'})
         dest = odf.userfield.UserFields(user_fields.dest_file)
-        self.assertEqual([('username', 'string', 'mac'),
-                          ('firstname', 'string', 'mac'),
-                          ('lastname', 'string', 'mac'),
-                          ('address', 'string',
-                           'Hall-Platz 3\n01234 Testheim')],
+        self.assertEqual([(b'username', b'string', b'mac'),
+                          (b'firstname', b'string', b'mac'),
+                          (b'lastname', b'string', b'mac'),
+                          (b'address', b'string',
+                           b'Hall-Platz 3\n01234 Testheim')],
                          dest.list_fields_and_values())
 
     def _get_dest_file_name(self):
