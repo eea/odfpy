@@ -20,15 +20,16 @@
 #
 #import pdb
 #pdb.set_trace()
-from __future__ import absolute_import
-import sys
+
+import sys, os.path
+sys.path.append(os.path.dirname(__file__))
 from xml.sax import handler
 from xml.sax.saxutils import escape, quoteattr
 from xml.dom import Node
 
-from .opendocument import load
+from opendocument import load
 
-from .namespaces import ANIMNS, CHARTNS, CONFIGNS, DCNS, DR3DNS, DRAWNS, FONS, \
+from namespaces import ANIMNS, CHARTNS, CONFIGNS, DCNS, DR3DNS, DRAWNS, FONS, \
   FORMNS, MATHNS, METANS, NUMBERNS, OFFICENS, PRESENTATIONNS, SCRIPTNS, \
   SMILNS, STYLENS, SVGNS, TABLENS, TEXTNS, XLINKNS
 
@@ -265,13 +266,24 @@ class StyleToCSS:
             it is already CSS2
         """
         sdict = {}
+        procedures=[]
         for rule,val in ruleset.items():
             if rule[0] == '':
                 sdict[rule[1]] = val
                 continue
             method = self.ruleconversions.get(rule, None )
             if method:
-                method(ruleset, sdict, rule, val)
+                procedures.append([method, ruleset, sdict, rule, val])
+        # this ensures that the procedures for horizontal position
+        # are run last! It is important since Python3 makes the order
+        # of dictionaries unpredictable
+        for p in filter(lambda x: x[0] != self.c_hp, procedures):
+            method, ruleset, sdict, rule, val = p
+            method(ruleset, sdict, rule, val)
+        for p in filter(lambda x: x[0] == self.c_hp, procedures):
+            method, ruleset, sdict, rule, val = p
+            method(ruleset, sdict, rule, val)
+
         return sdict
 
 

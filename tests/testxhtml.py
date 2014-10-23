@@ -19,9 +19,7 @@
 #
 
 import unittest
-import sys
-import os
-import os.path
+import sys, os, os.path, re
 import io
 from odf.odf2xhtml import ODF2XHTML
 
@@ -43,6 +41,30 @@ def has_rules(html, selector, rules):
         if html[selstart:selstart+selend].find(rule.strip()) == -1:
             return False
     return True
+
+def divWithClass_has_styles(s,classname, styleString):
+    """
+    Checks whether a div with some class attribute bears a set of other
+    attributes.
+    @param s string to be searched
+    @param classname the value of the class attribute
+    @param styleString a sequence of style stances separated by semicolons
+    @return True when the div opening tag bears all the requested
+    styles, independently of their order
+    """
+    pattern=re.compile(r'<div [^>]*class="'+classname+r'"[^>]*>', re.MULTILINE)
+    found=pattern.findall(s)
+    if not found:
+        return False
+    found=found[0]
+    foundStyle=re.match(r'''.*style ?= ?["']([^"']*)["'].*''', found)
+    if not foundStyle:
+        return False
+    foundStyle=foundStyle.group(1)
+    foundStyle  = map(lambda x: x.replace(' ',''), foundStyle.split(';'))
+    styleString = map(lambda x: x.replace(' ',''), styleString.split(';'))
+    return set(foundStyle)==set(styleString)
+
 
 
 htmlout = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
@@ -184,8 +206,8 @@ class TestExampleDocs(unittest.TestCase):
         odt = os.path.join(os.path.dirname(__file__), "examples", "images.odt")
         odhandler = ODF2XHTML()
         result = odhandler.odf2xhtml(odt)
-        assert has_rules(result,".G-fr1","margin-left: 0cm; margin-right: 0cm;")
-        assert has_rules(result,".G-fr2","margin-left: auto; margin-right: 0px;")
+        assert has_rules(result,".G-fr1","margin-left: 0cm; margin-right: auto;")
+        assert has_rules(result,".G-fr2","margin-left: auto; margin-right: 0cm;")
         assert has_rules(result,".G-fr3","float: left")
         assert has_rules(result,".G-fr4","margin-right: auto;margin-left: auto;")
         assert has_rules(result,".G-fr5","float: right")
@@ -195,12 +217,12 @@ class TestExampleDocs(unittest.TestCase):
         odt = os.path.join(os.path.dirname(__file__), "examples", "imageslabels.odt")
         odhandler = ODF2XHTML()
         result = odhandler.odf2xhtml(odt)
-        assert has_rules(result,".G-fr1","margin-left: 0cm; margin-right: 0cm;")
-        assert has_rules(result,".G-fr2","margin-left: 0cm; margin-right: 0cm;")
+        assert has_rules(result,".G-fr1","margin-left: 0cm; margin-right: auto;")
+        assert has_rules(result,".G-fr2","margin-left: auto; margin-right: 0cm;")
         assert has_rules(result,".G-fr3","float: left")
         assert has_rules(result,".G-fr4","float: right")
         assert has_rules(result,".G-fr5","margin-right: auto;margin-left: auto;")
-        assert has_rules(result,".G-fr7","margin-right: 0cm;margin-left: 0cm;")
+        assert has_rules(result,".G-fr7","margin-right: auto;margin-left: auto;")
         assert has_rules(result,".P-Illustration","font-size: 10pt;")
 
     def test_css(self):
@@ -209,12 +231,12 @@ class TestExampleDocs(unittest.TestCase):
         odhandler = ODF2XHTML()
         odhandler.load(odt)
         result = odhandler.css()
-        assert has_rules(result,".G-fr1","margin-left: 0cm;margin-right:auto")
-        assert has_rules(result,".G-fr2","margin-left: 0cm;margin-right: 0cm")
+        assert has_rules(result,".G-fr1","margin-left: 0cm;margin-right: auto")
+        assert has_rules(result,".G-fr2","margin-left: auto;margin-right: 0cm")
         assert has_rules(result,".G-fr3","float: left")
         assert has_rules(result,".G-fr4","float: right")
-        assert has_rules(result,".G-fr5","margin-right: auto;margin-left: 0cm")
-        assert has_rules(result,".G-fr7","margin-right: 0cm;margin-left: 0cm")
+        assert has_rules(result,".G-fr5","margin-right: auto;margin-left: auto")
+        assert has_rules(result,".G-fr7","margin-right: auto;margin-left: auto")
         assert has_rules(result,".P-Illustration","font-size: 10pt;")
 
     def test_positioned_shapes(self):
@@ -222,7 +244,11 @@ class TestExampleDocs(unittest.TestCase):
         odt = os.path.join(os.path.dirname(__file__), "examples", "cols.odp")
         odhandler = ODF2XHTML()
         result = odhandler.odf2xhtml(odt)
-        self.assertNotEqual(-1, result.find(u'''<div style="position: absolute;width:5.503cm;height:1.905cm;left:2.117cm;top:3.175cm;" class="G-gr1">'''))
+        # Python3 can ouput style stances in a non-predictable order when
+        # parsing an XML document; so the following test may fail
+        # unexpectedly with Python3. It is replaced by a more robust test.
+        ## self.assertNotEqual(-1, result.find(u'''<div style="position: absolute;width:5.503cm;height:1.905cm;left:2.117cm;top:3.175cm;" class="G-gr1">'''))
+        assert(divWithClass_has_styles(result, "G-gr1", "position: absolute;width:5.503cm;height:1.905cm;left:2.117cm;top:3.175cm;"))
         assert has_rules(result,".MP-Default","height: 19.05cm; width: 25.4cm; position: relative;")
 
 

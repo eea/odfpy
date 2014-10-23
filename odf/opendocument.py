@@ -41,7 +41,7 @@ from odfmanifest import manifestlist
 
 __version__= TOOLSVERSION
 
-_XMLPROLOGUE = u"<?xml version='1.0' encoding='UTF-8'?>\n"
+_XMLPROLOGUE = b"<?xml version='1.0' encoding='UTF-8'?>\n"
 
 ########### the following syntax is invalid for Python3 ##############
 # UNIXPERMS = 0100644 << 16L  # -rw-r--r--
@@ -164,7 +164,10 @@ class OpenDocument:
 
     def toXml(self, filename=''):
         xml=BytesIO()
-        xml.write(_XMLPROLOGUE)
+        if sys.version_info.major==2:
+            xml.write(_XMLPROLOGUE.encode("utf-8"))
+        else:
+            xml.write(_XMLPROLOGUE)
         self.body.toXml(0, xml)
         if not filename:
             return xml.getvalue()
@@ -179,7 +182,10 @@ class OpenDocument:
         """
         self.__replaceGenerator()
         xml=BytesIO()
-        xml.write(_XMLPROLOGUE)
+        if sys.version_info.major==2:
+            xml.write(_XMLPROLOGUE.encode("utf-8"))
+        else:
+            xml.write(_XMLPROLOGUE)
         self.topnode.toXml(0, xml)
         return xml.getvalue()
 
@@ -189,7 +195,10 @@ class OpenDocument:
             Always written as a bytestream in UTF-8 encoding
         """
         xml=BytesIO()
-        xml.write(_XMLPROLOGUE.encode('utf-8'))
+        if sys.version_info.major==2:
+            xml.write(_XMLPROLOGUE.encode("utf-8"))
+        else:
+            xml.write(_XMLPROLOGUE)
         x = DocumentContent()
         x.write_open_tag(0, xml)
         if self.scripts.hasChildNodes():
@@ -214,7 +223,10 @@ class OpenDocument:
             The self.manifest isn't avaible unless the document is being saved
         """
         xml=BytesIO()
-        xml.write(_XMLPROLOGUE.encode('utf-8'))
+        if sys.version_info.major==2:
+            xml.write(_XMLPROLOGUE.encode("utf-8"))
+        else:
+            xml.write(_XMLPROLOGUE)
         self.manifest.toXml(0,xml)
         return xml.getvalue()
 
@@ -224,7 +236,10 @@ class OpenDocument:
         x = DocumentMeta()
         x.addElement(self.meta)
         xml=BytesIO()
-        xml.write(_XMLPROLOGUE.encode('utf-8'))
+        if sys.version_info.major==2:
+            xml.write(_XMLPROLOGUE.encode("utf-8"))
+        else:
+            xml.write(_XMLPROLOGUE)
         x.toXml(0,xml)
         return xml.getvalue()
 
@@ -233,7 +248,10 @@ class OpenDocument:
         x = DocumentSettings()
         x.addElement(self.settings)
         xml=BytesIO()
-        xml.write(_XMLPROLOGUE.encode('utf-8'))
+        if sys.version_info.major==2:
+            xml.write(_XMLPROLOGUE.encode("utf-8"))
+        else:
+            xml.write(_XMLPROLOGUE)
         x.toXml(0,xml)
         return xml.getvalue()
 
@@ -280,7 +298,10 @@ class OpenDocument:
     def stylesxml(self):
         """ Generates the styles.xml file """
         xml=BytesIO()
-        xml.write(_XMLPROLOGUE.encode("utf-8"))
+        if sys.version_info.major==2:
+            xml.write(_XMLPROLOGUE.encode("utf-8"))
+        else:
+            xml.write(_XMLPROLOGUE)
         x = DocumentStyles()
         x.write_open_tag(0, xml)
         if self.fontfacedecls.hasChildNodes():

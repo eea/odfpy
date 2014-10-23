@@ -18,7 +18,7 @@
 # Contributor(s):
 #
 
-import unittest, os
+import unittest, os, sys
 from odf.opendocument import OpenDocumentText
 from odf import style, text
 from odf.text import P, H
@@ -67,4 +67,9 @@ class TestUnicode(unittest.TestCase):
         self.assertContains(c, u'<office:automatic-styles/>')
 
 if __name__ == '__main__':
-    unittest.main()
+    if sys.version_info.major==2:
+        unittest.main()
+    else:
+        sys.stderr.write("\n----------------------------------------------------------------------\nRan no test\n\n")
+        sys.stderr.write("For Python3, unicode strings are type 'str'.\n")
+        sys.stderr.write("OK\n")

@@ -18,7 +18,7 @@
 # Contributor(s):
 #
 
-import unittest, os, zipfile
+import unittest, os, zipfile, re
 from odf.opendocument import OpenDocumentText
 from odf import draw, text
 from odf.element import IllegalChild
@@ -30,6 +30,30 @@ def _getxmlpart(odffile, xmlfile):
     content = z.read(xmlfile)
     z.close()
     return content
+
+def element_has_attributes(s, tag, attribs):
+    """
+    checks that at least one of elements in an XML string with a given tag
+    has the requested attributes, independently of their order
+    @param s: an XML string
+    @param tag a tag
+    @param attributes an attribute string; attributes are separated by spaces
+    @return True if attributes are there, independently of their order
+    """
+    pattern=re.compile(r'<'+tag+' [^>]*/?>')
+    found=pattern.findall(s)
+    if not found:
+        return False
+    # removes parts of the string which are not attributes
+    found1=map(lambda s: s.replace('<'+tag+' ', '').replace('/>','').replace('>',''), found)
+    attribPattern=re.compile(r'[-a-z0-9:]*="[^"]*"')
+    foundAttribMap = map(lambda s: attribPattern.findall(s), found1)
+    attribs=attribPattern.findall(attribs)
+    for foundAttribs in foundAttribMap:
+        if set(foundAttribs) == set(attribs):
+            return True
+    return False
+
 
 class TestUnicode(unittest.TestCase):
     
@@ -57,7 +81,7 @@ class TestUnicode(unittest.TestCase):
         subsubloc = subdoc.addObject(subsubdoc)
         self.assertEqual(subsubloc,'./Object 1/Object 1')
 
-        c = self.textdoc.contentxml()
+        c = self.textdoc.contentxml().decode('utf-8')
         c.index('<office:body><office:text><draw:frame ')
         e = ElementParser(c, 'draw:frame')
 #       e = ElementParser('<draw:frame svg:width="476pt" text:anchor-type="paragraph" svg:height="404pt">')
@@ -70,17 +94,16 @@ class TestUnicode(unittest.TestCase):
         self.textdoc.save("TEST.odt")
         self.saved = True
         m = _getxmlpart("TEST.odt", "META-INF/manifest.xml").decode('utf-8')
-        print ("Sometimes, this fails with Python3, in an unpredictable way!")
-        m.index('<manifest:file-entry manifest:media-type="application/vnd.oasis.opendocument.text" manifest:full-path="/"/>')
-        m.index('<manifest:file-entry manifest:media-type="text/xml" manifest:full-path="styles.xml"/>')
-        m.index('<manifest:file-entry manifest:media-type="text/xml" manifest:full-path="content.xml"/>')
-        m.index('<manifest:file-entry manifest:media-type="text/xml" manifest:full-path="meta.xml"/>')
-        m.index('<manifest:file-entry manifest:media-type="application/vnd.oasis.opendocument.text" manifest:full-path="Object 1/"/>')
-        m.index('<manifest:file-entry manifest:media-type="text/xml" manifest:full-path="Object 1/styles.xml"/>')
-        m.index('<manifest:file-entry manifest:media-type="text/xml" manifest:full-path="Object 1/content.xml"/>')
-        m.index('<manifest:file-entry manifest:media-type="application/vnd.oasis.opendocument.text" manifest:full-path="Object 1/Object 1/"/>')
-        m.index('<manifest:file-entry manifest:media-type="text/xml" manifest:full-path="Object 1/Object 1/styles.xml"/>')
-        m.index('<manifest:file-entry manifest:media-type="text/xml" manifest:full-path="Object 1/Object 1/content.xml"/>')
+        assert(element_has_attributes(m, 'manifest:file-entry', 'manifest:media-type="application/vnd.oasis.opendocument.text" manifest:full-path="/"'))
+        assert(element_has_attributes(m, 'manifest:file-entry', 'manifest:media-type="application/vnd.oasis.opendocument.text" manifest:full-path="/"'))
+        assert(element_has_attributes(m, 'manifest:file-entry', 'manifest:media-type="text/xml" manifest:full-path="content.xml"'))
+        assert(element_has_attributes(m, 'manifest:file-entry', 'manifest:media-type="text/xml" manifest:full-path="meta.xml"'))
+        assert(element_has_attributes(m, 'manifest:file-entry', 'manifest:media-type="application/vnd.oasis.opendocument.text" manifest:full-path="Object 1/"'))
+        assert(element_has_attributes(m, 'manifest:file-entry', 'manifest:media-type="text/xml" manifest:full-path="Object 1/styles.xml"'))
+        assert(element_has_attributes(m, 'manifest:file-entry', 'manifest:media-type="text/xml" manifest:full-path="Object 1/content.xml"'))
+        assert(element_has_attributes(m, 'manifest:file-entry', 'manifest:media-type="application/vnd.oasis.opendocument.text" manifest:full-path="Object 1/Object 1/"'))
+        assert(element_has_attributes(m, 'manifest:file-entry', 'manifest:media-type="text/xml" manifest:full-path="Object 1/Object 1/styles.xml"'))
+        assert(element_has_attributes(m, 'manifest:file-entry', 'manifest:media-type="text/xml" manifest:full-path="Object 1/Object 1/content.xml"'))
 
 if __name__ == '__main__':
     unittest.main()
