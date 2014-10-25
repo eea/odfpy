@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 # Copyright (C) 2006 Søren Roug, European Environment Agency
 #
@@ -22,7 +22,7 @@
 # OpenDocument can be a complete office document in a single
 # XML document. This script will take such a document and create
 # a package
-import cStringIO
+import io
 import zipfile,time, sys, getopt
 import xml.sax, xml.sax.saxutils
 from odf import manifest
@@ -135,8 +135,8 @@ class odfsplitter(base):
     def content(self):
         """ Return the content inside a wrapper called <office:document-content>
         """
-        prefixes = ' '.join(self._prefixes).encode('utf-8')
-        return  ''.join(['<?xml version="1.0" encoding="UTF-8"?>\n<office:document-content %s office:version="1.0">' % prefixes] + self.output._content + ['</office:document-content>'])
+        prefixes = ' '.join(self._prefixes)
+        return  ''.join(['<?xml version="1.0" encoding="UTF-8"?>\n<office:document-content %s office:version="1.0">' % prefixes] + list(map(lambda x: x.decode("utf-8"), self.output._content)) + ['</office:document-content>'])
 
     def settings(self):
         prefixes =  ' '.join(self._prefixes).encode('utf-8')
@@ -144,19 +144,19 @@ class odfsplitter(base):
 
     def styles(self):
         prefixes =  ' '.join(self._prefixes)
-        return ''.join( ['<?xml version="1.0" encoding="UTF-8"?>\n<office:document-styles %s office:version="1.0">' % prefixes] + self.output._styles + ['''</office:document-styles>'''])
+        return ''.join( ['<?xml version="1.0" encoding="UTF-8"?>\n<office:document-styles %s office:version="1.0">' % prefixes] + list(map(lambda x: x.decode("utf-8"), self.output._styles)) + ['''</office:document-styles>'''])
 
     def meta(self):
         prefixes =  ' '.join(self._prefixes)
-        return ''.join( ['<?xml version="1.0" encoding="UTF-8"?>\n<office:document-meta %s office:version="1.0">' % prefixes] + self.output._meta + ['''</office:document-meta>'''])
+        return ''.join( ['<?xml version="1.0" encoding="UTF-8"?>\n<office:document-meta %s office:version="1.0">' % prefixes] + list(map(lambda x: x.decode("utf-8"), self.output._meta)) + ['''</office:document-meta>'''])
 
 def usage():
    sys.stderr.write("Usage: %s [-o outputfile] [-s] inputfile\n" % sys.argv[0])
 
 def manifestxml(m):
     """ Generates the content of the manifest.xml file """
-    xml=cStringIO.StringIO()
-    xml.write("<?xml version='1.0' encoding='UTF-8'?>\n")
+    xml=io.BytesIO()
+    xml.write(b"<?xml version='1.0' encoding='UTF-8'?>\n")
     m.toXml(0,xml)
     return xml.getvalue()
 
@@ -186,7 +186,7 @@ parser.setContentHandler(odfs)
 if len(args) == 0:
     parser.parse(sys.stdin)
 else:
-    parser.parse(file(args[0]))
+    parser.parse(open(args[0],"r"))
 
 mimetype = odfs._mimetype
 suffix = odmimetypes.get(mimetype,'.xxx')

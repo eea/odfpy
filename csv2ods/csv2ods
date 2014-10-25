@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # Copyright (C) 2008 Agustin Henze -> agustinhenze at gmail.com
 #
@@ -23,12 +23,12 @@ from odf.style import Style, TextProperties, ParagraphProperties, TableColumnPro
 from odf.text import P
 from odf.table import Table, TableColumn, TableRow, TableCell
 from optparse import OptionParser
-import sys,csv,re
+import sys,csv,re, os
 
-PWENC = "utf-8"
-
-def csvToOds( pathFileCSV, pathFileODS, tableName='table', delimiter=',', quoting=csv.QUOTE_MINIMAL, quotechar = '"',
-							escapechar = None, skipinitialspace = False, lineterminator = '\r\n'):
+def csvToOds( pathFileCSV, pathFileODS, tableName='table',
+	      delimiter=',', quoting=csv.QUOTE_MINIMAL,
+	      quotechar = '"', escapechar = None,
+	      skipinitialspace = False, lineterminator = '\r\n'):
 	textdoc = OpenDocumentSpreadsheet()
 	# Create a style for the table content. One we can modify
 	# later in the word processor.
@@ -39,10 +39,22 @@ def csvToOds( pathFileCSV, pathFileODS, tableName='table', delimiter=',', quotin
 	
 	# Start the table
 	table = Table( name=tableName )
-	
-	reader = csv.reader(open(pathFileCSV), delimiter=delimiter,
-						quoting=quoting, quotechar=quotechar, escapechar=escapechar,
-						skipinitialspace=skipinitialspace, lineterminator=lineterminator)
+	output = os.popen('/usr/bin/file ' + pathFileCSV).read()
+	m=re.match(r'^.*: ([-a-zA-Z0-9]+) text$', output)
+	if m:
+		encoding=m.group(1)
+		if 'ISO-8859' in encoding:
+			encoding="latin-1"
+	else:
+		encoding="utf-8"
+
+	reader = csv.reader(open(pathFileCSV, encoding=encoding), 
+			    delimiter=delimiter,
+			    quoting=quoting,
+			    quotechar=quotechar,
+			    escapechar=escapechar,
+			    skipinitialspace=skipinitialspace,
+			    lineterminator=lineterminator)
 	fltExp = re.compile('^\s*[-+]?\d+(\.\d+)?\s*$')
 	
 	for row in reader:
@@ -54,7 +66,7 @@ def csvToOds( pathFileCSV, pathFileODS, tableName='table', delimiter=',', quotin
 			else:
 				tc = TableCell(valuetype="string")
 			tr.addElement(tc)
-			p = P(stylename=tablecontents,text=unicode(val,PWENC))
+			p = P(stylename=tablecontents,text=val)	
 			tc.addElement(p)
 
 	textdoc.spreadsheet.addElement(table)
@@ -134,9 +146,6 @@ if __name__ == "__main__":
 	else:
 		escapechar=None
 		
-	if options.encoding:
-		PWENC = options.encoding
-		
 	if options.tableName:
 		tableName = options.tableName
 	else:
@@ -147,5 +156,7 @@ if __name__ == "__main__":
 	else:
 		quotechar = "\""
 		
-	csvToOds( pathFileCSV=pathFileCSV, pathFileODS=pathFileODS, delimiter=delimiter, skipinitialspace=skipinitialspace,
-						escapechar=escapechar, lineterminator=lineterminator, tableName=tableName, quotechar=quotechar)
+	csvToOds( pathFileCSV=pathFileCSV, pathFileODS=pathFileODS,
+		  delimiter=delimiter, skipinitialspace=skipinitialspace,
+		  escapechar=escapechar, lineterminator=lineterminator,
+		  tableName=tableName, quotechar=quotechar)
