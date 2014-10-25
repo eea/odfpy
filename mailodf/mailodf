@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 # Copyright (C) 2006 Søren Roug, European Environment Agency
 #
@@ -21,10 +21,10 @@ from odf.odf2xhtml import ODF2XHTML
 import zipfile
 import sys, os, smtplib, getopt
 
-from email.MIMEMultipart import MIMEMultipart
-from email.MIMENonMultipart import MIMENonMultipart
-from email.MIMEText import MIMEText
-from email import Encoders
+from email.mime.multipart import MIMEMultipart
+from email.mime.nonmultipart import MIMENonMultipart
+from email.mime.text import MIMEText
+from email.encoders import encode_base64
 
 def usage():
    sys.stderr.write("Usage: %s [-f from] [-s subject] inputfile recipients...\n" % sys.argv[0])
@@ -78,7 +78,7 @@ for file in z.namelist():
         img = MIMENonMultipart(main,sub)
         img.set_payload(z.read(file))
         img['Content-Location'] = "" + file
-        Encoders.encode_base64(img)
+        encode_base64(img)
         msg.attach(img)
 z.close()
 

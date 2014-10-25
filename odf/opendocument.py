@@ -96,7 +96,7 @@ class OpenDocument:
         self.childobjects = []
         self._extra = []
         self.folder = "" # Always empty for toplevel documents
-        self.topnode = Document(mimetype=self.mimetype)
+        self.topnode = Document(mimetype=self.mimetype.decode("utf-8"))
         self.topnode.ownerDocument = self
 
         self.clear_caches()

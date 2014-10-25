@@ -20,10 +20,8 @@
 import zipfile, time, sys, getopt, re
 import xml.sax, xml.sax.saxutils
 from odf.namespaces import TOOLSVERSION, OFFICENS, XLINKNS, DCNS, METANS
-try:
-    from cStringIO import StringIO
-except ImportError:
-    from io import StringIO
+from io import StringIO
+
 OUTENCODING="utf-8"
 
 whitespace = re.compile(r'\s+')
