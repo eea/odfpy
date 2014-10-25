@@ -34,6 +34,23 @@ It is probably a flaw in the command assertRaises of Python3: the
 right exception is raised, but it is not correctly identified by
 Python3's assertRaises.
 
+## REDISTRIBUTION LICENSE
+
+This project, with the exception of the OpenDocument schemas, are
+Copyright (C) 2006-2014, Daniel Carrera, Alex Hudson, Søren Roug,
+Thomas Zander, Roman Fordinal, Michael Howitz and Georges Khaznadar.
+
+It is distributed under both GNU General Public License v.2 or (at
+your option) any later version or APACHE License v.2.
+See GPL-LICENSE-2.txt and APACHE-LICENSE-2.0.txt.
+
+The OpenDocument RelaxNG Schemas are Copyright © OASIS Open 2005. See
+the schema files for their copyright notice.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+
 ## TODO / IDEAS
 
 * html2odf
@@ -73,4 +90,4 @@ Python3's assertRaises.
   http://freshmeat.net/projects/xmldiff/
 
 * odfsign
-  Sign and verify the signature(s) of an ODF document.
+   Sign and verify the signature(s) of an ODF document.
