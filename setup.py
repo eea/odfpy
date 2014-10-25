@@ -62,7 +62,7 @@ setup(name='odfpy',
       description='Python API and tools to manipulate OpenDocument files',
       long_description = (
 """
-Odfpy is a library to read and write OpenDocument v. 1.1 files.
+Odfpy is a library to read and write OpenDocument v. 1.2 files.
 The main focus has been to prevent the programmer from creating invalid
 documents. It has checks that raise an exception if the programmer adds
 an invalid element, adds an attribute unknown to the grammar, forgets to
@@ -86,11 +86,15 @@ In addition to the API, there are a few scripts:
 - odfuserfield - List or change the user-field declarations in an ODF file
 - xml2odf - Create OD? package from OpenDocument in XML form
 
-Visit https://joinup.ec.europa.eu/software/odfpy/home for documentation and examples."""
+The source code is at https://github.com/eea/odfpy
+
+Visit https://github.com/eea/odfpy/wiki for documentation and examples.
+
+The code at https://joinup.ec.europa.eu/software/odfpy/home is obsolete."""
 ),
       author='Soren Roug',
       author_email='soren.roug@eea.europa.eu',
-      url='https://joinup.ec.europa.eu/software/odfpy/home',
+      url='https://github.com/eea/odfpy',
       packages=['odf'],
       scripts=[
           'csv2ods/csv2ods',
