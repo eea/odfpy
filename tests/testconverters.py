@@ -44,28 +44,28 @@ class TestConverters(unittest.TestCase):
                 for attr in attrs:
                     self.allattrs[attr] = 1
                     self.allqattrs[(attr, element)] = 1
-                    self.assertEquals(attr, findconv(attr, element))
+                    self.assertEqual(attr, findconv(attr, element))
         for (attr,elem) in attrconverters.attrconverters.keys():
             if attr == (OFFICENS,u'process-content'):  # Special attribute
                 continue
             if elem is None:
-                self.assertEquals(self.allattrs[attr], 1)
+                self.assertEqual(self.allattrs[attr], 1)
             else:
-                self.assertEquals(self.allqattrs[(attr, elem)], 1)
+                self.assertEqual(self.allqattrs[(attr, elem)], 1)
 
     def testBooleanConverter(self):
         """ Check that the boolean converter understands the values """
-        self.assertEquals(attrconverters.cnv_boolean("usesoftpagebreak", 'false', None), 'false')
-        self.assertEquals(attrconverters.cnv_boolean("usesoftpagebreak", 'true', None), 'true')
-        self.assertEquals(attrconverters.cnv_boolean("usesoftpagebreak", True, None), 'true')
-        self.assertEquals(attrconverters.cnv_boolean("usesoftpagebreak", False, None), 'false')
-        self.assertEquals(attrconverters.cnv_boolean("usesoftpagebreak", 1, None), 'true')
-        self.assertEquals(attrconverters.cnv_boolean("usesoftpagebreak", 0, None), 'false')
+        self.assertEqual(attrconverters.cnv_boolean("usesoftpagebreak", 'false', None), 'false')
+        self.assertEqual(attrconverters.cnv_boolean("usesoftpagebreak", 'true', None), 'true')
+        self.assertEqual(attrconverters.cnv_boolean("usesoftpagebreak", True, None), 'true')
+        self.assertEqual(attrconverters.cnv_boolean("usesoftpagebreak", False, None), 'false')
+        self.assertEqual(attrconverters.cnv_boolean("usesoftpagebreak", 1, None), 'true')
+        self.assertEqual(attrconverters.cnv_boolean("usesoftpagebreak", 0, None), 'false')
         self.assertRaises(ValueError, attrconverters.cnv_boolean, "usesoftpagebreak", '', None)
         self.assertRaises(ValueError, attrconverters.cnv_boolean, "usesoftpagebreak", 'on', None)
         self.assertRaises(ValueError, attrconverters.cnv_boolean, "usesoftpagebreak", None, None)
-#       self.assertEquals(attrconverters.cnv_boolean("usesoftpagebreak", '', None), 'false')
-#       self.assertEquals(attrconverters.cnv_boolean("usesoftpagebreak", 'on', None), 'true')
+#       self.assertEqual(attrconverters.cnv_boolean("usesoftpagebreak", '', None), 'false')
+#       self.assertEqual(attrconverters.cnv_boolean("usesoftpagebreak", 'on', None), 'true')
 
 
 if __name__ == '__main__':

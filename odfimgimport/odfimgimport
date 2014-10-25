@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 # Copyright (C) 2007-2009 Søren Roug, European Environment Agency
 #
@@ -18,11 +18,16 @@
 # Contributor(s):
 #
 import zipfile, sys, getopt, mimetypes
-from urllib2 import urlopen, quote, unquote
-from urlparse import urlunsplit, urlsplit
+try:
+    from urllib2 import urlopen, quote, unquote
+except ImportError:
+    from urllib.request import urlopen, quote, unquote
+try:
+    from urlparse import urlunsplit, urlsplit
+except ImportError:
+    from urllib.parse import urlunsplit, urlsplit
 from odf.opendocument import load
 from odf.draw import Image
-import cStringIO
 
 sys.tracebacklimit = 0
 
@@ -49,7 +54,7 @@ def importpicture(href):
     global doc, newpictures, failures, verbose
 
     # Check that it is not already in the manifest
-    if doc.Pictures.has_key(href): return href
+    if href in doc.Pictures: return href
 
     image = None
     if verbose: print >>sys.stderr, "Importing", href,
@@ -62,7 +67,7 @@ def importpicture(href):
             o = list(urlsplit(href))
             o[2] = quote(o[2].encode('utf-8'))
             goodhref = urlunsplit(o)
-        if newpictures.has_key(goodhref):
+        if goodhref in newpictures:
             if verbose: print >>sys.stderr, "already imported"
             return newpictures[goodhref]  # Already imported
         try:
@@ -93,7 +98,7 @@ def importpicture(href):
                 goodhref = unquote(href[3:])
             else:
                 goodhref = unquote(directory + href[2:])
-        if newpictures.has_key(goodhref):
+        if goodhref in newpictures:
             if verbose: print >>sys.stderr, "already imported"
             return newpictures[goodhref]  # Already imported
         mediatype, encoding = mimetypes.guess_type(goodhref)

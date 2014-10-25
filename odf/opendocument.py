@@ -20,10 +20,19 @@
 
 __doc__="""Use OpenDocument to generate your documents."""
 
-import zipfile, time, sys, mimetypes, copy
-from cStringIO import StringIO
+import zipfile, time, sys, mimetypes, copy, os.path
+
+# to allow Python3 to access modules in the same path
+sys.path.append(os.path.dirname(__file__))
+
+# using BytesIO provides a cleaner interface than StringIO
+# with both Python2 and Python3: the programmer must care to
+# convert strings or unicode to bytes, which is valid for Python 2 and 3.
+from io import BytesIO
+
 from namespaces import *
-import manifest, meta
+import manifest
+import meta
 from office import *
 import element
 from attrconverters import make_NCName
@@ -32,9 +41,12 @@ from odfmanifest import manifestlist
 
 __version__= TOOLSVERSION
 
-_XMLPROLOGUE = u"<?xml version='1.0' encoding='UTF-8'?>\n"
+_XMLPROLOGUE = b"<?xml version='1.0' encoding='UTF-8'?>\n"
 
-UNIXPERMS = 0100644 << 16L  # -rw-r--r--
+########### the following syntax is invalid for Python3 ##############
+# UNIXPERMS = 0100644 << 16L  # -rw-r--r--
+######################################################################
+UNIXPERMS = 2175008768 # same value as 0100644 << 16L == -rw-r--r--
 
 IS_FILENAME = 0
 IS_IMAGE = 1
@@ -124,13 +136,13 @@ class OpenDocument:
     def build_caches(self, element):
         """ Called from element.py
         """
-        if not self.element_dict.has_key(element.qname):
+        if element.qname not in self.element_dict:
             self.element_dict[element.qname] = []
         self.element_dict[element.qname].append(element)
         if element.qname == (STYLENS, u'style'):
             self.__register_stylename(element) # Add to style dictionary
         styleref = element.getAttrNS(TEXTNS,u'style-name')
-        if styleref is not None and self._styles_ooo_fix.has_key(styleref):
+        if styleref is not None and styleref in self._styles_ooo_fix:
             element.setAttrNS(TEXTNS,u'style-name', self._styles_ooo_fix[styleref])
 
     def __register_stylename(self, element):
@@ -142,7 +154,7 @@ class OpenDocument:
         if name is None:
             return
         if element.parentNode.qname in ((OFFICENS,u'styles'), (OFFICENS,u'automatic-styles')):
-            if self._styles_dict.has_key(name):
+            if name in self._styles_dict:
                 newname = 'M'+name # Rename style
                 self._styles_ooo_fix[name] = newname
                 # From here on all references to the old name will refer to the new one
@@ -151,13 +163,16 @@ class OpenDocument:
             self._styles_dict[name] = element
 
     def toXml(self, filename=''):
-        xml=StringIO()
-        xml.write(_XMLPROLOGUE)
+        xml=BytesIO()
+        if sys.version_info.major==2:
+            xml.write(_XMLPROLOGUE.encode("utf-8"))
+        else:
+            xml.write(_XMLPROLOGUE)
         self.body.toXml(0, xml)
         if not filename:
             return xml.getvalue()
         else:
-            f=file(filename,'w')
+            f=codecs.open(filename,'w', encoding='utf-8')
             f.write(xml.getvalue())
             f.close()
 
@@ -166,8 +181,11 @@ class OpenDocument:
             Always written as a bytestream in UTF-8 encoding
         """
         self.__replaceGenerator()
-        xml=StringIO()
-        xml.write(_XMLPROLOGUE)
+        xml=BytesIO()
+        if sys.version_info.major==2:
+            xml.write(_XMLPROLOGUE.encode("utf-8"))
+        else:
+            xml.write(_XMLPROLOGUE)
         self.topnode.toXml(0, xml)
         return xml.getvalue()
 
@@ -176,8 +194,11 @@ class OpenDocument:
         """ Generates the content.xml file
             Always written as a bytestream in UTF-8 encoding
         """
-        xml=StringIO()
-        xml.write(_XMLPROLOGUE)
+        xml=BytesIO()
+        if sys.version_info.major==2:
+            xml.write(_XMLPROLOGUE.encode("utf-8"))
+        else:
+            xml.write(_XMLPROLOGUE)
         x = DocumentContent()
         x.write_open_tag(0, xml)
         if self.scripts.hasChildNodes():
@@ -201,8 +222,11 @@ class OpenDocument:
         """ Generates the manifest.xml file
             The self.manifest isn't avaible unless the document is being saved
         """
-        xml=StringIO()
-        xml.write(_XMLPROLOGUE)
+        xml=BytesIO()
+        if sys.version_info.major==2:
+            xml.write(_XMLPROLOGUE.encode("utf-8"))
+        else:
+            xml.write(_XMLPROLOGUE)
         self.manifest.toXml(0,xml)
         return xml.getvalue()
 
@@ -211,8 +235,11 @@ class OpenDocument:
         self.__replaceGenerator()
         x = DocumentMeta()
         x.addElement(self.meta)
-        xml=StringIO()
-        xml.write(_XMLPROLOGUE)
+        xml=BytesIO()
+        if sys.version_info.major==2:
+            xml.write(_XMLPROLOGUE.encode("utf-8"))
+        else:
+            xml.write(_XMLPROLOGUE)
         x.toXml(0,xml)
         return xml.getvalue()
 
@@ -220,8 +247,11 @@ class OpenDocument:
         """ Generates the settings.xml file """
         x = DocumentSettings()
         x.addElement(self.settings)
-        xml=StringIO()
-        xml.write(_XMLPROLOGUE)
+        xml=BytesIO()
+        if sys.version_info.major==2:
+            xml.write(_XMLPROLOGUE.encode("utf-8"))
+        else:
+            xml.write(_XMLPROLOGUE)
         x.toXml(0,xml)
         return xml.getvalue()
 
@@ -267,8 +297,11 @@ class OpenDocument:
 
     def stylesxml(self):
         """ Generates the styles.xml file """
-        xml=StringIO()
-        xml.write(_XMLPROLOGUE)
+        xml=BytesIO()
+        if sys.version_info.major==2:
+            xml.write(_XMLPROLOGUE.encode("utf-8"))
+        else:
+            xml.write(_XMLPROLOGUE)
         x = DocumentStyles()
         x.write_open_tag(0, xml)
         if self.fontfacedecls.hasChildNodes():
@@ -408,7 +441,6 @@ class OpenDocument:
         """
         zipoutputfp = zipfile.ZipFile(outputfp,"w")
         self.__zipwrite(zipoutputfp)
-        zipoutputfp.close()
 
     def __zipwrite(self, outputfp):
         """ Write the document to an open file pointer
@@ -422,7 +454,10 @@ class OpenDocument:
         zi = zipfile.ZipInfo('mimetype', self._now)
         zi.compress_type = zipfile.ZIP_STORED
         zi.external_attr = UNIXPERMS
-        self._z.writestr(zi, self.mimetype)
+        if sys.version_info.major==2:
+            self._z.writestr(zi, self.mimetype.encode("utf-8"))
+        else:
+            self._z.writestr(zi, self.mimetype)
 
         self._saveXmlObjects(self,"")
 
@@ -442,7 +477,10 @@ class OpenDocument:
         for op in self._extra:
             if op.filename == "META-INF/documentsignatures.xml": continue # Don't save signatures
             self.manifest.addElement(manifest.FileEntry(fullpath=op.filename, mediatype=op.mediatype))
-            zi = zipfile.ZipInfo(op.filename.encode('utf-8'), self._now)
+            if sys.version_info.major==3:
+                zi = zipfile.ZipInfo(op.filename, self._now)
+            else:
+                zi = zipfile.ZipInfo(op.filename.encode('utf-8'), self._now)
             zi.compress_type = zipfile.ZIP_DEFLATED
             zi.external_attr = UNIXPERMS
             if op.content is not None:
@@ -586,8 +624,13 @@ def __loadxmlparts(z, manifest, doc, objectpath):
     from xml.sax import make_parser, handler
 
     for xmlfile in (objectpath+'settings.xml', objectpath+'meta.xml', objectpath+'content.xml', objectpath+'styles.xml'):
-        if not manifest.has_key(xmlfile):
+        if xmlfile not in manifest:
             continue
+        ##########################################################
+        # this one is added to debug the bad behavior with Python2
+        # which raises exceptions of type SAXParseException
+        from xml.sax._exceptions import SAXParseException
+        ##########################################################
         try:
             xmlpart = z.read(xmlfile)
             doc._parsing = xmlfile
@@ -598,10 +641,24 @@ def __loadxmlparts(z, manifest, doc, objectpath):
             parser.setErrorHandler(handler.ErrorHandler())
 
             inpsrc = InputSource()
-            inpsrc.setByteStream(StringIO(xmlpart))
+            if sys.version_info.major==3:
+                inpsrc.setByteStream(BytesIO(xmlpart))
+            else:
+                # There may be a SAXParseException triggered because of
+                # a missing xmlns prefix like meta, config, etc.
+                # So i add such declarations when needed.
+                # Is there any option to prevent xmlns checks by SAX?
+                for prefix in ('meta', 'config', 'dc', 'style', 'svg', 'fo','draw', 'table','form'):
+                    if ' xmlns:{prefix}'.format(prefix=prefix) not in xmlpart:
+                        pos=xmlpart.index(" xmlns:")
+                        xmlpart=xmlpart[:pos]+' xmlns:{prefix}="urn:oasis:names:tc:opendocument:xmlns:{prefix}:1.0"'.format(prefix=prefix)+xmlpart[pos:]
+                inpsrc.setByteStream(BytesIO(xmlpart))
             parser.parse(inpsrc)
             del doc._parsing
-        except KeyError, v: pass
+        except KeyError as v: pass
+        except SAXParseException:
+            print ("====== SAX FAILED TO PARSE ==========\n", xmlpart)
+
 
 def __detectmimetype(zipfd, odffile):
     try:

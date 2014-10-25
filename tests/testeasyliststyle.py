@@ -20,7 +20,7 @@
 # Contributor(s):
 # Søren Roug
 
-import unittest
+import unittest, sys
 from odf import easyliststyle
 from odf.opendocument import OpenDocumentText
 from odf.style import Style, TextProperties
@@ -100,11 +100,14 @@ class TestEasyListStype(unittest.TestCase):
         listStyle = easyliststyle.styleFromString('bullet1', bulletListSpec,
             ',', '0.6cm', easyliststyle.SHOW_ONE_LEVEL)
         s.addElement(listStyle)
-        result = unicode(textdoc.stylesxml(),'utf-8')
-        self.assertNotEqual(-1, result.find(u'''style:name="bullet1"'''))
-        self.assertNotEqual(-1, result.find(u'''text:bullet-char="*"'''))
-        self.assertNotEqual(-1, result.find(u'''text:level="1"'''))
-        self.assertNotEqual(-1, result.find(u'''style:list-level-properties'''))
+        if sys.version_info.major==2:
+            result = unicode(textdoc.stylesxml(),'utf-8')
+        else:
+            result = textdoc.stylesxml()
+        self.assertNotEqual(-1, result.find(b'''style:name="bullet1"'''))
+        self.assertNotEqual(-1, result.find(b'''text:bullet-char="*"'''))
+        self.assertNotEqual(-1, result.find(b'''text:level="1"'''))
+        self.assertNotEqual(-1, result.find(b'''style:list-level-properties'''))
         #<text:list-style style:name="bullet1" style:display-name="bullet1">
         #<text:list-level-style-bullet text:bullet-char="*" text:level="1">
         #<style:list-level-properties text:min-label-width="0.6cm" text:space-before="0.6cm"/>

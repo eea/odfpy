@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 # Copyright (C) 2009 Søren Roug, European Environment Agency
 #
@@ -30,7 +30,7 @@ from odf.attrconverters import attrconverters, cnv_string
 try:
     from cStringIO import StringIO
 except ImportError:
-    from StringIO import StringIO
+    from io import StringIO
 
 
 extension_attributes = {
@@ -76,7 +76,7 @@ printed_errors = []
 def print_error(str):
     if str not in printed_errors:
         printed_errors.append(str)
-        print str
+        print (str)
 
 def chop_arg(arg):
     if len(arg) > 20:
@@ -110,7 +110,7 @@ class ODFElementHandler(handler.ContentHandler):
             prefix = nsdict.get(att[0],att[0])
             # Check if it is a known extension
             notan_extension = True
-	    for product, ext_attrs in extension_attributes.items():
+            for product, ext_attrs in extension_attributes.items():
                 allowed_ext_attrs = ext_attrs.get(tag)
                 if allowed_ext_attrs and att in allowed_ext_attrs:
                     print_error("Warning: Attribute %s in element <%s> is illegal - %s extension"  % ( make_qname(att), make_qname(tag), product))
@@ -122,7 +122,7 @@ class ODFElementHandler(handler.ContentHandler):
             try:
                 convert = attrconverters.get(att, cnv_string)
                 convert(att, value, tag)
-            except ValueError, res:
+            except ValueError as res:
                 print_error("Error: Bad value '%s' for attribute %s:%s in  tag: <%s> - %s" % 
                     (chop_arg(value), prefix, att[1], make_qname(tag), res))
 
@@ -201,6 +201,8 @@ def lint(odffile):
             parser.setErrorHandler(handler.ErrorHandler())
 
             inpsrc = InputSource()
+            if not isinstance(content, str):
+                content=content.decode("utf-8")
             inpsrc.setByteStream(StringIO(content))
             parser.parse(inpsrc)
 

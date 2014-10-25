@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 # Copyright (C) 2006 Søren Roug, European Environment Agency
 #
@@ -17,15 +17,28 @@
 #
 # Contributor(s):
 #
+from __future__ import print_function
 from odf.odf2xhtml import ODF2XHTML
 import zipfile
 import sys
 #from time import gmtime, strftime
 
-from email.MIMEMultipart import MIMEMultipart
-from email.MIMENonMultipart import MIMENonMultipart
-from email.MIMEText import MIMEText
-from email import Encoders
+try:
+    from email.MIMEMultipart import MIMEMultipart
+except ImportError:
+    from email.mime.multipart import MIMEMultipart
+try:
+    from email.MIMENonMultipart import MIMENonMultipart
+except ImportError:
+    from email.mime.nonmultipart import MIMENonMultipart
+try:
+    from email.MIMEText import MIMEText
+except ImportError:
+    from email.mime.text import MIMEText
+try:
+    from email import Encoders
+except ImportError:
+    from email import encoders
 
 if len(sys.argv) != 2:
     sys.stderr.write("Usage: %s inputfile\n" % sys.argv[0])
@@ -61,4 +74,4 @@ for file in z.namelist():
         Encoders.encode_base64(img)
         msg.attach(img)
 z.close()
-print msg.as_string()
+print (msg.as_string())

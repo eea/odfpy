@@ -31,16 +31,16 @@ class TestText(unittest.TestCase):
         textdoc = OpenDocumentText()
         spb = text.SoftPageBreak()
         textdoc.text.addElement(spb)
-        self.assertEquals(1, 1)
+        self.assertEqual(1, 1)
 
     def test_1stpara(self):
         """ Grab 1st paragraph and convert to string value """
         poem_odt = os.path.join(
             os.path.dirname(__file__), "examples", "serious_poem.odt")
         d = load(poem_odt)
-        shouldbe = u"The boy stood on the burning deck,Whence allbuthim had fled.The flames that litthe battle'swreck,Shone o'er him, round the dead. "
-        self.assertEquals(shouldbe, unicode(d.body))
-        self.assertEquals(shouldbe, str(d.body))
+        shouldbe = "The boy stood on the burning deck,Whence allbuthim had fled.The flames that litthe battle'swreck,Shone o'er him, round the dead. "
+        #self.assertEqual(shouldbe, d.body)
+        self.assertEqual(shouldbe, str(d.body))
 
     def test_link(self):
         """ Create a link """
@@ -49,7 +49,7 @@ class TestText(unittest.TestCase):
         anchor = text.A(href="http://www.com/", text="A link label")
         para.addElement(anchor)
         textdoc.text.addElement(para)
-        self.assertEquals(1, 1)
+        self.assertEqual(1, 1)
 
     def test_simple_link(self):
         """ Create a link """

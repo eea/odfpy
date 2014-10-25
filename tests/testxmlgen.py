@@ -19,8 +19,10 @@
 #
 
 import xml.sax, xml.sax.saxutils
-import StringIO
+import io
+import tempfile
 import unittest
+import sys
 
 class MyGen(xml.sax.saxutils.XMLGenerator):
 
@@ -41,7 +43,7 @@ class TestXMLGenerator(unittest.TestCase):
 
     def test_xmlgenerator(self):
         """ Test that the xml namespace is understood by XMLGenerator """
-        outfp = StringIO.StringIO()
+        outfp = tempfile.TemporaryFile()
         c = xml.sax.saxutils.XMLGenerator(outfp,'utf-8')
         parser = xml.sax.make_parser()
         parser.setFeature(xml.sax.handler.feature_namespaces, 1)
@@ -56,12 +58,14 @@ class TestXMLGenerator(unittest.TestCase):
 <a:greetings xmlns:a="http://example.com/ns" xmlns:xml="http://www.w3.org/XML/1998/namespace">
   <a:greet xml:lang="en">Hello world</a:greet>
 </a:greetings>"""
-        self.assertEqual( outfp.getvalue(), expectedresult)
+        outfp.seek(0)
+        self.assertEqual( outfp.read().decode('utf-8'), expectedresult)
+        outfp.close()
 
 
     def test_xmlgenerator_wo_ns(self):
         """ Test that the missing xml namespace is understood by XMLGenerator """
-        outfp = StringIO.StringIO()
+        outfp = tempfile.TemporaryFile()
         c = xml.sax.saxutils.XMLGenerator(outfp,'utf-8')
         parser = xml.sax.make_parser()
         parser.setFeature(xml.sax.handler.feature_namespaces, 1)
@@ -76,12 +80,14 @@ class TestXMLGenerator(unittest.TestCase):
 <a:greetings xmlns:a="http://example.com/ns">
   <a:greet xml:lang="en">Hello world</a:greet>
 </a:greetings>"""
-        self.assertEqual( outfp.getvalue(), expectedresult)
+        outfp.seek(0)
+        self.assertEqual( outfp.read().decode('utf-8'), expectedresult)
+        outfp.close()
 #       self.assertRaises(KeyError, parser.feed, testcontent)
 
     def test_myxml(self):
         """ Test that my patch works """
-        outfp = StringIO.StringIO()
+        outfp = tempfile.TemporaryFile()
         c = MyGen(outfp,'utf-8')
         parser = xml.sax.make_parser()
         parser.setFeature(xml.sax.handler.feature_namespaces, 1)
@@ -92,15 +98,17 @@ class TestXMLGenerator(unittest.TestCase):
 </a:greetings>"""
         parser.feed(testcontent)
         parser.close()
+        outfp.seek(0)
         expectedresult = """<?xml version="1.0" encoding="utf-8"?>
 <a:greetings xmlns:a="http://example.com/ns" xmlns:xml="http://www.w3.org/XML/1998/namespace">
   <a:greet xml:lang="en">Hello world</a:greet>
 </a:greetings>"""
-        self.assertEqual( outfp.getvalue(), expectedresult)
+        self.assertEqual( outfp.read().decode('utf-8'), expectedresult)
+        outfp.close()
 
     def test_myxml_wo_xml(self):
         """ Test that my patch understands the missing xml namespace """
-        outfp = StringIO.StringIO()
+        outfp = tempfile.TemporaryFile()
         c = MyGen(outfp,'utf-8')
         parser = xml.sax.make_parser()
         parser.setFeature(xml.sax.handler.feature_namespaces, 1)
@@ -111,11 +119,13 @@ class TestXMLGenerator(unittest.TestCase):
 </a:greetings>"""
         parser.feed(testcontent)
         parser.close()
+        outfp.seek(0)
         expectedresult = """<?xml version="1.0" encoding="utf-8"?>
 <a:greetings xmlns:a="http://example.com/ns" xmlns:xml="http://www.w3.org/XML/1998/namespace">
   <a:greet xml:lang="en">Hello world</a:greet>
 </a:greetings>"""
-        self.assertEqual( outfp.getvalue(), expectedresult)
+        self.assertEqual( outfp.read().decode('utf-8'), expectedresult)
+        outfp.close()
 
 if __name__ == '__main__':
     unittest.main()

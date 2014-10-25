@@ -32,7 +32,7 @@ class TestMasterStyles(unittest.TestCase):
         self.assertNotEqual(-1, stack.find(needle))
 
     def assertNotContains(self, stack, needle):
-        self.assertEquals(-1, stack.find(needle))
+        self.assertEqual(-1, stack.find(needle))
 
     def testStyle(self):
         """ Create a presentation with a page layout called MyLayout
@@ -57,8 +57,8 @@ class TestMasterStyles(unittest.TestCase):
         titlestyle.addElement(style.GraphicProperties(fillcolor="#ffff99"))
         presdoc.styles.addElement(titlestyle)
 
-        s = unicode(presdoc.stylesxml(),'UTF-8')
-        self.assertContains(s, u'<style:page-layout style:name="MyLayout"><style:page-layout-properties ')
+        s = presdoc.stylesxml().decode("utf-8")
+        self.assertContains(s, '<style:page-layout style:name="MyLayout"><style:page-layout-properties ')
         e = ElementParser(s,'style:page-layout-properties')
         self.assertEqual(e.element,'style:page-layout-properties')
         self.assertTrue(e.has_value("fo:margin","0cm"))
@@ -71,7 +71,7 @@ class TestMasterStyles(unittest.TestCase):
         self.assertTrue(e.has_value("style:display-name","MyMaster-title"))
         self.assertTrue(e.has_value("style:family","presentation"))
 
-        self.assertContains(s, u'<style:paragraph-properties fo:text-align="center"/><style:text-properties fo:font-size="34pt"/><style:graphic-properties draw:fill-color="#ffff99"/></style:style></office:styles>')
+        self.assertContains(s, '<style:paragraph-properties fo:text-align="center"/><style:text-properties fo:font-size="34pt"/><style:graphic-properties draw:fill-color="#ffff99"/></style:style></office:styles>')
         e = ElementParser(s,'style:master-page')
         self.assertTrue(e.has_value("style:name","MyMaster"))
         self.assertTrue(e.has_value("style:display-name","MyMaster"))
@@ -91,8 +91,8 @@ class TestMasterStyles(unittest.TestCase):
         hp = text.P(text="header try")
         h.addElement(hp)
         mp.addElement(h)
-        s = unicode(textdoc.stylesxml(),'UTF-8')
-        self.assertContains(s, u'<office:automatic-styles><style:page-layout style:name="pagelayout"/></office:automatic-styles>')
+        s = textdoc.stylesxml()
+        self.assertContains(s, b'<office:automatic-styles><style:page-layout style:name="pagelayout"/></office:automatic-styles>')
 
     def testAutomaticStyles(self):
         """ Create a text document with a page layout called "pagelayout"
@@ -127,14 +127,14 @@ class TestMasterStyles(unittest.TestCase):
         textdoc.text.addElement(text.P(text="Paragraph 1", stylename=parastyle))
 
         # Check styles.xml
-        s = unicode(textdoc.stylesxml(),'UTF-8')
-        self.assertContains(s, u'<style:page-layout style:name="pagelayout"/>')
-        self.assertContains(s, u'style:name="HeaderPara"')
-        self.assertNotContains(s, u'style:name="Para" ')
+        s = textdoc.stylesxml()
+        self.assertContains(s, b'<style:page-layout style:name="pagelayout"/>')
+        self.assertContains(s, b'style:name="HeaderPara"')
+        self.assertNotContains(s, b'style:name="Para" ')
         # Check content.xml
-        s = unicode(textdoc.contentxml(),'UTF-8')
-        self.assertNotContains(s, u'<style:page-layout style:name="pagelayout"/>')
-        self.assertContains(s, u'style:name="Para" ')
+        s = textdoc.contentxml()
+        self.assertNotContains(s, b'<style:page-layout style:name="pagelayout"/>')
+        self.assertContains(s, b'style:name="Para"')
 
 
 if __name__ == '__main__':

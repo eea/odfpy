@@ -18,13 +18,16 @@
 #
 # Contributor(s):
 #
-
+from __future__ import print_function
 # This script lists the content of the manifest.xml file
 import zipfile
 from xml.sax import make_parser,handler
 from xml.sax.xmlreader import InputSource
 import xml.sax.saxutils
-from cStringIO import StringIO
+try:
+    from cStringIO import StringIO
+except ImportError:
+    from io import StringIO
 
 MANIFESTNS="urn:oasis:names:tc:opendocument:xmlns:manifest:1.0"
 
@@ -96,6 +99,8 @@ def manifestlist(manifestxml):
     parser.setErrorHandler(handler.ErrorHandler())
 
     inpsrc = InputSource()
+    if not isinstance(manifestxml, str):
+        manifestxml=manifestxml.decode("utf-8")
     inpsrc.setByteStream(StringIO(manifestxml))
     parser.parse(inpsrc)
 
@@ -111,5 +116,5 @@ if __name__ == "__main__":
     import sys
     result = odfmanifest(sys.argv[1])
     for file in result.values():
-        print "%-40s %-40s" % (file['media-type'], file['full-path'])
+        print ("%-40s %-40s" % (file['media-type'], file['full-path']))
 

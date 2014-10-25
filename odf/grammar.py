@@ -22,7 +22,8 @@ __doc__=""" In principle the OpenDocument schema converted to python structures.
 Currently it contains the legal child elements of a given element.
 To be used for validation check in the API
 """
-
+import sys, os.path
+sys.path.append(os.path.dirname(__file__))
 from namespaces import *
 
 # The following code is generated from the RelaxNG schema with this notice:

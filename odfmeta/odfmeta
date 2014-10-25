@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 # Copyright (C) 2006-2009 Søren Roug, European Environment Agency
 #
@@ -23,7 +23,7 @@ from odf.namespaces import TOOLSVERSION, OFFICENS, XLINKNS, DCNS, METANS
 try:
     from cStringIO import StringIO
 except ImportError:
-    from StringIO import StringIO
+    from io import StringIO
 OUTENCODING="utf-8"
 
 whitespace = re.compile(r'\s+')
@@ -111,9 +111,9 @@ class odfmetaparser(base):
 #           self._data = [attrs.get((XLINKNS,u'title'),'')]
         if showversion and name == (OFFICENS,u'document-meta'):
             if showversion == '-V':
-                print "version:%s" % attrs.get((OFFICENS,u'version'),'Unknown')
+                print ("version:%s" % attrs.get((OFFICENS,u'version'),'Unknown').decode('utf-8'))
             else:
-                print "%s" % attrs.get((OFFICENS,u'version'),'Unknown')
+                print ("%s" % attrs.get((OFFICENS,u'version'),'Unknown').decode('utf-8'))
         if name == (METANS,u'user-defined'):
             field = attrs.get((METANS,u'name'))
         if field in deletefields:
@@ -141,13 +141,13 @@ class odfmetaparser(base):
                         base.characters(self, v)
                         base.endElementNS(self, k, None)
         if name in xfields:
-                print "%s" % self.data()
+                print ("%s" % self.data())
         if name in Xfields:
             if isinstance(self._tag, tuple):
                 texttag = self._tag[1]
             else:
                 texttag = self._tag
-            print "%s:%s" % (texttag.encode(OUTENCODING), self.data())
+            print ("%s:%s" % (texttag, self.data()))
         if field in deletefields:
             self.output.dowrite = True
         else:
@@ -162,9 +162,9 @@ class odfmetaparser(base):
 
     def data(self):
         if usenormalize:
-            return normalize(''.join(self._data)).encode(OUTENCODING)
+            return normalize(''.join(self._data))
         else:
-            return ''.join(self._data).encode(OUTENCODING)
+            return ''.join(self._data)
 
 now = time.localtime()[:6]
 outputfile = "-"
@@ -230,7 +230,7 @@ else:
     zin = zipfile.ZipFile(args[0], 'r')
 
 try:
-    content = zin.read('meta.xml')
+    content = zin.read('meta.xml').decode('utf-8')
 except:
     sys.stderr.write("File has no meta data\n")
     sys.exit(1)

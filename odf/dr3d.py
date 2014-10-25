@@ -17,6 +17,8 @@
 #
 # Contributor(s):
 #
+import sys, os.path
+sys.path.append(os.path.dirname(__file__))
 
 from namespaces import DR3DNS
 from element import Element

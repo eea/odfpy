@@ -20,6 +20,9 @@
 #
 #import pdb
 #pdb.set_trace()
+
+import sys, os.path
+sys.path.append(os.path.dirname(__file__))
 from xml.sax import handler
 from xml.sax.saxutils import escape, quoteattr
 from xml.dom import Node
@@ -215,7 +218,7 @@ class StyleToCSS:
                 sdict['right'] = "0";
             else: # No wrapping
                 sdict['margin-left'] = "auto"
-                sdict['margin-right'] = "0px"
+                sdict['margin-right'] = "0cm"
         elif hpos in ("left", "inside"):
             if wrap in ( "right", "parallel","dynamic"):
                 sdict['float'] = "left"
@@ -224,14 +227,14 @@ class StyleToCSS:
                 sdict['top'] = "0"
                 sdict['left'] = "0"
             else: # No wrapping
-                sdict['margin-left'] = "0px"
+                sdict['margin-left'] = "0cm"
                 sdict['margin-right'] = "auto"
         elif hpos in ("from-left", "from-inside"):
             if wrap in ( "right", "parallel"):
                 sdict['float'] = "left"
             else:
                 sdict['position'] = "relative" # No wrapping
-                if ruleset.has_key( (SVGNS,'x') ):
+                if (SVGNS,'x') in ruleset:
                     sdict['left'] = ruleset[(SVGNS,'x')]
 
     def c_page_width(self, ruleset, sdict, rule, val):
@@ -263,13 +266,24 @@ class StyleToCSS:
             it is already CSS2
         """
         sdict = {}
+        procedures=[]
         for rule,val in ruleset.items():
             if rule[0] == '':
                 sdict[rule[1]] = val
                 continue
             method = self.ruleconversions.get(rule, None )
             if method:
-                method(ruleset, sdict, rule, val)
+                procedures.append([method, ruleset, sdict, rule, val])
+        # this ensures that the procedures for horizontal position
+        # are run last! It is important since Python3 makes the order
+        # of dictionaries unpredictable
+        for p in filter(lambda x: x[0] != self.c_hp, procedures):
+            method, ruleset, sdict, rule, val = p
+            method(ruleset, sdict, rule, val)
+        for p in filter(lambda x: x[0] == self.c_hp, procedures):
+            method, ruleset, sdict, rule, val = p
+            method(ruleset, sdict, rule, val)
+
         return sdict
 
 
@@ -291,7 +305,7 @@ class TagStack:
     def rfindattr(self, attr):
         """ Find a tag with the given attribute """
         for tag, attrs in self.stack:
-            if attrs.has_key(attr):
+            if attr in attrs:
                 return attrs[attr]
         return None
     def count_tags(self, tag):
@@ -431,7 +445,7 @@ class ODF2XHTML(handler.ContentHandler):
         (TEXTNS, "user-index-source"):(self.s_text_x_source, self.e_text_x_source),
         }
         if embedable:
-            self.set_embedable()
+            self.make_embedable()
         self._resetobject()
 
     def set_plain(self):
@@ -590,7 +604,7 @@ class ODF2XHTML(handler.ContentHandler):
 
     def get_anchor(self, name):
         """ Create a unique anchor id for a href name """
-        if not self.anchors.has_key(name):
+        if name not in self.anchors:
             self.anchors[name] = "anchor%03d" % (len(self.anchors) + 1)
         return self.anchors.get(name)
 
@@ -650,13 +664,13 @@ class ODF2XHTML(handler.ContentHandler):
             style = ''
         else:
             style = "position: absolute;"
-        if attrs.has_key( (SVGNS,"width") ):
+        if (SVGNS,"width")in attrs:
             style = style + "width:" + attrs[(SVGNS,"width")] + ";"
-        if attrs.has_key( (SVGNS,"height") ):
+        if (SVGNS,"height") in attrs:
             style = style + "height:" +  attrs[(SVGNS,"height")] + ";"
-        if attrs.has_key( (SVGNS,"x") ):
+        if (SVGNS,"x") in attrs:
             style = style + "left:" +  attrs[(SVGNS,"x")] + ";"
-        if attrs.has_key( (SVGNS,"y") ):
+        if (SVGNS,"y") in attrs:
             style = style + "top:" +  attrs[(SVGNS,"y")] + ";"
         if self.generate_css:
             self.opentag(htmltag, {'class': name, 'style': style})
@@ -686,13 +700,13 @@ class ODF2XHTML(handler.ContentHandler):
             style = ''
         else:
             style = "position:absolute;"
-        if attrs.has_key( (SVGNS,"width") ):
+        if (SVGNS,"width") in attrs:
             style = style + "width:" + attrs[(SVGNS,"width")] + ";"
-        if attrs.has_key( (SVGNS,"height") ):
+        if (SVGNS,"height") in attrs:
             style = style + "height:" +  attrs[(SVGNS,"height")] + ";"
-        if attrs.has_key( (SVGNS,"x") ):
+        if (SVGNS,"x") in attrs:
             style = style + "left:" +  attrs[(SVGNS,"x")] + ";"
-        if attrs.has_key( (SVGNS,"y") ):
+        if (SVGNS,"y") in attrs:
             style = style + "top:" +  attrs[(SVGNS,"y")] + ";"
         if self.generate_css:
             self.opentag(htmltag, {'class': name, 'style': style})
@@ -775,7 +789,7 @@ class ODF2XHTML(handler.ContentHandler):
 
     def s_draw_textbox(self, tag, attrs):
         style = ''
-        if attrs.has_key( (FONS,"min-height") ):
+        if (FONS,"min-height") in attrs:
             style = style + "min-height:" +  attrs[(FONS,"min-height")] + ";"
         self.opentag('div')
 #       self.opentag('div', {'style': style})
@@ -808,14 +822,14 @@ ol, ul { padding-left: 2em; }
         for name in self.stylestack:
             styles = self.styledict.get(name)
             # Preload with the family's default style
-            if styles.has_key('__style-family') and self.styledict.has_key(styles['__style-family']):
+            if '__style-family'in styles and styles['__style-family'] in self.styledict:
                 familystyle = self.styledict[styles['__style-family']].copy()
                 del styles['__style-family']
                 for style, val in styles.items():
                     familystyle[style] = val
                 styles = familystyle
             # Resolve the remaining parent styles
-            while styles.has_key('__parent-style-name') and self.styledict.has_key(styles['__parent-style-name']):
+            while '__parent-style-name' in styles and styles['__parent-style-name'] in self.styledict:
                 parentstyle = self.styledict[styles['__parent-style-name']].copy()
                 del styles['__parent-style-name']
                 for style, val in styles.items():
@@ -1007,7 +1021,7 @@ ol, ul { padding-left: 2em; }
         pagelayout = attrs.get( (STYLENS,'page-layout-name'), None)
         if pagelayout:
             pagelayout = ".PL-" + pagelayout
-            if self.styledict.has_key( pagelayout ):
+            if pagelayout in self.styledict:
                 styles = self.styledict[pagelayout]
                 for style, val in styles.items():
                     self.styledict[self.currentstyle][style] = val
@@ -1037,7 +1051,7 @@ ol, ul { padding-left: 2em; }
         parent = attrs.get( (STYLENS,'parent-style-name') )
         self.currentstyle = special_styles.get(name,"."+name)
         self.stylestack.append(self.currentstyle)
-        if not self.styledict.has_key(self.currentstyle):
+        if self.currentstyle not in self.styledict:
             self.styledict[self.currentstyle] = {}
 
         self.styledict[self.currentstyle]['__style-family'] = htmlfamily
@@ -1046,7 +1060,7 @@ ol, ul { padding-left: 2em; }
         if parent:
             parent = "%s-%s" % (sfamily, parent)
             parent = special_styles.get(parent, "."+parent)
-            if self.styledict.has_key( parent ):
+            if parent in self.styledict:
                 styles = self.styledict[parent]
                 for style, val in styles.items():
                     self.styledict[self.currentstyle][style] = val
@@ -1107,7 +1121,7 @@ ol, ul { padding-left: 2em; }
         htmlattrs = {}
         if c:
             htmlattrs['class'] = "TC-%s" % c.replace(".","_")
-        for x in xrange(repeated):
+        for x in range(repeated):
             self.emptytag('col', htmlattrs)
         self.purgedata()
 
@@ -1324,7 +1338,10 @@ ol, ul { padding-left: 2em; }
 #        self.writeout( escape(mark) )
         # Since HTML only knows about endnotes, there is too much risk that the
         # marker is reused in the source. Therefore we force numeric markers
-        self.writeout(unicode(self.currentnote))
+        if sys.version_info.major==3:
+            self.writeout(self.currentnote)
+        else:
+            self.writeout(unicode(self.currentnote))
         self.closetag('sup')
         self.closetag('a')
 
@@ -1363,7 +1380,7 @@ ol, ul { padding-left: 2em; }
             We use &#160; so we can send the output through an XML parser if we desire to
         """
         c = attrs.get( (TEXTNS,'c'),"1")
-        for x in xrange(int(c)):
+        for x in range(int(c)):
             self.writeout('&#160;')
 
     def s_text_span(self, tag, attrs):
@@ -1420,6 +1437,10 @@ ol, ul { padding-left: 2em; }
         """
         self.lines = []
         self._wfunc = self._wlines
+        try:
+            basestring
+        except NameError:
+            basestring = str
         if isinstance(odffile, basestring):
             self.document = load(odffile)
         else:
@@ -1433,7 +1454,10 @@ ol, ul { padding-left: 2em; }
                 self._walknode(c)
             self.endElementNS(node.qname, node.tagName)
         if node.nodeType == Node.TEXT_NODE or node.nodeType == Node.CDATA_SECTION_NODE:
-            self.characters(unicode(node))
+            if sys.version_info.major==3:
+                self.characters(str(node))
+            else:
+                self.characters(unicode(node))
 
 
     def odf2xhtml(self, odffile):
