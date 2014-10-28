@@ -20,7 +20,7 @@
 import zipfile, time, sys, getopt, re
 import xml.sax, xml.sax.saxutils
 from odf.namespaces import TOOLSVERSION, OFFICENS, XLINKNS, DCNS, METANS
-from io import StringIO
+from io import BytesIO
 
 OUTENCODING="utf-8"
 
@@ -232,7 +232,7 @@ try:
 except:
     sys.stderr.write("File has no meta data\n")
     sys.exit(1)
-parser.parse(StringIO(content))
+parser.parse(BytesIO(content.encode('utf-8')))
 
 if writemeta:
     if outputfile == '-':
@@ -259,3 +259,8 @@ if writemeta:
 
     zout.close()
 zin.close()
+
+
+# Local Variables: ***
+# mode: python     ***
+# End:             ***

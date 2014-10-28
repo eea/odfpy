@@ -102,34 +102,34 @@ class TestXHTML(unittest.TestCase):
         d = OpenDocumentText()
 
         # Styles
-        h1style = style.Style(name="Heading 1",family="paragraph")
-        h1style.addElement(style.TextProperties(attributes={'fontsize':"24pt", 'fontweight':"bold"}))
+        h1style = style.Style(name=u"Heading 1",family=u"paragraph")
+        h1style.addElement(style.TextProperties(attributes={'fontsize':u"24pt", 'fontweight':u"bold"}))
         d.styles.addElement(h1style)
 
-        boldstyle = style.Style(name="Bold",family="text")
-        boldstyle.addElement(style.TextProperties(attributes={'fontweight':"bold"}))
+        boldstyle = style.Style(name=u"Bold",family=u"text")
+        boldstyle.addElement(style.TextProperties(attributes={'fontweight':u"bold"}))
         d.automaticstyles.addElement(boldstyle)
 
         # Text
-        h = H(outlinelevel=1, stylename=h1style, text="Simple test document")
+        h = H(outlinelevel=1, stylename=h1style, text=u"Simple test document")
         d.text.addElement(h)
-        p = P(text="The earth's climate has not changed many times in the course of its long history. ")
+        p = P(text=u"The earth's climate has not changed many times in the course of its long history. ")
         d.text.addElement(p)
-        boldpart = Span(stylename=boldstyle, text="This part is bold. ")
+        boldpart = Span(stylename=boldstyle, text=u"This part is bold. ")
         p.addElement(boldpart)
-        p.addText("This is after bold.")
+        p.addText(u"This is after bold.")
 
-        d.save("TEST.odt")
+        d.save(u"TEST.odt")
 
     def tearDown(self):
-        os.unlink("TEST.odt")
+        os.unlink(u"TEST.odt")
 
     def testParsing(self):
         """ Parse the test file """
         odhandler = ODF2XHTML()
         outf = io.BytesIO()
 
-        result = odhandler.odf2xhtml("TEST.odt")
+        result = odhandler.odf2xhtml(u"TEST.odt")
         outf.write(result.encode('utf-8'))
         strresult = outf.getvalue().decode('utf-8')
         #self.assertEqual(strresult, htmlout)
@@ -145,20 +145,20 @@ class TestExampleDocs(unittest.TestCase):
     def test_twolevellist(self):
         """ Check CSS has list styles for two level lists"""
         twolevellist_odt = os.path.join(
-            os.path.dirname(__file__), "examples", "twolevellist.odt")
+            os.path.dirname(__file__), u"examples", u"twolevellist.odt")
         odhandler = ODF2XHTML()
         result = odhandler.odf2xhtml(twolevellist_odt)
-        assert has_rules(result,".L1_2","list-style-type: circle; font-family: StarSymbol, sans-serif;")
+        assert has_rules(result,u".L1_2",u"list-style-type: circle; font-family: StarSymbol, sans-serif;")
 
     def test_simplestyles(self):
         """ Check CSS has text and paragraph styles """
         simplestyles_odt = os.path.join(
-            os.path.dirname(__file__), "examples", "simplestyles.odt")
+            os.path.dirname(__file__), u"examples", u"simplestyles.odt")
         odhandler = ODF2XHTML()
         result = odhandler.odf2xhtml(simplestyles_odt)
-        assert has_rules(result,".S-T1","font-weight: normal;")
-        assert has_rules(result,".P-P2","font-weight: bold; font-style: italic;")
-        assert has_rules(result,".S-T11","text-decoration: underline;")
+        assert has_rules(result,u".S-T1",u"font-weight: normal;")
+        assert has_rules(result,u".P-P2",u"font-weight: bold; font-style: italic;")
+        assert has_rules(result,u".S-T11",u"text-decoration: underline;")
         self.assertNotEqual(-1, result.find(u"""<p class="P-P2"><span class="S-T1">Italic</span></p>\n"""))
         self.assertNotEqual(-1, result.find(u"""\n\ttext-decoration: underline;\n"""))
         self.assertNotEqual(-1, result.find(u"""<p class="P-P3"><span class="S-T1">Underline italic</span></p>\n"""))
@@ -166,27 +166,27 @@ class TestExampleDocs(unittest.TestCase):
     def test_simplelist(self):
         """ Check CSS has list styles """
         simplelist_odt = os.path.join(
-            os.path.dirname(__file__), "examples", "simplelist.odt")
+            os.path.dirname(__file__), u"examples", u"simplelist.odt")
         odhandler = ODF2XHTML()
         result = odhandler.odf2xhtml(simplelist_odt)
-        assert has_rules(result,".L1_1","list-style-type: disc;")
-        assert has_rules(result,".L1_2","list-style-type: circle;")
-        assert has_rules(result,".L1_3","list-style-type: square;")
+        assert has_rules(result,u".L1_1",u"list-style-type: disc;")
+        assert has_rules(result,u".L1_2",u"list-style-type: circle;")
+        assert has_rules(result,u".L1_3",u"list-style-type: square;")
         self.assertNotEqual(-1, result.find(u"""<p class="P-Standard">Line 1</p>\n<ul class="L1_1"><li><p class="P-P1">Item A</p>"""))
 
     def test_mixedlist(self):
         """ Check CSS has list styles """
         simplelist_odt = os.path.join(
-            os.path.dirname(__file__), "examples", "ol.odp")
+            os.path.dirname(__file__), u"examples", u"ol.odp")
         odhandler = ODF2XHTML()
         result = odhandler.odf2xhtml(simplelist_odt)
-        assert has_rules(result,".L2_1","list-style-type: decimal;")
-        assert has_rules(result,".L2_2","list-style-type: circle;")
-        assert has_rules(result,".L2_3","list-style-type: square;")
-        assert has_rules(result,".L3_1","list-style-type: disc;")
-        assert has_rules(result,".L3_2","list-style-type: decimal;")
-        assert has_rules(result,".L3_3","list-style-type: square;")
-        assert has_rules(result,".MP-Default","height: 19.05cm; width: 25.4cm; position: relative;")
+        assert has_rules(result,u".L2_1",u"list-style-type: decimal;")
+        assert has_rules(result,u".L2_2",u"list-style-type: circle;")
+        assert has_rules(result,u".L2_3",u"list-style-type: square;")
+        assert has_rules(result,u".L3_1",u"list-style-type: disc;")
+        assert has_rules(result,u".L3_2",u"list-style-type: decimal;")
+        assert has_rules(result,u".L3_3",u"list-style-type: square;")
+        assert has_rules(result,u".MP-Default",u"height: 19.05cm; width: 25.4cm; position: relative;")
         self.assertNotEqual(-1, result.find(u"""<ol class="L2_1">"""))
         self.assertNotEqual(-1, result.find(u"""<ol class="L3_2">"""))
         self.assertNotEqual(-1, result.find(u"""position:absolute;width:22.86cm;height:3.176cm;left:1.27cm;top:0.762cm;"""))
@@ -194,7 +194,7 @@ class TestExampleDocs(unittest.TestCase):
     def test_simpletable(self):
         """ Check CSS has table styles """
         simpletable_odt = os.path.join(
-            os.path.dirname(__file__), "examples", "simpletable.odt")
+            os.path.dirname(__file__), u"examples", u"simpletable.odt")
         odhandler = ODF2XHTML()
         result = odhandler.odf2xhtml(simpletable_odt)
         assert result.find(u"""<td class="TD-Tabel1_A1"><p class="P-Table_20_Contents">Cell 1</p>""") != -1
@@ -203,53 +203,53 @@ class TestExampleDocs(unittest.TestCase):
 
     def test_images(self):
         """ Check CSS has frame styles for images """
-        odt = os.path.join(os.path.dirname(__file__), "examples", "images.odt")
+        odt = os.path.join(os.path.dirname(__file__), u"examples", u"images.odt")
         odhandler = ODF2XHTML()
         result = odhandler.odf2xhtml(odt)
-        assert has_rules(result,".G-fr1","margin-left: 0cm; margin-right: auto;")
-        assert has_rules(result,".G-fr2","margin-left: auto; margin-right: 0cm;")
-        assert has_rules(result,".G-fr3","float: left")
-        assert has_rules(result,".G-fr4","margin-right: auto;margin-left: auto;")
-        assert has_rules(result,".G-fr5","float: right")
+        assert has_rules(result,u".G-fr1",u"margin-left: 0cm; margin-right: auto;")
+        assert has_rules(result,u".G-fr2",u"margin-left: auto; margin-right: 0cm;")
+        assert has_rules(result,u".G-fr3",u"float: left")
+        assert has_rules(result,u".G-fr4",u"margin-right: auto;margin-left: auto;")
+        assert has_rules(result,u".G-fr5",u"float: right")
 
     def test_imageslabels(self):
         """ Check CSS has frame styles for images with captions"""
-        odt = os.path.join(os.path.dirname(__file__), "examples", "imageslabels.odt")
+        odt = os.path.join(os.path.dirname(__file__), u"examples", u"imageslabels.odt")
         odhandler = ODF2XHTML()
         result = odhandler.odf2xhtml(odt)
-        assert has_rules(result,".G-fr1","margin-left: 0cm; margin-right: auto;")
-        assert has_rules(result,".G-fr2","margin-left: auto; margin-right: 0cm;")
-        assert has_rules(result,".G-fr3","float: left")
-        assert has_rules(result,".G-fr4","float: right")
-        assert has_rules(result,".G-fr5","margin-right: auto;margin-left: auto;")
-        assert has_rules(result,".G-fr7","margin-right: auto;margin-left: auto;")
-        assert has_rules(result,".P-Illustration","font-size: 10pt;")
+        assert has_rules(result,u".G-fr1",u"margin-left: 0cm; margin-right: auto;")
+        assert has_rules(result,u".G-fr2",u"margin-left: auto; margin-right: 0cm;")
+        assert has_rules(result,u".G-fr3",u"float: left")
+        assert has_rules(result,u".G-fr4",u"float: right")
+        assert has_rules(result,u".G-fr5",u"margin-right: auto;margin-left: auto;")
+        assert has_rules(result,u".G-fr7",u"margin-right: auto;margin-left: auto;")
+        assert has_rules(result,u".P-Illustration",u"font-size: 10pt;")
 
     def test_css(self):
         """ Test css() method """
-        odt = os.path.join(os.path.dirname(__file__), "examples", "imageslabels.odt")
+        odt = os.path.join(os.path.dirname(__file__), u"examples", u"imageslabels.odt")
         odhandler = ODF2XHTML()
         odhandler.load(odt)
         result = odhandler.css()
-        assert has_rules(result,".G-fr1","margin-left: 0cm;margin-right: auto")
-        assert has_rules(result,".G-fr2","margin-left: auto;margin-right: 0cm")
-        assert has_rules(result,".G-fr3","float: left")
-        assert has_rules(result,".G-fr4","float: right")
-        assert has_rules(result,".G-fr5","margin-right: auto;margin-left: auto")
-        assert has_rules(result,".G-fr7","margin-right: auto;margin-left: auto")
-        assert has_rules(result,".P-Illustration","font-size: 10pt;")
+        assert has_rules(result,u".G-fr1",u"margin-left: 0cm;margin-right: auto")
+        assert has_rules(result,u".G-fr2",u"margin-left: auto;margin-right: 0cm")
+        assert has_rules(result,u".G-fr3",u"float: left")
+        assert has_rules(result,u".G-fr4",u"float: right")
+        assert has_rules(result,u".G-fr5",u"margin-right: auto;margin-left: auto")
+        assert has_rules(result,u".G-fr7",u"margin-right: auto;margin-left: auto")
+        assert has_rules(result,u".P-Illustration",u"font-size: 10pt;")
 
     def test_positioned_shapes(self):
         """ Test positioned custom-shapes """
-        odt = os.path.join(os.path.dirname(__file__), "examples", "cols.odp")
+        odt = os.path.join(os.path.dirname(__file__), u"examples", u"cols.odp")
         odhandler = ODF2XHTML()
         result = odhandler.odf2xhtml(odt)
         # Python3 can ouput style stances in a non-predictable order when
         # parsing an XML document; so the following test may fail
         # unexpectedly with Python3. It is replaced by a more robust test.
         ## self.assertNotEqual(-1, result.find(u'''<div style="position: absolute;width:5.503cm;height:1.905cm;left:2.117cm;top:3.175cm;" class="G-gr1">'''))
-        assert(divWithClass_has_styles(result, "G-gr1", "position: absolute;width:5.503cm;height:1.905cm;left:2.117cm;top:3.175cm;"))
-        assert has_rules(result,".MP-Default","height: 19.05cm; width: 25.4cm; position: relative;")
+        assert(divWithClass_has_styles(result, u"G-gr1", u"position: absolute;width:5.503cm;height:1.905cm;left:2.117cm;top:3.175cm;"))
+        assert has_rules(result,u".MP-Default",u"height: 19.05cm; width: 25.4cm; position: relative;")
 
 
 if __name__ == '__main__':

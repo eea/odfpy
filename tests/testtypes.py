@@ -28,7 +28,7 @@ class TestTypes(unittest.TestCase):
     def test_paras(self):
         """ Grab all paragraphs and check they are paragraphs """
         poem_odt = os.path.join(
-            os.path.dirname(__file__), "examples", "serious_poem.odt")
+            os.path.dirname(__file__), u"examples", u"serious_poem.odt")
         d = load(poem_odt)
         allparas = d.getElementsByType(text.P)
 
@@ -38,7 +38,7 @@ class TestTypes(unittest.TestCase):
     def test_body(self):
         """ Check that the document's body is <office:body> """
         poem_odt = os.path.join(
-            os.path.dirname(__file__), "examples", "serious_poem.odt")
+            os.path.dirname(__file__), u"examples", u"serious_poem.odt")
         d = load(poem_odt)
         self.assertTrue(d.body.isInstanceOf(office.Body))
         self.assertFalse(d.body.isInstanceOf(text.P))

@@ -60,7 +60,7 @@ class TestForm(unittest.TestCase):
         table.addElement(tr)
 
         calcdoc.spreadsheet.addElement(table)
-        result = calcdoc.contentxml()
+        result = calcdoc.contentxml() # contentxml() is supposed to yeld a bytes
         self.assertNotEqual(-1, result.find(b'''xmlns:ooo="http://openoffice.org/2004/office"'''))
 
     def test_form_controls(self):

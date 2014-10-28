@@ -31,30 +31,30 @@ class TestStyles(unittest.TestCase):
     def test_style(self):
         """ Get a common style with getStyleByName """
         textdoc = OpenDocumentText()
-        tablecontents = style.Style(name="Table Contents", family="paragraph")
-        tablecontents.addElement(style.ParagraphProperties(numberlines="false", linenumber="0"))
+        tablecontents = style.Style(name=u"Table Contents", family=u"paragraph")
+        tablecontents.addElement(style.ParagraphProperties(numberlines=u"false", linenumber=u"0"))
         textdoc.styles.addElement(tablecontents)
-        s = textdoc.getStyleByName('Table Contents')
-        self.assertEqual(('urn:oasis:names:tc:opendocument:xmlns:style:1.0', 'style'), s.qname)
+        s = textdoc.getStyleByName(u'Table Contents')
+        self.assertEqual((u'urn:oasis:names:tc:opendocument:xmlns:style:1.0', 'style'), s.qname)
 
 
     def test_style(self):
         """ Get an automatic style with getStyleByName """
         textdoc = OpenDocumentText()
-        boldstyle = style.Style(name='Bold', family="text")
-        boldstyle.addElement(style.TextProperties(fontweight="bold"))
+        boldstyle = style.Style(name=u'Bold', family=u"text")
+        boldstyle.addElement(style.TextProperties(fontweight=u"bold"))
         textdoc.automaticstyles.addElement(boldstyle)
-        s = textdoc.getStyleByName('Bold')
-        self.assertEqual(('urn:oasis:names:tc:opendocument:xmlns:style:1.0', 'style'), s.qname)
+        s = textdoc.getStyleByName(u'Bold')
+        self.assertEqual((u'urn:oasis:names:tc:opendocument:xmlns:style:1.0', 'style'), s.qname)
 
     def testStyleFail(self):
         """ Verify that 'xname' attribute is not legal """
-        self.assertRaises(AttributeError, style.Style, xname='Table Contents')
+        self.assertRaises(AttributeError, style.Style, xname=u'Table Contents')
 
     def testBadChild(self):
         """ Test that you can't add an illegal child """
-        tablecontents = style.Style(name="Table Contents", family="paragraph")
-        p = text.P(text="x")
+        tablecontents = style.Style(name=u"Table Contents", family=u"paragraph")
+        p = text.P(text=u"x")
         # something to fix here
         if sys.version_info.major==3:
             print("There is some bug to fix: the exception 'IllegalChild' is correctly raised, but the call of 'assertRaises' fails, only with Python3! See line 61 in `teststyles.py`.")
@@ -62,39 +62,39 @@ class TestStyles(unittest.TestCase):
 
     def testTextStyleName(self):
         """ Test that you can use the name of the style in references """
-        boldstyle = style.Style(name="Bold",family="text")
-        boldstyle.addElement(style.TextProperties(attributes={'fontweight':"bold"}))
-        text.Span(stylename="Bold",text="This part is bold. ")
+        boldstyle = style.Style(name=u"Bold",family=u"text")
+        boldstyle.addElement(style.TextProperties(attributes={u'fontweight':u"bold"}))
+        text.Span(stylename=u"Bold",text=u"This part is bold. ")
 
     def testBadFamily(self):
         """ Test that odfpy verifies 'family' argument """
-        self.assertRaises(ValueError, style.Style, name="Bold",family="incorrect")
+        self.assertRaises(ValueError, style.Style, name=u"Bold",family=u"incorrect")
 
 class TestQattributes(unittest.TestCase):
 
     def testAttribute(self):
         """ Test that you can add a normal attributes using 'qattributes' """
-        standard = style.Style(name="Standard", family="paragraph")
-        p = style.ParagraphProperties(qattributes={(TEXTNS,'enable-numbering'):'true'})
+        standard = style.Style(name=u"Standard", family=u"paragraph")
+        p = style.ParagraphProperties(qattributes={(TEXTNS,u'enable-numbering'):'true'})
         standard.addElement(p)
 
     def testAttributeForeign(self):
         """ Test that you can add foreign attributes """
         textdoc = OpenDocumentText()
-        standard = style.Style(name="Standard", family="paragraph")
-        p = style.ParagraphProperties(qattributes={('http://foreignuri.com','enable-numbering'):'true'})
+        standard = style.Style(name=u"Standard", family=u"paragraph")
+        p = style.ParagraphProperties(qattributes={(u'http://foreignuri.com','enable-numbering'):u'true'})
         standard.addElement(p)
         textdoc.styles.addElement(standard)
-        s = textdoc.stylesxml().decode("utf-8")
-        s.index("""<?xml version='1.0' encoding='UTF-8'?>\n""")
-        s.index('xmlns:ns41="http://foreignuri.com"')
-        s.index('<style:paragraph-properties ns41:enable-numbering="true"/>')
-        e = ElementParser(s,'style:style')
+        s = textdoc.stylesxml()
+        s.index(u"""<?xml version='1.0' encoding='UTF-8'?>\n""")
+        s.index(u'xmlns:ns41="http://foreignuri.com"')
+        s.index(u'<style:paragraph-properties ns41:enable-numbering="true"/>')
+        e = ElementParser(s,u'style:style')
 #        e = ElementParser('<style:style style:name="Standard" style:display-name="Standard" style:family="paragraph">')
-        self.assertEqual(e.element,'style:style')
-        self.assertTrue(e.has_value("style:display-name","Standard"))
-        self.assertTrue(e.has_value("style:name","Standard"))
-        self.assertTrue(e.has_value("style:family","paragraph"))
+        self.assertEqual(e.element,u'style:style')
+        self.assertTrue(e.has_value(u"style:display-name","Standard"))
+        self.assertTrue(e.has_value(u"style:name","Standard"))
+        self.assertTrue(e.has_value(u"style:family","paragraph"))
 
 
 

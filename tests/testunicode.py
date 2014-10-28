@@ -42,29 +42,29 @@ class TestUnicode(unittest.TestCase):
 
     def test_xstyle(self):
         self.assertRaises(UnicodeDecodeError, style.Style, name="X✗", family="paragraph")
-        xstyle = style.Style(name=u"X✗", family="paragraph")
-        pp = style.ParagraphProperties(padding="0.2cm")
-        pp.setAttribute("backgroundcolor", u"rød")
+        xstyle = style.Style(name=u"X✗", family=u"paragraph")
+        pp = style.ParagraphProperties(padding=u"0.2cm")
+        pp.setAttribute(u"backgroundcolor", u"rød")
         xstyle.addElement(pp)
         self.textdoc.styles.addElement(xstyle)
-        self.textdoc.save("TEST.odt")
+        self.textdoc.save(u"TEST.odt")
         self.saved = True
 
     def test_text(self):
         p = P(text=u"Æblegrød")
         p.addText(u' Blåbærgrød')
         self.textdoc.text.addElement(p)
-        self.textdoc.save("TEST.odt")
+        self.textdoc.save(u"TEST.odt")
         self.saved = True
 
     def test_contenttext(self):
         p = H(outlinelevel=1,text=u"Æblegrød")
         p.addText(u' Blåbærgrød')
         self.textdoc.text.addElement(p)
-        c = unicode(self.textdoc.contentxml(),'UTF-8')
-        self.assertContains(c, u'<office:body><office:text><text:h text:outline-level="1">\xc6blegr\xf8d Bl\xe5b\xe6rgr\xf8d</text:h></office:text></office:body>')
-        self.assertContains(c, u'xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"')
-        self.assertContains(c, u'<office:automatic-styles/>')
+        c = self.textdoc.contentxml() # contentxml is supposed to yeld a bytes
+        self.assertContains(c, b'<office:body><office:text><text:h text:outline-level="1">\xc3\x86blegr\xc3\xb8d Bl\xc3\xa5b\xc3\xa6rgr\xc3\xb8d</text:h></office:text></office:body>')
+        self.assertContains(c, b'xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"')
+        self.assertContains(c, b'<office:automatic-styles/>')
 
 if __name__ == '__main__':
     if sys.version_info.major==2:

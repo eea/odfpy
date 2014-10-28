@@ -28,6 +28,8 @@ from odf.style import BackgroundImage
 from odf.text import ListLevelStyleImage
 from odf.office import BinaryData
 
+if sys.version_info.major==3: unicode=str
+
 def usage():
    sys.stderr.write("Usage: %s [-e] [-o outputfile] [inputfile]\n" % sys.argv[0])
 
@@ -54,7 +56,7 @@ if __name__ == "__main__":
     if len(args) == 0:
         d = load(sys.stdin)
     else:
-        d = load(args[0])
+        d = load(unicode(args[0]))
     if embedimage:
         images = d.getElementsByType(Image) + \
            d.getElementsByType(BackgroundImage) +  \
@@ -69,6 +71,11 @@ if __name__ == "__main__":
                 image.removeAttribute('href')
     xml = d.xml()
     if outputfile == '-':
-        sys.stdout.write(xml.decode("utf-8"))
+       print (xml)
     else:
         open(outputfile,"wb").write(xml)
+
+
+# Local Variables: ***
+# mode: python     ***
+# End:             ***

@@ -30,6 +30,9 @@ from namespaces import nsdict
 import grammar
 from attrconverters import AttrConverters
 
+if sys.version_info.major == 3:
+    unicode=str # unicode function does not exist
+
 # The following code is pasted form xml.sax.saxutils
 # Tt makes it possible to run the code without the xml sax package installed
 # To make it possible to have <rubbish> in your text elements, it is necessary to escape the texts
@@ -248,10 +251,7 @@ class Text(Childless, Node):
         self.data = data
 
     def __str__(self):
-        if sys.version_info.major ==3:
-            return self.data
-        else:
-            return self.data.encode()
+        return self.data
 
     def __unicode__(self):
         return self.data
@@ -259,10 +259,7 @@ class Text(Childless, Node):
     def toXml(self,level,f):
         """ Write XML in UTF-8 """
         if self.data:
-            if sys.version_info.major == 3:
-                f.write((_escape(self.data)).encode("utf-8"))
-            else:
-                f.write(_escape(unicode(self.data)).encode("utf-8"))
+            f.write(_escape(unicode(self.data)))
     
 class CDATASection(Text, Childless):
     nodeType = Node.CDATA_SECTION_NODE
@@ -449,8 +446,26 @@ class Element(Node):
         self.attributes[(namespace, localpart)] = c.convert((namespace, localpart), value, self)
 
     def getAttrNS(self, namespace, localpart):
+        """
+        gets an attribute, given a namespace and a key
+        @param namespace a unicode string or a bytes: the namespace
+        @param localpart a unicode string or a bytes:
+        the key to get the attribute
+        @return an attribute as a unicode string or a bytes: if both paramters
+        are byte strings, it will be a bytes; if both attributes are
+        unicode strings, it will be a unicode string
+        """
         prefix = self.get_nsprefix(namespace)
-        return self.attributes.get((namespace, localpart))
+        result = self.attributes.get((namespace, localpart))
+
+        assert(
+            (type(namespace), type(namespace), type(namespace) == \
+                 type(b""), type(b""), type(b"")) or
+            (type(namespace), type(namespace), type(namespace) == \
+                 type(u""), type(u""), type(u""))
+            )
+
+        return result
 
     def removeAttrNS(self, namespace, localpart):
         del self.attributes[(namespace, localpart)]
@@ -472,40 +487,38 @@ class Element(Node):
             return self.getAttrNS(allowed_attrs[i][0], allowed_attrs[i][1])
 
     def write_open_tag(self, level, f):
-        f.write(('<'+self.tagName).encode('utf-8'))
+        f.write(('<'+self.tagName))
         if level == 0:
             for namespace, prefix in self.namespaces.items():
-                f.write((' xmlns:' + prefix + '="'+ _escape(str(namespace))+'"').encode('utf-8'))
+                f.write(u' xmlns:' + prefix + u'="'+ _escape(str(namespace))+'"')
         for qname in self.attributes.keys():
             prefix = self.get_nsprefix(qname[0])
-            if sys.version_info.major==3:
-                f.write((' '+_escape(str(prefix+':'+qname[1]))+'='+_quoteattr(self.attributes[qname])).encode('utf-8'))
-            else:
-                f.write((' '+_escape(str(prefix+':'+qname[1]))+'='+_quoteattr(unicode(self.attributes[qname]).encode('utf-8'))).encode('utf-8'))
-        f.write((u'>').encode('utf-8'))
+            f.write(u' '+_escape(str(prefix+u':'+qname[1]))+u'='+_quoteattr(unicode(self.attributes[qname])))
+        f.write(u'>')
 
     def write_close_tag(self, level, f):
-        f.write(('</'+self.tagName+'>').encode('utf-8'))
+        f.write('</'+self.tagName+'>')
 
     def toXml(self, level, f):
-        """ Generate XML stream out of the tree structure """
-        f.write(('<'+self.tagName).encode('utf-8'))
+        """
+        Generate an XML stream out of the tree structure
+        @param level integer: level in the XML tree; zero at root of the tree
+        @param f an open writable file able to accept unicode strings
+        """
+        f.write(u'<'+self.tagName)
         if level == 0:
             for namespace, prefix in self.namespaces.items():
-                f.write((' xmlns:' + prefix + '="'+ _escape(str(namespace))+'"').encode('utf-8'))
+                f.write(u' xmlns:' + prefix + u'="'+ _escape(str(namespace))+u'"')
         for qname in self.attributes.keys():
             prefix = self.get_nsprefix(qname[0])
-            if sys.version_info.major==3:
-                f.write((' '+_escape(str(prefix+':'+qname[1]))+'='+_quoteattr(self.attributes[qname])).encode('utf-8'))
-            else:
-                f.write((u' '+_escape(unicode(prefix+':'+qname[1]))+u'='+_quoteattr(unicode(self.attributes[qname]))).encode('utf-8'))
+            f.write(u' '+_escape(unicode(prefix+':'+qname[1]))+u'='+_quoteattr(unicode(self.attributes[qname])))
         if self.childNodes:
-            f.write((u'>').encode('utf-8'))
+            f.write(u'>')
             for element in self.childNodes:
                 element.toXml(level+1,f)
-            f.write((u'</'+self.tagName+'>').encode('utf-8'))
+            f.write(u'</'+self.tagName+'>')
         else:
-            f.write((u'/>').encode('utf-8'))
+            f.write(u'/>')
 
     def _getElementsByObj(self, obj, accumulator):
         if self.qname == obj.qname:

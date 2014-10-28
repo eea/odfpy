@@ -53,10 +53,10 @@ class TestDatastyles(unittest.TestCase):
         tr.addElement(tc)
         table.addElement(tr)
         doc.spreadsheet.addElement(table)
-        doc.save("TEST.ods")
+        doc.save(u"TEST.ods")
         self.saved = True
-        d = load("TEST.ods")
-        result = d.contentxml()
+        d = load(u"TEST.ods")
+        result = d.contentxml() # contentxml is supposed to yeld a bytes
         self.assertNotEqual(-1, result.find(b'''<number:percentage-style'''))
         self.assertNotEqual(-1, result.find(b'''style:data-style-name="N11"'''))
         self.assertNotEqual(-1, result.find(b'''style:name="pourcent"'''))
@@ -132,7 +132,7 @@ class TestDatastyles(unittest.TestCase):
         yaxis.addElement(yt)
         yt.addElement(text.P(text="y_axis"))
 
-        result = doc.contentxml()
+        result = doc.contentxml() # contentxml() is supposed to yeld a bytes
         self.assertNotEqual(-1, result.find(b'''style:family="chart"'''))
 
 if __name__ == '__main__':

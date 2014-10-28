@@ -22,6 +22,7 @@ import getopt
 
 import odf.userfield
 
+if sys.version_info.major==3: unicode=str
 
 listfields = False
 Listfields = False
@@ -56,7 +57,7 @@ for o, a in opts:
             k,v = (a, "")
         if len(k) == 0:
             exitwithusage()
-        setfields[k] = v
+        setfields[unicode(k)] = unicode(v)
     if o == '-l':
         listfields = True
         Listfields = False
@@ -64,14 +65,14 @@ for o, a in opts:
         Listfields = True
         listfields = False
     if o == "-x":
-        xfields.append(a)
+        xfields.append(unicode(a))
     if o == "-X":
-        Xfields.append(a)
+        Xfields.append(unicode(a))
     if o == "-o":
-        outputfile = a
+        outputfile = unicode(a)
 
 if len(args) != 0:
-    inputfile = args[0]
+    inputfile = unicode(args[0])
 
 user_fields = odf.userfield.UserFields(inputfile, outputfile)
 
@@ -92,3 +93,9 @@ if listfields:
 
 if setfields:
     user_fields.update(setfields)
+
+
+
+# Local Variables: ***
+# mode: python     ***
+# End:             ***

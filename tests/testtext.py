@@ -19,10 +19,13 @@
 #
 
 import unittest
-import os
+import os, sys
 from odf.opendocument import OpenDocumentText, load
 from odf import text
 from odf.namespaces import TEXTNS
+
+if sys.version_info.major==3:
+    unicode=str
 
 class TestText(unittest.TestCase):
     
@@ -36,11 +39,11 @@ class TestText(unittest.TestCase):
     def test_1stpara(self):
         """ Grab 1st paragraph and convert to string value """
         poem_odt = os.path.join(
-            os.path.dirname(__file__), "examples", "serious_poem.odt")
+            os.path.dirname(__file__), u"examples", u"serious_poem.odt")
         d = load(poem_odt)
-        shouldbe = "The boy stood on the burning deck,Whence allbuthim had fled.The flames that litthe battle'swreck,Shone o'er him, round the dead. "
+        shouldbe = u"The boy stood on the burning deck,Whence allbuthim had fled.The flames that litthe battle'swreck,Shone o'er him, round the dead. "
         #self.assertEqual(shouldbe, d.body)
-        self.assertEqual(shouldbe, str(d.body))
+        self.assertEqual(shouldbe, unicode(d.body))
 
     def test_link(self):
         """ Create a link """

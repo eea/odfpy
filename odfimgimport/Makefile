@@ -9,6 +9,14 @@ txt: odfimgimport.txt
 	xmlto txt $<
 
 clean:
-	rm -f *.txt odf
+	rm -f *.1 *.txt odf textWithImages-fetchedBy*
 odf:
 	ln -s ../odf
+
+test: clean odf
+	@python2 odfimgimport -o textWithImages-fetchedByPython2.odt \
+	  textWithImages.odt
+	@python3 odfimgimport -o textWithImages-fetchedByPython3.odt \
+	  textWithImages.odt
+	@echo created textWithImages-fetchedByPython2.odt and \
+	  textWithImages-fetchedByPython3.odt

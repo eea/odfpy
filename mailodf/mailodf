@@ -26,6 +26,8 @@ from email.mime.nonmultipart import MIMENonMultipart
 from email.mime.text import MIMEText
 from email.encoders import encode_base64
 
+if sys.version_info.major==3: unicode=str
+
 def usage():
    sys.stderr.write("Usage: %s [-f from] [-s subject] inputfile recipients...\n" % sys.argv[0])
 
@@ -62,7 +64,7 @@ msg['To'] = ','.join(args[1:])
 msg.preamble = 'This is a multi-part message in MIME format.'
 msg.epilogue = ''
 odhandler = ODF2XHTML()
-result = odhandler.odf2xhtml(args[0]).encode('us-ascii','xmlcharrefreplace')
+result = odhandler.odf2xhtml(unicode(args[0]))
 if subject:
     msg['Subject'] = subject
 else:
@@ -70,7 +72,7 @@ else:
 htmlpart = MIMEText(result,'html','us-ascii')
 htmlpart['Content-Location'] = 'index.html'
 msg.attach(htmlpart)
-z = zipfile.ZipFile(args[0])
+z = zipfile.ZipFile(unicode(args[0]))
 for file in z.namelist():
     if file[0:9] == 'Pictures/':
         suffix = file[file.rfind(".")+1:]
@@ -86,3 +88,8 @@ server = smtplib.SMTP('localhost')
 #server.set_debuglevel(1)
 server.sendmail(fromaddr, args[1:], msg.as_string())
 server.quit()
+
+
+# Local Variables: ***
+# mode: python     ***
+# End:             ***

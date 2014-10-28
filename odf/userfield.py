@@ -27,20 +27,23 @@ import zipfile
 from odf.text import UserFieldDecl
 from odf.namespaces import OFFICENS
 from odf.opendocument import load
-import io
+import io, sys
+
+if sys.version_info.major==3:
+    unicode=str
 
 OUTENCODING = "utf-8"
 
 
 # OpenDocument v.1.0 section 6.7.1
 VALUE_TYPES = {
-    'float': (OFFICENS, u'value'),
-    'percentage': (OFFICENS, u'value'),
-    'currency': (OFFICENS, u'value'),
-    'date': (OFFICENS, u'date-value'),
-    'time': (OFFICENS, u'time-value'),
-    'boolean': (OFFICENS, u'boolean-value'),
-    'string': (OFFICENS, u'string-value'),
+    u'float': (OFFICENS, u'value'),
+    u'percentage': (OFFICENS, u'value'),
+    u'currency': (OFFICENS, u'value'),
+    u'date': (OFFICENS, u'date-value'),
+    u'time': (OFFICENS, u'time-value'),
+    u'boolean': (OFFICENS, u'boolean-value'),
+    u'string': (OFFICENS, u'string-value'),
     }
 
 
@@ -54,10 +57,13 @@ class UserFields(object):
     def __init__(self, src=None, dest=None):
         """Constructor
 
-        src ... source document name, file like object or None for stdin
-        dest ... destination document name, file like object or None for stdout
-
+        @param src open file in binary mode: source document,
+        or filename as a unicode string, or None for stdin.
+        @param dest opendile in binary mode: destination document,
+        or filename as a unicode string, or None for stdout.
         """
+        assert(src==None or 'rb' in repr(src) or 'BufferedReader' in repr(src) or 'BytesIO' in repr(src) or type(src)==type(u""))
+        assert(dest==None or 'wb' in repr(dest) or 'BufferedWriter' in repr(dest) or 'BytesIO' in repr(dest) or type(dest)==type(u""))
         self.src_file = src
         self.dest_file = dest
         self.document = None
@@ -66,7 +72,7 @@ class UserFields(object):
         if (sys.version_info.major==3 and (isinstance(self.src_file, str) or (isinstance(self.src_file, io.IOBase)))) or (sys.version_info.major==2 and isinstance(self.src_file, basestring)):
             # src_file is a filename, check if it is a zip-file
             if not zipfile.is_zipfile(self.src_file):
-                raise TypeError("%s is no odt file." % self.src_file)
+                raise TypeError(u"%s is no odt file." % self.src_file)
         elif self.src_file is None:
             # use stdin if no file given
             self.src_file = sys.stdin
@@ -77,59 +83,61 @@ class UserFields(object):
         # write output
         if self.dest_file is None:
             # use stdout if no filename given
-            self.document.save('-')
+            self.document.save(u'-')
         else:
             self.document.save(self.dest_file)
 
     def list_fields(self):
         """List (extract) all known user-fields.
 
-        Returns list of user-field names.
-
+        @return list of user-field names as unicode strings.
         """
         return [x[0] for x in self.list_fields_and_values()]
 
     def list_fields_and_values(self, field_names=None):
         """List (extract) user-fields with type and value.
 
-        field_names ... list of field names to show or None for all.
+        @param field_names list of field names as unicode strings
+        to show, or None for all.
 
-        Returns list of tuples (<field name>, <field type>, <value>).
+        @return list of tuples (<field name>, <field type>, <value>)
+        as type (unicode string, stringified type, unicode string).
 
         """
         self.loaddoc()
         found_fields = []
         all_fields = self.document.getElementsByType(UserFieldDecl)
         for f in all_fields:
-            value_type = f.getAttribute('valuetype')
-            if value_type == 'string':
-                value = f.getAttribute('stringvalue')
+            value_type = f.getAttribute(u'valuetype')
+            if value_type == u'string':
+                value = f.getAttribute(u'stringvalue')
             else:
-                value = f.getAttribute('value')
-            field_name = f.getAttribute('name')
+                value = f.getAttribute(u'value')
+            field_name = f.getAttribute(u'name')
 
             if field_names is None or field_name in field_names:
-                found_fields.append((field_name.encode(OUTENCODING),
-                                     value_type.encode(OUTENCODING),
-                                     value.encode(OUTENCODING)))
+                found_fields.append((field_name,
+                                     value_type,
+                                     value))
         return found_fields
 
     def list_values(self, field_names):
         """Extract the contents of given field names from the file.
 
-        field_names ... list of field names
+        @param field_names list of field names as unicode strings
 
-        Returns list of field values.
+        @return list of field values as unicode strings.
 
         """
         return [x[2] for x in self.list_fields_and_values(field_names)]
 
     def get(self, field_name):
         """Extract the contents of this field from the file.
-
-        Returns field value or None if field does not exist.
+        @param field_name unicode string: name of a field
+        @return field value as a unicode string or None if field does not exist.
 
         """
+        assert(type(field_name)==type(u""))
         values = self.list_values([field_name])
         if not values:
             return None
@@ -137,10 +145,12 @@ class UserFields(object):
 
     def get_type_and_value(self, field_name):
         """Extract the type and contents of this field from the file.
-
-        Returns tuple (<type>, <field-value>) or None if field does not exist.
+        @param field_name unicode string: name of a field
+        @return tuple (<type>, <field-value>) as a pair of unicode strings
+        or None if field does not exist.
 
         """
+        assert(type(field_name)==type(u""))
         fields = self.list_fields_and_values([field_name])
         if not fields:
             return None
@@ -158,13 +168,13 @@ class UserFields(object):
         self.loaddoc()
         all_fields = self.document.getElementsByType(UserFieldDecl)
         for f in all_fields:
-            field_name = f.getAttribute('name')
+            field_name = f.getAttribute(u'name')
             if field_name in data:
-                value_type = f.getAttribute('valuetype')
+                value_type = f.getAttribute(u'valuetype')
                 value = data.get(field_name)
-                if value_type == 'string':
-                    f.setAttribute('stringvalue', value)
+                if value_type == u'string':
+                    f.setAttribute(u'stringvalue', value)
                 else:
-                    f.setAttribute('value', value) 
+                    f.setAttribute(u'value', value)
         self.savedoc()
 

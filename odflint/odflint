@@ -27,11 +27,9 @@ from odf import element, grammar
 from odf.namespaces import *
 from odf.attrconverters import attrconverters, cnv_string
 
-try:
-    from cStringIO import StringIO
-except ImportError:
-    from io import StringIO
+from io import BytesIO
 
+if sys.version_info.major==3: unicode=str
 
 extension_attributes = {
 	 "OpenOffice.org" : {
@@ -178,7 +176,7 @@ def lint(odffile):
         mimetype = zfd.read('mimetype')
     except:
         mimetype=''
-    d = OpenDocument(mimetype)
+    d = OpenDocument(unicode(mimetype))
     first = True
     for zi in zfd.infolist():
         if first:
@@ -202,12 +200,17 @@ def lint(odffile):
 
             inpsrc = InputSource()
             if not isinstance(content, str):
-                content=content.decode("utf-8")
-            inpsrc.setByteStream(StringIO(content))
+                content=content
+            inpsrc.setByteStream(BytesIO(content))
             parser.parse(inpsrc)
 
 
 if len(sys.argv) != 2:
     exitwithusage()
-lint(sys.argv[1])
+lint(unicode(sys.argv[1]))
 
+
+
+# Local Variables: ***
+# mode: python     ***
+# End:             ***

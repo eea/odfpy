@@ -33,35 +33,35 @@ class TestWhite(unittest.TestCase):
         """ Test that tabs and newlines are converted to elements """
         para = P()
         teletype.addTextToElement(para,
-                                "The boy stood   on the burning deck,\n" +
-                                "\tHis feet\twere\t\tfull of blisters.\n" +
-                                "The captain  stood in\tthe public house\n" +
-                                "         With beer running down his whiskers.   " );
-        outfp = io.BytesIO()
+                                u"The boy stood   on the burning deck,\n" +
+                                u"\tHis feet\twere\t\tfull of blisters.\n" +
+                                u"The captain  stood in\tthe public house\n" +
+                                u"         With beer running down his whiskers.   " );
+        outfp = io.StringIO()
         para.toXml(1,outfp)
-        self.assertEqual('''<text:p>The boy stood <text:s text:c="2"/>on the burning deck,<text:line-break/>''' + 
-          '''<text:tab/>His feet<text:tab/>were<text:tab/><text:tab/>full of blisters.<text:line-break/>''' + 
-          '''The captain <text:s text:c="1"/>stood in<text:tab/>the public house<text:line-break/>''' +
-          ''' <text:s text:c="8"/>With beer running down his whiskers. <text:s text:c="2"/></text:p>''', outfp.getvalue().decode("utf-8"))
+        self.assertEqual(u'''<text:p>The boy stood <text:s text:c="2"/>on the burning deck,<text:line-break/>''' +
+          u'''<text:tab/>His feet<text:tab/>were<text:tab/><text:tab/>full of blisters.<text:line-break/>''' +
+          u'''The captain <text:s text:c="1"/>stood in<text:tab/>the public house<text:line-break/>''' +
+          u''' <text:s text:c="8"/>With beer running down his whiskers. <text:s text:c="2"/></text:p>''', outfp.getvalue())
        
 
     def test_extract(self):
         """ Convert a paragraph to plain text """
         poem_odt = os.path.join(
-            os.path.dirname(__file__), "examples", "serious_poem.odt")
+            os.path.dirname(__file__), u"examples", u"serious_poem.odt")
         d = load(poem_odt)
         allparas = d.getElementsByType(P)
-        content = """<text:p text:style-name="Standard">The boy stood <text:s text:c="3"/>on the burning deck,<text:line-break/><text:tab/>Whence all<text:tab/>but<text:tab/><text:tab/>him had fled.<text:line-break/>The flames <text:s text:c="2"/>that lit<text:tab/>the battle's<text:tab/>wreck,<text:line-break/> <text:s text:c="11"/>Shone o'er him, round the dead. <text:s text:c="2"/></text:p>"""
+        content = u"""<text:p text:style-name="Standard">The boy stood <text:s text:c="3"/>on the burning deck,<text:line-break/><text:tab/>Whence all<text:tab/>but<text:tab/><text:tab/>him had fled.<text:line-break/>The flames <text:s text:c="2"/>that lit<text:tab/>the battle's<text:tab/>wreck,<text:line-break/> <text:s text:c="11"/>Shone o'er him, round the dead. <text:s text:c="2"/></text:p>"""
 
-        self.assertEqual("The boy stood    on the burning deck,\n\tWhence all\tbut\t\thim had fled.\nThe flames   that lit\tthe battle's\twreck,\n           Shone o'er him, round the dead.   ", teletype.extractText(allparas[0]))
+        self.assertEqual(u"The boy stood    on the burning deck,\n\tWhence all\tbut\t\thim had fled.\nThe flames   that lit\tthe battle's\twreck,\n           Shone o'er him, round the dead.   ", teletype.extractText(allparas[0]))
 
     def test_extract_with_span(self):
         """ Extract a text with a bold/italic span """
         poem_odt = os.path.join(
-            os.path.dirname(__file__), "examples", "simplestyles.odt")
+            os.path.dirname(__file__), u"examples", u"simplestyles.odt")
         d = load(poem_odt)
         teletype.extractText(d.body)
-        self.assertEqual('Plain textBoldItalicBold italicUnderlineUnderline italicUnderline bold italicKm2 - superscriptH2O - subscript', teletype.extractText(d.body))
+        self.assertEqual(u'Plain textBoldItalicBold italicUnderlineUnderline italicUnderline bold italicKm2 - superscriptH2O - subscript', teletype.extractText(d.body))
 
 
 if __name__ == '__main__':

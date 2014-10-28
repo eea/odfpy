@@ -137,3 +137,8 @@ if __name__ == "__main__":
     for heading in odtheadings(sys.argv[1]):
         print (heading)
 
+
+
+# Local Variables: ***
+# mode: python     ***
+# End:             ***

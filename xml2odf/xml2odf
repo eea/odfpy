@@ -155,8 +155,8 @@ def usage():
 
 def manifestxml(m):
     """ Generates the content of the manifest.xml file """
-    xml=io.BytesIO()
-    xml.write(b"<?xml version='1.0' encoding='UTF-8'?>\n")
+    xml=io.StringIO()
+    xml.write(u"<?xml version='1.0' encoding='UTF-8'?>\n")
     m.toXml(0,xml)
     return xml.getvalue()
 
@@ -231,5 +231,11 @@ m.addElement(manifest.FileEntry(fullpath="meta.xml",   mediatype="text/xml"))
 # Write manifest
 zi = zipfile.ZipInfo("META-INF/manifest.xml", now)
 zi.compress_type = zipfile.ZIP_DEFLATED
-z.writestr(zi, manifestxml(m) )
+z.writestr(zi, manifestxml(m).encode("utf-8") )
 z.close()
+
+
+
+# Local Variables: ***
+# mode: python     ***
+# End:             ***

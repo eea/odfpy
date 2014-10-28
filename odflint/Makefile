@@ -8,6 +8,12 @@ all: odf odflint.1
 	xmlto txt $<
 
 clean:
-	rm -f *.txt odf
+	rm -f *.1 *~ *.txt odf
 odf:
 	ln -s ../odf
+
+test: clean odf
+	@echo ================== output by Python2 ======================
+	@python2 odflint ../tests/examples/simplestyles.odt
+	@echo ================== output by Python3 ======================
+	@python3 odflint ../tests/examples/simplestyles.odt
