@@ -1,0 +1,415 @@
+\hypertarget{classodf_1_1odf2xhtml_1_1StyleToCSS}{\section{odf.\+odf2xhtml.\+Style\+To\+C\+S\+S Class Reference}
+\label{classodf_1_1odf2xhtml_1_1StyleToCSS}\index{odf.\+odf2xhtml.\+Style\+To\+C\+S\+S@{odf.\+odf2xhtml.\+Style\+To\+C\+S\+S}}
+}
+
+
+The purpose of the \hyperlink{classodf_1_1odf2xhtml_1_1StyleToCSS}{Style\+To\+C\+S\+S} class is to contain the rules to convert O\+D\+F styles to C\+S\+S2.  
+
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \hyperlink{classodf_1_1odf2xhtml_1_1StyleToCSS_a214c6b09e186940c35d887f21d8c973e}{\+\_\+\+\_\+init\+\_\+\+\_\+}
+\item 
+def \hyperlink{classodf_1_1odf2xhtml_1_1StyleToCSS_ade04405816e9c1910d3c838da3268e8f}{save\+\_\+font}
+\begin{DoxyCompactList}\small\item\em It is possible that the H\+T\+M\+L browser doesn't know how to show a particular font. \end{DoxyCompactList}\item 
+def \hyperlink{classodf_1_1odf2xhtml_1_1StyleToCSS_aa278feb4f768a5252db842a634e6aa40}{c\+\_\+drawfillimage}
+\begin{DoxyCompactList}\small\item\em Fill a figure with an image. \end{DoxyCompactList}\item 
+def \hyperlink{classodf_1_1odf2xhtml_1_1StyleToCSS_ac802a5289202cbcbc757a31058a64cba}{c\+\_\+fo}
+\begin{DoxyCompactList}\small\item\em X\+S\+L formatting attributes. \end{DoxyCompactList}\item 
+def \hyperlink{classodf_1_1odf2xhtml_1_1StyleToCSS_abe8f0fbde56352df58f27b77ec2b778c}{c\+\_\+border\+\_\+model}
+\begin{DoxyCompactList}\small\item\em Convert to C\+S\+S2 border model. \end{DoxyCompactList}\item 
+def \hyperlink{classodf_1_1odf2xhtml_1_1StyleToCSS_a3b736d004a014f44f9b4b0a785f6c521}{c\+\_\+width}
+\begin{DoxyCompactList}\small\item\em Set width of box. \end{DoxyCompactList}\item 
+def \hyperlink{classodf_1_1odf2xhtml_1_1StyleToCSS_a0b2d3701c891d53a1a8a17bee7b03ac4}{c\+\_\+text\+\_\+align}
+\begin{DoxyCompactList}\small\item\em Text align. \end{DoxyCompactList}\item 
+def \hyperlink{classodf_1_1odf2xhtml_1_1StyleToCSS_a703a8b9ecab741226ba8ff32758e8b6d}{c\+\_\+fn}
+\begin{DoxyCompactList}\small\item\em Generate the C\+S\+S font family A generic font can be found in two ways. \end{DoxyCompactList}\item 
+def \hyperlink{classodf_1_1odf2xhtml_1_1StyleToCSS_aaa5fe16ebf02d9ad413bcf7f350d9f50}{c\+\_\+text\+\_\+position}
+\begin{DoxyCompactList}\small\item\em Text position. \end{DoxyCompactList}\item 
+def \hyperlink{classodf_1_1odf2xhtml_1_1StyleToCSS_a7ae83ac40aab56410adf7f13279de6b9}{c\+\_\+hp}
+\item 
+def \hyperlink{classodf_1_1odf2xhtml_1_1StyleToCSS_ac50cfa3fe23466b6610fc1d1ebcae5d2}{c\+\_\+page\+\_\+width}
+\begin{DoxyCompactList}\small\item\em Set width of box H\+T\+M\+L doesn't really have a page-\/width. \end{DoxyCompactList}\item 
+def \hyperlink{classodf_1_1odf2xhtml_1_1StyleToCSS_a59299bfcf552e28c13a9a0333d23ebdc}{c\+\_\+text\+\_\+underline\+\_\+style}
+\begin{DoxyCompactList}\small\item\em Set underline decoration H\+T\+M\+L doesn't really have a page-\/width. \end{DoxyCompactList}\item 
+def \hyperlink{classodf_1_1odf2xhtml_1_1StyleToCSS_aa3c6d04e9324bfedb7776d11f76e5142}{c\+\_\+text\+\_\+line\+\_\+through\+\_\+style}
+\begin{DoxyCompactList}\small\item\em Set underline decoration H\+T\+M\+L doesn't really have a page-\/width. \end{DoxyCompactList}\item 
+def \hyperlink{classodf_1_1odf2xhtml_1_1StyleToCSS_a59dfb75146e43ea1cf6ba7c9e8ba3573}{c\+\_\+page\+\_\+height}
+\begin{DoxyCompactList}\small\item\em Set height of box. \end{DoxyCompactList}\item 
+def \hyperlink{classodf_1_1odf2xhtml_1_1StyleToCSS_a595651ab08545240168ab983cb69b229}{convert\+\_\+styles}
+\begin{DoxyCompactList}\small\item\em Rule is a tuple of (namespace, name). \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classodf_1_1odf2xhtml_1_1StyleToCSS_abbf3b4ba96b5c3192a4fe55b768a0445}{fontdict}
+\item 
+\hyperlink{classodf_1_1odf2xhtml_1_1StyleToCSS_a8b624e6ed4d31d0e947239db1036e92c}{fillimages}
+\item 
+\hyperlink{classodf_1_1odf2xhtml_1_1StyleToCSS_a99d05d82ffecc1e04e1c9363db5ac14f}{ruleconversions}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+The purpose of the \hyperlink{classodf_1_1odf2xhtml_1_1StyleToCSS}{Style\+To\+C\+S\+S} class is to contain the rules to convert O\+D\+F styles to C\+S\+S2. 
+
+Since it needs the generic fonts, it would probably make sense to also contain the Styles in a dict as well.. 
+
+Definition at line 62 of file odf2xhtml.\+py.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classodf_1_1odf2xhtml_1_1StyleToCSS_a214c6b09e186940c35d887f21d8c973e}{\index{odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S@{odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S}!\+\_\+\+\_\+init\+\_\+\+\_\+@{\+\_\+\+\_\+init\+\_\+\+\_\+}}
+\index{\+\_\+\+\_\+init\+\_\+\+\_\+@{\+\_\+\+\_\+init\+\_\+\+\_\+}!odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S@{odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S}}
+\subsubsection[{\+\_\+\+\_\+init\+\_\+\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+odf2xhtml.\+Style\+To\+C\+S\+S.\+\_\+\+\_\+init\+\_\+\+\_\+ (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}}\label{classodf_1_1odf2xhtml_1_1StyleToCSS_a214c6b09e186940c35d887f21d8c973e}
+
+
+Definition at line 64 of file odf2xhtml.\+py.
+
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classodf_1_1odf2xhtml_1_1StyleToCSS_abe8f0fbde56352df58f27b77ec2b778c}{\index{odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S@{odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S}!c\+\_\+border\+\_\+model@{c\+\_\+border\+\_\+model}}
+\index{c\+\_\+border\+\_\+model@{c\+\_\+border\+\_\+model}!odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S@{odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S}}
+\subsubsection[{c\+\_\+border\+\_\+model}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+odf2xhtml.\+Style\+To\+C\+S\+S.\+c\+\_\+border\+\_\+model (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{ruleset, }
+\item[{}]{sdict, }
+\item[{}]{rule, }
+\item[{}]{val}
+\end{DoxyParamCaption}
+)}}\label{classodf_1_1odf2xhtml_1_1StyleToCSS_abe8f0fbde56352df58f27b77ec2b778c}
+
+
+Convert to C\+S\+S2 border model. 
+
+
+
+Definition at line 146 of file odf2xhtml.\+py.
+
+\hypertarget{classodf_1_1odf2xhtml_1_1StyleToCSS_aa278feb4f768a5252db842a634e6aa40}{\index{odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S@{odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S}!c\+\_\+drawfillimage@{c\+\_\+drawfillimage}}
+\index{c\+\_\+drawfillimage@{c\+\_\+drawfillimage}!odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S@{odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S}}
+\subsubsection[{c\+\_\+drawfillimage}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+odf2xhtml.\+Style\+To\+C\+S\+S.\+c\+\_\+drawfillimage (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{ruleset, }
+\item[{}]{sdict, }
+\item[{}]{rule, }
+\item[{}]{val}
+\end{DoxyParamCaption}
+)}}\label{classodf_1_1odf2xhtml_1_1StyleToCSS_aa278feb4f768a5252db842a634e6aa40}
+
+
+Fill a figure with an image. 
+
+Since C\+S\+S doesn't let you resize images this should really be implemented as an absolutely position  with a width and a height 
+
+Definition at line 135 of file odf2xhtml.\+py.
+
+\hypertarget{classodf_1_1odf2xhtml_1_1StyleToCSS_a703a8b9ecab741226ba8ff32758e8b6d}{\index{odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S@{odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S}!c\+\_\+fn@{c\+\_\+fn}}
+\index{c\+\_\+fn@{c\+\_\+fn}!odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S@{odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S}}
+\subsubsection[{c\+\_\+fn}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+odf2xhtml.\+Style\+To\+C\+S\+S.\+c\+\_\+fn (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{ruleset, }
+\item[{}]{sdict, }
+\item[{}]{rule, }
+\item[{}]{fontstyle}
+\end{DoxyParamCaption}
+)}}\label{classodf_1_1odf2xhtml_1_1StyleToCSS_a703a8b9ecab741226ba8ff32758e8b6d}
+
+
+Generate the C\+S\+S font family A generic font can be found in two ways. 
+
+In a $<$style\+:font-\/face$>$ element or as a font-\/family-\/generic attribute in text-\/properties. 
+
+Definition at line 169 of file odf2xhtml.\+py.
+
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classodf_1_1odf2xhtml_1_1StyleToCSS_a703a8b9ecab741226ba8ff32758e8b6d_cgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{classodf_1_1odf2xhtml_1_1StyleToCSS_ac802a5289202cbcbc757a31058a64cba}{\index{odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S@{odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S}!c\+\_\+fo@{c\+\_\+fo}}
+\index{c\+\_\+fo@{c\+\_\+fo}!odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S@{odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S}}
+\subsubsection[{c\+\_\+fo}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+odf2xhtml.\+Style\+To\+C\+S\+S.\+c\+\_\+fo (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{ruleset, }
+\item[{}]{sdict, }
+\item[{}]{rule, }
+\item[{}]{val}
+\end{DoxyParamCaption}
+)}}\label{classodf_1_1odf2xhtml_1_1StyleToCSS_ac802a5289202cbcbc757a31058a64cba}
+
+
+X\+S\+L formatting attributes. 
+
+
+
+Definition at line 140 of file odf2xhtml.\+py.
+
+\hypertarget{classodf_1_1odf2xhtml_1_1StyleToCSS_a7ae83ac40aab56410adf7f13279de6b9}{\index{odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S@{odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S}!c\+\_\+hp@{c\+\_\+hp}}
+\index{c\+\_\+hp@{c\+\_\+hp}!odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S@{odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S}}
+\subsubsection[{c\+\_\+hp}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+odf2xhtml.\+Style\+To\+C\+S\+S.\+c\+\_\+hp (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{ruleset, }
+\item[{}]{sdict, }
+\item[{}]{rule, }
+\item[{}]{hpos}
+\end{DoxyParamCaption}
+)}}\label{classodf_1_1odf2xhtml_1_1StyleToCSS_a7ae83ac40aab56410adf7f13279de6b9}
+
+
+Definition at line 207 of file odf2xhtml.\+py.
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classodf_1_1odf2xhtml_1_1StyleToCSS_a7ae83ac40aab56410adf7f13279de6b9_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{classodf_1_1odf2xhtml_1_1StyleToCSS_a59dfb75146e43ea1cf6ba7c9e8ba3573}{\index{odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S@{odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S}!c\+\_\+page\+\_\+height@{c\+\_\+page\+\_\+height}}
+\index{c\+\_\+page\+\_\+height@{c\+\_\+page\+\_\+height}!odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S@{odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S}}
+\subsubsection[{c\+\_\+page\+\_\+height}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+odf2xhtml.\+Style\+To\+C\+S\+S.\+c\+\_\+page\+\_\+height (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{ruleset, }
+\item[{}]{sdict, }
+\item[{}]{rule, }
+\item[{}]{val}
+\end{DoxyParamCaption}
+)}}\label{classodf_1_1odf2xhtml_1_1StyleToCSS_a59dfb75146e43ea1cf6ba7c9e8ba3573}
+
+
+Set height of box. 
+
+
+
+Definition at line 274 of file odf2xhtml.\+py.
+
+\hypertarget{classodf_1_1odf2xhtml_1_1StyleToCSS_ac50cfa3fe23466b6610fc1d1ebcae5d2}{\index{odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S@{odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S}!c\+\_\+page\+\_\+width@{c\+\_\+page\+\_\+width}}
+\index{c\+\_\+page\+\_\+width@{c\+\_\+page\+\_\+width}!odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S@{odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S}}
+\subsubsection[{c\+\_\+page\+\_\+width}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+odf2xhtml.\+Style\+To\+C\+S\+S.\+c\+\_\+page\+\_\+width (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{ruleset, }
+\item[{}]{sdict, }
+\item[{}]{rule, }
+\item[{}]{val}
+\end{DoxyParamCaption}
+)}}\label{classodf_1_1odf2xhtml_1_1StyleToCSS_ac50cfa3fe23466b6610fc1d1ebcae5d2}
+
+
+Set width of box H\+T\+M\+L doesn't really have a page-\/width. 
+
+It is always 100\% of the browser width 
+
+Definition at line 253 of file odf2xhtml.\+py.
+
+\hypertarget{classodf_1_1odf2xhtml_1_1StyleToCSS_a0b2d3701c891d53a1a8a17bee7b03ac4}{\index{odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S@{odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S}!c\+\_\+text\+\_\+align@{c\+\_\+text\+\_\+align}}
+\index{c\+\_\+text\+\_\+align@{c\+\_\+text\+\_\+align}!odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S@{odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S}}
+\subsubsection[{c\+\_\+text\+\_\+align}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+odf2xhtml.\+Style\+To\+C\+S\+S.\+c\+\_\+text\+\_\+align (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{ruleset, }
+\item[{}]{sdict, }
+\item[{}]{rule, }
+\item[{}]{align}
+\end{DoxyParamCaption}
+)}}\label{classodf_1_1odf2xhtml_1_1StyleToCSS_a0b2d3701c891d53a1a8a17bee7b03ac4}
+
+
+Text align. 
+
+
+
+Definition at line 159 of file odf2xhtml.\+py.
+
+\hypertarget{classodf_1_1odf2xhtml_1_1StyleToCSS_aa3c6d04e9324bfedb7776d11f76e5142}{\index{odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S@{odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S}!c\+\_\+text\+\_\+line\+\_\+through\+\_\+style@{c\+\_\+text\+\_\+line\+\_\+through\+\_\+style}}
+\index{c\+\_\+text\+\_\+line\+\_\+through\+\_\+style@{c\+\_\+text\+\_\+line\+\_\+through\+\_\+style}!odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S@{odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S}}
+\subsubsection[{c\+\_\+text\+\_\+line\+\_\+through\+\_\+style}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+odf2xhtml.\+Style\+To\+C\+S\+S.\+c\+\_\+text\+\_\+line\+\_\+through\+\_\+style (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{ruleset, }
+\item[{}]{sdict, }
+\item[{}]{rule, }
+\item[{}]{val}
+\end{DoxyParamCaption}
+)}}\label{classodf_1_1odf2xhtml_1_1StyleToCSS_aa3c6d04e9324bfedb7776d11f76e5142}
+
+
+Set underline decoration H\+T\+M\+L doesn't really have a page-\/width. 
+
+It is always 100\% of the browser width 
+
+Definition at line 268 of file odf2xhtml.\+py.
+
+\hypertarget{classodf_1_1odf2xhtml_1_1StyleToCSS_aaa5fe16ebf02d9ad413bcf7f350d9f50}{\index{odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S@{odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S}!c\+\_\+text\+\_\+position@{c\+\_\+text\+\_\+position}}
+\index{c\+\_\+text\+\_\+position@{c\+\_\+text\+\_\+position}!odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S@{odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S}}
+\subsubsection[{c\+\_\+text\+\_\+position}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+odf2xhtml.\+Style\+To\+C\+S\+S.\+c\+\_\+text\+\_\+position (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{ruleset, }
+\item[{}]{sdict, }
+\item[{}]{rule, }
+\item[{}]{tp}
+\end{DoxyParamCaption}
+)}}\label{classodf_1_1odf2xhtml_1_1StyleToCSS_aaa5fe16ebf02d9ad413bcf7f350d9f50}
+
+
+Text position. 
+
+This is used e.\+g. to make superscript and subscript This attribute can have one or two values.
+
+The first value must be present and specifies the vertical text position as a percentage that relates to the current font height or it takes one of the values sub or super. Negative percentages or the sub value place the text below the baseline. Positive percentages or the super value place the text above the baseline. If sub or super is specified, the application can choose an appropriate text position.
+
+The second value is optional and specifies the font height as a percentage that relates to the current font-\/height. If this value is not specified, an appropriate font height is used. Although this value may change the font height that is displayed, it never changes the current font height that is used for additional calculations. 
+
+Definition at line 195 of file odf2xhtml.\+py.
+
+\hypertarget{classodf_1_1odf2xhtml_1_1StyleToCSS_a59299bfcf552e28c13a9a0333d23ebdc}{\index{odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S@{odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S}!c\+\_\+text\+\_\+underline\+\_\+style@{c\+\_\+text\+\_\+underline\+\_\+style}}
+\index{c\+\_\+text\+\_\+underline\+\_\+style@{c\+\_\+text\+\_\+underline\+\_\+style}!odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S@{odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S}}
+\subsubsection[{c\+\_\+text\+\_\+underline\+\_\+style}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+odf2xhtml.\+Style\+To\+C\+S\+S.\+c\+\_\+text\+\_\+underline\+\_\+style (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{ruleset, }
+\item[{}]{sdict, }
+\item[{}]{rule, }
+\item[{}]{val}
+\end{DoxyParamCaption}
+)}}\label{classodf_1_1odf2xhtml_1_1StyleToCSS_a59299bfcf552e28c13a9a0333d23ebdc}
+
+
+Set underline decoration H\+T\+M\+L doesn't really have a page-\/width. 
+
+It is always 100\% of the browser width 
+
+Definition at line 260 of file odf2xhtml.\+py.
+
+\hypertarget{classodf_1_1odf2xhtml_1_1StyleToCSS_a3b736d004a014f44f9b4b0a785f6c521}{\index{odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S@{odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S}!c\+\_\+width@{c\+\_\+width}}
+\index{c\+\_\+width@{c\+\_\+width}!odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S@{odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S}}
+\subsubsection[{c\+\_\+width}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+odf2xhtml.\+Style\+To\+C\+S\+S.\+c\+\_\+width (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{ruleset, }
+\item[{}]{sdict, }
+\item[{}]{rule, }
+\item[{}]{val}
+\end{DoxyParamCaption}
+)}}\label{classodf_1_1odf2xhtml_1_1StyleToCSS_a3b736d004a014f44f9b4b0a785f6c521}
+
+
+Set width of box. 
+
+
+
+Definition at line 154 of file odf2xhtml.\+py.
+
+\hypertarget{classodf_1_1odf2xhtml_1_1StyleToCSS_a595651ab08545240168ab983cb69b229}{\index{odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S@{odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S}!convert\+\_\+styles@{convert\+\_\+styles}}
+\index{convert\+\_\+styles@{convert\+\_\+styles}!odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S@{odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S}}
+\subsubsection[{convert\+\_\+styles}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+odf2xhtml.\+Style\+To\+C\+S\+S.\+convert\+\_\+styles (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{ruleset}
+\end{DoxyParamCaption}
+)}}\label{classodf_1_1odf2xhtml_1_1StyleToCSS_a595651ab08545240168ab983cb69b229}
+
+
+Rule is a tuple of (namespace, name). 
+
+If the namespace is '' then it is already C\+S\+S2 
+
+Definition at line 281 of file odf2xhtml.\+py.
+
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classodf_1_1odf2xhtml_1_1StyleToCSS_a595651ab08545240168ab983cb69b229_cgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{classodf_1_1odf2xhtml_1_1StyleToCSS_ade04405816e9c1910d3c838da3268e8f}{\index{odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S@{odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S}!save\+\_\+font@{save\+\_\+font}}
+\index{save\+\_\+font@{save\+\_\+font}!odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S@{odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S}}
+\subsubsection[{save\+\_\+font}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+odf2xhtml.\+Style\+To\+C\+S\+S.\+save\+\_\+font (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{name, }
+\item[{}]{family, }
+\item[{}]{generic}
+\end{DoxyParamCaption}
+)}}\label{classodf_1_1odf2xhtml_1_1StyleToCSS_ade04405816e9c1910d3c838da3268e8f}
+
+
+It is possible that the H\+T\+M\+L browser doesn't know how to show a particular font. 
+
+Fortunately O\+D\+F provides generic fallbacks. Unfortunately they are not the same as C\+S\+S2. C\+S\+S2\+: serif, sans-\/serif, cursive, fantasy, monospace O\+D\+F\+: roman, swiss, modern, decorative, script, system This method put the font and fallback into a dictionary 
+
+Definition at line 120 of file odf2xhtml.\+py.
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classodf_1_1odf2xhtml_1_1StyleToCSS_ade04405816e9c1910d3c838da3268e8f_icgraph}
+\end{center}
+\end{figure}
+
+
+
+
+\subsection{Member Data Documentation}
+\hypertarget{classodf_1_1odf2xhtml_1_1StyleToCSS_a8b624e6ed4d31d0e947239db1036e92c}{\index{odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S@{odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S}!fillimages@{fillimages}}
+\index{fillimages@{fillimages}!odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S@{odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S}}
+\subsubsection[{fillimages}]{\setlength{\rightskip}{0pt plus 5cm}odf.\+odf2xhtml.\+Style\+To\+C\+S\+S.\+fillimages}}\label{classodf_1_1odf2xhtml_1_1StyleToCSS_a8b624e6ed4d31d0e947239db1036e92c}
+
+
+Definition at line 69 of file odf2xhtml.\+py.
+
+\hypertarget{classodf_1_1odf2xhtml_1_1StyleToCSS_abbf3b4ba96b5c3192a4fe55b768a0445}{\index{odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S@{odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S}!fontdict@{fontdict}}
+\index{fontdict@{fontdict}!odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S@{odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S}}
+\subsubsection[{fontdict}]{\setlength{\rightskip}{0pt plus 5cm}odf.\+odf2xhtml.\+Style\+To\+C\+S\+S.\+fontdict}}\label{classodf_1_1odf2xhtml_1_1StyleToCSS_abbf3b4ba96b5c3192a4fe55b768a0445}
+
+
+Definition at line 66 of file odf2xhtml.\+py.
+
+\hypertarget{classodf_1_1odf2xhtml_1_1StyleToCSS_a99d05d82ffecc1e04e1c9363db5ac14f}{\index{odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S@{odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S}!ruleconversions@{ruleconversions}}
+\index{ruleconversions@{ruleconversions}!odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S@{odf\+::odf2xhtml\+::\+Style\+To\+C\+S\+S}}
+\subsubsection[{ruleconversions}]{\setlength{\rightskip}{0pt plus 5cm}odf.\+odf2xhtml.\+Style\+To\+C\+S\+S.\+ruleconversions}}\label{classodf_1_1odf2xhtml_1_1StyleToCSS_a99d05d82ffecc1e04e1c9363db5ac14f}
+
+
+Definition at line 71 of file odf2xhtml.\+py.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+odf/\hyperlink{odf2xhtml_8py}{odf2xhtml.\+py}\end{DoxyCompactItemize}

@@ -30,17 +30,17 @@ class TestSimple(unittest.TestCase):
         textdoc = OpenDocumentText()
         p = P(text="Hello World!")
         textdoc.text.addElement(p)
-        textdoc.save("TEST.odt")
+        textdoc.save(u"TEST.odt")
         self.saved = True
 
     def tearDown(self):
         if self.saved:
-            os.unlink("TEST.odt")
+            os.unlink(u"TEST.odt")
         
     def test_simple(self):
         """ Check that a simple load works """
-        d = load("TEST.odt")
-        result = d.contentxml()
+        d = load(u"TEST.odt")
+        result = d.contentxml() # contentxml() is supposed to yeld a bytes
         self.assertNotEqual(-1, result.find(b"""Hello World!"""))
 
 
@@ -55,26 +55,26 @@ class TestHeadings(unittest.TestCase):
     def test_headings(self):
         """ Create a document, save it and load it """
         textdoc = OpenDocumentText()
-        textdoc.text.addElement(H(outlinelevel=1, text="Heading 1"))
-        textdoc.text.addElement(P(text="Hello World!"))
-        textdoc.text.addElement(H(outlinelevel=2, text="Heading 2"))
-        textdoc.save("TEST.odt")
+        textdoc.text.addElement(H(outlinelevel=1, text=u"Heading 1"))
+        textdoc.text.addElement(P(text=u"Hello World!"))
+        textdoc.text.addElement(H(outlinelevel=2, text=u"Heading 2"))
+        textdoc.save(u"TEST.odt")
         self.saved = True
-        d = load("TEST.odt")
-        result = d.contentxml()
+        d = load(u"TEST.odt")
+        result = d.contentxml() # contentxml() is supposed to yeld a bytes
         self.assertNotEqual(-1, result.find(b"""<text:h text:outline-level="1">Heading 1</text:h><text:p>Hello World!</text:p><text:h text:outline-level="2">Heading 2</text:h>"""))
 
     def test_linebreak(self):
         """ Test that a line break (empty) element show correctly """
         textdoc = OpenDocumentText()
-        p = P(text="Hello World!")
+        p = P(text=u"Hello World!")
         textdoc.text.addElement(p)
         p.addElement(LineBreak())
-        p.addText("Line 2")
-        textdoc.save("TEST.odt")
+        p.addText(u"Line 2")
+        textdoc.save(u"TEST.odt")
         self.saved = True
-        d = load("TEST.odt")
-        result = d.contentxml()
+        d = load(u"TEST.odt")
+        result = d.contentxml() # contentxml() is supposed to yeld a bytes
         self.assertNotEqual(-1, result.find(b"""<text:p>Hello World!<text:line-break/>Line 2</text:p>"""))
 
 
@@ -147,16 +147,16 @@ class TestExampleDocs(unittest.TestCase):
     def test_metagenerator(self):
         """ Check that meta:generator is the original one """
         parastyles_odt = os.path.join(
-            os.path.dirname(__file__), "examples", "emb_spreadsheet.odp")
+            os.path.dirname(__file__), u"examples", u"emb_spreadsheet.odp")
         d = load(parastyles_odt)
         meta = d.metaxml()
-        self.assertNotEqual(-1, meta.find(b"""<meta:generator>ODFPY"""), "Must not use the original generator string")
+        self.assertNotEqual(-1, meta.find(u"""<meta:generator>ODFPY"""), "Must not use the original generator string")
 
 
     def test_spreadsheet(self):
         """ Load a document containing subobjects """
         spreadsheet_odt = os.path.join(
-            os.path.dirname(__file__), "examples", "emb_spreadsheet.odp")
+            os.path.dirname(__file__), u"examples", u"emb_spreadsheet.odp")
         d = load(spreadsheet_odt)
         self.assertEqual(1, len(d.childobjects))
         for s in d.childobjects:

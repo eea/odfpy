@@ -1,0 +1,12 @@
+<map id="odf.odfmanifest.manifestlist" name="odf.odfmanifest.manifestlist">
+<area shape="rect" id="node3" href="$namespaceodf_1_1odfmanifest.html#a69af946eb54c4a75e75cef5611d6fcef" title="odf.odfmanifest.odfmanifest" alt="" coords="255,5,436,33"/>
+<area shape="rect" id="node5" href="$namespaceodf_1_1opendocument.html#af6d010acf6dd4ad33f05b48ce036a208" title="Creates a text master document. " alt="" coords="235,55,456,99"/>
+<area shape="rect" id="node7" href="$namespaceodf_1_1opendocument.html#a5f91a599e953a7b3d3cd07ad3a696467" title="Load an ODF file into memory. " alt="" coords="268,122,423,150"/>
+<area shape="rect" id="node9" href="$classodf_1_1userfield_1_1UserFields.html#a65ccd99e2c198f06b55551d6a7bbf59a" title="odf.userfield.UserFields.loaddoc" alt="" coords="504,122,709,150"/>
+<area shape="rect" id="node11" href="$classodf_1_1userfield_1_1UserFields.html#ae67ac78a3c883117d523f245f076b227" title="List (extract) user&#45;fields with type and value. " alt="" coords="769,85,945,129"/>
+<area shape="rect" id="node21" href="$classodf_1_1userfield_1_1UserFields.html#aa13e8293efd5d183ac771d07b56a4558" title="Set the value of user fields. " alt="" coords="759,151,956,179"/>
+<area shape="rect" id="node13" href="$classodf_1_1userfield_1_1UserFields.html#a9151edeae09fcea4b334a445d7efc6b0" title="List (extract) all known user&#45;fields. " alt="" coords="1007,18,1183,62"/>
+<area shape="rect" id="node15" href="$classodf_1_1userfield_1_1UserFields.html#a1ca142bc38126c2d15a9a40e94c9d21c" title="Extract the contents of given field names from the file. " alt="" coords="1007,85,1183,129"/>
+<area shape="rect" id="node19" href="$classodf_1_1userfield_1_1UserFields.html#a532884dffd16a0a946aa961ea442d3ca" title="Extract the type and contents of this field from the file. " alt="" coords="1005,151,1184,195"/>
+<area shape="rect" id="node17" href="$classodf_1_1userfield_1_1UserFields.html#a916cc9d873f57f30b69e752bb48d5bff" title="Extract the contents of this field from the file. " alt="" coords="1232,93,1411,121"/>
+</map>

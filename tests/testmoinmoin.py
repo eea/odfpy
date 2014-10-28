@@ -28,18 +28,18 @@ class TestSimple(unittest.TestCase):
     
     def setUp(self):
         textdoc = OpenDocumentText()
-        p = P(text="Hello World!")
+        p = P(text=u"Hello World!")
         textdoc.text.addElement(p)
-        textdoc.save("TEST.odt")
+        textdoc.save(u"TEST.odt")
         self.saved = True
 
     def tearDown(self):
         if self.saved:
-            os.unlink("TEST.odt")
+            os.unlink(u"TEST.odt")
         
     def test_simple(self):
-        result = odf2moinmoin.ODF2MoinMoin("TEST.odt")
-        self.assertEqual('Hello World!\n', result.toString())
+        result = odf2moinmoin.ODF2MoinMoin(u"TEST.odt")
+        self.assertEqual(u'Hello World!\n', result.toString())
 
 
 class TestHeadings(unittest.TestCase):
@@ -48,38 +48,38 @@ class TestHeadings(unittest.TestCase):
 
     def tearDown(self):
         if self.saved:
-            os.unlink("TEST.odt")
+            os.unlink(u"TEST.odt")
         
     def test_headings(self):
         textdoc = OpenDocumentText()
-        textdoc.text.addElement(H(outlinelevel=1, text="Heading 1"))
-        textdoc.text.addElement(P(text="Hello World!"))
-        textdoc.text.addElement(H(outlinelevel=2, text="Heading 2"))
-        textdoc.save("TEST.odt")
+        textdoc.text.addElement(H(outlinelevel=1, text=u"Heading 1"))
+        textdoc.text.addElement(P(text=u"Hello World!"))
+        textdoc.text.addElement(H(outlinelevel=2, text=u"Heading 2"))
+        textdoc.save(u"TEST.odt")
         self.saved = True
-        result = odf2moinmoin.ODF2MoinMoin("TEST.odt")
-        self.assertEqual('= Heading 1 =\n\nHello World!\n== Heading 2 ==\n\n', result.toString())
+        result = odf2moinmoin.ODF2MoinMoin(u"TEST.odt")
+        self.assertEqual(u'= Heading 1 =\n\nHello World!\n== Heading 2 ==\n\n', result.toString())
 
     def test_linebreak(self):
         textdoc = OpenDocumentText()
-        p = P(text="Hello World!")
+        p = P(text=u"Hello World!")
         textdoc.text.addElement(p)
         p.addElement(LineBreak())
-        p.addText("Line 2")
-        textdoc.save("TEST.odt")
+        p.addText(u"Line 2")
+        textdoc.save(u"TEST.odt")
         self.saved = True
-        result = odf2moinmoin.ODF2MoinMoin("TEST.odt")
-        self.assertEqual('Hello World![[BR]]Line 2\n', result.toString())
+        result = odf2moinmoin.ODF2MoinMoin(u"TEST.odt")
+        self.assertEqual(u'Hello World![[BR]]Line 2\n', result.toString())
 
 class TestExampleDocs(unittest.TestCase):
 
 
     def test_twolevellist(self):
         twolevellist_odt = os.path.join(
-            os.path.dirname(__file__), "examples", "twolevellist.odt")
+            os.path.dirname(__file__), u"examples", u"twolevellist.odt")
         result = odf2moinmoin.ODF2MoinMoin(twolevellist_odt)
         #FIXME: Item c must only have one newline before
-        self.assertEqual("Line 1\n * Item A\n * Item B\n    * Subitem B.1\n    * '''Subitem B.2 (bold)'''\n\n * Item C\n\nLine 4\n", result.toString())
+        self.assertEqual(u"Line 1\n * Item A\n * Item B\n    * Subitem B.1\n    * '''Subitem B.2 (bold)'''\n\n * Item C\n\nLine 4\n", result.toString())
 
     def test_simplestyles(self):
         """ The simplestyles.odt has BOLD set in the paragraph style which is
@@ -87,38 +87,38 @@ class TestExampleDocs(unittest.TestCase):
             in MoinMoin, and currently ignored.
         """
         simplestyles_odt = os.path.join(
-            os.path.dirname(__file__), "examples", "simplestyles.odt")
+            os.path.dirname(__file__), u"examples", u"simplestyles.odt")
         result = odf2moinmoin.ODF2MoinMoin(simplestyles_odt)
         # The correct expected:
         #expected = "\nPlain text\n\n'''Bold'''\n\n''Italic''\n\n'''''Bold italic'''''\n\n__Underline__\n\n''__Underline italic__''\n\n'''''__Underline bold italic__'''''\n\nKm^2^ - superscript\n\nH,,2,,O - subscript\n\n~~Strike-through~~\n"
         # The simple-minded expected
-        expected = "Plain text\n\n'''Bold'''\n\n'''''Italic'''''\n\n'''''Bold italic'''''\n\n'''''__Underline__'''''\n\n'''''__Underline italic__'''''\n\n'''''__Underline bold italic__'''''\n\nKm^2^ - superscript\n\nH,,2,,O - subscript\n\n\n"
+        expected = u"Plain text\n\n'''Bold'''\n\n'''''Italic'''''\n\n'''''Bold italic'''''\n\n'''''__Underline__'''''\n\n'''''__Underline italic__'''''\n\n'''''__Underline bold italic__'''''\n\nKm^2^ - superscript\n\nH,,2,,O - subscript\n\n\n"
         self.assertEqual(expected, result.toString())
 
 
 
     def test_parastyles(self):
         parastyles_odt = os.path.join(
-            os.path.dirname(__file__), "examples", "parastyles.odt")
+            os.path.dirname(__file__), u"examples", u"parastyles.odt")
         result = odf2moinmoin.ODF2MoinMoin(parastyles_odt)
-        expected = "Plain text\n\n'''Bold'''\n\n''Italic''\n\n'''''Bold italic'''''\n\n__Underline__\n\n''__Underline italic__''\n\n'''''__Underline bold italic__'''''\n\nKm^2^ - superscript\n\nH,,2,,O - subscript\n\n~~Strike-through~~\n"
+        expected = u"Plain text\n\n'''Bold'''\n\n''Italic''\n\n'''''Bold italic'''''\n\n__Underline__\n\n''__Underline italic__''\n\n'''''__Underline bold italic__'''''\n\nKm^2^ - superscript\n\nH,,2,,O - subscript\n\n~~Strike-through~~\n"
         self.assertEqual(expected, result.toString())
 
 
 
     def test_simplelist(self):
         simplelist_odt = os.path.join(
-            os.path.dirname(__file__), "examples", "simplelist.odt")
+            os.path.dirname(__file__), u"examples", u"simplelist.odt")
         result = odf2moinmoin.ODF2MoinMoin(simplelist_odt)
-        self.assertEqual("Line 1\n * Item A\n * Item B\n\nLine 4\n", result.toString())
+        self.assertEqual(u"Line 1\n * Item A\n * Item B\n\nLine 4\n", result.toString())
 
 
 
     def test_simpletable(self):
         simpletable_odt = os.path.join(
-            os.path.dirname(__file__), "examples", "simpletable.odt")
+            os.path.dirname(__file__), u"examples", u"simpletable.odt")
         result = odf2moinmoin.ODF2MoinMoin(simpletable_odt)
-        self.assertEqual("\n||Cell 1||Cell 2||\n||'''Cell 3 (bold)'''||''Cell 4 (italic)''||\n", result.toString())
+        self.assertEqual(u"\n||Cell 1||Cell 2||\n||'''Cell 3 (bold)'''||''Cell 4 (italic)''||\n", result.toString())
 
 if __name__ == '__main__':
     unittest.main()

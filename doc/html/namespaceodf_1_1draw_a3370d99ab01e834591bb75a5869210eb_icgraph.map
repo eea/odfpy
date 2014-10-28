@@ -1,0 +1,26 @@
+<map id="odf.draw.StyleRefElement" name="odf.draw.StyleRefElement">
+<area shape="rect" id="node3" href="$namespaceodf_1_1dr3d.html#aba28eec6f99ef3087a9eea2466d23519" title="odf.dr3d.Cube" alt="" coords="256,5,357,33"/>
+<area shape="rect" id="node5" href="$namespaceodf_1_1dr3d.html#ae362ce3da2d61861bdc952e265ed2e04" title="odf.dr3d.Extrude" alt="" coords="249,55,364,83"/>
+<area shape="rect" id="node7" href="$namespaceodf_1_1dr3d.html#a103936ecf1180522905dc79982c87d31" title="odf.dr3d.Light" alt="" coords="257,106,356,134"/>
+<area shape="rect" id="node9" href="$namespaceodf_1_1dr3d.html#a4f9c7c75c9b3185c3528e10166ed9b2b" title="odf.dr3d.Rotate" alt="" coords="252,157,361,185"/>
+<area shape="rect" id="node11" href="$namespaceodf_1_1dr3d.html#a5a8f373f91a79140287e56efd0f2c293" title="odf.dr3d.Scene" alt="" coords="253,207,360,235"/>
+<area shape="rect" id="node13" href="$namespaceodf_1_1dr3d.html#a1fec5cfe7a206d33efe637fd268ce1d7" title="odf.dr3d.Sphere" alt="" coords="251,258,363,286"/>
+<area shape="rect" id="node15" href="$namespaceodf_1_1draw.html#a1fcf417ecc69c5f64a5825f68b356fa1" title="odf.draw.Caption" alt="" coords="248,309,365,337"/>
+<area shape="rect" id="node17" href="$namespaceodf_1_1draw.html#ab0956530dc535c6f1776b823113c4bc0" title="odf.draw.Circle" alt="" coords="253,359,360,387"/>
+<area shape="rect" id="node19" href="$namespaceodf_1_1draw.html#a092f2cd3049571abdfb5d6a03ab696cc" title="odf.draw.Connector" alt="" coords="240,410,373,438"/>
+<area shape="rect" id="node21" href="$namespaceodf_1_1draw.html#a6f3480962e7b3bc1a970d6b33ba44e10" title="odf.draw.Control" alt="" coords="249,461,364,489"/>
+<area shape="rect" id="node23" href="$namespaceodf_1_1draw.html#a8302202708fe540f98e9ad352d07cd8d" title="odf.draw.CustomShape" alt="" coords="229,511,384,539"/>
+<area shape="rect" id="node25" href="$namespaceodf_1_1draw.html#ac1020dc0376882dee7c4b45a81c659bb" title="odf.draw.Ellipse" alt="" coords="251,562,363,590"/>
+<area shape="rect" id="node27" href="$namespaceodf_1_1draw.html#a6982db25567ebf0e29f1c37e1b407908" title="odf.draw.Frame" alt="" coords="252,613,361,641"/>
+<area shape="rect" id="node29" href="$namespaceodf_1_1draw.html#ad2abf6ab0b81e09da0eb0c06c2306f7c" title="odf.draw.G" alt="" coords="265,663,348,691"/>
+<area shape="rect" id="node31" href="$namespaceodf_1_1draw.html#abdd7c40b2d4504744fb37e12ee393d68" title="odf.draw.Line" alt="" coords="257,714,356,742"/>
+<area shape="rect" id="node33" href="$namespaceodf_1_1draw.html#aaeed001f3e9662b4f06fbf1f01a120e2" title="odf.draw.Measure" alt="" coords="245,765,368,793"/>
+<area shape="rect" id="node35" href="$namespaceodf_1_1draw.html#a15b1916f99b043836a0a9a2f89aac3cf" title="odf.draw.PageThumbnail" alt="" coords="225,815,388,843"/>
+<area shape="rect" id="node37" href="$namespaceodf_1_1draw.html#a78e1bf674d5b1a4c0012b2f914a5be1c" title="odf.draw.Path" alt="" coords="256,866,357,894"/>
+<area shape="rect" id="node39" href="$namespaceodf_1_1draw.html#a150f60a7954bf8079746da0f7c5c1224" title="odf.draw.Polygon" alt="" coords="247,917,367,945"/>
+<area shape="rect" id="node41" href="$namespaceodf_1_1draw.html#a080e54252677a66c80c2c5093c094e57" title="odf.draw.Polyline" alt="" coords="248,967,365,995"/>
+<area shape="rect" id="node43" href="$namespaceodf_1_1draw.html#aa4fd010d615a735e14c4240ec0a33e9e" title="odf.draw.Rect" alt="" coords="256,1018,357,1046"/>
+<area shape="rect" id="node45" href="$namespaceodf_1_1draw.html#a2a7e04c9f2f98f894903b0b0109f4977" title="odf.draw.RegularPolygon" alt="" coords="225,1069,388,1097"/>
+<area shape="rect" id="node47" href="$namespaceodf_1_1office.html#a04497efb1d2eb04f1160a785801bd1ea" title="odf.office.Annotation" alt="" coords="237,1119,376,1147"/>
+<area shape="rect" id="node49" href="$namespaceodf_1_1office.html#a03f599b1065c597dccff9a79d841e8f2" title="odf.office.AnnotationEnd" alt="" coords="227,1170,387,1198"/>
+</map>

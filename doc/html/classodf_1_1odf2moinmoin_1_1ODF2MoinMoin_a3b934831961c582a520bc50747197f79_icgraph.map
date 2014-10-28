@@ -1,0 +1,9 @@
+<map id="odf.odf2moinmoin.ODF2MoinMoin.textToString" name="odf.odf2moinmoin.ODF2MoinMoin.textToString">
+<area shape="rect" id="node3" href="$classodf_1_1odf2moinmoin_1_1ODF2MoinMoin.html#ae8d1354370b6a766b4a4a13e641c3f3e" title="odf.odf2moinmoin.ODF2Moin\lMoin.text_a" alt="" coords="243,5,432,49"/>
+<area shape="rect" id="node5" href="$classodf_1_1odf2moinmoin_1_1ODF2MoinMoin.html#a3b0b8148243f876b62fbe69ed9118674" title="odf.odf2moinmoin.ODF2Moin\lMoin.text_note" alt="" coords="243,71,432,115"/>
+<area shape="rect" id="node7" href="$classodf_1_1odf2moinmoin_1_1ODF2MoinMoin.html#a6c254d8936107bf3d5fdb6f8987c146c" title="odf.odf2moinmoin.ODF2Moin\lMoin.inline_markup" alt="" coords="243,138,432,182"/>
+<area shape="rect" id="node12" href="$classodf_1_1odf2moinmoin_1_1ODF2MoinMoin.html#ad3d4dfeb7a6fefddddc811d6d4a49cb2" title="Converts the document to a string. " alt="" coords="955,206,1144,250"/>
+<area shape="rect" id="node9" href="$classodf_1_1odf2moinmoin_1_1ODF2MoinMoin.html#a8ff7e610a43ebc6e0d42401dbdb5ba8a" title="MoinMoin uses || to delimit table cells. " alt="" coords="717,106,907,150"/>
+<area shape="rect" id="node14" href="$classodf_1_1odf2moinmoin_1_1ODF2MoinMoin.html#a952b697c0cd2a9a87c43be10ae6c6cdb" title="odf.odf2moinmoin.ODF2Moin\lMoin.paragraphToString" alt="" coords="480,177,669,221"/>
+<area shape="rect" id="node16" href="$classodf_1_1odf2moinmoin_1_1ODF2MoinMoin.html#ac0ae168e52e4a0bb3f66bd2de1852556" title="odf.odf2moinmoin.ODF2Moin\lMoin.listToString" alt="" coords="717,247,907,291"/>
+</map>

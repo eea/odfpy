@@ -1,0 +1,398 @@
+\hypertarget{namespaceodf_1_1opendocument}{\section{odf.\+opendocument Namespace Reference}
+\label{namespaceodf_1_1opendocument}\index{odf.\+opendocument@{odf.\+opendocument}}
+}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{classodf_1_1opendocument_1_1OpaqueObject}{Opaque\+Object}
+\begin{DoxyCompactList}\small\item\em just a record to bear a filename, a mediatype and a bytes content \end{DoxyCompactList}\item 
+class \hyperlink{classodf_1_1opendocument_1_1OpenDocument}{Open\+Document}
+\begin{DoxyCompactList}\small\item\em A class to hold the content of an \hyperlink{classodf_1_1opendocument_1_1OpenDocument}{Open\+Document} document Use the xml method to write the X\+M\+L source to the screen or to a file. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \hyperlink{namespaceodf_1_1opendocument_a6a86bb2e0369feaea53b7c05290b2392}{Open\+Document\+Chart}
+\begin{DoxyCompactList}\small\item\em Creates a chart document. \end{DoxyCompactList}\item 
+def \hyperlink{namespaceodf_1_1opendocument_a5ff2aeb89ca9dfbae829ee5853c7b3e2}{Open\+Document\+Drawing}
+\begin{DoxyCompactList}\small\item\em Creates a drawing document. \end{DoxyCompactList}\item 
+def \hyperlink{namespaceodf_1_1opendocument_a3f866df98a777ed31da478c6406d22db}{Open\+Document\+Image}
+\begin{DoxyCompactList}\small\item\em Creates an image document. \end{DoxyCompactList}\item 
+def \hyperlink{namespaceodf_1_1opendocument_a8a56383489ab849a51711a04de3f0f63}{Open\+Document\+Presentation}
+\begin{DoxyCompactList}\small\item\em Creates a presentation document. \end{DoxyCompactList}\item 
+def \hyperlink{namespaceodf_1_1opendocument_a6e2d5bd6da597f4b19f6b285d3802d0d}{Open\+Document\+Spreadsheet}
+\begin{DoxyCompactList}\small\item\em Creates a spreadsheet document. \end{DoxyCompactList}\item 
+def \hyperlink{namespaceodf_1_1opendocument_aa484e380b454031a93c5da214fab392d}{Open\+Document\+Text}
+\begin{DoxyCompactList}\small\item\em Creates a text document. \end{DoxyCompactList}\item 
+def \hyperlink{namespaceodf_1_1opendocument_af6d010acf6dd4ad33f05b48ce036a208}{Open\+Document\+Text\+Master}
+\begin{DoxyCompactList}\small\item\em Creates a text master document. \end{DoxyCompactList}\item 
+def \hyperlink{namespaceodf_1_1opendocument_a5f91a599e953a7b3d3cd07ad3a696467}{load}
+\begin{DoxyCompactList}\small\item\em Load an O\+D\+F file into memory. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+string \hyperlink{namespaceodf_1_1opendocument_aef5700f9b878becf7cd993c97584dfee}{\+\_\+\+\_\+doc\+\_\+\+\_\+} = \char`\"{}\char`\"{}\char`\"{}Use \hyperlink{classodf_1_1opendocument_1_1OpenDocument}{Open\+Document} to generate your documents.\char`\"{}\char`\"{}\char`\"{}
+\item 
+\hyperlink{namespaceodf_1_1opendocument_a35331d671c8f271f0722c22d783ad205}{unicode} = str
+\item 
+\hyperlink{namespaceodf_1_1opendocument_a7ae7b9f7ff753deece3ec6f05a9104ee}{\+\_\+\+\_\+version\+\_\+\+\_\+} = T\+O\+O\+L\+S\+V\+E\+R\+S\+I\+O\+N
+\item 
+string \hyperlink{namespaceodf_1_1opendocument_a2598e2e2f5849be1876f9a585f8359dd}{\+\_\+\+X\+M\+L\+P\+R\+O\+L\+O\+G\+U\+E} = u\char`\"{}$<$?xml version='1.\+0' encoding='U\+T\+F-\/8'?$>$\textbackslash{}n\char`\"{}
+\item 
+int \hyperlink{namespaceodf_1_1opendocument_a8302c421f86687ff0d9f2aca113fd769}{U\+N\+I\+X\+P\+E\+R\+M\+S} = 2175008768
+\begin{DoxyCompactList}\small\item\em file permission as an integer value. \end{DoxyCompactList}\item 
+int \hyperlink{namespaceodf_1_1opendocument_a16a01c597acdbd785c45dc2c8abf6e99}{I\+S\+\_\+\+F\+I\+L\+E\+N\+A\+M\+E} = 0
+\item 
+int \hyperlink{namespaceodf_1_1opendocument_abdff0b1ae362b65dc635c8e3e74e36cf}{I\+S\+\_\+\+I\+M\+A\+G\+E} = 1
+\item 
+dictionary \hyperlink{namespaceodf_1_1opendocument_a5b88ff682371ff9d1cd3d545484e3bfb}{odmimetypes}
+\begin{DoxyCompactList}\small\item\em mime-\/types =$>$ file extensions \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\hypertarget{namespaceodf_1_1opendocument_a5f91a599e953a7b3d3cd07ad3a696467}{\index{odf\+::opendocument@{odf\+::opendocument}!load@{load}}
+\index{load@{load}!odf\+::opendocument@{odf\+::opendocument}}
+\subsubsection[{load}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+opendocument.\+load (
+\begin{DoxyParamCaption}
+\item[{}]{odffile}
+\end{DoxyParamCaption}
+)}}\label{namespaceodf_1_1opendocument_a5f91a599e953a7b3d3cd07ad3a696467}
+
+
+Load an O\+D\+F file into memory. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em odffile} & unicode string\+: name of a file, or as an alternative, an open readable stream \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+a reference to the structure (an \hyperlink{classodf_1_1opendocument_1_1OpenDocument}{Open\+Document} instance) 
+\end{DoxyReturn}
+
+
+Definition at line 1003 of file opendocument.\+py.
+
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespaceodf_1_1opendocument_a5f91a599e953a7b3d3cd07ad3a696467_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespaceodf_1_1opendocument_a5f91a599e953a7b3d3cd07ad3a696467_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{namespaceodf_1_1opendocument_a6a86bb2e0369feaea53b7c05290b2392}{\index{odf\+::opendocument@{odf\+::opendocument}!Open\+Document\+Chart@{Open\+Document\+Chart}}
+\index{Open\+Document\+Chart@{Open\+Document\+Chart}!odf\+::opendocument@{odf\+::opendocument}}
+\subsubsection[{Open\+Document\+Chart}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+opendocument.\+Open\+Document\+Chart (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{namespaceodf_1_1opendocument_a6a86bb2e0369feaea53b7c05290b2392}
+
+
+Creates a chart document. 
+
+\begin{DoxyReturn}{Returns}
+an \hyperlink{classodf_1_1opendocument_1_1OpenDocument}{Open\+Document} instance with chart mimetype 
+\end{DoxyReturn}
+
+
+Definition at line 827 of file opendocument.\+py.
+
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespaceodf_1_1opendocument_a6a86bb2e0369feaea53b7c05290b2392_cgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{namespaceodf_1_1opendocument_a5ff2aeb89ca9dfbae829ee5853c7b3e2}{\index{odf\+::opendocument@{odf\+::opendocument}!Open\+Document\+Drawing@{Open\+Document\+Drawing}}
+\index{Open\+Document\+Drawing@{Open\+Document\+Drawing}!odf\+::opendocument@{odf\+::opendocument}}
+\subsubsection[{Open\+Document\+Drawing}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+opendocument.\+Open\+Document\+Drawing (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{namespaceodf_1_1opendocument_a5ff2aeb89ca9dfbae829ee5853c7b3e2}
+
+
+Creates a drawing document. 
+
+\begin{DoxyReturn}{Returns}
+an \hyperlink{classodf_1_1opendocument_1_1OpenDocument}{Open\+Document} instance with drawing mimetype 
+\end{DoxyReturn}
+
+
+Definition at line 838 of file opendocument.\+py.
+
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespaceodf_1_1opendocument_a5ff2aeb89ca9dfbae829ee5853c7b3e2_cgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{namespaceodf_1_1opendocument_a3f866df98a777ed31da478c6406d22db}{\index{odf\+::opendocument@{odf\+::opendocument}!Open\+Document\+Image@{Open\+Document\+Image}}
+\index{Open\+Document\+Image@{Open\+Document\+Image}!odf\+::opendocument@{odf\+::opendocument}}
+\subsubsection[{Open\+Document\+Image}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+opendocument.\+Open\+Document\+Image (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{namespaceodf_1_1opendocument_a3f866df98a777ed31da478c6406d22db}
+
+
+Creates an image document. 
+
+\begin{DoxyReturn}{Returns}
+an \hyperlink{classodf_1_1opendocument_1_1OpenDocument}{Open\+Document} instance with image mimetype 
+\end{DoxyReturn}
+
+
+Definition at line 849 of file opendocument.\+py.
+
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespaceodf_1_1opendocument_a3f866df98a777ed31da478c6406d22db_cgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{namespaceodf_1_1opendocument_a8a56383489ab849a51711a04de3f0f63}{\index{odf\+::opendocument@{odf\+::opendocument}!Open\+Document\+Presentation@{Open\+Document\+Presentation}}
+\index{Open\+Document\+Presentation@{Open\+Document\+Presentation}!odf\+::opendocument@{odf\+::opendocument}}
+\subsubsection[{Open\+Document\+Presentation}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+opendocument.\+Open\+Document\+Presentation (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{namespaceodf_1_1opendocument_a8a56383489ab849a51711a04de3f0f63}
+
+
+Creates a presentation document. 
+
+\begin{DoxyReturn}{Returns}
+an \hyperlink{classodf_1_1opendocument_1_1OpenDocument}{Open\+Document} instance with presentation mimetype 
+\end{DoxyReturn}
+
+
+Definition at line 860 of file opendocument.\+py.
+
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespaceodf_1_1opendocument_a8a56383489ab849a51711a04de3f0f63_cgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{namespaceodf_1_1opendocument_a6e2d5bd6da597f4b19f6b285d3802d0d}{\index{odf\+::opendocument@{odf\+::opendocument}!Open\+Document\+Spreadsheet@{Open\+Document\+Spreadsheet}}
+\index{Open\+Document\+Spreadsheet@{Open\+Document\+Spreadsheet}!odf\+::opendocument@{odf\+::opendocument}}
+\subsubsection[{Open\+Document\+Spreadsheet}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+opendocument.\+Open\+Document\+Spreadsheet (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{namespaceodf_1_1opendocument_a6e2d5bd6da597f4b19f6b285d3802d0d}
+
+
+Creates a spreadsheet document. 
+
+\begin{DoxyReturn}{Returns}
+an \hyperlink{classodf_1_1opendocument_1_1OpenDocument}{Open\+Document} instance with spreadsheet mimetype 
+\end{DoxyReturn}
+
+
+Definition at line 871 of file opendocument.\+py.
+
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespaceodf_1_1opendocument_a6e2d5bd6da597f4b19f6b285d3802d0d_cgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{namespaceodf_1_1opendocument_aa484e380b454031a93c5da214fab392d}{\index{odf\+::opendocument@{odf\+::opendocument}!Open\+Document\+Text@{Open\+Document\+Text}}
+\index{Open\+Document\+Text@{Open\+Document\+Text}!odf\+::opendocument@{odf\+::opendocument}}
+\subsubsection[{Open\+Document\+Text}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+opendocument.\+Open\+Document\+Text (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{namespaceodf_1_1opendocument_aa484e380b454031a93c5da214fab392d}
+
+
+Creates a text document. 
+
+\begin{DoxyReturn}{Returns}
+an \hyperlink{classodf_1_1opendocument_1_1OpenDocument}{Open\+Document} instance with text mimetype 
+\end{DoxyReturn}
+
+
+Definition at line 882 of file opendocument.\+py.
+
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespaceodf_1_1opendocument_aa484e380b454031a93c5da214fab392d_cgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{namespaceodf_1_1opendocument_af6d010acf6dd4ad33f05b48ce036a208}{\index{odf\+::opendocument@{odf\+::opendocument}!Open\+Document\+Text\+Master@{Open\+Document\+Text\+Master}}
+\index{Open\+Document\+Text\+Master@{Open\+Document\+Text\+Master}!odf\+::opendocument@{odf\+::opendocument}}
+\subsubsection[{Open\+Document\+Text\+Master}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+opendocument.\+Open\+Document\+Text\+Master (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{namespaceodf_1_1opendocument_af6d010acf6dd4ad33f05b48ce036a208}
+
+
+Creates a text master document. 
+
+\begin{DoxyReturn}{Returns}
+an \hyperlink{classodf_1_1opendocument_1_1OpenDocument}{Open\+Document} instance with master mimetype 
+\end{DoxyReturn}
+
+
+Definition at line 893 of file opendocument.\+py.
+
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespaceodf_1_1opendocument_af6d010acf6dd4ad33f05b48ce036a208_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+\subsection{Variable Documentation}
+\hypertarget{namespaceodf_1_1opendocument_aef5700f9b878becf7cd993c97584dfee}{\index{odf\+::opendocument@{odf\+::opendocument}!\+\_\+\+\_\+doc\+\_\+\+\_\+@{\+\_\+\+\_\+doc\+\_\+\+\_\+}}
+\index{\+\_\+\+\_\+doc\+\_\+\+\_\+@{\+\_\+\+\_\+doc\+\_\+\+\_\+}!odf\+::opendocument@{odf\+::opendocument}}
+\subsubsection[{\+\_\+\+\_\+doc\+\_\+\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}string odf.\+opendocument.\+\_\+\+\_\+doc\+\_\+\+\_\+ = \char`\"{}\char`\"{}\char`\"{}Use {\bf Open\+Document} to generate your documents.\char`\"{}\char`\"{}\char`\"{}}}\label{namespaceodf_1_1opendocument_aef5700f9b878becf7cd993c97584dfee}
+
+
+Definition at line 25 of file opendocument.\+py.
+
+\hypertarget{namespaceodf_1_1opendocument_a7ae7b9f7ff753deece3ec6f05a9104ee}{\index{odf\+::opendocument@{odf\+::opendocument}!\+\_\+\+\_\+version\+\_\+\+\_\+@{\+\_\+\+\_\+version\+\_\+\+\_\+}}
+\index{\+\_\+\+\_\+version\+\_\+\+\_\+@{\+\_\+\+\_\+version\+\_\+\+\_\+}!odf\+::opendocument@{odf\+::opendocument}}
+\subsubsection[{\+\_\+\+\_\+version\+\_\+\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}odf.\+opendocument.\+\_\+\+\_\+version\+\_\+\+\_\+ = T\+O\+O\+L\+S\+V\+E\+R\+S\+I\+O\+N}}\label{namespaceodf_1_1opendocument_a7ae7b9f7ff753deece3ec6f05a9104ee}
+
+
+Definition at line 49 of file opendocument.\+py.
+
+\hypertarget{namespaceodf_1_1opendocument_a2598e2e2f5849be1876f9a585f8359dd}{\index{odf\+::opendocument@{odf\+::opendocument}!\+\_\+\+X\+M\+L\+P\+R\+O\+L\+O\+G\+U\+E@{\+\_\+\+X\+M\+L\+P\+R\+O\+L\+O\+G\+U\+E}}
+\index{\+\_\+\+X\+M\+L\+P\+R\+O\+L\+O\+G\+U\+E@{\+\_\+\+X\+M\+L\+P\+R\+O\+L\+O\+G\+U\+E}!odf\+::opendocument@{odf\+::opendocument}}
+\subsubsection[{\+\_\+\+X\+M\+L\+P\+R\+O\+L\+O\+G\+U\+E}]{\setlength{\rightskip}{0pt plus 5cm}string odf.\+opendocument.\+\_\+\+X\+M\+L\+P\+R\+O\+L\+O\+G\+U\+E = u\char`\"{}$<$?xml version='1.\+0' encoding='U\+T\+F-\/8'?$>$\textbackslash{}n\char`\"{}}}\label{namespaceodf_1_1opendocument_a2598e2e2f5849be1876f9a585f8359dd}
+
+
+Definition at line 51 of file opendocument.\+py.
+
+\hypertarget{namespaceodf_1_1opendocument_a16a01c597acdbd785c45dc2c8abf6e99}{\index{odf\+::opendocument@{odf\+::opendocument}!I\+S\+\_\+\+F\+I\+L\+E\+N\+A\+M\+E@{I\+S\+\_\+\+F\+I\+L\+E\+N\+A\+M\+E}}
+\index{I\+S\+\_\+\+F\+I\+L\+E\+N\+A\+M\+E@{I\+S\+\_\+\+F\+I\+L\+E\+N\+A\+M\+E}!odf\+::opendocument@{odf\+::opendocument}}
+\subsubsection[{I\+S\+\_\+\+F\+I\+L\+E\+N\+A\+M\+E}]{\setlength{\rightskip}{0pt plus 5cm}int odf.\+opendocument.\+I\+S\+\_\+\+F\+I\+L\+E\+N\+A\+M\+E = 0}}\label{namespaceodf_1_1opendocument_a16a01c597acdbd785c45dc2c8abf6e99}
+
+
+Definition at line 63 of file opendocument.\+py.
+
+\hypertarget{namespaceodf_1_1opendocument_abdff0b1ae362b65dc635c8e3e74e36cf}{\index{odf\+::opendocument@{odf\+::opendocument}!I\+S\+\_\+\+I\+M\+A\+G\+E@{I\+S\+\_\+\+I\+M\+A\+G\+E}}
+\index{I\+S\+\_\+\+I\+M\+A\+G\+E@{I\+S\+\_\+\+I\+M\+A\+G\+E}!odf\+::opendocument@{odf\+::opendocument}}
+\subsubsection[{I\+S\+\_\+\+I\+M\+A\+G\+E}]{\setlength{\rightskip}{0pt plus 5cm}int odf.\+opendocument.\+I\+S\+\_\+\+I\+M\+A\+G\+E = 1}}\label{namespaceodf_1_1opendocument_abdff0b1ae362b65dc635c8e3e74e36cf}
+
+
+Definition at line 64 of file opendocument.\+py.
+
+\hypertarget{namespaceodf_1_1opendocument_a5b88ff682371ff9d1cd3d545484e3bfb}{\index{odf\+::opendocument@{odf\+::opendocument}!odmimetypes@{odmimetypes}}
+\index{odmimetypes@{odmimetypes}!odf\+::opendocument@{odf\+::opendocument}}
+\subsubsection[{odmimetypes}]{\setlength{\rightskip}{0pt plus 5cm}dictionary odf.\+opendocument.\+odmimetypes}}\label{namespaceodf_1_1opendocument_a5b88ff682371ff9d1cd3d545484e3bfb}
+{\bfseries Initial value\+:}
+\begin{DoxyCode}
+1 = \{
+2  \textcolor{stringliteral}{u'application/vnd.oasis.opendocument.text'}:                  \textcolor{stringliteral}{u'.odt'},
+3  \textcolor{stringliteral}{u'application/vnd.oasis.opendocument.text-template'}:         \textcolor{stringliteral}{u'.ott'},
+4  \textcolor{stringliteral}{u'application/vnd.oasis.opendocument.graphics'}:              \textcolor{stringliteral}{u'.odg'},
+5  \textcolor{stringliteral}{u'application/vnd.oasis.opendocument.graphics-template'}:     \textcolor{stringliteral}{u'.otg'},
+6  \textcolor{stringliteral}{u'application/vnd.oasis.opendocument.presentation'}:          \textcolor{stringliteral}{u'.odp'},
+7  \textcolor{stringliteral}{u'application/vnd.oasis.opendocument.presentation-template'}: \textcolor{stringliteral}{u'.otp'},
+8  \textcolor{stringliteral}{u'application/vnd.oasis.opendocument.spreadsheet'}:           \textcolor{stringliteral}{u'.ods'},
+9  \textcolor{stringliteral}{u'application/vnd.oasis.opendocument.spreadsheet-template'}:  \textcolor{stringliteral}{u'.ots'},
+10  \textcolor{stringliteral}{u'application/vnd.oasis.opendocument.chart'}:                 \textcolor{stringliteral}{u'.odc'},
+11  \textcolor{stringliteral}{u'application/vnd.oasis.opendocument.chart-template'}:        \textcolor{stringliteral}{u'.otc'},
+12  \textcolor{stringliteral}{u'application/vnd.oasis.opendocument.image'}:                 \textcolor{stringliteral}{u'.odi'},
+13  \textcolor{stringliteral}{u'application/vnd.oasis.opendocument.image-template'}:        \textcolor{stringliteral}{u'.oti'},
+14  \textcolor{stringliteral}{u'application/vnd.oasis.opendocument.formula'}:               \textcolor{stringliteral}{u'.odf'},
+15  \textcolor{stringliteral}{u'application/vnd.oasis.opendocument.formula-template'}:      \textcolor{stringliteral}{u'.otf'},
+16  \textcolor{stringliteral}{u'application/vnd.oasis.opendocument.text-master'}:           \textcolor{stringliteral}{u'.odm'},
+17  \textcolor{stringliteral}{u'application/vnd.oasis.opendocument.text-web'}:              \textcolor{stringliteral}{u'.oth'},
+18 \}
+\end{DoxyCode}
+
+
+mime-\/types =$>$ file extensions 
+
+
+
+Definition at line 75 of file opendocument.\+py.
+
+\hypertarget{namespaceodf_1_1opendocument_a35331d671c8f271f0722c22d783ad205}{\index{odf\+::opendocument@{odf\+::opendocument}!unicode@{unicode}}
+\index{unicode@{unicode}!odf\+::opendocument@{odf\+::opendocument}}
+\subsubsection[{unicode}]{\setlength{\rightskip}{0pt plus 5cm}odf.\+opendocument.\+unicode = str}}\label{namespaceodf_1_1opendocument_a35331d671c8f271f0722c22d783ad205}
+
+
+Definition at line 47 of file opendocument.\+py.
+
+\hypertarget{namespaceodf_1_1opendocument_a8302c421f86687ff0d9f2aca113fd769}{\index{odf\+::opendocument@{odf\+::opendocument}!U\+N\+I\+X\+P\+E\+R\+M\+S@{U\+N\+I\+X\+P\+E\+R\+M\+S}}
+\index{U\+N\+I\+X\+P\+E\+R\+M\+S@{U\+N\+I\+X\+P\+E\+R\+M\+S}!odf\+::opendocument@{odf\+::opendocument}}
+\subsubsection[{U\+N\+I\+X\+P\+E\+R\+M\+S}]{\setlength{\rightskip}{0pt plus 5cm}int odf.\+opendocument.\+U\+N\+I\+X\+P\+E\+R\+M\+S = 2175008768}}\label{namespaceodf_1_1opendocument_a8302c421f86687ff0d9f2aca113fd769}
+
+
+file permission as an integer value. 
+
+The following syntax would be invalid for Python3\+: U\+N\+I\+X\+P\+E\+R\+M\+S = 0100644 $<$$<$ 16\+L \# -\/rw-\/r--r--
+
+So it has been precomputed\+: 2175008768 is the same value as 0100644 $<$$<$ 16\+L == -\/rw-\/r--r-- 
+
+Definition at line 61 of file opendocument.\+py.
+

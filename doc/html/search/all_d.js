@@ -1,0 +1,27 @@
+var searchData=
+[
+  ['namedexpression',['NamedExpression',['../namespaceodf_1_1table.html#a6b5ae300cf69b37989f225494b8f4813',1,'odf::table']]],
+  ['namedexpressions',['NamedExpressions',['../namespaceodf_1_1table.html#ae7edd61c74bd06edd9c38fef5a5d74fe',1,'odf::table']]],
+  ['namedrange',['NamedRange',['../namespaceodf_1_1table.html#acfa7a4dcd34bde11ecae8d2f17c2f8c1',1,'odf::table']]],
+  ['namespaces',['namespaces',['../classodf_1_1element_1_1Element.html#a6f97b7e2b9e13ea5e18d1856c10167e6',1,'odf::element::Element']]],
+  ['namespaces_2epy',['namespaces.py',['../namespaces_8py.html',1,'']]],
+  ['nextsibling',['nextSibling',['../classodf_1_1element_1_1Node.html#a84fb62eaffb2cad956e5ce71fbe2c108',1,'odf::element::Node']]],
+  ['node',['Node',['../classodf_1_1element_1_1Node.html',1,'odf::element']]],
+  ['nodetype',['nodeType',['../classodf_1_1element_1_1Text.html#ac1eb83101645ca0be4db49cf7bd20df3',1,'odf.element.Text.nodeType()'],['../classodf_1_1element_1_1CDATASection.html#a77185faced1c6e282b1456892a7ac36d',1,'odf.element.CDATASection.nodeType()'],['../classodf_1_1element_1_1Element.html#a0905e184b9692b74b085ebabe37debb5',1,'odf.element.Element.nodeType()']]],
+  ['note',['Note',['../namespaceodf_1_1text.html#aee043b88869ba290f1a3ec47d514a954',1,'odf::text']]],
+  ['notebody',['notebody',['../classodf_1_1odf2xhtml_1_1ODF2XHTML.html#a4107eb14ee53672b15f8cc11e9ac0276',1,'odf.odf2xhtml.ODF2XHTML.notebody()'],['../namespaceodf_1_1text.html#a3c6feb3576c9f983d23ba707d55a4916',1,'odf.text.NoteBody()']]],
+  ['notecitation',['NoteCitation',['../namespaceodf_1_1text.html#a5a8c97b9e0fa5d7364f80b32ea9a65ee',1,'odf::text']]],
+  ['notecontinuationnoticebackward',['NoteContinuationNoticeBackward',['../namespaceodf_1_1text.html#ac6efedcc39568989331cb55a9a0db99f',1,'odf::text']]],
+  ['notecontinuationnoticeforward',['NoteContinuationNoticeForward',['../namespaceodf_1_1text.html#a1b7015298d30a1d91007688b1d28a5d5',1,'odf::text']]],
+  ['notedict',['notedict',['../classodf_1_1odf2xhtml_1_1ODF2XHTML.html#a2c69d8e25a9d351f604594713fd89bd5',1,'odf::odf2xhtml::ODF2XHTML']]],
+  ['noteref',['NoteRef',['../namespaceodf_1_1text.html#ab8633c893130fb0c8491ccd45a2fd838',1,'odf::text']]],
+  ['notes',['Notes',['../namespaceodf_1_1presentation.html#a5c91562888ed717a8b6825e539282da9',1,'odf::presentation']]],
+  ['notesconfiguration',['NotesConfiguration',['../namespaceodf_1_1text.html#ad6d5b8f557cec789f243107cfcf96fa1',1,'odf::text']]],
+  ['nsdict',['nsdict',['../namespaceodf_1_1namespaces.html#ae5c4cfaeef44ee2715cc52f618fc7397',1,'odf::namespaces']]],
+  ['nulldate',['NullDate',['../namespaceodf_1_1table.html#ad66569cc09ef58f51d303600f27f6dd0',1,'odf::table']]],
+  ['number',['Number',['../namespaceodf_1_1form.html#a81e13e985ef81a6d7f2825d18abe20ab',1,'odf.form.Number()'],['../namespaceodf_1_1number.html#a8ef64aa6b0a897ee0126227ceb7b6347',1,'odf.number.Number()'],['../namespaceodf_1_1text.html#a9a821dd23a321a2694daf31951ddd434',1,'odf.text.Number()']]],
+  ['number_2epy',['number.py',['../number_8py.html',1,'']]],
+  ['numberedparagraph',['NumberedParagraph',['../namespaceodf_1_1text.html#a14a04b61a4ca2102a6fa036cee705b22',1,'odf::text']]],
+  ['numberns',['NUMBERNS',['../namespaceodf_1_1namespaces.html#a4555107194c538783a780aebf6137d88',1,'odf::namespaces']]],
+  ['numberstyle',['NumberStyle',['../namespaceodf_1_1number.html#a3de4c489058b4321d042bcc04127dcb6',1,'odf::number']]]
+];

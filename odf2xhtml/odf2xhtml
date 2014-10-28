@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 # Copyright (C) 2007 Søren Roug, European Environment Agency
 #
@@ -20,10 +20,9 @@
 from odf.odf2xhtml import ODF2XHTML
 import sys, getopt
 
-try:
-    from cStringIO import StringIO
-except ImportError:
-    from StringIO import StringIO
+if sys.version_info.major==3: unicode=str
+
+from io import StringIO
 
 def usage():
    sys.stderr.write("Usage: %s [-p] inputfile\n" % sys.argv[0])
@@ -47,10 +46,14 @@ if len(args) != 1:
     sys.exit(2)
 
 odhandler = ODF2XHTML(generatecss, embedable)
-result = odhandler.odf2xhtml(args[0]).encode('us-ascii','xmlcharrefreplace')
 try:
-    result = odhandler.odf2xhtml(args[0]).encode('us-ascii','xmlcharrefreplace')
+   result = odhandler.odf2xhtml(unicode(args[0]))
 except:
-    sys.stderr.write("Unable to open file %s or file is not OpenDocument\n" % sys.argv[1])
+    sys.stderr.write("Unable to open file %s or file is not OpenDocument\n" % args[0])
     sys.exit(1)
 sys.stdout.write(result)
+
+
+# Local Variables: ***
+# mode: python     ***
+# End:             ***

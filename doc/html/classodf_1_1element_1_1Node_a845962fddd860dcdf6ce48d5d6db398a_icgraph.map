@@ -1,0 +1,6 @@
+<map id="odf.element.Node.appendChild" name="odf.element.Node.appendChild">
+<area shape="rect" id="node3" href="$classodf_1_1element_1_1Node.html#a0fb7cc4a9d5e0686aa2d15269f5e9431" title="Inserts the node newChild before the existing child node refChild. " alt="" coords="259,5,453,33"/>
+<area shape="rect" id="node6" href="$classodf_1_1element_1_1Element.html#ae819fd7cab6f9cdd69fe886178bc6d10" title="adds an element to an Element " alt="" coords="251,55,461,83"/>
+<area shape="rect" id="node8" href="$classodf_1_1element_1_1Element.html#ab8d1a84f94329e980729b5a1fe9f5296" title="Adds text to an element Setting check_grammar=False turns off grammar checking. " alt="" coords="263,106,449,134"/>
+<area shape="rect" id="node10" href="$classodf_1_1element_1_1Element.html#a513c231914791f9447648a1fdf1ec038" title="Adds CDATA to an element Setting check_grammar=False turns off grammar checking. " alt="" coords="253,157,459,185"/>
+</map>

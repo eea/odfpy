@@ -1432,16 +1432,17 @@ ol, ul { padding-left: 2em; }
 #-----------------------------------------------------------------------------
 
     def load(self, odffile):
-        """ Loads a document into the parser and parses it.
-            The argument can either be a filename or a document in memory.
         """
+        Loads a document into the parser and parses it.
+        The argument can either be a filename or a document in memory.
+        @param odffile if the type is unicode string: name of a file; else
+        it must be an open file type
+        """
+        assert(type(odffile)==type(u"") or 'rb' in repr(odffile) or 'BufferedReader' in repr(odffile)  or 'BytesIO' in repr(odffile))
+
         self.lines = []
         self._wfunc = self._wlines
-        try:
-            basestring
-        except NameError:
-            basestring = str
-        if isinstance(odffile, basestring):
+        if type(odffile)==type(u""):
             self.document = load(odffile)
         else:
             self.document = odffile
@@ -1461,10 +1462,20 @@ ol, ul { padding-left: 2em; }
 
 
     def odf2xhtml(self, odffile):
-        """ Load a file and return the XHTML
         """
+        Load a file and return the XHTML
+        @param odffile if the type is unicode string: name of a file; else
+        it must be an open file type
+        @return XHTML code as a a unicode string
+        """
+        assert(type(odffile)==type(u"") or 'rb' in repr(odffile) or 'BufferedReader' in repr(odffile)  or 'BytesIO' in repr(odffile))
+
+
         self.load(odffile)
-        return self.xhtml()
+
+        result=self.xhtml()
+        assert(type(result)==type(u""))
+        return result
 
     def _wlines(self,s):
         if s != '': self.lines.append(s)

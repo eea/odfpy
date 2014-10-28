@@ -23,22 +23,12 @@ import zipfile
 import sys
 #from time import gmtime, strftime
 
-try:
-    from email.MIMEMultipart import MIMEMultipart
-except ImportError:
-    from email.mime.multipart import MIMEMultipart
-try:
-    from email.MIMENonMultipart import MIMENonMultipart
-except ImportError:
-    from email.mime.nonmultipart import MIMENonMultipart
-try:
-    from email.MIMEText import MIMEText
-except ImportError:
-    from email.mime.text import MIMEText
-try:
-    from email import Encoders
-except ImportError:
-    from email import encoders
+from email.mime.multipart import MIMEMultipart
+from email.mime.nonmultipart import MIMENonMultipart
+from email.mime.text import MIMEText
+from email import encoders
+
+if sys.version_info.major==3: unicode=str
 
 if len(sys.argv) != 2:
     sys.stderr.write("Usage: %s inputfile\n" % sys.argv[0])
@@ -59,7 +49,7 @@ msg = MIMEMultipart('related',type="text/html")
 msg.preamble = 'This is a multi-part message in MIME format.'
 msg.epilogue = ''
 odhandler = ODF2XHTML()
-result = odhandler.odf2xhtml(sys.argv[1]).encode('us-ascii','xmlcharrefreplace')
+result = odhandler.odf2xhtml(unicode(sys.argv[1]))
 htmlpart = MIMEText(result,'html','us-ascii')
 htmlpart['Content-Location'] = 'index.html'
 msg.attach(htmlpart)
@@ -71,7 +61,12 @@ for file in z.namelist():
         img = MIMENonMultipart(main,sub)
         img.set_payload(z.read(file))
         img['Content-Location'] = "" + file
-        Encoders.encode_base64(img)
+        encoders.encode_base64(img)
         msg.attach(img)
 z.close()
 print (msg.as_string())
+
+
+# Local Variables: ***
+# mode: python     ***
+# End:             ***

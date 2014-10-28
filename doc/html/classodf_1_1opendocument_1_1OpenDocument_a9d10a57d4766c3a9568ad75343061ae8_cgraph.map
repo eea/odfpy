@@ -1,0 +1,5 @@
+<map id="odf.opendocument.OpenDocument.contentxml" name="odf.opendocument.OpenDocument.contentxml">
+<area shape="rect" id="node3" href="$namespaceodf_1_1office.html#a55094c9d071beb272023c7bddff88a03" title="odf.office.DocumentContent" alt="" coords="364,5,543,33"/>
+<area shape="rect" id="node5" href="$namespaceodf_1_1office.html#abcd765298646e8cd782dbca186afe6b5" title="odf.office.AutomaticStyles" alt="" coords="368,55,539,83"/>
+<area shape="rect" id="node7" href="$classodf_1_1opendocument_1_1OpenDocument.html#aa274419863b2e8815dba6fa65a84ce20" title="Loop through the masterstyles elements, and find the automatic styles that are used. " alt="" coords="341,106,565,150"/>
+</map>

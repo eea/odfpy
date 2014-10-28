@@ -1,0 +1,27 @@
+var searchData=
+[
+  ['radialgradient',['Radialgradient',['../namespaceodf_1_1svg.html#a207eb01363b7981e890942fbd716d237',1,'odf::svg']]],
+  ['radio',['Radio',['../namespaceodf_1_1form.html#a415e1bfd0b285e10f100126172f883bf',1,'odf::form']]],
+  ['rebuild_5fcaches',['rebuild_caches',['../classodf_1_1opendocument_1_1OpenDocument.html#a764f9c380d99c1b23d0e260f4aea1093',1,'odf::opendocument::OpenDocument']]],
+  ['rect',['Rect',['../namespaceodf_1_1draw.html#aa4fd010d615a735e14c4240ec0a33e9e',1,'odf::draw']]],
+  ['referencemark',['ReferenceMark',['../namespaceodf_1_1text.html#a77d62eead71b01e6e732b29c038cfc39',1,'odf::text']]],
+  ['referencemarkend',['ReferenceMarkEnd',['../namespaceodf_1_1text.html#a8644c879898a41a8ba029a84af0fadf2',1,'odf::text']]],
+  ['referencemarkstart',['ReferenceMarkStart',['../namespaceodf_1_1text.html#a87f8b9497724adb94ee80f979c371b77',1,'odf::text']]],
+  ['referenceref',['ReferenceRef',['../namespaceodf_1_1text.html#a341d7e12d9e38ed19afb758f6defb28b',1,'odf::text']]],
+  ['regioncenter',['RegionCenter',['../namespaceodf_1_1style.html#a26917541bab7c1c5defc2adedd22953b',1,'odf::style']]],
+  ['regionleft',['RegionLeft',['../namespaceodf_1_1style.html#ad0b82e704577cbd5ee04ec6176a9ed02',1,'odf::style']]],
+  ['regionright',['RegionRight',['../namespaceodf_1_1style.html#a4511768243558fef5b12a73d419e920c',1,'odf::style']]],
+  ['regressioncurve',['RegressionCurve',['../namespaceodf_1_1chart.html#a4317ee1ece08c161d7eb0b0374a5bcaf',1,'odf::chart']]],
+  ['regularpolygon',['RegularPolygon',['../namespaceodf_1_1draw.html#a2a7e04c9f2f98f894903b0b0109f4977',1,'odf::draw']]],
+  ['removeattribute',['removeAttribute',['../classodf_1_1element_1_1Element.html#ad42001ec63013f0c4e834c5a42409721',1,'odf::element::Element']]],
+  ['removeattrns',['removeAttrNS',['../classodf_1_1element_1_1Element.html#a32e1e56f26c61b4f65cdf6a7fdbc0a63',1,'odf::element::Element']]],
+  ['removechild',['removeChild',['../classodf_1_1element_1_1Node.html#a9c175787513efaca98d15948c75d565e',1,'odf.element.Node.removeChild()'],['../classodf_1_1element_1_1Childless.html#a2402048d2c1f8111d760251879db5dc4',1,'odf.element.Childless.removeChild()']]],
+  ['replacechild',['replaceChild',['../classodf_1_1element_1_1Childless.html#abbe6bb396f159cf279b90d20dafc93c6',1,'odf::element::Childless']]],
+  ['rewritelink',['rewritelink',['../classodf_1_1odf2xhtml_1_1ODF2XHTML.html#a4b3b1cb31b1314eb5f311f9743f7402e',1,'odf::odf2xhtml::ODF2XHTML']]],
+  ['rfindattr',['rfindattr',['../classodf_1_1odf2xhtml_1_1TagStack.html#a3ea03cd9a6ce9dc7a1624ae7ada9e4cf',1,'odf::odf2xhtml::TagStack']]],
+  ['rotate',['Rotate',['../namespaceodf_1_1dr3d.html#a4f9c7c75c9b3185c3528e10166ed9b2b',1,'odf::dr3d']]],
+  ['ruby',['Ruby',['../namespaceodf_1_1text.html#a6c440a41be64b2d1e21ee8d79589988d',1,'odf::text']]],
+  ['rubybase',['RubyBase',['../namespaceodf_1_1text.html#a7b7d39eab3673e0f9fd8c50e7fc24578',1,'odf::text']]],
+  ['rubyproperties',['RubyProperties',['../namespaceodf_1_1style.html#afd33c4113b8f64734f09d3d5920a235a',1,'odf::style']]],
+  ['rubytext',['RubyText',['../namespaceodf_1_1text.html#afe73cde3762dc8f76f42208a754d0a30',1,'odf::text']]]
+];

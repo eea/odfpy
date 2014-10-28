@@ -1,0 +1,22 @@
+var searchData=
+[
+  ['g',['G',['../namespaceodf_1_1draw.html#ad2abf6ab0b81e09da0eb0c06c2306f7c',1,'odf::draw']]],
+  ['generate_5ffootnotes',['generate_footnotes',['../classodf_1_1odf2xhtml_1_1ODF2XHTML.html#a6f209dc272b2df70f9556178c8d8db97',1,'odf::odf2xhtml::ODF2XHTML']]],
+  ['generate_5fstylesheet',['generate_stylesheet',['../classodf_1_1odf2xhtml_1_1ODF2XHTML.html#a4a1ec5042410a956f416d2843a220b3a',1,'odf::odf2xhtml::ODF2XHTML']]],
+  ['generator',['Generator',['../namespaceodf_1_1meta.html#af358679847dc4f8640f812b78207eac5',1,'odf::meta']]],
+  ['genericcontrol',['GenericControl',['../namespaceodf_1_1form.html#afec8e57920eb45eca1b989d22ebb2f1c',1,'odf::form']]],
+  ['get',['get',['../classodf_1_1userfield_1_1UserFields.html#a916cc9d873f57f30b69e752bb48d5bff',1,'odf::userfield::UserFields']]],
+  ['get_5fanchor',['get_anchor',['../classodf_1_1odf2xhtml_1_1ODF2XHTML.html#a463de3b9a7575f414be75a0c570f1620',1,'odf::odf2xhtml::ODF2XHTML']]],
+  ['get_5fknownns',['get_knownns',['../classodf_1_1element_1_1Element.html#a31ad0b6559d84f55ab508fef095bb2ed',1,'odf::element::Element']]],
+  ['get_5fnsprefix',['get_nsprefix',['../classodf_1_1element_1_1Element.html#af1c38c8bca58c0258075cb7a701e8858',1,'odf::element::Element']]],
+  ['get_5ftype_5fand_5fvalue',['get_type_and_value',['../classodf_1_1userfield_1_1UserFields.html#a532884dffd16a0a946aa961ea442d3ca',1,'odf::userfield::UserFields']]],
+  ['getattribute',['getAttribute',['../classodf_1_1element_1_1Element.html#abc4db1dc9e2f6712bc4fc2fa358cf8dc',1,'odf::element::Element']]],
+  ['getattrns',['getAttrNS',['../classodf_1_1element_1_1Element.html#a6c6bad8ddb25a3eb53946943461f5d12',1,'odf::element::Element']]],
+  ['getelementsbytype',['getElementsByType',['../classodf_1_1element_1_1Element.html#a3228c7117ad9f00bc48a221895bf664a',1,'odf.element.Element.getElementsByType()'],['../classodf_1_1opendocument_1_1OpenDocument.html#a2b84e16f84a05005ae4a9840bf8c91b1',1,'odf.opendocument.OpenDocument.getElementsByType()']]],
+  ['getmediatype',['getMediaType',['../classodf_1_1opendocument_1_1OpenDocument.html#ae1d827d4f3b6fa8bb24008b94fc728d6',1,'odf::opendocument::OpenDocument']]],
+  ['getstylebyname',['getStyleByName',['../classodf_1_1opendocument_1_1OpenDocument.html#ac499f824523aa0bfec3dd6f5f6ae302f',1,'odf::opendocument::OpenDocument']]],
+  ['gluepoint',['GluePoint',['../namespaceodf_1_1draw.html#a999d7da1ea0a91f20d4128e2ac523932',1,'odf::draw']]],
+  ['gradient',['Gradient',['../namespaceodf_1_1draw.html#ac59308ebd82c72f4dc098358f6dcee3d',1,'odf::draw']]],
+  ['graphicproperties',['GraphicProperties',['../namespaceodf_1_1style.html#a2da980beff962eab0c04ffdef5bb7f0f',1,'odf::style']]],
+  ['grid',['Grid',['../namespaceodf_1_1chart.html#a869f1e52109d7d02fdb2e6afa0486bc4',1,'odf.chart.Grid()'],['../namespaceodf_1_1form.html#a4e5cb7e44914b108e06fb9c77b0b2b52',1,'odf.form.Grid()']]]
+];

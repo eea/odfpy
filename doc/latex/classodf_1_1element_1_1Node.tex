@@ -1,0 +1,213 @@
+\hypertarget{classodf_1_1element_1_1Node}{\section{odf.\+element.\+Node Class Reference}
+\label{classodf_1_1element_1_1Node}\index{odf.\+element.\+Node@{odf.\+element.\+Node}}
+}
+
+
+super class for more specific nodes  
+
+
+
+
+Inheritance diagram for odf.\+element.\+Node\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=313pt]{classodf_1_1element_1_1Node__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for odf.\+element.\+Node\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=172pt]{classodf_1_1element_1_1Node__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \hyperlink{classodf_1_1element_1_1Node_a63cfdbf12489f500484956a118096260}{has\+Child\+Nodes}
+\begin{DoxyCompactList}\small\item\em Tells whether this element has any children; text nodes, subelements, whatever. \end{DoxyCompactList}\item 
+def \hyperlink{classodf_1_1element_1_1Node_a0fb7cc4a9d5e0686aa2d15269f5e9431}{insert\+Before}
+\begin{DoxyCompactList}\small\item\em Inserts the node new\+Child before the existing child node ref\+Child. \end{DoxyCompactList}\item 
+def \hyperlink{classodf_1_1element_1_1Node_a845962fddd860dcdf6ce48d5d6db398a}{append\+Child}
+\begin{DoxyCompactList}\small\item\em Adds the node new\+Child to the end of the list of children of this node. \end{DoxyCompactList}\item 
+def \hyperlink{classodf_1_1element_1_1Node_a9c175787513efaca98d15948c75d565e}{remove\+Child}
+\begin{DoxyCompactList}\small\item\em Removes the child node indicated by old\+Child from the list of children, and returns it. \end{DoxyCompactList}\item 
+def \hyperlink{classodf_1_1element_1_1Node_ab5187facfbbe9ec043d4263d53ea26fc}{\+\_\+\+\_\+str\+\_\+\+\_\+}
+\item 
+def \hyperlink{classodf_1_1element_1_1Node_ad858fce2149350fa73195586a9a7d3ed}{\+\_\+\+\_\+unicode\+\_\+\+\_\+}
+\end{DoxyCompactItemize}
+\subsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classodf_1_1element_1_1Node_a9c0ce94d5fda3d35c448e01e7180324b}{parent\+Node} = None
+\item 
+\hyperlink{classodf_1_1element_1_1Node_a84fb62eaffb2cad956e5ce71fbe2c108}{next\+Sibling} = None
+\item 
+\hyperlink{classodf_1_1element_1_1Node_aa1ab10b7b12207015a51a3925bd2dd4d}{previous\+Sibling} = None
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+super class for more specific nodes 
+
+Definition at line 101 of file element.\+py.
+
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classodf_1_1element_1_1Node_ab5187facfbbe9ec043d4263d53ea26fc}{\index{odf\+::element\+::\+Node@{odf\+::element\+::\+Node}!\+\_\+\+\_\+str\+\_\+\+\_\+@{\+\_\+\+\_\+str\+\_\+\+\_\+}}
+\index{\+\_\+\+\_\+str\+\_\+\+\_\+@{\+\_\+\+\_\+str\+\_\+\+\_\+}!odf\+::element\+::\+Node@{odf\+::element\+::\+Node}}
+\subsubsection[{\+\_\+\+\_\+str\+\_\+\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+element.\+Node.\+\_\+\+\_\+str\+\_\+\+\_\+ (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}}\label{classodf_1_1element_1_1Node_ab5187facfbbe9ec043d4263d53ea26fc}
+
+
+Definition at line 192 of file element.\+py.
+
+\hypertarget{classodf_1_1element_1_1Node_ad858fce2149350fa73195586a9a7d3ed}{\index{odf\+::element\+::\+Node@{odf\+::element\+::\+Node}!\+\_\+\+\_\+unicode\+\_\+\+\_\+@{\+\_\+\+\_\+unicode\+\_\+\+\_\+}}
+\index{\+\_\+\+\_\+unicode\+\_\+\+\_\+@{\+\_\+\+\_\+unicode\+\_\+\+\_\+}!odf\+::element\+::\+Node@{odf\+::element\+::\+Node}}
+\subsubsection[{\+\_\+\+\_\+unicode\+\_\+\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+element.\+Node.\+\_\+\+\_\+unicode\+\_\+\+\_\+ (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}}\label{classodf_1_1element_1_1Node_ad858fce2149350fa73195586a9a7d3ed}
+
+
+Definition at line 198 of file element.\+py.
+
+\hypertarget{classodf_1_1element_1_1Node_a845962fddd860dcdf6ce48d5d6db398a}{\index{odf\+::element\+::\+Node@{odf\+::element\+::\+Node}!append\+Child@{append\+Child}}
+\index{append\+Child@{append\+Child}!odf\+::element\+::\+Node@{odf\+::element\+::\+Node}}
+\subsubsection[{append\+Child}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+element.\+Node.\+append\+Child (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{new\+Child}
+\end{DoxyParamCaption}
+)}}\label{classodf_1_1element_1_1Node_a845962fddd860dcdf6ce48d5d6db398a}
+
+
+Adds the node new\+Child to the end of the list of children of this node. 
+
+If the new\+Child is already in the tree, it is first removed. 
+
+Definition at line 159 of file element.\+py.
+
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=228pt]{classodf_1_1element_1_1Node_a845962fddd860dcdf6ce48d5d6db398a_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classodf_1_1element_1_1Node_a845962fddd860dcdf6ce48d5d6db398a_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{classodf_1_1element_1_1Node_a63cfdbf12489f500484956a118096260}{\index{odf\+::element\+::\+Node@{odf\+::element\+::\+Node}!has\+Child\+Nodes@{has\+Child\+Nodes}}
+\index{has\+Child\+Nodes@{has\+Child\+Nodes}!odf\+::element\+::\+Node@{odf\+::element\+::\+Node}}
+\subsubsection[{has\+Child\+Nodes}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+element.\+Node.\+has\+Child\+Nodes (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}}\label{classodf_1_1element_1_1Node_a63cfdbf12489f500484956a118096260}
+
+
+Tells whether this element has any children; text nodes, subelements, whatever. 
+
+
+
+Definition at line 110 of file element.\+py.
+
+\hypertarget{classodf_1_1element_1_1Node_a0fb7cc4a9d5e0686aa2d15269f5e9431}{\index{odf\+::element\+::\+Node@{odf\+::element\+::\+Node}!insert\+Before@{insert\+Before}}
+\index{insert\+Before@{insert\+Before}!odf\+::element\+::\+Node@{odf\+::element\+::\+Node}}
+\subsubsection[{insert\+Before}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+element.\+Node.\+insert\+Before (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{new\+Child, }
+\item[{}]{ref\+Child}
+\end{DoxyParamCaption}
+)}}\label{classodf_1_1element_1_1Node_a0fb7cc4a9d5e0686aa2d15269f5e9431}
+
+
+Inserts the node new\+Child before the existing child node ref\+Child. 
+
+If ref\+Child is null, insert new\+Child at the end of the list of children. 
+
+Definition at line 131 of file element.\+py.
+
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classodf_1_1element_1_1Node_a0fb7cc4a9d5e0686aa2d15269f5e9431_cgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{classodf_1_1element_1_1Node_a9c175787513efaca98d15948c75d565e}{\index{odf\+::element\+::\+Node@{odf\+::element\+::\+Node}!remove\+Child@{remove\+Child}}
+\index{remove\+Child@{remove\+Child}!odf\+::element\+::\+Node@{odf\+::element\+::\+Node}}
+\subsubsection[{remove\+Child}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+element.\+Node.\+remove\+Child (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{old\+Child}
+\end{DoxyParamCaption}
+)}}\label{classodf_1_1element_1_1Node_a9c175787513efaca98d15948c75d565e}
+
+
+Removes the child node indicated by old\+Child from the list of children, and returns it. 
+
+
+
+Definition at line 176 of file element.\+py.
+
+
+
+\subsection{Member Data Documentation}
+\hypertarget{classodf_1_1element_1_1Node_a84fb62eaffb2cad956e5ce71fbe2c108}{\index{odf\+::element\+::\+Node@{odf\+::element\+::\+Node}!next\+Sibling@{next\+Sibling}}
+\index{next\+Sibling@{next\+Sibling}!odf\+::element\+::\+Node@{odf\+::element\+::\+Node}}
+\subsubsection[{next\+Sibling}]{\setlength{\rightskip}{0pt plus 5cm}odf.\+element.\+Node.\+next\+Sibling = None\hspace{0.3cm}{\ttfamily [static]}}}\label{classodf_1_1element_1_1Node_a84fb62eaffb2cad956e5ce71fbe2c108}
+
+
+Definition at line 103 of file element.\+py.
+
+\hypertarget{classodf_1_1element_1_1Node_a9c0ce94d5fda3d35c448e01e7180324b}{\index{odf\+::element\+::\+Node@{odf\+::element\+::\+Node}!parent\+Node@{parent\+Node}}
+\index{parent\+Node@{parent\+Node}!odf\+::element\+::\+Node@{odf\+::element\+::\+Node}}
+\subsubsection[{parent\+Node}]{\setlength{\rightskip}{0pt plus 5cm}odf.\+element.\+Node.\+parent\+Node = None\hspace{0.3cm}{\ttfamily [static]}}}\label{classodf_1_1element_1_1Node_a9c0ce94d5fda3d35c448e01e7180324b}
+
+
+Definition at line 102 of file element.\+py.
+
+\hypertarget{classodf_1_1element_1_1Node_aa1ab10b7b12207015a51a3925bd2dd4d}{\index{odf\+::element\+::\+Node@{odf\+::element\+::\+Node}!previous\+Sibling@{previous\+Sibling}}
+\index{previous\+Sibling@{previous\+Sibling}!odf\+::element\+::\+Node@{odf\+::element\+::\+Node}}
+\subsubsection[{previous\+Sibling}]{\setlength{\rightskip}{0pt plus 5cm}odf.\+element.\+Node.\+previous\+Sibling = None\hspace{0.3cm}{\ttfamily [static]}}}\label{classodf_1_1element_1_1Node_aa1ab10b7b12207015a51a3925bd2dd4d}
+
+
+Definition at line 104 of file element.\+py.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+odf/\hyperlink{element_8py}{element.\+py}\end{DoxyCompactItemize}

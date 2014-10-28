@@ -1,0 +1,7 @@
+<map id="odf.odf2moinmoin.ODF2MoinMoin.load" name="odf.odf2moinmoin.ODF2MoinMoin.load">
+<area shape="rect" id="node3" href="$classodf_1_1odf2moinmoin_1_1ODF2MoinMoin.html#a3d7cf4306b6fbfa8fc2ea92d012d271a" title="Extracts necessary font information from a font&#45;declaration element. " alt="" coords="243,5,440,49"/>
+<area shape="rect" id="node5" href="$classodf_1_1odf2moinmoin_1_1ODF2MoinMoin.html#a2eec52acd99c4c06eb85578e13d58e73" title="Runs through &quot;style&quot; elements extracting necessary information. " alt="" coords="247,71,436,115"/>
+<area shape="rect" id="node12" href="$classodf_1_1odf2moinmoin_1_1ODF2MoinMoin.html#ac8cc4d4f8722e7d071a98040623c3baa" title="odf.odf2moinmoin.ODF2Moin\lMoin.processListStyles" alt="" coords="247,138,436,182"/>
+<area shape="rect" id="node7" href="$classodf_1_1odf2moinmoin_1_1ODF2MoinMoin.html#a685a84d1f5ce34195dd54787cac3e4b5" title="Extracts text properties from a style element. " alt="" coords="747,71,936,115"/>
+<area shape="rect" id="node9" href="$classodf_1_1odf2moinmoin_1_1ODF2MoinMoin.html#ac5d37970518c2754d690e848f9266694" title="Extracts paragraph properties from a style element. " alt="" coords="488,101,699,145"/>
+</map>

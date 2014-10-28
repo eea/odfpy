@@ -57,7 +57,7 @@ class TestMasterStyles(unittest.TestCase):
         titlestyle.addElement(style.GraphicProperties(fillcolor="#ffff99"))
         presdoc.styles.addElement(titlestyle)
 
-        s = presdoc.stylesxml().decode("utf-8")
+        s = presdoc.stylesxml()
         self.assertContains(s, '<style:page-layout style:name="MyLayout"><style:page-layout-properties ')
         e = ElementParser(s,'style:page-layout-properties')
         self.assertEqual(e.element,'style:page-layout-properties')
@@ -92,7 +92,7 @@ class TestMasterStyles(unittest.TestCase):
         h.addElement(hp)
         mp.addElement(h)
         s = textdoc.stylesxml()
-        self.assertContains(s, b'<office:automatic-styles><style:page-layout style:name="pagelayout"/></office:automatic-styles>')
+        self.assertContains(s, u'<office:automatic-styles><style:page-layout style:name="pagelayout"/></office:automatic-styles>')
 
     def testAutomaticStyles(self):
         """ Create a text document with a page layout called "pagelayout"
@@ -128,11 +128,11 @@ class TestMasterStyles(unittest.TestCase):
 
         # Check styles.xml
         s = textdoc.stylesxml()
-        self.assertContains(s, b'<style:page-layout style:name="pagelayout"/>')
-        self.assertContains(s, b'style:name="HeaderPara"')
-        self.assertNotContains(s, b'style:name="Para" ')
+        self.assertContains(s, u'<style:page-layout style:name="pagelayout"/>')
+        self.assertContains(s, u'style:name="HeaderPara"')
+        self.assertNotContains(s, u'style:name="Para" ')
         # Check content.xml
-        s = textdoc.contentxml()
+        s = textdoc.contentxml() # contentxml is supposed to yed a byts
         self.assertNotContains(s, b'<style:page-layout style:name="pagelayout"/>')
         self.assertContains(s, b'style:name="Para"')
 

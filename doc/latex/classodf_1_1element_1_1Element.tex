@@ -1,0 +1,675 @@
+\hypertarget{classodf_1_1element_1_1Element}{\section{odf.\+element.\+Element Class Reference}
+\label{classodf_1_1element_1_1Element}\index{odf.\+element.\+Element@{odf.\+element.\+Element}}
+}
+
+
+Creates a arbitrary element and is intended to be subclassed not used on its own.  
+
+
+
+
+Inheritance diagram for odf.\+element.\+Element\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=184pt]{classodf_1_1element_1_1Element__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for odf.\+element.\+Element\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=266pt]{classodf_1_1element_1_1Element__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \hyperlink{classodf_1_1element_1_1Element_aebb50570215d430236d8cfdaa41331d9}{\+\_\+\+\_\+init\+\_\+\+\_\+}
+\item 
+def \hyperlink{classodf_1_1element_1_1Element_a31ad0b6559d84f55ab508fef095bb2ed}{get\+\_\+knownns}
+\begin{DoxyCompactList}\small\item\em Odfpy maintains a list of known namespaces. \end{DoxyCompactList}\item 
+def \hyperlink{classodf_1_1element_1_1Element_af1c38c8bca58c0258075cb7a701e8858}{get\+\_\+nsprefix}
+\begin{DoxyCompactList}\small\item\em Odfpy maintains a list of known namespaces. \end{DoxyCompactList}\item 
+def \hyperlink{classodf_1_1element_1_1Element_aab7cbbc18e5d24d10b0128b6b45e6824}{allowed\+\_\+attributes}
+\item 
+def \hyperlink{classodf_1_1element_1_1Element_ae819fd7cab6f9cdd69fe886178bc6d10}{add\+Element}
+\begin{DoxyCompactList}\small\item\em adds an element to an \hyperlink{classodf_1_1element_1_1Element}{Element} \end{DoxyCompactList}\item 
+def \hyperlink{classodf_1_1element_1_1Element_ab8d1a84f94329e980729b5a1fe9f5296}{add\+Text}
+\begin{DoxyCompactList}\small\item\em Adds text to an element Setting check\+\_\+grammar=False turns off grammar checking. \end{DoxyCompactList}\item 
+def \hyperlink{classodf_1_1element_1_1Element_a513c231914791f9447648a1fdf1ec038}{add\+C\+D\+A\+T\+A}
+\begin{DoxyCompactList}\small\item\em Adds C\+D\+A\+T\+A to an element Setting check\+\_\+grammar=False turns off grammar checking. \end{DoxyCompactList}\item 
+def \hyperlink{classodf_1_1element_1_1Element_ad42001ec63013f0c4e834c5a42409721}{remove\+Attribute}
+\begin{DoxyCompactList}\small\item\em Removes an attribute by name. \end{DoxyCompactList}\item 
+def \hyperlink{classodf_1_1element_1_1Element_acdbef59f5caf5bbb1afcc46d4c01baf9}{set\+Attribute}
+\begin{DoxyCompactList}\small\item\em Add an attribute to the element This is sort of a convenience method. \end{DoxyCompactList}\item 
+def \hyperlink{classodf_1_1element_1_1Element_a9263c523586b6e43cb44265281a54423}{set\+Attr\+N\+S}
+\begin{DoxyCompactList}\small\item\em Add an attribute to the element In case you need to add an attribute the library doesn't know about then you must provide the full qualified name It will not check that the attribute is legal according to the schema. \end{DoxyCompactList}\item 
+def \hyperlink{classodf_1_1element_1_1Element_a6c6bad8ddb25a3eb53946943461f5d12}{get\+Attr\+N\+S}
+\begin{DoxyCompactList}\small\item\em gets an attribute, given a namespace and a key \end{DoxyCompactList}\item 
+def \hyperlink{classodf_1_1element_1_1Element_a32e1e56f26c61b4f65cdf6a7fdbc0a63}{remove\+Attr\+N\+S}
+\item 
+def \hyperlink{classodf_1_1element_1_1Element_abc4db1dc9e2f6712bc4fc2fa358cf8dc}{get\+Attribute}
+\begin{DoxyCompactList}\small\item\em Get an attribute value. \end{DoxyCompactList}\item 
+def \hyperlink{classodf_1_1element_1_1Element_a51ddef230911fa83d62d6f3a0b08c592}{write\+\_\+open\+\_\+tag}
+\item 
+def \hyperlink{classodf_1_1element_1_1Element_a5e2c55304d35824924e035c50f505e08}{write\+\_\+close\+\_\+tag}
+\item 
+def \hyperlink{classodf_1_1element_1_1Element_aa278538d7c0568e820f11dcfeccc3975}{to\+Xml}
+\begin{DoxyCompactList}\small\item\em Generate an X\+M\+L stream out of the tree structure. \end{DoxyCompactList}\item 
+def \hyperlink{classodf_1_1element_1_1Element_a3228c7117ad9f00bc48a221895bf664a}{get\+Elements\+By\+Type}
+\begin{DoxyCompactList}\small\item\em Gets elements based on the type, which is function from \hyperlink{text_8py}{text.\+py}, \hyperlink{draw_8py}{draw.\+py} etc. \end{DoxyCompactList}\item 
+def \hyperlink{classodf_1_1element_1_1Element_ae817aee0e4ddb0ff4b5ec2e4413bc754}{is\+Instance\+Of}
+\begin{DoxyCompactList}\small\item\em This is a check to see if the object is an instance of a type. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classodf_1_1element_1_1Element_af094fd4f65c213f17b319c152f8be830}{qname}
+\item 
+\hyperlink{classodf_1_1element_1_1Element_a3f5adc77e6ef8392e488e913de580b92}{owner\+Document}
+\item 
+\hyperlink{classodf_1_1element_1_1Element_a7b1caf94c20e484ead54b595dcce9064}{child\+Nodes}
+\item 
+\hyperlink{classodf_1_1element_1_1Element_a5f26e2e0cc6496fec1adc0f75d60a56c}{allowed\+\_\+children}
+\item 
+\hyperlink{classodf_1_1element_1_1Element_a95626c50cd66e61210673e949b86198f}{tag\+Name}
+\item 
+\hyperlink{classodf_1_1element_1_1Element_a075965834885860b3800d7a934d678c5}{attributes}
+\end{DoxyCompactItemize}
+\subsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classodf_1_1element_1_1Element_a0905e184b9692b74b085ebabe37debb5}{node\+Type} = Node.\+E\+L\+E\+M\+E\+N\+T\+\_\+\+N\+O\+D\+E
+\item 
+dictionary \hyperlink{classodf_1_1element_1_1Element_a6f97b7e2b9e13ea5e18d1856c10167e6}{namespaces} = \{\}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Creates a arbitrary element and is intended to be subclassed not used on its own. 
+
+This element is the base of every element it defines a class which resembles a xml-\/element. The main advantage of this kind of implementation is that you don't have to create a to\+X\+M\+L method for every different object. Every element consists of an attribute, optional subelements, optional text and optional cdata. 
+
+Definition at line 299 of file element.\+py.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classodf_1_1element_1_1Element_aebb50570215d430236d8cfdaa41331d9}{\index{odf\+::element\+::\+Element@{odf\+::element\+::\+Element}!\+\_\+\+\_\+init\+\_\+\+\_\+@{\+\_\+\+\_\+init\+\_\+\+\_\+}}
+\index{\+\_\+\+\_\+init\+\_\+\+\_\+@{\+\_\+\+\_\+init\+\_\+\+\_\+}!odf\+::element\+::\+Element@{odf\+::element\+::\+Element}}
+\subsubsection[{\+\_\+\+\_\+init\+\_\+\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+element.\+Element.\+\_\+\+\_\+init\+\_\+\+\_\+ (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{attributes = {\ttfamily None}, }
+\item[{}]{text = {\ttfamily None}, }
+\item[{}]{cdata = {\ttfamily None}, }
+\item[{}]{qname = {\ttfamily None}, }
+\item[{}]{qattributes = {\ttfamily None}, }
+\item[{}]{check\+\_\+grammar = {\ttfamily True}, }
+\item[{}]{args}
+\end{DoxyParamCaption}
+)}}\label{classodf_1_1element_1_1Element_aebb50570215d430236d8cfdaa41331d9}
+
+
+Definition at line 311 of file element.\+py.
+
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classodf_1_1element_1_1Element_a513c231914791f9447648a1fdf1ec038}{\index{odf\+::element\+::\+Element@{odf\+::element\+::\+Element}!add\+C\+D\+A\+T\+A@{add\+C\+D\+A\+T\+A}}
+\index{add\+C\+D\+A\+T\+A@{add\+C\+D\+A\+T\+A}!odf\+::element\+::\+Element@{odf\+::element\+::\+Element}}
+\subsubsection[{add\+C\+D\+A\+T\+A}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+element.\+Element.\+add\+C\+D\+A\+T\+A (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{cdata, }
+\item[{}]{check\+\_\+grammar = {\ttfamily True}}
+\end{DoxyParamCaption}
+)}}\label{classodf_1_1element_1_1Element_a513c231914791f9447648a1fdf1ec038}
+
+
+Adds C\+D\+A\+T\+A to an element Setting check\+\_\+grammar=False turns off grammar checking. 
+
+
+
+Definition at line 411 of file element.\+py.
+
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classodf_1_1element_1_1Element_a513c231914791f9447648a1fdf1ec038_cgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{classodf_1_1element_1_1Element_ae819fd7cab6f9cdd69fe886178bc6d10}{\index{odf\+::element\+::\+Element@{odf\+::element\+::\+Element}!add\+Element@{add\+Element}}
+\index{add\+Element@{add\+Element}!odf\+::element\+::\+Element@{odf\+::element\+::\+Element}}
+\subsubsection[{add\+Element}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+element.\+Element.\+add\+Element (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{element, }
+\item[{}]{check\+\_\+grammar = {\ttfamily True}}
+\end{DoxyParamCaption}
+)}}\label{classodf_1_1element_1_1Element_ae819fd7cab6f9cdd69fe886178bc6d10}
+
+
+adds an element to an \hyperlink{classodf_1_1element_1_1Element}{Element} 
+
+Element.\+add\+Element(\+Element) 
+
+Definition at line 387 of file element.\+py.
+
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classodf_1_1element_1_1Element_ae819fd7cab6f9cdd69fe886178bc6d10_cgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{classodf_1_1element_1_1Element_ab8d1a84f94329e980729b5a1fe9f5296}{\index{odf\+::element\+::\+Element@{odf\+::element\+::\+Element}!add\+Text@{add\+Text}}
+\index{add\+Text@{add\+Text}!odf\+::element\+::\+Element@{odf\+::element\+::\+Element}}
+\subsubsection[{add\+Text}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+element.\+Element.\+add\+Text (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{text, }
+\item[{}]{check\+\_\+grammar = {\ttfamily True}}
+\end{DoxyParamCaption}
+)}}\label{classodf_1_1element_1_1Element_ab8d1a84f94329e980729b5a1fe9f5296}
+
+
+Adds text to an element Setting check\+\_\+grammar=False turns off grammar checking. 
+
+
+
+Definition at line 400 of file element.\+py.
+
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classodf_1_1element_1_1Element_ab8d1a84f94329e980729b5a1fe9f5296_cgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{classodf_1_1element_1_1Element_aab7cbbc18e5d24d10b0128b6b45e6824}{\index{odf\+::element\+::\+Element@{odf\+::element\+::\+Element}!allowed\+\_\+attributes@{allowed\+\_\+attributes}}
+\index{allowed\+\_\+attributes@{allowed\+\_\+attributes}!odf\+::element\+::\+Element@{odf\+::element\+::\+Element}}
+\subsubsection[{allowed\+\_\+attributes}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+element.\+Element.\+allowed\+\_\+attributes (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}}\label{classodf_1_1element_1_1Element_aab7cbbc18e5d24d10b0128b6b45e6824}
+
+
+Definition at line 374 of file element.\+py.
+
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classodf_1_1element_1_1Element_aab7cbbc18e5d24d10b0128b6b45e6824_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classodf_1_1element_1_1Element_aab7cbbc18e5d24d10b0128b6b45e6824_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{classodf_1_1element_1_1Element_a31ad0b6559d84f55ab508fef095bb2ed}{\index{odf\+::element\+::\+Element@{odf\+::element\+::\+Element}!get\+\_\+knownns@{get\+\_\+knownns}}
+\index{get\+\_\+knownns@{get\+\_\+knownns}!odf\+::element\+::\+Element@{odf\+::element\+::\+Element}}
+\subsubsection[{get\+\_\+knownns}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+element.\+Element.\+get\+\_\+knownns (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{prefix}
+\end{DoxyParamCaption}
+)}}\label{classodf_1_1element_1_1Element_a31ad0b6559d84f55ab508fef095bb2ed}
+
+
+Odfpy maintains a list of known namespaces. 
+
+In some cases a prefix is used, and we need to know which namespace it resolves to. 
+
+Definition at line 357 of file element.\+py.
+
+\hypertarget{classodf_1_1element_1_1Element_af1c38c8bca58c0258075cb7a701e8858}{\index{odf\+::element\+::\+Element@{odf\+::element\+::\+Element}!get\+\_\+nsprefix@{get\+\_\+nsprefix}}
+\index{get\+\_\+nsprefix@{get\+\_\+nsprefix}!odf\+::element\+::\+Element@{odf\+::element\+::\+Element}}
+\subsubsection[{get\+\_\+nsprefix}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+element.\+Element.\+get\+\_\+nsprefix (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{namespace}
+\end{DoxyParamCaption}
+)}}\label{classodf_1_1element_1_1Element_af1c38c8bca58c0258075cb7a701e8858}
+
+
+Odfpy maintains a list of known namespaces. 
+
+In some cases we have a namespace U\+R\+L, and needs to look up or assign the prefix for it. 
+
+Definition at line 367 of file element.\+py.
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classodf_1_1element_1_1Element_af1c38c8bca58c0258075cb7a701e8858_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{classodf_1_1element_1_1Element_abc4db1dc9e2f6712bc4fc2fa358cf8dc}{\index{odf\+::element\+::\+Element@{odf\+::element\+::\+Element}!get\+Attribute@{get\+Attribute}}
+\index{get\+Attribute@{get\+Attribute}!odf\+::element\+::\+Element@{odf\+::element\+::\+Element}}
+\subsubsection[{get\+Attribute}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+element.\+Element.\+get\+Attribute (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{attr}
+\end{DoxyParamCaption}
+)}}\label{classodf_1_1element_1_1Element_abc4db1dc9e2f6712bc4fc2fa358cf8dc}
+
+
+Get an attribute value. 
+
+The method knows which namespace the attribute is in 
+
+Definition at line 503 of file element.\+py.
+
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classodf_1_1element_1_1Element_abc4db1dc9e2f6712bc4fc2fa358cf8dc_cgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{classodf_1_1element_1_1Element_a6c6bad8ddb25a3eb53946943461f5d12}{\index{odf\+::element\+::\+Element@{odf\+::element\+::\+Element}!get\+Attr\+N\+S@{get\+Attr\+N\+S}}
+\index{get\+Attr\+N\+S@{get\+Attr\+N\+S}!odf\+::element\+::\+Element@{odf\+::element\+::\+Element}}
+\subsubsection[{get\+Attr\+N\+S}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+element.\+Element.\+get\+Attr\+N\+S (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{namespace, }
+\item[{}]{localpart}
+\end{DoxyParamCaption}
+)}}\label{classodf_1_1element_1_1Element_a6c6bad8ddb25a3eb53946943461f5d12}
+
+
+gets an attribute, given a namespace and a key 
+
+
+\begin{DoxyParams}{Parameters}
+{\em namespace} & a unicode string or a bytes\+: the namespace \\
+\hline
+{\em localpart} & a unicode string or a bytes\+: the key to get the attribute \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+an attribute as a unicode string or a bytes\+: if both paramters are byte strings, it will be a bytes; if both attributes are unicode strings, it will be a unicode string 
+\end{DoxyReturn}
+
+
+Definition at line 484 of file element.\+py.
+
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classodf_1_1element_1_1Element_a6c6bad8ddb25a3eb53946943461f5d12_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classodf_1_1element_1_1Element_a6c6bad8ddb25a3eb53946943461f5d12_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{classodf_1_1element_1_1Element_a3228c7117ad9f00bc48a221895bf664a}{\index{odf\+::element\+::\+Element@{odf\+::element\+::\+Element}!get\+Elements\+By\+Type@{get\+Elements\+By\+Type}}
+\index{get\+Elements\+By\+Type@{get\+Elements\+By\+Type}!odf\+::element\+::\+Element@{odf\+::element\+::\+Element}}
+\subsubsection[{get\+Elements\+By\+Type}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+element.\+Element.\+get\+Elements\+By\+Type (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{element}
+\end{DoxyParamCaption}
+)}}\label{classodf_1_1element_1_1Element_a3228c7117ad9f00bc48a221895bf664a}
+
+
+Gets elements based on the type, which is function from \hyperlink{text_8py}{text.\+py}, \hyperlink{draw_8py}{draw.\+py} etc. 
+
+
+
+Definition at line 562 of file element.\+py.
+
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classodf_1_1element_1_1Element_a3228c7117ad9f00bc48a221895bf664a_cgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{classodf_1_1element_1_1Element_ae817aee0e4ddb0ff4b5ec2e4413bc754}{\index{odf\+::element\+::\+Element@{odf\+::element\+::\+Element}!is\+Instance\+Of@{is\+Instance\+Of}}
+\index{is\+Instance\+Of@{is\+Instance\+Of}!odf\+::element\+::\+Element@{odf\+::element\+::\+Element}}
+\subsubsection[{is\+Instance\+Of}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+element.\+Element.\+is\+Instance\+Of (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{element}
+\end{DoxyParamCaption}
+)}}\label{classodf_1_1element_1_1Element_ae817aee0e4ddb0ff4b5ec2e4413bc754}
+
+
+This is a check to see if the object is an instance of a type. 
+
+
+
+Definition at line 568 of file element.\+py.
+
+\hypertarget{classodf_1_1element_1_1Element_ad42001ec63013f0c4e834c5a42409721}{\index{odf\+::element\+::\+Element@{odf\+::element\+::\+Element}!remove\+Attribute@{remove\+Attribute}}
+\index{remove\+Attribute@{remove\+Attribute}!odf\+::element\+::\+Element@{odf\+::element\+::\+Element}}
+\subsubsection[{remove\+Attribute}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+element.\+Element.\+remove\+Attribute (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{attr, }
+\item[{}]{check\+\_\+grammar = {\ttfamily True}}
+\end{DoxyParamCaption}
+)}}\label{classodf_1_1element_1_1Element_ad42001ec63013f0c4e834c5a42409721}
+
+
+Removes an attribute by name. 
+
+
+
+Definition at line 419 of file element.\+py.
+
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classodf_1_1element_1_1Element_ad42001ec63013f0c4e834c5a42409721_cgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{classodf_1_1element_1_1Element_a32e1e56f26c61b4f65cdf6a7fdbc0a63}{\index{odf\+::element\+::\+Element@{odf\+::element\+::\+Element}!remove\+Attr\+N\+S@{remove\+Attr\+N\+S}}
+\index{remove\+Attr\+N\+S@{remove\+Attr\+N\+S}!odf\+::element\+::\+Element@{odf\+::element\+::\+Element}}
+\subsubsection[{remove\+Attr\+N\+S}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+element.\+Element.\+remove\+Attr\+N\+S (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{namespace, }
+\item[{}]{localpart}
+\end{DoxyParamCaption}
+)}}\label{classodf_1_1element_1_1Element_a32e1e56f26c61b4f65cdf6a7fdbc0a63}
+
+
+Definition at line 497 of file element.\+py.
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classodf_1_1element_1_1Element_a32e1e56f26c61b4f65cdf6a7fdbc0a63_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{classodf_1_1element_1_1Element_acdbef59f5caf5bbb1afcc46d4c01baf9}{\index{odf\+::element\+::\+Element@{odf\+::element\+::\+Element}!set\+Attribute@{set\+Attribute}}
+\index{set\+Attribute@{set\+Attribute}!odf\+::element\+::\+Element@{odf\+::element\+::\+Element}}
+\subsubsection[{set\+Attribute}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+element.\+Element.\+set\+Attribute (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{attr, }
+\item[{}]{value, }
+\item[{}]{check\+\_\+grammar = {\ttfamily True}}
+\end{DoxyParamCaption}
+)}}\label{classodf_1_1element_1_1Element_acdbef59f5caf5bbb1afcc46d4c01baf9}
+
+
+Add an attribute to the element This is sort of a convenience method. 
+
+All attributes in O\+D\+F have namespaces. The library knows what attributes are legal and then allows the user to provide the attribute as a keyword argument and the library will add the correct namespace. Must overwrite, If attribute already exists. 
+
+Definition at line 443 of file element.\+py.
+
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classodf_1_1element_1_1Element_acdbef59f5caf5bbb1afcc46d4c01baf9_cgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{classodf_1_1element_1_1Element_a9263c523586b6e43cb44265281a54423}{\index{odf\+::element\+::\+Element@{odf\+::element\+::\+Element}!set\+Attr\+N\+S@{set\+Attr\+N\+S}}
+\index{set\+Attr\+N\+S@{set\+Attr\+N\+S}!odf\+::element\+::\+Element@{odf\+::element\+::\+Element}}
+\subsubsection[{set\+Attr\+N\+S}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+element.\+Element.\+set\+Attr\+N\+S (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{namespace, }
+\item[{}]{localpart, }
+\item[{}]{value}
+\end{DoxyParamCaption}
+)}}\label{classodf_1_1element_1_1Element_a9263c523586b6e43cb44265281a54423}
+
+
+Add an attribute to the element In case you need to add an attribute the library doesn't know about then you must provide the full qualified name It will not check that the attribute is legal according to the schema. 
+
+Must overwrite, If attribute already exists. 
+
+Definition at line 466 of file element.\+py.
+
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classodf_1_1element_1_1Element_a9263c523586b6e43cb44265281a54423_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classodf_1_1element_1_1Element_a9263c523586b6e43cb44265281a54423_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{classodf_1_1element_1_1Element_aa278538d7c0568e820f11dcfeccc3975}{\index{odf\+::element\+::\+Element@{odf\+::element\+::\+Element}!to\+Xml@{to\+Xml}}
+\index{to\+Xml@{to\+Xml}!odf\+::element\+::\+Element@{odf\+::element\+::\+Element}}
+\subsubsection[{to\+Xml}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+element.\+Element.\+to\+Xml (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{level, }
+\item[{}]{f}
+\end{DoxyParamCaption}
+)}}\label{classodf_1_1element_1_1Element_aa278538d7c0568e820f11dcfeccc3975}
+
+
+Generate an X\+M\+L stream out of the tree structure. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em level} & integer\+: level in the X\+M\+L tree; zero at root of the tree \\
+\hline
+{\em f} & an open writable file able to accept unicode strings \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 536 of file element.\+py.
+
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classodf_1_1element_1_1Element_aa278538d7c0568e820f11dcfeccc3975_cgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{classodf_1_1element_1_1Element_a5e2c55304d35824924e035c50f505e08}{\index{odf\+::element\+::\+Element@{odf\+::element\+::\+Element}!write\+\_\+close\+\_\+tag@{write\+\_\+close\+\_\+tag}}
+\index{write\+\_\+close\+\_\+tag@{write\+\_\+close\+\_\+tag}!odf\+::element\+::\+Element@{odf\+::element\+::\+Element}}
+\subsubsection[{write\+\_\+close\+\_\+tag}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+element.\+Element.\+write\+\_\+close\+\_\+tag (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{level, }
+\item[{}]{f}
+\end{DoxyParamCaption}
+)}}\label{classodf_1_1element_1_1Element_a5e2c55304d35824924e035c50f505e08}
+
+
+Definition at line 527 of file element.\+py.
+
+\hypertarget{classodf_1_1element_1_1Element_a51ddef230911fa83d62d6f3a0b08c592}{\index{odf\+::element\+::\+Element@{odf\+::element\+::\+Element}!write\+\_\+open\+\_\+tag@{write\+\_\+open\+\_\+tag}}
+\index{write\+\_\+open\+\_\+tag@{write\+\_\+open\+\_\+tag}!odf\+::element\+::\+Element@{odf\+::element\+::\+Element}}
+\subsubsection[{write\+\_\+open\+\_\+tag}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+element.\+Element.\+write\+\_\+open\+\_\+tag (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{level, }
+\item[{}]{f}
+\end{DoxyParamCaption}
+)}}\label{classodf_1_1element_1_1Element_a51ddef230911fa83d62d6f3a0b08c592}
+
+
+Definition at line 517 of file element.\+py.
+
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classodf_1_1element_1_1Element_a51ddef230911fa83d62d6f3a0b08c592_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+\subsection{Member Data Documentation}
+\hypertarget{classodf_1_1element_1_1Element_a5f26e2e0cc6496fec1adc0f75d60a56c}{\index{odf\+::element\+::\+Element@{odf\+::element\+::\+Element}!allowed\+\_\+children@{allowed\+\_\+children}}
+\index{allowed\+\_\+children@{allowed\+\_\+children}!odf\+::element\+::\+Element@{odf\+::element\+::\+Element}}
+\subsubsection[{allowed\+\_\+children}]{\setlength{\rightskip}{0pt plus 5cm}odf.\+element.\+Element.\+allowed\+\_\+children}}\label{classodf_1_1element_1_1Element_a5f26e2e0cc6496fec1adc0f75d60a56c}
+
+
+Definition at line 317 of file element.\+py.
+
+\hypertarget{classodf_1_1element_1_1Element_a075965834885860b3800d7a934d678c5}{\index{odf\+::element\+::\+Element@{odf\+::element\+::\+Element}!attributes@{attributes}}
+\index{attributes@{attributes}!odf\+::element\+::\+Element@{odf\+::element\+::\+Element}}
+\subsubsection[{attributes}]{\setlength{\rightskip}{0pt plus 5cm}odf.\+element.\+Element.\+attributes}}\label{classodf_1_1element_1_1Element_a075965834885860b3800d7a934d678c5}
+
+
+Definition at line 328 of file element.\+py.
+
+\hypertarget{classodf_1_1element_1_1Element_a7b1caf94c20e484ead54b595dcce9064}{\index{odf\+::element\+::\+Element@{odf\+::element\+::\+Element}!child\+Nodes@{child\+Nodes}}
+\index{child\+Nodes@{child\+Nodes}!odf\+::element\+::\+Element@{odf\+::element\+::\+Element}}
+\subsubsection[{child\+Nodes}]{\setlength{\rightskip}{0pt plus 5cm}odf.\+element.\+Element.\+child\+Nodes}}\label{classodf_1_1element_1_1Element_a7b1caf94c20e484ead54b595dcce9064}
+
+
+Definition at line 316 of file element.\+py.
+
+\hypertarget{classodf_1_1element_1_1Element_a6f97b7e2b9e13ea5e18d1856c10167e6}{\index{odf\+::element\+::\+Element@{odf\+::element\+::\+Element}!namespaces@{namespaces}}
+\index{namespaces@{namespaces}!odf\+::element\+::\+Element@{odf\+::element\+::\+Element}}
+\subsubsection[{namespaces}]{\setlength{\rightskip}{0pt plus 5cm}dictionary odf.\+element.\+Element.\+namespaces = \{\}\hspace{0.3cm}{\ttfamily [static]}}}\label{classodf_1_1element_1_1Element_a6f97b7e2b9e13ea5e18d1856c10167e6}
+
+
+Definition at line 302 of file element.\+py.
+
+\hypertarget{classodf_1_1element_1_1Element_a0905e184b9692b74b085ebabe37debb5}{\index{odf\+::element\+::\+Element@{odf\+::element\+::\+Element}!node\+Type@{node\+Type}}
+\index{node\+Type@{node\+Type}!odf\+::element\+::\+Element@{odf\+::element\+::\+Element}}
+\subsubsection[{node\+Type}]{\setlength{\rightskip}{0pt plus 5cm}odf.\+element.\+Element.\+node\+Type = Node.\+E\+L\+E\+M\+E\+N\+T\+\_\+\+N\+O\+D\+E\hspace{0.3cm}{\ttfamily [static]}}}\label{classodf_1_1element_1_1Element_a0905e184b9692b74b085ebabe37debb5}
+
+
+Definition at line 301 of file element.\+py.
+
+\hypertarget{classodf_1_1element_1_1Element_a3f5adc77e6ef8392e488e913de580b92}{\index{odf\+::element\+::\+Element@{odf\+::element\+::\+Element}!owner\+Document@{owner\+Document}}
+\index{owner\+Document@{owner\+Document}!odf\+::element\+::\+Element@{odf\+::element\+::\+Element}}
+\subsubsection[{owner\+Document}]{\setlength{\rightskip}{0pt plus 5cm}odf.\+element.\+Element.\+owner\+Document}}\label{classodf_1_1element_1_1Element_a3f5adc77e6ef8392e488e913de580b92}
+
+
+Definition at line 315 of file element.\+py.
+
+\hypertarget{classodf_1_1element_1_1Element_af094fd4f65c213f17b319c152f8be830}{\index{odf\+::element\+::\+Element@{odf\+::element\+::\+Element}!qname@{qname}}
+\index{qname@{qname}!odf\+::element\+::\+Element@{odf\+::element\+::\+Element}}
+\subsubsection[{qname}]{\setlength{\rightskip}{0pt plus 5cm}odf.\+element.\+Element.\+qname}}\label{classodf_1_1element_1_1Element_af094fd4f65c213f17b319c152f8be830}
+
+
+Definition at line 313 of file element.\+py.
+
+\hypertarget{classodf_1_1element_1_1Element_a95626c50cd66e61210673e949b86198f}{\index{odf\+::element\+::\+Element@{odf\+::element\+::\+Element}!tag\+Name@{tag\+Name}}
+\index{tag\+Name@{tag\+Name}!odf\+::element\+::\+Element@{odf\+::element\+::\+Element}}
+\subsubsection[{tag\+Name}]{\setlength{\rightskip}{0pt plus 5cm}odf.\+element.\+Element.\+tag\+Name}}\label{classodf_1_1element_1_1Element_a95626c50cd66e61210673e949b86198f}
+
+
+Definition at line 319 of file element.\+py.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+odf/\hyperlink{element_8py}{element.\+py}\end{DoxyCompactItemize}

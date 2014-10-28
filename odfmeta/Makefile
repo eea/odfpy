@@ -9,6 +9,12 @@ txt: odfmeta.txt
 	xmlto txt $<
 
 clean:
-	rm -f *.txt odf
+	rm -f *.1 *~ *.txt odf
 odf:
 	ln -s ../odf
+
+test: clean odf
+	@echo ============= output by Python2 =======================
+	@python2 odfmeta ../tests/examples/pythagoras.ods
+	@echo ============= output by Python3 =======================
+	@python3 odfmeta ../tests/examples/pythagoras.ods

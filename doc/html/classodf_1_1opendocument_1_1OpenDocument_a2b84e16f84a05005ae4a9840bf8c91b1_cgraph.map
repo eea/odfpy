@@ -1,0 +1,5 @@
+<map id="odf.opendocument.OpenDocument.getElementsByType" name="odf.opendocument.OpenDocument.getElementsByType">
+<area shape="rect" id="node3" href="$classodf_1_1opendocument_1_1OpenDocument.html#a764f9c380d99c1b23d0e260f4aea1093" title="odf.opendocument.OpenDocument.rebuild\l_caches" alt="" coords="297,29,559,73"/>
+<area shape="rect" id="node5" href="$classodf_1_1opendocument_1_1OpenDocument.html#a6d6f5670a14b76be97b2f2b19253639a" title="Builds internal caches; called from element.py. " alt="" coords="608,29,859,73"/>
+<area shape="rect" id="node7" href="$classodf_1_1opendocument_1_1OpenDocument.html#a8a18747a87cb2ad88aa02e2166cf8607" title="Register a style. " alt="" coords="907,29,1131,73"/>
+</map>

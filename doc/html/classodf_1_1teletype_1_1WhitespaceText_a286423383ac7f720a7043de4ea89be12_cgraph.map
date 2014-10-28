@@ -1,0 +1,7 @@
+<map id="odf.teletype.WhitespaceText.addTextToElement" name="odf.teletype.WhitespaceText.addTextToElement">
+<area shape="rect" id="node3" href="$classodf_1_1teletype_1_1WhitespaceText.html#ae114319dd6c4c0fbe2182bf72e7d5190" title="Creates a Text Node whose contents are the current textBuffer. " alt="" coords="261,5,448,49"/>
+<area shape="rect" id="node5" href="$namespaceodf_1_1text.html#aa57801d19e9bdf60df01e5e69fa09241" title="odf.text.Tab" alt="" coords="311,71,399,99"/>
+<area shape="rect" id="node7" href="$namespaceodf_1_1text.html#a21dbe100d6bb85cacb054da9d22cce34" title="odf.text.LineBreak" alt="" coords="292,122,417,150"/>
+<area shape="rect" id="node9" href="$classodf_1_1teletype_1_1WhitespaceText.html#ac3177ba3231d64e3eb800842cdbe071b" title="Creates a &lt;text:s&gt; element for the current spaceCount. " alt="" coords="261,173,448,217"/>
+<area shape="rect" id="node11" href="$namespaceodf_1_1text.html#a9bdcfba7b88daa6dc5419ab4f07b2668" title="odf.text.S" alt="" coords="317,239,392,267"/>
+</map>
