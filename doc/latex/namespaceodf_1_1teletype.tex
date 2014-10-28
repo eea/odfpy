@@ -1,0 +1,45 @@
+\hypertarget{namespaceodf_1_1teletype}{\section{odf.\+teletype Namespace Reference}
+\label{namespaceodf_1_1teletype}\index{odf.\+teletype@{odf.\+teletype}}
+}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{classodf_1_1teletype_1_1WhitespaceText}{Whitespace\+Text}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \hyperlink{namespaceodf_1_1teletype_a3a8f534821d84f0f0895f466ebfab51d}{add\+Text\+To\+Element}
+\item 
+def \hyperlink{namespaceodf_1_1teletype_a4709f2572210f5b59c9ee00df7bd2328}{extract\+Text}
+\begin{DoxyCompactList}\small\item\em Extract text content from an Element, with whitespace represented properly. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\hypertarget{namespaceodf_1_1teletype_a3a8f534821d84f0f0895f466ebfab51d}{\index{odf\+::teletype@{odf\+::teletype}!add\+Text\+To\+Element@{add\+Text\+To\+Element}}
+\index{add\+Text\+To\+Element@{add\+Text\+To\+Element}!odf\+::teletype@{odf\+::teletype}}
+\subsubsection[{add\+Text\+To\+Element}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+teletype.\+add\+Text\+To\+Element (
+\begin{DoxyParamCaption}
+\item[{}]{odf\+Element, }
+\item[{}]{s}
+\end{DoxyParamCaption}
+)}}\label{namespaceodf_1_1teletype_a3a8f534821d84f0f0895f466ebfab51d}
+
+
+Definition at line 107 of file teletype.\+py.
+
+\hypertarget{namespaceodf_1_1teletype_a4709f2572210f5b59c9ee00df7bd2328}{\index{odf\+::teletype@{odf\+::teletype}!extract\+Text@{extract\+Text}}
+\index{extract\+Text@{extract\+Text}!odf\+::teletype@{odf\+::teletype}}
+\subsubsection[{extract\+Text}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+teletype.\+extract\+Text (
+\begin{DoxyParamCaption}
+\item[{}]{odf\+Element}
+\end{DoxyParamCaption}
+)}}\label{namespaceodf_1_1teletype_a4709f2572210f5b59c9ee00df7bd2328}
+
+
+Extract text content from an Element, with whitespace represented properly. 
+
+Returns the text, with tabs, spaces, and newlines correctly evaluated. This method recursively descends through the children of the given element, accumulating text and \char`\"{}unwrapping\char`\"{} $<$text\+:s$>$, $<$text\+:tab$>$, and $<$text\+:line-\/break$>$ elements along the way. 
+
+Definition at line 118 of file teletype.\+py.
+

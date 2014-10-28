@@ -1,0 +1,6 @@
+<map id="odf.element.Element.allowed_attributes" name="odf.element.Element.allowed_attributes">
+<area shape="rect" id="node3" href="$classodf_1_1element_1_1Element.html#ad42001ec63013f0c4e834c5a42409721" title="Removes an attribute by name. " alt="" coords="253,5,437,49"/>
+<area shape="rect" id="node5" href="$classodf_1_1element_1_1Element.html#acdbef59f5caf5bbb1afcc46d4c01baf9" title="Add an attribute to the element This is sort of a convenience method. " alt="" coords="500,97,708,125"/>
+<area shape="rect" id="node7" href="$classodf_1_1element_1_1Element.html#a9263c523586b6e43cb44265281a54423" title="Add an attribute to the element In case you need to add an attribute the library doesn&#39;t know about t..." alt="" coords="245,122,445,150"/>
+<area shape="rect" id="node10" href="$classodf_1_1element_1_1Element.html#abc4db1dc9e2f6712bc4fc2fa358cf8dc" title="Get an attribute value. " alt="" coords="241,173,449,201"/>
+</map>

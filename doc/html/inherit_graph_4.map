@@ -1,0 +1,6 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node3" href="$classodf_1_1load_1_1LoadParser.html" title="Extract headings from content.xml of an ODT file. " alt="" coords="193,5,329,33"/>
+<area shape="rect" id="node5" href="$classodf_1_1odf2xhtml_1_1ODF2XHTML.html" title="The ODF2XHTML parses an ODF file and produces XHTML. " alt="" coords="171,55,352,83"/>
+<area shape="rect" id="node9" href="$classodf_1_1odfmanifest_1_1ODFManifestHandler.html" title="The ODFManifestHandler parses a manifest file and produces a list of content. " alt="" coords="167,106,356,150"/>
+<area shape="rect" id="node7" href="$classodf_1_1odf2xhtml_1_1ODF2XHTMLembedded.html" title="The ODF2XHTML parses an ODF file and produces XHTML. " alt="" coords="405,55,648,83"/>
+</map>

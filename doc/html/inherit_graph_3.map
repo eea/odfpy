@@ -1,0 +1,7 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$classodf_1_1element_1_1Childless.html" title="Mixin that makes childless&#45;ness easy to implement and avoids the complexity of the Node methods that ..." alt="" coords="108,5,252,33"/>
+<area shape="rect" id="node3" href="$classodf_1_1element_1_1CDATASection.html" title="odf.element.CDATASection" alt="" coords="489,5,668,33"/>
+<area shape="rect" id="node5" href="$classodf_1_1element_1_1Text.html" title="odf.element.Text" alt="" coords="312,30,429,58"/>
+<area shape="rect" id="node9" href="$classodf_1_1element_1_1Node.html" title="super class for more specific nodes " alt="" coords="119,55,241,83"/>
+<area shape="rect" id="node11" href="$classodf_1_1element_1_1Element.html" title="Creates a arbitrary element and is intended to be subclassed not used on its own. ..." alt="" coords="301,81,440,109"/>
+</map>

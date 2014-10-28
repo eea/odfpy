@@ -1,0 +1,15 @@
+<map id="odf.style.StyleElement" name="odf.style.StyleElement">
+<area shape="rect" id="node3" href="$namespaceodf_1_1number.html#af5e0e7f6c98f62e21f0e71010f5aa563" title="odf.number.BooleanStyle" alt="" coords="212,5,377,33"/>
+<area shape="rect" id="node5" href="$namespaceodf_1_1number.html#ac6b4d66af1b244f0eb18d78e8e005e74" title="odf.number.CurrencyStyle" alt="" coords="211,55,379,83"/>
+<area shape="rect" id="node7" href="$namespaceodf_1_1number.html#ab42d20ae70cc68d268f68ddc16a1d149" title="odf.number.DateStyle" alt="" coords="223,106,367,134"/>
+<area shape="rect" id="node9" href="$namespaceodf_1_1number.html#a3de4c489058b4321d042bcc04127dcb6" title="odf.number.NumberStyle" alt="" coords="213,157,376,185"/>
+<area shape="rect" id="node11" href="$namespaceodf_1_1number.html#a2ceb4840095912a306db1c85e44e3fbd" title="odf.number.PercentageStyle" alt="" coords="203,207,387,235"/>
+<area shape="rect" id="node13" href="$namespaceodf_1_1number.html#a398c168b934489bcb746a51500b18e68" title="odf.number.TextStyle" alt="" coords="224,258,365,286"/>
+<area shape="rect" id="node15" href="$namespaceodf_1_1number.html#a70598f014bbfd84e75a373c7a6eeaf22" title="odf.number.TimeStyle" alt="" coords="221,309,368,337"/>
+<area shape="rect" id="node17" href="$namespaceodf_1_1style.html#a40f13519236d211e9e181eeedebf676c" title="odf.style.MasterPage" alt="" coords="224,359,365,387"/>
+<area shape="rect" id="node19" href="$namespaceodf_1_1style.html#a82ec1a21b4b7acef2322854f4e9617ff" title="odf.style.PresentationPage\lLayout" alt="" coords="207,410,383,454"/>
+<area shape="rect" id="node21" href="$namespaceodf_1_1style.html#a2e56cb9fa1da126938ed06f68a2a1308" title="odf.style.Style" alt="" coords="244,477,345,505"/>
+<area shape="rect" id="node23" href="$namespaceodf_1_1text.html#a001e25096cba539946bed6b296c9199f" title="odf.text.ListStyle" alt="" coords="236,527,353,555"/>
+<area shape="rect" id="node25" href="$namespaceodf_1_1easyliststyle.html#ac96c1944732eab4a4cabaf65c05ca411" title="odf.easyliststyle.styleFromList" alt="" coords="436,527,631,555"/>
+<area shape="rect" id="node27" href="$namespaceodf_1_1easyliststyle.html#aec199f5afcac7f5d364b79acb2b435ff" title="odf.easyliststyle.styleFrom\lString" alt="" coords="681,519,855,563"/>
+</map>

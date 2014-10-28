@@ -1,0 +1,8 @@
+<map id="odf.element.Element.get_nsprefix" name="odf.element.Element.get_nsprefix">
+<area shape="rect" id="node3" href="$classodf_1_1element_1_1Element.html#a9263c523586b6e43cb44265281a54423" title="Add an attribute to the element In case you need to add an attribute the library doesn&#39;t know about t..." alt="" coords="213,5,413,33"/>
+<area shape="rect" id="node7" href="$classodf_1_1element_1_1Element.html#a6c6bad8ddb25a3eb53946943461f5d12" title="gets an attribute, given a namespace and a key " alt="" coords="213,55,413,83"/>
+<area shape="rect" id="node11" href="$classodf_1_1element_1_1Element.html#a51ddef230911fa83d62d6f3a0b08c592" title="odf.element.Element.write\l_open_tag" alt="" coords="228,106,399,150"/>
+<area shape="rect" id="node13" href="$classodf_1_1element_1_1Element.html#aa278538d7c0568e820f11dcfeccc3975" title="Generate an XML stream out of the tree structure. " alt="" coords="225,173,401,201"/>
+<area shape="rect" id="node5" href="$classodf_1_1element_1_1Element.html#acdbef59f5caf5bbb1afcc46d4c01baf9" title="Add an attribute to the element This is sort of a convenience method. " alt="" coords="463,5,671,33"/>
+<area shape="rect" id="node9" href="$classodf_1_1element_1_1Element.html#abc4db1dc9e2f6712bc4fc2fa358cf8dc" title="Get an attribute value. " alt="" coords="463,55,671,83"/>
+</map>

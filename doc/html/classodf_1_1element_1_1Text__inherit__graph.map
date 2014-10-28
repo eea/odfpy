@@ -1,0 +1,5 @@
+<map id="odf.element.Text" name="odf.element.Text">
+<area shape="rect" id="node9" href="$classodf_1_1element_1_1CDATASection.html" title="odf.element.CDATASection" alt="" coords="67,238,245,266"/>
+<area shape="rect" id="node2" href="$classodf_1_1element_1_1Childless.html" title="Mixin that makes childless&#45;ness easy to implement and avoids the complexity of the Node methods that ..." alt="" coords="5,83,149,111"/>
+<area shape="rect" id="node4" href="$classodf_1_1element_1_1Node.html" title="super class for more specific nodes " alt="" coords="173,83,296,111"/>
+</map>

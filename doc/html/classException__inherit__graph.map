@@ -1,0 +1,4 @@
+<map id="Exception" name="Exception">
+<area shape="rect" id="node3" href="$classodf_1_1element_1_1IllegalChild.html" title="Complains if you add an element to a parent where it is not allowed. " alt="" coords="5,83,160,111"/>
+<area shape="rect" id="node5" href="$classodf_1_1element_1_1IllegalText.html" title="Complains if you add text or cdata to an element where it is not allowed. " alt="" coords="184,83,333,111"/>
+</map>

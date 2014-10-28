@@ -1,0 +1,10 @@
+<map id="odf.draw.DrawElement" name="odf.draw.DrawElement">
+<area shape="rect" id="node3" href="$namespaceodf_1_1draw.html#a7820347b2c8c35512386f5e492cedfcd" title="odf.draw.FillImage" alt="" coords="217,5,343,33"/>
+<area shape="rect" id="node5" href="$namespaceodf_1_1draw.html#ac59308ebd82c72f4dc098358f6dcee3d" title="odf.draw.Gradient" alt="" coords="219,55,341,83"/>
+<area shape="rect" id="node7" href="$namespaceodf_1_1draw.html#a6732a23a2cfbdc0f8b06c9b14c9926c1" title="odf.draw.Hatch" alt="" coords="225,106,335,134"/>
+<area shape="rect" id="node9" href="$namespaceodf_1_1draw.html#ae9494b54e945c5cfe9dd175d89cf4b4a" title="odf.draw.Marker" alt="" coords="223,157,337,185"/>
+<area shape="rect" id="node11" href="$namespaceodf_1_1draw.html#a398ffbd306f5b6f16b846356ffa7066e" title="odf.draw.Opacity" alt="" coords="221,207,339,235"/>
+<area shape="rect" id="node13" href="$namespaceodf_1_1draw.html#aa72c3c77b8286dc168a665a6f7c8fb82" title="odf.draw.StrokeDash" alt="" coords="209,258,351,286"/>
+<area shape="rect" id="node15" href="$namespaceodf_1_1svg.html#aad55be3da8e1ec9d65e99c60489092b0" title="odf.svg.Lineargradient" alt="" coords="205,309,355,337"/>
+<area shape="rect" id="node17" href="$namespaceodf_1_1svg.html#a207eb01363b7981e890942fbd716d237" title="odf.svg.Radialgradient" alt="" coords="205,359,355,387"/>
+</map>

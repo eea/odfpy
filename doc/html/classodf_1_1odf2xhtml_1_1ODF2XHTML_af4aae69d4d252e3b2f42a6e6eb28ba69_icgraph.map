@@ -1,0 +1,30 @@
+<map id="odf.odf2xhtml.ODF2XHTML.closetag" name="odf.odf2xhtml.ODF2XHTML.closetag">
+<area shape="rect" id="node3" href="$classodf_1_1odf2xhtml_1_1ODF2XHTML.html#af15fc249e395d62b54187f7d0295b140" title="End the &lt;draw:frame&gt; " alt="" coords="315,5,507,49"/>
+<area shape="rect" id="node5" href="$classodf_1_1odf2xhtml_1_1ODF2XHTML.html#a43856079ee04e091b6b3f5d4bd8ade34" title="End the &lt;draw:frame&gt; " alt="" coords="315,71,507,115"/>
+<area shape="rect" id="node7" href="$classodf_1_1odf2xhtml_1_1ODF2XHTML.html#a35f1faec7eef6b156647fd4bedc9f867" title="A &lt;draw:object&#45;ole&gt; is embedded OLE object in the document (e.g. " alt="" coords="315,138,507,182"/>
+<area shape="rect" id="node9" href="$classodf_1_1odf2xhtml_1_1ODF2XHTML.html#a21d717ff541974323a57d08f1ea7bf52" title="A &lt;draw:page&gt; is a slide in a presentation. " alt="" coords="315,205,507,249"/>
+<area shape="rect" id="node11" href="$classodf_1_1odf2xhtml_1_1ODF2XHTML.html#a9a816bc717f72330823785e2b6839200" title="odf.odf2xhtml.ODF2XHTML.e\l_draw_page" alt="" coords="315,271,507,315"/>
+<area shape="rect" id="node13" href="$classodf_1_1odf2xhtml_1_1ODF2XHTML.html#a5f4858d7be871707f4c61b48c3c21fc4" title="End the &lt;draw:text&#45;box&gt; " alt="" coords="315,338,507,382"/>
+<area shape="rect" id="node15" href="$classodf_1_1odf2xhtml_1_1ODF2XHTML.html#a803832f31cfdfeea1c4adf7a64c685cb" title="odf.odf2xhtml.ODF2XHTML.html_body" alt="" coords="289,405,532,433"/>
+<area shape="rect" id="node23" href="$classodf_1_1odf2xhtml_1_1ODF2XHTML.html#a6f209dc272b2df70f9556178c8d8db97" title="odf.odf2xhtml.ODF2XHTML.generate\l_footnotes" alt="" coords="293,557,528,601"/>
+<area shape="rect" id="node25" href="$classodf_1_1odf2xhtml_1_1ODF2XHTML.html#aefec37ee1d0b9023ae8e5a22d6c289e1" title="odf.odf2xhtml.ODF2XHTML.e\l_office_presentation" alt="" coords="581,482,773,526"/>
+<area shape="rect" id="node27" href="$classodf_1_1odf2xhtml_1_1ODF2XHTML.html#aa4e2c84b2e60ef07ad9880bda747a861" title="odf.odf2xhtml.ODF2XHTML.e\l_office_spreadsheet" alt="" coords="581,549,773,593"/>
+<area shape="rect" id="node29" href="$classodf_1_1odf2xhtml_1_1ODF2XHTML.html#a788f24df6fbe5fef46f54eb2e6825747" title="odf.odf2xhtml.ODF2XHTML.e\l_office_text" alt="" coords="581,615,773,659"/>
+<area shape="rect" id="node31" href="$classodf_1_1odf2xhtml_1_1ODF2XHTML.html#a6563a63a5fa1849ba1936ca22b88dcad" title="Last tag. " alt="" coords="315,674,507,718"/>
+<area shape="rect" id="node36" href="$classodf_1_1odf2xhtml_1_1ODF2XHTML.html#a6375b542e3e95fc2942d3d879d41a215" title="odf.odf2xhtml.ODF2XHTML.e\l_style_footer" alt="" coords="315,741,507,785"/>
+<area shape="rect" id="node38" href="$classodf_1_1odf2xhtml_1_1ODF2XHTML.html#a8417c235f667d915381905089debb1d1" title="odf.odf2xhtml.ODF2XHTML.e\l_style_header" alt="" coords="315,807,507,851"/>
+<area shape="rect" id="node40" href="$classodf_1_1odf2xhtml_1_1ODF2XHTML.html#a15f7208b86e2a914835c58900195053d" title="End a table. " alt="" coords="315,874,507,918"/>
+<area shape="rect" id="node42" href="$classodf_1_1odf2xhtml_1_1ODF2XHTML.html#abe26e525a81964e1ca9851ec5dd4ff47" title="End a table cell. " alt="" coords="315,941,507,985"/>
+<area shape="rect" id="node44" href="$classodf_1_1odf2xhtml_1_1ODF2XHTML.html#a2c0009aefeaa32a4aebf651241ec6457" title="End a table row. " alt="" coords="315,1007,507,1051"/>
+<area shape="rect" id="node46" href="$classodf_1_1odf2xhtml_1_1ODF2XHTML.html#a14a820640a82139efd06c6f5380bb53b" title="End an anchor or bookmark reference. " alt="" coords="315,1074,507,1118"/>
+<area shape="rect" id="node48" href="$classodf_1_1odf2xhtml_1_1ODF2XHTML.html#a81094645caa9e4af42180c1cbff16295" title="Bookmark definition. " alt="" coords="315,1141,507,1185"/>
+<area shape="rect" id="node50" href="$classodf_1_1odf2xhtml_1_1ODF2XHTML.html#a594ecf8ef3da1464e5b6d37a7f3875fb" title="Headings end Side&#45;effect: If there is no title in the metadata, then it is taken from the first headi..." alt="" coords="315,1207,507,1251"/>
+<area shape="rect" id="node52" href="$classodf_1_1odf2xhtml_1_1ODF2XHTML.html#aa26f15129f53a46093ddd98b5f3fbb0b" title="End a list. " alt="" coords="315,1274,507,1318"/>
+<area shape="rect" id="node54" href="$classodf_1_1odf2xhtml_1_1ODF2XHTML.html#a096fd2025dd1ea4c614970070880826c" title="End list item. " alt="" coords="315,1341,507,1385"/>
+<area shape="rect" id="node56" href="$classodf_1_1odf2xhtml_1_1ODF2XHTML.html#ae9568b8626799b560059d7960e7df42b" title="odf.odf2xhtml.ODF2XHTML.e\l_text_note_citation" alt="" coords="315,1407,507,1451"/>
+<area shape="rect" id="node58" href="$classodf_1_1odf2xhtml_1_1ODF2XHTML.html#a8c328424b530f1468b8d57afea41a8dc" title="End Paragraph. " alt="" coords="315,1474,507,1518"/>
+<area shape="rect" id="node60" href="$classodf_1_1odf2xhtml_1_1ODF2XHTML.html#a9d856aad6a3d0aca6eeaaff9eca1834a" title="End the &lt;text:span&gt; " alt="" coords="315,1541,507,1585"/>
+<area shape="rect" id="node17" href="$classodf_1_1odf2xhtml_1_1ODF2XHTML.html#a1e48d9dbb25393afd87f020a1c748e2e" title="For some odd reason, OpenOffice Impress doesn&#39;t define a default&#45;style for the &#39;paragraph&#39;. " alt="" coords="581,282,773,326"/>
+<area shape="rect" id="node19" href="$classodf_1_1odf2xhtml_1_1ODF2XHTML.html#a2a3f183ccb5d2c46020aa39d2950e973" title="odf.odf2xhtml.ODF2XHTML.s\l_office_spreadsheet" alt="" coords="581,349,773,393"/>
+<area shape="rect" id="node21" href="$classodf_1_1odf2xhtml_1_1ODF2XHTML.html#a611aac2522c193741f85f6c9150ed5ed" title="OpenDocument text. " alt="" coords="581,415,773,459"/>
+</map>

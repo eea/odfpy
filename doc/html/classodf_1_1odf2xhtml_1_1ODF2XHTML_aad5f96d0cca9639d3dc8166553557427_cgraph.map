@@ -1,0 +1,11 @@
+<map id="odf.odf2xhtml.ODF2XHTML.odf2xhtml" name="odf.odf2xhtml.ODF2XHTML.odf2xhtml">
+<area shape="rect" id="node3" href="$classodf_1_1odf2moinmoin_1_1ODF2MoinMoin.html#aab6e8e37a95662a023697cfbeefef367" title="Loads an ODT file. " alt="" coords="309,105,499,149"/>
+<area shape="rect" id="node16" href="$classodf_1_1odf2xhtml_1_1ODF2XHTML.html#a33674047bdb1e09e4a63c82ec6f91573" title="Loads a document into the parser and parses it. " alt="" coords="300,191,508,219"/>
+<area shape="rect" id="node20" href="$classodf_1_1odf2xhtml_1_1ODF2XHTML.html#ade09dcddfbaca47ffafa7ab8f305f1b4" title="Returns the xhtml. " alt="" coords="296,242,512,270"/>
+<area shape="rect" id="node5" href="$classodf_1_1odf2moinmoin_1_1ODF2MoinMoin.html#a3d7cf4306b6fbfa8fc2ea92d012d271a" title="Extracts necessary font information from a font&#45;declaration element. " alt="" coords="560,5,757,49"/>
+<area shape="rect" id="node7" href="$classodf_1_1odf2moinmoin_1_1ODF2MoinMoin.html#a2eec52acd99c4c06eb85578e13d58e73" title="Runs through &quot;style&quot; elements extracting necessary information. " alt="" coords="564,71,753,115"/>
+<area shape="rect" id="node14" href="$classodf_1_1odf2moinmoin_1_1ODF2MoinMoin.html#ac8cc4d4f8722e7d071a98040623c3baa" title="odf.odf2moinmoin.ODF2Moin\lMoin.processListStyles" alt="" coords="564,138,753,182"/>
+<area shape="rect" id="node9" href="$classodf_1_1odf2moinmoin_1_1ODF2MoinMoin.html#a685a84d1f5ce34195dd54787cac3e4b5" title="Extracts text properties from a style element. " alt="" coords="1064,71,1253,115"/>
+<area shape="rect" id="node11" href="$classodf_1_1odf2moinmoin_1_1ODF2MoinMoin.html#ac5d37970518c2754d690e848f9266694" title="Extracts paragraph properties from a style element. " alt="" coords="805,101,1016,145"/>
+<area shape="rect" id="node18" href="$classodf_1_1odf2xhtml_1_1ODF2XHTML.html#a7d16a36a759c67f039212abc46df8a65" title="odf.odf2xhtml.ODF2XHTML.\l_wlines" alt="" coords="567,205,751,249"/>
+</map>

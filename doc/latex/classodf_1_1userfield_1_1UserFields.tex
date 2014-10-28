@@ -1,0 +1,416 @@
+\hypertarget{classodf_1_1userfield_1_1UserFields}{\section{odf.\+userfield.\+User\+Fields Class Reference}
+\label{classodf_1_1userfield_1_1UserFields}\index{odf.\+userfield.\+User\+Fields@{odf.\+userfield.\+User\+Fields}}
+}
+
+
+List, view and manipulate user fields.  
+
+
+
+
+Inheritance diagram for odf.\+userfield.\+User\+Fields\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=198pt]{classodf_1_1userfield_1_1UserFields__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for odf.\+userfield.\+User\+Fields\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=198pt]{classodf_1_1userfield_1_1UserFields__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \hyperlink{classodf_1_1userfield_1_1UserFields_a5181a6106854423e1e28a83455aa9e94}{\+\_\+\+\_\+init\+\_\+\+\_\+}
+\begin{DoxyCompactList}\small\item\em Constructor. \end{DoxyCompactList}\item 
+def \hyperlink{classodf_1_1userfield_1_1UserFields_a65ccd99e2c198f06b55551d6a7bbf59a}{loaddoc}
+\item 
+def \hyperlink{classodf_1_1userfield_1_1UserFields_ae5336dcb2cdaee62f02d16cdb8945a2f}{savedoc}
+\item 
+def \hyperlink{classodf_1_1userfield_1_1UserFields_a9151edeae09fcea4b334a445d7efc6b0}{list\+\_\+fields}
+\begin{DoxyCompactList}\small\item\em List (extract) all known user-\/fields. \end{DoxyCompactList}\item 
+def \hyperlink{classodf_1_1userfield_1_1UserFields_ae67ac78a3c883117d523f245f076b227}{list\+\_\+fields\+\_\+and\+\_\+values}
+\begin{DoxyCompactList}\small\item\em List (extract) user-\/fields with type and value. \end{DoxyCompactList}\item 
+def \hyperlink{classodf_1_1userfield_1_1UserFields_a1ca142bc38126c2d15a9a40e94c9d21c}{list\+\_\+values}
+\begin{DoxyCompactList}\small\item\em Extract the contents of given field names from the file. \end{DoxyCompactList}\item 
+def \hyperlink{classodf_1_1userfield_1_1UserFields_a916cc9d873f57f30b69e752bb48d5bff}{get}
+\begin{DoxyCompactList}\small\item\em Extract the contents of this field from the file. \end{DoxyCompactList}\item 
+def \hyperlink{classodf_1_1userfield_1_1UserFields_a532884dffd16a0a946aa961ea442d3ca}{get\+\_\+type\+\_\+and\+\_\+value}
+\begin{DoxyCompactList}\small\item\em Extract the type and contents of this field from the file. \end{DoxyCompactList}\item 
+def \hyperlink{classodf_1_1userfield_1_1UserFields_aa13e8293efd5d183ac771d07b56a4558}{update}
+\begin{DoxyCompactList}\small\item\em Set the value of user fields. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classodf_1_1userfield_1_1UserFields_adfbbf12e8d9c5377410d463070b5bd76}{document}
+\end{DoxyCompactItemize}
+\subsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classodf_1_1userfield_1_1UserFields_aab129a38d3cc36d3ca8469de9a04c5a9}{src\+\_\+file} = None
+\item 
+\hyperlink{classodf_1_1userfield_1_1UserFields_a4ff1ceee3cb418e2b72d6c0366fb63b3}{dest\+\_\+file} = None
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+List, view and manipulate user fields. 
+
+
+
+Definition at line 53 of file userfield.\+py.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classodf_1_1userfield_1_1UserFields_a5181a6106854423e1e28a83455aa9e94}{\index{odf\+::userfield\+::\+User\+Fields@{odf\+::userfield\+::\+User\+Fields}!\+\_\+\+\_\+init\+\_\+\+\_\+@{\+\_\+\+\_\+init\+\_\+\+\_\+}}
+\index{\+\_\+\+\_\+init\+\_\+\+\_\+@{\+\_\+\+\_\+init\+\_\+\+\_\+}!odf\+::userfield\+::\+User\+Fields@{odf\+::userfield\+::\+User\+Fields}}
+\subsubsection[{\+\_\+\+\_\+init\+\_\+\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+userfield.\+User\+Fields.\+\_\+\+\_\+init\+\_\+\+\_\+ (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{src = {\ttfamily None}, }
+\item[{}]{dest = {\ttfamily None}}
+\end{DoxyParamCaption}
+)}}\label{classodf_1_1userfield_1_1UserFields_a5181a6106854423e1e28a83455aa9e94}
+
+
+Constructor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em src} & open file in binary mode\+: source document, or filename as a unicode string, or None for stdin. \\
+\hline
+{\em dest} & opendile in binary mode\+: destination document, or filename as a unicode string, or None for stdout. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 67 of file userfield.\+py.
+
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classodf_1_1userfield_1_1UserFields_a916cc9d873f57f30b69e752bb48d5bff}{\index{odf\+::userfield\+::\+User\+Fields@{odf\+::userfield\+::\+User\+Fields}!get@{get}}
+\index{get@{get}!odf\+::userfield\+::\+User\+Fields@{odf\+::userfield\+::\+User\+Fields}}
+\subsubsection[{get}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+userfield.\+User\+Fields.\+get (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{field\+\_\+name}
+\end{DoxyParamCaption}
+)}}\label{classodf_1_1userfield_1_1UserFields_a916cc9d873f57f30b69e752bb48d5bff}
+
+
+Extract the contents of this field from the file. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em field\+\_\+name} & unicode string\+: name of a field \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+field value as a unicode string or None if field does not exist. 
+\end{DoxyReturn}
+
+
+Definition at line 146 of file userfield.\+py.
+
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classodf_1_1userfield_1_1UserFields_a916cc9d873f57f30b69e752bb48d5bff_cgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{classodf_1_1userfield_1_1UserFields_a532884dffd16a0a946aa961ea442d3ca}{\index{odf\+::userfield\+::\+User\+Fields@{odf\+::userfield\+::\+User\+Fields}!get\+\_\+type\+\_\+and\+\_\+value@{get\+\_\+type\+\_\+and\+\_\+value}}
+\index{get\+\_\+type\+\_\+and\+\_\+value@{get\+\_\+type\+\_\+and\+\_\+value}!odf\+::userfield\+::\+User\+Fields@{odf\+::userfield\+::\+User\+Fields}}
+\subsubsection[{get\+\_\+type\+\_\+and\+\_\+value}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+userfield.\+User\+Fields.\+get\+\_\+type\+\_\+and\+\_\+value (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{field\+\_\+name}
+\end{DoxyParamCaption}
+)}}\label{classodf_1_1userfield_1_1UserFields_a532884dffd16a0a946aa961ea442d3ca}
+
+
+Extract the type and contents of this field from the file. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em field\+\_\+name} & unicode string\+: name of a field \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+tuple ($<$type$>$, $<$field-\/value$>$) as a pair of unicode strings or None if field does not exist. 
+\end{DoxyReturn}
+
+
+Definition at line 160 of file userfield.\+py.
+
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classodf_1_1userfield_1_1UserFields_a532884dffd16a0a946aa961ea442d3ca_cgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{classodf_1_1userfield_1_1UserFields_a9151edeae09fcea4b334a445d7efc6b0}{\index{odf\+::userfield\+::\+User\+Fields@{odf\+::userfield\+::\+User\+Fields}!list\+\_\+fields@{list\+\_\+fields}}
+\index{list\+\_\+fields@{list\+\_\+fields}!odf\+::userfield\+::\+User\+Fields@{odf\+::userfield\+::\+User\+Fields}}
+\subsubsection[{list\+\_\+fields}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+userfield.\+User\+Fields.\+list\+\_\+fields (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}}\label{classodf_1_1userfield_1_1UserFields_a9151edeae09fcea4b334a445d7efc6b0}
+
+
+List (extract) all known user-\/fields. 
+
+\begin{DoxyReturn}{Returns}
+list of user-\/field names as unicode strings. 
+\end{DoxyReturn}
+
+
+Definition at line 98 of file userfield.\+py.
+
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classodf_1_1userfield_1_1UserFields_a9151edeae09fcea4b334a445d7efc6b0_cgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{classodf_1_1userfield_1_1UserFields_ae67ac78a3c883117d523f245f076b227}{\index{odf\+::userfield\+::\+User\+Fields@{odf\+::userfield\+::\+User\+Fields}!list\+\_\+fields\+\_\+and\+\_\+values@{list\+\_\+fields\+\_\+and\+\_\+values}}
+\index{list\+\_\+fields\+\_\+and\+\_\+values@{list\+\_\+fields\+\_\+and\+\_\+values}!odf\+::userfield\+::\+User\+Fields@{odf\+::userfield\+::\+User\+Fields}}
+\subsubsection[{list\+\_\+fields\+\_\+and\+\_\+values}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+userfield.\+User\+Fields.\+list\+\_\+fields\+\_\+and\+\_\+values (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{field\+\_\+names = {\ttfamily None}}
+\end{DoxyParamCaption}
+)}}\label{classodf_1_1userfield_1_1UserFields_ae67ac78a3c883117d523f245f076b227}
+
+
+List (extract) user-\/fields with type and value. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em field\+\_\+names} & list of field names as unicode strings to show, or None for all.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+list of tuples ($<$field name$>$=\char`\"{}\char`\"{}$>$, $<$field type$>$=\char`\"{}\char`\"{}$>$, 
+\end{DoxyReturn}
+) as type (unicode string, stringified type, unicode string). 
+
+Definition at line 111 of file userfield.\+py.
+
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classodf_1_1userfield_1_1UserFields_ae67ac78a3c883117d523f245f076b227_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classodf_1_1userfield_1_1UserFields_ae67ac78a3c883117d523f245f076b227_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{classodf_1_1userfield_1_1UserFields_a1ca142bc38126c2d15a9a40e94c9d21c}{\index{odf\+::userfield\+::\+User\+Fields@{odf\+::userfield\+::\+User\+Fields}!list\+\_\+values@{list\+\_\+values}}
+\index{list\+\_\+values@{list\+\_\+values}!odf\+::userfield\+::\+User\+Fields@{odf\+::userfield\+::\+User\+Fields}}
+\subsubsection[{list\+\_\+values}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+userfield.\+User\+Fields.\+list\+\_\+values (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{field\+\_\+names}
+\end{DoxyParamCaption}
+)}}\label{classodf_1_1userfield_1_1UserFields_a1ca142bc38126c2d15a9a40e94c9d21c}
+
+
+Extract the contents of given field names from the file. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em field\+\_\+names} & list of field names as unicode strings\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+list of field values as unicode strings. 
+\end{DoxyReturn}
+
+
+Definition at line 137 of file userfield.\+py.
+
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classodf_1_1userfield_1_1UserFields_a1ca142bc38126c2d15a9a40e94c9d21c_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classodf_1_1userfield_1_1UserFields_a1ca142bc38126c2d15a9a40e94c9d21c_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{classodf_1_1userfield_1_1UserFields_a65ccd99e2c198f06b55551d6a7bbf59a}{\index{odf\+::userfield\+::\+User\+Fields@{odf\+::userfield\+::\+User\+Fields}!loaddoc@{loaddoc}}
+\index{loaddoc@{loaddoc}!odf\+::userfield\+::\+User\+Fields@{odf\+::userfield\+::\+User\+Fields}}
+\subsubsection[{loaddoc}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+userfield.\+User\+Fields.\+loaddoc (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}}\label{classodf_1_1userfield_1_1UserFields_a65ccd99e2c198f06b55551d6a7bbf59a}
+
+
+Definition at line 74 of file userfield.\+py.
+
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classodf_1_1userfield_1_1UserFields_a65ccd99e2c198f06b55551d6a7bbf59a_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classodf_1_1userfield_1_1UserFields_a65ccd99e2c198f06b55551d6a7bbf59a_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{classodf_1_1userfield_1_1UserFields_ae5336dcb2cdaee62f02d16cdb8945a2f}{\index{odf\+::userfield\+::\+User\+Fields@{odf\+::userfield\+::\+User\+Fields}!savedoc@{savedoc}}
+\index{savedoc@{savedoc}!odf\+::userfield\+::\+User\+Fields@{odf\+::userfield\+::\+User\+Fields}}
+\subsubsection[{savedoc}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+userfield.\+User\+Fields.\+savedoc (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}}\label{classodf_1_1userfield_1_1UserFields_ae5336dcb2cdaee62f02d16cdb8945a2f}
+
+
+Definition at line 85 of file userfield.\+py.
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classodf_1_1userfield_1_1UserFields_ae5336dcb2cdaee62f02d16cdb8945a2f_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{classodf_1_1userfield_1_1UserFields_aa13e8293efd5d183ac771d07b56a4558}{\index{odf\+::userfield\+::\+User\+Fields@{odf\+::userfield\+::\+User\+Fields}!update@{update}}
+\index{update@{update}!odf\+::userfield\+::\+User\+Fields@{odf\+::userfield\+::\+User\+Fields}}
+\subsubsection[{update}]{\setlength{\rightskip}{0pt plus 5cm}def odf.\+userfield.\+User\+Fields.\+update (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{data}
+\end{DoxyParamCaption}
+)}}\label{classodf_1_1userfield_1_1UserFields_aa13e8293efd5d183ac771d07b56a4558}
+
+
+Set the value of user fields. 
+
+The field types will be the same. \begin{DoxyVerb}    data ... dict, with field name as key, field value as value
+
+    Returns None\end{DoxyVerb}
+ 
+
+Definition at line 176 of file userfield.\+py.
+
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classodf_1_1userfield_1_1UserFields_aa13e8293efd5d183ac771d07b56a4558_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+\subsection{Member Data Documentation}
+\hypertarget{classodf_1_1userfield_1_1UserFields_a4ff1ceee3cb418e2b72d6c0366fb63b3}{\index{odf\+::userfield\+::\+User\+Fields@{odf\+::userfield\+::\+User\+Fields}!dest\+\_\+file@{dest\+\_\+file}}
+\index{dest\+\_\+file@{dest\+\_\+file}!odf\+::userfield\+::\+User\+Fields@{odf\+::userfield\+::\+User\+Fields}}
+\subsubsection[{dest\+\_\+file}]{\setlength{\rightskip}{0pt plus 5cm}odf.\+userfield.\+User\+Fields.\+dest\+\_\+file = None\hspace{0.3cm}{\ttfamily [static]}}}\label{classodf_1_1userfield_1_1UserFields_a4ff1ceee3cb418e2b72d6c0366fb63b3}
+
+
+Definition at line 57 of file userfield.\+py.
+
+\hypertarget{classodf_1_1userfield_1_1UserFields_adfbbf12e8d9c5377410d463070b5bd76}{\index{odf\+::userfield\+::\+User\+Fields@{odf\+::userfield\+::\+User\+Fields}!document@{document}}
+\index{document@{document}!odf\+::userfield\+::\+User\+Fields@{odf\+::userfield\+::\+User\+Fields}}
+\subsubsection[{document}]{\setlength{\rightskip}{0pt plus 5cm}odf.\+userfield.\+User\+Fields.\+document}}\label{classodf_1_1userfield_1_1UserFields_adfbbf12e8d9c5377410d463070b5bd76}
+
+
+Definition at line 72 of file userfield.\+py.
+
+\hypertarget{classodf_1_1userfield_1_1UserFields_aab129a38d3cc36d3ca8469de9a04c5a9}{\index{odf\+::userfield\+::\+User\+Fields@{odf\+::userfield\+::\+User\+Fields}!src\+\_\+file@{src\+\_\+file}}
+\index{src\+\_\+file@{src\+\_\+file}!odf\+::userfield\+::\+User\+Fields@{odf\+::userfield\+::\+User\+Fields}}
+\subsubsection[{src\+\_\+file}]{\setlength{\rightskip}{0pt plus 5cm}odf.\+userfield.\+User\+Fields.\+src\+\_\+file = None\hspace{0.3cm}{\ttfamily [static]}}}\label{classodf_1_1userfield_1_1UserFields_aab129a38d3cc36d3ca8469de9a04c5a9}
+
+
+Definition at line 56 of file userfield.\+py.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+odf/\hyperlink{userfield_8py}{userfield.\+py}\end{DoxyCompactItemize}
