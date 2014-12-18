@@ -445,7 +445,7 @@ class ODF2XHTML(handler.ContentHandler):
         (TEXTNS, "user-index-source"):(self.s_text_x_source, self.e_text_x_source),
         }
         if embedable:
-            self.make_embedable()
+            self.set_embedable()
         self._resetobject()
 
     def set_plain(self):
