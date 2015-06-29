@@ -31,9 +31,9 @@ from odf.table import Table, TableColumn, TableRow, TableCell
 from optparse import OptionParser
 import sys,csv,re, os, codecs
 
-if sys.version_info.major==3: unicode=str
+if sys.version_info[0]==3: unicode=str
 
-if sys.version_info.major==2:
+if sys.version_info[0]==2:
     class UTF8Recoder:
         """
         Iterator that reads an encoded stream and reencodes the input to UTF-8
@@ -81,7 +81,7 @@ def csvToOds( pathFileCSV, pathFileODS, tableName='table',
     # Start the table
     table = Table( name=tableName )
 
-    if sys.version_info.major==3:
+    if sys.version_info[0]==3:
         reader = csv.reader(open(pathFileCSV, encoding=encoding),
                             delimiter=delimiter,
                             quoting=quoting,

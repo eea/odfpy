@@ -27,7 +27,7 @@ import zipfile
 
 from io import BytesIO
 
-if sys.version_info.major==3:
+if sys.version_info[0]==3:
     unicode=str
 
 
@@ -190,7 +190,7 @@ class TestUserFields(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    if sys.version_info.major==3:
+    if sys.version_info[0]==3:
         unittest.main(warnings='ignore') # ignore warnings for unclosed files
     else:
         unittest.main()

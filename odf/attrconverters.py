@@ -32,7 +32,7 @@ def make_NCName(arg):
     return arg
 
 def cnv_angle(attribute, arg, element):
-        if sys.version_info.major==2:
+        if sys.version_info[0]==2:
             return unicode(arg)
         else:
             return str(arg)
@@ -190,7 +190,7 @@ def cnv_NCName(attribute, arg, element):
     """ NCName is defined in http://www.w3.org/TR/REC-xml-names/#NT-NCName
         Essentially an XML name minus ':'
     """
-    if (sys.version_info.major==3 and isinstance(arg, str)) or (sys.version_info.major==2 and type(arg) in types.StringTypes):
+    if (sys.version_info[0]==3 and isinstance(arg, str)) or (sys.version_info[0]==2 and type(arg) in types.StringTypes):
         return make_NCName(arg)
     else:
         return arg.getAttrNS(STYLENS, 'name')
@@ -235,7 +235,7 @@ pattern_points = re.compile(r'-?[0-9]+,-?[0-9]+([ ]+-?[0-9]+,-?[0-9]+)*')
 #pattern_points = re.compile(r'-?[0-9.]+,-?[0-9.]+([ ]+-?[0-9.]+,-?[0-9.]+)*')
 def cnv_points(attribute, arg, element):
     global pattern_points
-    if (sys.version_info.major==3 and isinstance(arg, str)) or (sys.version_info.major==2 and type(arg) in types.StringTypes):
+    if (sys.version_info[0]==3 and isinstance(arg, str)) or (sys.version_info[0]==2 and type(arg) in types.StringTypes):
         if not pattern_points.match(arg):
             raise ValueError( "x,y are separated by a comma and the points are separated by white spaces")
         return arg
@@ -255,7 +255,7 @@ def cnv_rowOrCol(attribute, arg, element):
     return str(arg)
 
 def cnv_string(attribute, arg, element):
-    if sys.version_info.major==2:
+    if sys.version_info[0]==2:
         return unicode(arg)
     else:
         return str(arg)
@@ -1605,7 +1605,7 @@ class AttrConverters:
             conversion = attrconverters.get((attribute, None), None)
             if conversion is not None:
                 return conversion(attribute, value, element)
-        if sys.version_info.major==2:
+        if sys.version_info[0]==2:
             return unicode(value)
         else:
             return str(value)

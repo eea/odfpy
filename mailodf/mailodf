@@ -26,7 +26,7 @@ from email.mime.nonmultipart import MIMENonMultipart
 from email.mime.text import MIMEText
 from email.encoders import encode_base64
 
-if sys.version_info.major==3: unicode=str
+if sys.version_info[0]==3: unicode=str
 
 def usage():
    sys.stderr.write("Usage: %s [-f from] [-s subject] inputfile recipients...\n" % sys.argv[0])

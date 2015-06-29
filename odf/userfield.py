@@ -29,7 +29,7 @@ from odf.namespaces import OFFICENS
 from odf.opendocument import load
 import io, sys
 
-if sys.version_info.major==3:
+if sys.version_info[0]==3:
     unicode=str
 
 OUTENCODING = "utf-8"
@@ -69,7 +69,7 @@ class UserFields(object):
         self.document = None
 
     def loaddoc(self):
-        if (sys.version_info.major==3 and (isinstance(self.src_file, str) or (isinstance(self.src_file, io.IOBase)))) or (sys.version_info.major==2 and isinstance(self.src_file, basestring)):
+        if (sys.version_info[0]==3 and (isinstance(self.src_file, str) or (isinstance(self.src_file, io.IOBase)))) or (sys.version_info[0]==2 and isinstance(self.src_file, basestring)):
             # src_file is a filename, check if it is a zip-file
             if not zipfile.is_zipfile(self.src_file):
                 raise TypeError(u"%s is no odt file." % self.src_file)

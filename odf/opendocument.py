@@ -43,7 +43,7 @@ from attrconverters import make_NCName
 from xml.sax.xmlreader import InputSource
 from odfmanifest import manifestlist
 
-if sys.version_info.major == 3:
+if sys.version_info[0] == 3:
     unicode=str # unicode function does not exist
 
 __version__= TOOLSVERSION
@@ -228,7 +228,7 @@ class OpenDocument:
 
         result=None
         xml=StringIO()
-        if sys.version_info.major==2:
+        if sys.version_info[0]==2:
             xml.write(_XMLPROLOGUE)
         else:
             xml.write(_XMLPROLOGUE)
@@ -248,7 +248,7 @@ class OpenDocument:
         """
         self.__replaceGenerator()
         xml=StringIO()
-        if sys.version_info.major==2:
+        if sys.version_info[0]==2:
             xml.write(_XMLPROLOGUE)
         else:
             xml.write(_XMLPROLOGUE)
@@ -318,7 +318,7 @@ class OpenDocument:
         x = DocumentSettings()
         x.addElement(self.settings)
         xml=StringIO()
-        if sys.version_info.major==2:
+        if sys.version_info[0]==2:
             xml.write(_XMLPROLOGUE)
         else:
             xml.write(_XMLPROLOGUE)
@@ -628,7 +628,7 @@ class OpenDocument:
         for op in self._extra:
             if op.filename == u"META-INF/documentsignatures.xml": continue # Don't save signatures
             self.manifest.addElement(manifest.FileEntry(fullpath=op.filename, mediatype=op.mediatype))
-            if sys.version_info.major==3:
+            if sys.version_info[0]==3:
                 zi = zipfile.ZipInfo(op.filename, self._now)
             else:
                 zi = zipfile.ZipInfo(op.filename.encode('utf-8'), self._now)

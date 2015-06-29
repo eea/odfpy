@@ -28,7 +28,7 @@ from odf.style import BackgroundImage
 from odf.text import ListLevelStyleImage
 from odf.office import BinaryData
 
-if sys.version_info.major==3: unicode=str
+if sys.version_info[0]==3: unicode=str
 
 def usage():
    sys.stderr.write("Usage: %s [-e] [-o outputfile] [inputfile]\n" % sys.argv[0])

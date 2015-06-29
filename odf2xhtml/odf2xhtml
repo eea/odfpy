@@ -20,7 +20,7 @@
 from odf.odf2xhtml import ODF2XHTML
 import sys, getopt
 
-if sys.version_info.major==3: unicode=str
+if sys.version_info[0]==3: unicode=str
 
 from io import StringIO
 

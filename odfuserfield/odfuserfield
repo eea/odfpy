@@ -22,7 +22,7 @@ import getopt
 
 import odf.userfield
 
-if sys.version_info.major==3: unicode=str
+if sys.version_info[0]==3: unicode=str
 
 listfields = False
 Listfields = False

@@ -30,7 +30,7 @@ from namespaces import nsdict
 import grammar
 from attrconverters import AttrConverters
 
-if sys.version_info.major == 3:
+if sys.version_info[0] == 3:
     unicode=str # unicode function does not exist
 
 # The following code is pasted form xml.sax.saxutils

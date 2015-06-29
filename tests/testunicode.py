@@ -67,7 +67,7 @@ class TestUnicode(unittest.TestCase):
         self.assertContains(c, b'<office:automatic-styles/>')
 
 if __name__ == '__main__':
-    if sys.version_info.major==2:
+    if sys.version_info[0]==2:
         unittest.main()
     else:
         sys.stderr.write("\n----------------------------------------------------------------------\nRan no test\n\n")

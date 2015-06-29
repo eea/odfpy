@@ -1338,7 +1338,7 @@ ol, ul { padding-left: 2em; }
 #        self.writeout( escape(mark) )
         # Since HTML only knows about endnotes, there is too much risk that the
         # marker is reused in the source. Therefore we force numeric markers
-        if sys.version_info.major==3:
+        if sys.version_info[0]==3:
             self.writeout(self.currentnote)
         else:
             self.writeout(unicode(self.currentnote))
@@ -1455,7 +1455,7 @@ ol, ul { padding-left: 2em; }
                 self._walknode(c)
             self.endElementNS(node.qname, node.tagName)
         if node.nodeType == Node.TEXT_NODE or node.nodeType == Node.CDATA_SECTION_NODE:
-            if sys.version_info.major==3:
+            if sys.version_info[0]==3:
                 self.characters(str(node))
             else:
                 self.characters(unicode(node))
