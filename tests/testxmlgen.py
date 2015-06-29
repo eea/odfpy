@@ -74,16 +74,19 @@ class TestXMLGenerator(unittest.TestCase):
 <a:greetings xmlns:a="http://example.com/ns">
   <a:greet xml:lang="en">Hello world</a:greet>
 </a:greetings>"""
-        parser.feed(testcontent)
-        parser.close()
-        expectedresult="""<?xml version="1.0" encoding="utf-8"?>
+        # There is a bug in older versions of saxutils
+        if sys.version_info[0] == 2 and sys.version_info[1] == 6:
+            self.assertRaises(KeyError, parser.feed, testcontent)
+        else:
+            parser.feed(testcontent)
+            parser.close()
+            expectedresult="""<?xml version="1.0" encoding="utf-8"?>
 <a:greetings xmlns:a="http://example.com/ns">
   <a:greet xml:lang="en">Hello world</a:greet>
 </a:greetings>"""
-        outfp.seek(0)
-        self.assertEqual( outfp.read().decode('utf-8'), expectedresult)
-        outfp.close()
-#       self.assertRaises(KeyError, parser.feed, testcontent)
+            outfp.seek(0)
+            self.assertEqual( outfp.read().decode('utf-8'), expectedresult)
+            outfp.close()
 
     def test_myxml(self):
         """ Test that my patch works """
