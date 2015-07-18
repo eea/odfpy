@@ -1,0 +1,38 @@
+
+Check that pypi can understand the long description
+
+python setup.py --long-description | rst2html > test.html
+
+Create a release tag:
+
+$ cd ~/tmp
+$ git clone https://github.com/eea/odfpy.git
+$ cd odfpy
+
+Run the automated tests:
+
+$ cd tests ; make ; cd ..
+
+Remove the "dev" marker from the version in setup.py and odf/namespaces.py
+
+$ vi setup.py odf/namespaces.py
+
+~check in the difference locally~
+
+$ git tag -a release-1.2.X -m "Tagging the 1.2.X release of the 'odfpy' project."
+$ git push origin release-1.2.X
+or:
+$ git push origin --tags
+
+$ python setup.py build
+$ python setup.py sdist
+$ python setup.py sdist upload
+
+Increment the version number and add the "dev" marker.
+
+$ vi setup.py odf/namespaces.py
+
+Check in changes and push them to origin
+
+$ git commit -a
+$ git push
