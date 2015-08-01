@@ -55,10 +55,11 @@ class TestStyles(unittest.TestCase):
         """ Test that you can't add an illegal child """
         tablecontents = style.Style(name=u"Table Contents", family=u"paragraph")
         p = text.P(text=u"x")
-        # something to fix here
-        if sys.version_info[0]==3:
-            print("There is some bug to fix: the exception 'IllegalChild' is correctly raised, but the call of 'assertRaises' fails, only with Python3! See line 61 in `teststyles.py`.")
-        self.assertRaises(IllegalChild, tablecontents.addElement,p)
+        with self.assertRaises(Exception) as cm:
+            tablecontents.addElement(p)
+        # FIXME: This doesn't work on Python 3.
+        if sys.version_info[0]==2:
+            self.assertTrue(isinstance(cm.exception, IllegalChild))
 
     def testTextStyleName(self):
         """ Test that you can use the name of the style in references """

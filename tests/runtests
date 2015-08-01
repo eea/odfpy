@@ -1,6 +1,12 @@
 #!/bin/sh
+echo '========= Python 2 tests =========='
 for file in test*.py
 do
-    python2  $file; echo '========= end of `python2  '$file'` =========='
-    python3 $file; echo '========= end of `python3  '$file'` =========='
+    python2  $file
+done
+
+echo '========= Python 3 tests =========='
+for file in test*.py
+do
+    python3 $file
 done

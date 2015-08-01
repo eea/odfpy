@@ -18,11 +18,14 @@
 # Contributor(s):
 #
 
-import unittest, os, os.path
+import unittest, os, os.path, sys
 from odf.opendocument import OpenDocumentText, load
 from odf import style, text
 from odf.text import P, H, LineBreak
 from elementparser import ElementParser
+
+if sys.version_info[0]==3:
+    unicode=str
 
 class TestSimple(unittest.TestCase):
     
@@ -159,14 +162,21 @@ class TestExampleDocs(unittest.TestCase):
             os.path.dirname(__file__), u"examples", u"emb_spreadsheet.odp")
         d = load(spreadsheet_odt)
         self.assertEqual(1, len(d.childobjects))
-        for s in d.childobjects:
-            print (s.folder)
-#        mani = unicode(d.manifestxml(),'utf-8')
-#        self.assertNotEqual(-1, mani.find(u''' manifest:full-path="Object 1/"'''), "Must contain the subobject")
-#        self.assertNotEqual(-1, mani.find(u''' manifest:full-path="Object 1/settings.xml"'''), "Must contain the subobject settings.xml")
+#       for s in d.childobjects:
+#           print (s.folder)
+#       mani = unicode(d.manifestxml(),'utf-8')
+#       self.assertNotEqual(-1, mani.find(u''' manifest:full-path="Object 1/"'''), "Must contain the subobject")
+#       self.assertNotEqual(-1, mani.find(u''' manifest:full-path="Object 1/settings.xml"'''), "Must contain the subobject settings.xml")
 
 #        d.save("subobject.odp")
 
+    def test_chinese(self):
+        """ Load a document containing Chinese content"""
+        chinese_spreadsheet = os.path.join(
+            os.path.dirname(__file__), u"examples", u"chinese_spreadsheet.ods")
+        d = load(chinese_spreadsheet)
+        result = unicode(d.contentxml(),'utf-8')
+        self.assertNotEqual(-1, result.find(u'''工作表1'''))
 
 if __name__ == '__main__':
     unittest.main()

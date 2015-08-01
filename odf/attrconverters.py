@@ -103,7 +103,7 @@ def cnv_family(attribute, arg, element):
 def __save_prefix(attribute, arg, element):
     prefix = arg.split(':',1)[0]
     if prefix == arg:
-        return str(arg)
+        return arg
     namespace = element.get_knownns(prefix)
     if namespace is None:
         #raise ValueError( "'%s' is an unknown prefix" % str(prefix))
