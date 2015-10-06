@@ -18,6 +18,8 @@
 # Contributor(s):
 #
 
+from xml.dom.minidom import parseString
+from xml.dom import Node
 from namespaces import MATHNS
 from element import Element
 
@@ -28,3 +30,35 @@ from element import Element
 def Math(**args):
     return Element(qname = (MATHNS,'math'), **args)
 
+math_templ = u'\
+<math xmlns="http://www.w3.org/1998/Math/MathML">\
+<semantics>\
+<annotation encoding="StarMath 5.0">%s</annotation>\
+</semantics></math>'
+
+def gen_odf_math_(parent):
+    elem = Element(qname = (MATHNS,parent.tagName))
+    if parent.attributes:
+        for attr, value in parent.attributes.items():
+            elem.setAttribute((MATHNS,attr), value, check_grammar=False)
+    for child in parent.childNodes:
+        if child.nodeType == Node.TEXT_NODE:
+            text = child.nodeValue
+            elem.addText(text, check_grammar=False)
+        else:
+            elem.addElement(gen_odf_math_(child), check_grammar=False)
+    return elem
+
+def gen_odf_math(starmath_string):
+    u'''
+    Generating odf.math.Math element
+    '''
+    mathml = math_templ % (starmath_string)
+    math_ = parseString(mathml.encode('utf-8'))
+    math_ = math_.documentElement
+    odf_math = gen_odf_math_(math_)
+    return odf_math
+
+if __name__ == '__main__':
+    formula = 'c = sqrt(a^2+b_2) + %ialpha over %ibeta'
+    math = gen_odf_math(formula)
