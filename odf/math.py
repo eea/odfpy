@@ -28,9 +28,8 @@ from element import Element
 
 math_templ = u'\
 <math xmlns="http://www.w3.org/1998/Math/MathML">\
-<semantics>\
 <annotation encoding="StarMath 5.0">%s</annotation>\
-</semantics></math>'
+</math>'
 
 def Math(starmath_string):
     u'''
