@@ -93,10 +93,7 @@ allowed_children = {
 #	),
 # Completes Dublin Core end
 	(MATHNS,u'math') : None,
-	(MATHNS,u'annotation'): (
-        (MATHNS,u'encoding'),
-    ),
-
+	
 	(XFORMSNS,u'model') : None,
 
 	(ANIMNS,u'animate') : (
@@ -4713,6 +4710,9 @@ allowed_attributes = {
 #	),
 # Completes Dublin Core end
 	(MATHNS,u'math'): None,
+	(MATHNS,u'annotation'): (
+        	(MATHNS,u'encoding'),
+        ),
 	(XFORMSNS,u'model'): None,
 # allowed_attributes
 	(ANIMNS,u'animate'):(
