@@ -93,6 +93,9 @@ allowed_children = {
 #	),
 # Completes Dublin Core end
 	(MATHNS,u'math') : None,
+	(MATHNS,u'annotation'): (
+        (MATHNS,u'encoding'),
+    ),
 
 	(XFORMSNS,u'model') : None,
 
