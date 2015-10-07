@@ -3641,6 +3641,7 @@ allows_text = (
 	(FORMNS,u'item'),
 	(FORMNS,u'option'),
 	(MATHNS,u'math'),
+	(MATHNS,u'annotation'),
 	(METANS,u'creation-date'),
 	(METANS,u'date-string'),
 	(METANS,u'editing-cycles'),
