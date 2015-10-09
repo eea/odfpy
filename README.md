@@ -27,12 +27,9 @@ $ su
 ```
 The library is incompatible with PyXML.
 
-## ISSUES
+## RUNNING TESTS
 
-If you run the tests with python3, you will probably see one error.
-It is probably a flaw in the command assertRaises of Python3: the
-right exception is raised, but it is not correctly identified by
-Python3's assertRaises.
+To run the tests, `cd` into the tests directory and run `make`.
 
 ## REDISTRIBUTION LICENSE
 
