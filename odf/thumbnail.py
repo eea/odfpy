@@ -70,11 +70,11 @@ AAAAAElFTkSuQmCC\
 """
 
 def thumbnail():
-    icon = base64.decodestring(iconstr)
+    icon = base64.b64decode(iconstr)
     return icon
 
 if __name__ == "__main__":
     icon = thumbnail()
-    f = file("thumbnail.png","wb")
+    f = open("thumbnail.png","wb")
     f.write(icon)
     f.close()
