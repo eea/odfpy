@@ -435,7 +435,6 @@ class OpenDocument:
             self.Pictures[manifestfn] = (IS_IMAGE, content, mediatype)
 
         assert(type(filename)==type(u""))
-        assert(type(mediatype)==type(""))
         assert(type(content) == type(b""))
 
         return manifestfn
