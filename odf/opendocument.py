@@ -918,7 +918,8 @@ def __fixXmlPart(xmlpart):
         if u' xmlns:{prefix}'.format(prefix=prefix) not in xmlpart:
             ###########################################
             # fixed a bug triggered by math elements
-            # Notice: math elements are probably wrongly exported to XHTML
+            # Notice: math elements are creectly exported to XHTML
+            #         and best viewed with MathJax javascript.
             # 2016-02-19 G.K.
             ###########################################
             try:
