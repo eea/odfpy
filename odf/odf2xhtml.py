@@ -748,12 +748,15 @@ class ODF2XHTML(handler.ContentHandler):
         """
         objhref = attrs[(XLINKNS,"href")]
         # Remove leading "./": from "./Object 1" to "Object 1"
-#       objhref = objhref [2:]
+        # objhref = objhref [2:]
        
         # Not using os.path.join since it fails to find the file on Windows.
-#       objcontentpath = '/'.join([objhref, 'content.xml'])
-
-        for c in self.document.childnodes:
+        # objcontentpath = '/'.join([objhref, 'content.xml'])
+        ################################
+        # fixed: self.document.childnodes ===>  self.document.childobjects
+        # 2016-02-19 G.K.
+        ################################
+        for c in self.document.childobjects:
             if c.folder == objhref:
                 self._walknode(c.topnode)
 

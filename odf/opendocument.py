@@ -916,9 +916,17 @@ def __fixXmlPart(xmlpart):
                          u'svg', u'fo',u'draw', u'table',u'form')
     for prefix in requestedPrefixes:
         if u' xmlns:{prefix}'.format(prefix=prefix) not in xmlpart:
-            pos=result.index(u" xmlns:")
-            toInsert=u' xmlns:{prefix}="urn:oasis:names:tc:opendocument:xmlns:{prefix}:1.0"'.format(prefix=prefix)
-            result=result[:pos]+toInsert+result[pos:]
+            ###########################################
+            # fixed a bug triggered by math elements
+            # Notice: math elements are probably wrongly exported to XHTML
+            # 2016-02-19 G.K.
+            ###########################################
+            try:
+                pos=result.index(u" xmlns:")
+                toInsert=u' xmlns:{prefix}="urn:oasis:names:tc:opendocument:xmlns:{prefix}:1.0"'.format(prefix=prefix)
+                result=result[:pos]+toInsert+result[pos:]
+            except:
+                pass
     return result
 
 
