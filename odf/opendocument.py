@@ -586,8 +586,6 @@ class OpenDocument:
         Writes the ZIP format
         @param outputfp open file descriptor
         """
-        assert('wb' in repr(outputfp) or 'BufferedWriter' in repr(outputfp)  or 'BytesIO' in repr(outputfp))
-
         zipoutputfp = zipfile.ZipFile(outputfp,"w")
         self.__zipwrite(zipoutputfp)
 
@@ -930,8 +928,6 @@ def __detectmimetype(zipfd, odffile):
     @return a mime-type as a unicode string
     """
     assert(isinstance(zipfd, zipfile.ZipFile))
-    assert(type(odffile)==type(u"") or 'rb' in repr(odffile) \
-               or 'BufferedReader' in repr(odffile)  or 'BytesIO' in repr(odffile))
 
     try:
         mimetype = zipfd.read('mimetype').decode("utf-8")
@@ -956,9 +952,6 @@ def load(odffile):
     an open readable stream
     @return a reference to the structure (an OpenDocument instance)
     """
-    assert(type(odffile)==type(u"") or 'rb' in repr(odffile) \
-               or 'BufferedReader' in repr(odffile)  or 'BytesIO' in repr(odffile))
-
     z = zipfile.ZipFile(odffile)
     mimetype = __detectmimetype(z, odffile)
     doc = OpenDocument(mimetype, add_generator=False)
