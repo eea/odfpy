@@ -21,8 +21,8 @@
 
 import re, sys, os.path
 sys.path.append(os.path.dirname(__file__))
-from style import Style, TextProperties, ListLevelProperties
-from text import ListStyle,ListLevelStyleNumber,ListLevelStyleBullet
+from odf.style import Style, TextProperties, ListLevelProperties
+from odf.text import ListStyle,ListLevelStyleNumber,ListLevelStyleBullet
 
 """
 Create a <text:list-style> element from a string or array.

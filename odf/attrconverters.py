@@ -20,7 +20,7 @@
 
 import sys, os.path
 sys.path.append(os.path.dirname(__file__))
-from namespaces import *
+from odf.namespaces import *
 import re, types
 
 pattern_color =  re.compile(r'#[0-9a-fA-F]{6}')

@@ -26,9 +26,9 @@ import sys, os.path
 sys.path.append(os.path.dirname(__file__))
 import xml.dom
 from xml.dom.minicompat import *
-from namespaces import nsdict
-import grammar
-from attrconverters import AttrConverters
+from odf.namespaces import nsdict
+import odf.grammar as grammar
+from odf.attrconverters import AttrConverters
 
 if sys.version_info[0] == 3:
     unicode=str # unicode function does not exist
