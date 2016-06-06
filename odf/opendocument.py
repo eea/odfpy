@@ -568,8 +568,11 @@ class OpenDocument:
         the ZIP content.
         @param addsuffix boolean: whether to add a suffix or not; defaults to False
         """
-        assert(type(outputfile)==type(u"") or 'wb' in repr(outputfile) or 'BufferedWriter' in repr(outputfile)  or 'BytesIO' in repr(outputfile))
-        assert(type(addsuffix)==type(True))
+        assert(isinstance(outputfile, basestring)
+               or 'wb' in repr(outputfile)
+               or isinstance(outputfile, io.BufferedWriter)
+               or isinstance(outputfile, io.BytesIO))
+        assert(type(addsuffix)==type(types.BooleanType))
 
         if outputfile == u'-':
             outputfp = zipfile.ZipFile(sys.stdout,"w")
@@ -930,8 +933,10 @@ def __detectmimetype(zipfd, odffile):
     @return a mime-type as a unicode string
     """
     assert(isinstance(zipfd, zipfile.ZipFile))
-    assert(type(odffile)==type(u"") or 'rb' in repr(odffile) \
-               or 'BufferedReader' in repr(odffile)  or 'BytesIO' in repr(odffile))
+    assert(isinstance(odffile, basestring)
+           or 'rb' in repr(odffile)
+           or isinstance(odffile, io.BufferedReader)
+           or isinstance(odffile, io.BytesIO))
 
     try:
         mimetype = zipfd.read('mimetype').decode("utf-8")
@@ -956,8 +961,10 @@ def load(odffile):
     an open readable stream
     @return a reference to the structure (an OpenDocument instance)
     """
-    assert(type(odffile)==type(u"") or 'rb' in repr(odffile) \
-               or 'BufferedReader' in repr(odffile)  or 'BytesIO' in repr(odffile))
+    assert(isinstance(odffile, basestring)
+           or 'rb' in repr(odffile)
+           or isinstance(odffile, io.BufferedReader)
+           or isinstance(odffile, io.BytesIO))
 
     z = zipfile.ZipFile(odffile)
     mimetype = __detectmimetype(z, odffile)
