@@ -589,8 +589,6 @@ class OpenDocument:
         Writes the ZIP format
         @param outputfp open file descriptor
         """
-        assert('wb' in repr(outputfp) or 'BufferedWriter' in repr(outputfp)  or 'BytesIO' in repr(outputfp))
-
         zipoutputfp = zipfile.ZipFile(outputfp,"w")
         self.__zipwrite(zipoutputfp)
 
@@ -919,9 +917,18 @@ def __fixXmlPart(xmlpart):
                          u'svg', u'fo',u'draw', u'table',u'form')
     for prefix in requestedPrefixes:
         if u' xmlns:{prefix}'.format(prefix=prefix) not in xmlpart:
-            pos=result.index(u" xmlns:")
-            toInsert=u' xmlns:{prefix}="urn:oasis:names:tc:opendocument:xmlns:{prefix}:1.0"'.format(prefix=prefix)
-            result=result[:pos]+toInsert+result[pos:]
+            ###########################################
+            # fixed a bug triggered by math elements
+            # Notice: math elements are creectly exported to XHTML
+            #         and best viewed with MathJax javascript.
+            # 2016-02-19 G.K.
+            ###########################################
+            try:
+                pos=result.index(u" xmlns:")
+                toInsert=u' xmlns:{prefix}="urn:oasis:names:tc:opendocument:xmlns:{prefix}:1.0"'.format(prefix=prefix)
+                result=result[:pos]+toInsert+result[pos:]
+            except:
+                pass
     return result
 
 
@@ -933,10 +940,6 @@ def __detectmimetype(zipfd, odffile):
     @return a mime-type as a unicode string
     """
     assert(isinstance(zipfd, zipfile.ZipFile))
-    assert(isinstance(odffile, basestring)
-           or 'rb' in repr(odffile)
-           or isinstance(odffile, io.BufferedReader)
-           or isinstance(odffile, io.BytesIO))
 
     try:
         mimetype = zipfd.read('mimetype').decode("utf-8")
@@ -961,11 +964,6 @@ def load(odffile):
     an open readable stream
     @return a reference to the structure (an OpenDocument instance)
     """
-    assert(isinstance(odffile, basestring)
-           or 'rb' in repr(odffile)
-           or isinstance(odffile, io.BufferedReader)
-           or isinstance(odffile, io.BytesIO))
-
     z = zipfile.ZipFile(odffile)
     mimetype = __detectmimetype(z, odffile)
     doc = OpenDocument(mimetype, add_generator=False)
