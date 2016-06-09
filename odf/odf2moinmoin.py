@@ -21,8 +21,8 @@
 #
 
 import sys, zipfile, xml.dom.minidom
-from namespaces import nsdict
-from elementtypes import *
+from odf.namespaces import nsdict
+from odf.elementtypes import *
 
 IGNORED_TAGS = [
     'draw:a'

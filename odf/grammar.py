@@ -24,7 +24,7 @@ To be used for validation check in the API
 """
 import sys, os.path
 sys.path.append(os.path.dirname(__file__))
-from namespaces import *
+from odf.namespaces import *
 
 # The following code is generated from the RelaxNG schema with this notice:
 

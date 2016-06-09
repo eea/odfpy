@@ -27,8 +27,8 @@
 from xml.sax import make_parser,handler
 from xml.sax.xmlreader import InputSource
 import xml.sax.saxutils
-from element import Element
-from namespaces import OFFICENS
+from odf.element import Element
+from odf.namespaces import OFFICENS
 try:
     from cStringIO import StringIO
 except ImportError:

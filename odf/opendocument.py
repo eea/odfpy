@@ -34,14 +34,14 @@ sys.path.append(os.path.dirname(__file__))
 # convert strings or unicode to bytes, which is valid for Python 2 and 3.
 from io import StringIO, BytesIO
 
-from namespaces import *
-import manifest
-import meta
-from office import *
-import element
-from attrconverters import make_NCName
+from odf.namespaces import *
+import odf.manifest as manifest
+import odf.meta as meta
+from odf.office import *
+import odf.element as element
+from odf.attrconverters import make_NCName
 from xml.sax.xmlreader import InputSource
-from odfmanifest import manifestlist
+from odf.odfmanifest import manifestlist
 
 if sys.version_info[0] == 3:
     unicode=str # unicode function does not exist
