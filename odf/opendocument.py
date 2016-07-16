@@ -568,8 +568,6 @@ class OpenDocument:
         the ZIP content.
         @param addsuffix boolean: whether to add a suffix or not; defaults to False
         """
-        assert(type(outputfile)==type(u"") or 'wb' in repr(outputfile) or 'BufferedWriter' in repr(outputfile)  or 'BytesIO' in repr(outputfile))
-        assert(type(addsuffix)==type(True))
 
         if outputfile == u'-':
             outputfp = zipfile.ZipFile(sys.stdout,"w")
