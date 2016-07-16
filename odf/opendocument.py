@@ -24,7 +24,7 @@
 
 __doc__="""Use OpenDocument to generate your documents."""
 
-import zipfile, time, sys, mimetypes, copy, os.path
+import zipfile, time, uuid, sys, mimetypes, copy, os.path
 
 # to allow Python3 to access modules in the same path
 sys.path.append(os.path.dirname(__file__))
@@ -426,7 +426,7 @@ class OpenDocument:
                 except: ext=u''
             else:
                 ext = mimetypes.guess_extension(mediatype)
-            manifestfn = u"Pictures/%0.0f%s" % ((time.time()*10000000000), ext)
+            manifestfn = u"Pictures/%s%s" % (uuid.uuid4().hex.upper(), ext)
             self.Pictures[manifestfn] = (IS_FILENAME, filename, mediatype)
             content=b""  # this value is only use by the assert further
             filename=u"" # this value is only use by the assert further
@@ -458,7 +458,7 @@ class OpenDocument:
             except ValueError: ext=u''
         else:
             ext = mimetypes.guess_extension(mediatype)
-        manifestfn = u"Pictures/%0.0f%s" % ((time.time()*10000000000), ext)
+        manifestfn = u"Pictures/%s%s" % (uuid.uuid4().hex.upper(), ext)
         self.Pictures[manifestfn] = (IS_FILENAME, filename, mediatype)
 
         assert(type(filename)==type(u""))
@@ -481,7 +481,7 @@ class OpenDocument:
         assert(type(mediatype)==type(u""))
 
         ext = mimetypes.guess_extension(mediatype)
-        manifestfn = u"Pictures/%0.0f%s" % ((time.time()*10000000000), ext)
+        manifestfn = u"Pictures/%s%s" % (uuid.uuid4().hex.upper(), ext)
         self.Pictures[manifestfn] = (IS_IMAGE, content, mediatype)
         return manifestfn
 
