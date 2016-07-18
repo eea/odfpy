@@ -674,7 +674,7 @@ class OpenDocument:
             zi = zipfile.ZipInfo(u"%ssettings.xml" % folder, self._now)
             zi.compress_type = zipfile.ZIP_DEFLATED
             zi.external_attr = UNIXPERMS
-            self._z.writestr(zi, anObject.settingsxml() )
+            self._z.writestr(zi, anObject.settingsxml().encode("utf-8") )
 
         # Write meta
         if self == anObject:
@@ -682,7 +682,7 @@ class OpenDocument:
             zi = zipfile.ZipInfo(u"meta.xml", self._now)
             zi.compress_type = zipfile.ZIP_DEFLATED
             zi.external_attr = UNIXPERMS
-            self._z.writestr(zi, anObject.metaxml() )
+            self._z.writestr(zi, anObject.metaxml().encode("utf-8") )
 
         # Write subobjects
         subobjectnum = 1
