@@ -19,7 +19,7 @@
 #
 
 import platform
-from distutils.core import setup
+from setuptools import setup
 
 version = '1.3.4dev'
 
