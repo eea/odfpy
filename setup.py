@@ -19,7 +19,7 @@
 #
 
 import platform
-from setuptools import setup, find_packages
+from setuptools import setup
 
 version = '1.3.4dev'
 
