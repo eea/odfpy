@@ -881,6 +881,7 @@ def __loadxmlparts(z, manifest, doc, objectpath):
 
             parser = make_parser()
             parser.setFeature(handler.feature_namespaces, 1)
+            parser.setFeature(handler.feature_external_ges, 0)
             parser.setContentHandler(LoadParser(doc))
             parser.setErrorHandler(handler.ErrorHandler())
 
