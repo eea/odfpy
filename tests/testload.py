@@ -88,8 +88,16 @@ class TestExampleDocs(unittest.TestCase):
         parastyles_odt = os.path.join(
             os.path.dirname(__file__), "examples", "parastyles.odt")
         d = load(parastyles_odt)
-        meta = unicode(d.metaxml(),'utf-8')
+        meta = d.metaxml()
         self.assertEqual(-1, meta.find(u"""<meta:generator>OpenOffice.org/2.3$Linux OpenOffice.org_project/680m6$Build-9226"""),"Must use the original generator string")
+
+    def test_metagenerator_odp(self):
+        """ Check that meta:generator is the original one """
+        parastyles_odt = os.path.join(
+            os.path.dirname(__file__), u"examples", u"emb_spreadsheet.odp")
+        d = load(parastyles_odt)
+        meta = d.metaxml()
+        self.assertNotEqual(-1, meta.find(u"""<meta:generator>ODFPY"""), "Must not use the original generator string")
 
 
     def test_simplelist(self):
@@ -120,7 +128,7 @@ class TestExampleDocs(unittest.TestCase):
         simplelist_odt = os.path.join(
             os.path.dirname(__file__), "examples", "headerfooter.odt")
         d = load(simplelist_odt)
-        result = unicode(d.stylesxml(),'utf-8')
+        result = d.stylesxml()
         self.assertNotEqual(-1, result.find(u'''style:name="MP1"'''))
         self.assertNotEqual(-1, result.find(u'''style:name="MP2"'''))
         self.assertNotEqual(-1, result.find(u"""<style:header><text:p text:style-name="MP1">Header<text:tab/>"""))
@@ -145,16 +153,13 @@ class TestExampleDocs(unittest.TestCase):
         self.assertNotEqual(-1, result.find(u'''table:formula="=SQRT([.A1]*[.A1]+[.A2]*[.A2])"'''))
         self.assertNotEqual(-1, result.find(u'''table:formula="=SUM([.A1]:[.A2])"'''))
 
-class TestExampleDocs(unittest.TestCase):
-
-    def test_metagenerator(self):
-        """ Check that meta:generator is the original one """
-        parastyles_odt = os.path.join(
-            os.path.dirname(__file__), u"examples", u"emb_spreadsheet.odp")
-        d = load(parastyles_odt)
-        meta = d.metaxml()
-        self.assertNotEqual(-1, meta.find(u"""<meta:generator>ODFPY"""), "Must not use the original generator string")
-
+    def test_externalent(self):
+        """ Check that external entities are not loaded """
+        simplelist_odt = os.path.join(
+            os.path.dirname(__file__), "examples", "nasty.odt")
+        d = load(simplelist_odt)
+        result = unicode(d.contentxml(),'utf-8')
+        self.assertEquals(-1, result.find(u"""The quick brown fox jumps over the lazy dog"""))
 
     def test_spreadsheet(self):
         """ Load a document containing subobjects """
