@@ -25,8 +25,9 @@ or:
 $ git push origin --tags
 
 $ python setup.py build
-$ python setup.py sdist
-$ python setup.py sdist upload
+$ rm tests/odf
+$ python setup.py sdist bdist_egg
+$ python setup.py sdist bdist_egg upload
 
 Increment the version number and add the "dev" marker.
 
