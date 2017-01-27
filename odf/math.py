@@ -28,3 +28,11 @@ from odf.element import Element
 def Math(**args):
     return Element(qname = (MATHNS,'math'), **args)
 
+def Annotation(**args):
+    return Element(qname = (MATHNS,'annotation'), **args)
+
+if __name__ == '__main__':
+    formula = 'c = sqrt(a^2+b_2) + %ialpha over %ibeta'
+    math = Math()
+    annot = Annotation(attributes={'encoding': 'StarMath 5.0',}, text=formula)
+    math.addElement(annot)
