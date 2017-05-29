@@ -369,7 +369,7 @@ class OpenDocument:
             stylenamelist = self._parseoneelement(top, stylenamelist)
         stylelist = []
         for e in self.automaticstyles.childNodes:
-            if e.getAttrNS(STYLENS,u'name') in stylenamelist:
+            if isinstance(e, element.Element) and e.getAttrNS(STYLENS,u'name') in stylenamelist:
                 stylelist.append(e)
 
         # check the type of the returned data
