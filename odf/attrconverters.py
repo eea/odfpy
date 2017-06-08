@@ -784,6 +784,7 @@ attrconverters = {
 	((FORMNS,u'xforms-list-source'), None): cnv_string,
 	((FORMNS,u'xforms-submission'), None): cnv_string,
         ((GRDDLNS,u'transformation'), None): cnv_string,
+	((LOEXTNS,u'contextual-spacing'), None): cnv_boolean,
 	((MANIFESTNS,u'algorithm-name'), None): cnv_string,
 	((MANIFESTNS,u'checksum'), None): cnv_string,
 	((MANIFESTNS,u'checksum-type'), None): cnv_string,
@@ -964,7 +965,6 @@ attrconverters = {
 	((STYLENS,u'color'), None): cnv_string,
 	((STYLENS,u'column-width'), None): cnv_string,
 	((STYLENS,u'condition'), None): cnv_string,
-	((STYLENS,u'contextual-spacing'), None): cnv_boolean,
 	((STYLENS,u'country-asian'), None): cnv_string,
 	((STYLENS,u'country-complex'), None): cnv_string,
 	((STYLENS,u'data-style-name'), None): cnv_StyleNameRef,
@@ -1610,4 +1610,3 @@ class AttrConverters:
             return unicode(value)
         else:
             return str(value)
-
