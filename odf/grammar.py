@@ -7472,6 +7472,7 @@ allowed_attributes = {
 		(STYLENS,u'border-line-width-left'),
 		(STYLENS,u'border-line-width-right'),
 		(STYLENS,u'border-line-width-top'),
+    (STYLENS,u'contextual-spacing'),
 		(STYLENS,u'font-independent-line-spacing'),
 		(STYLENS,u'join-border'),
 		(STYLENS,u'justify-single-word'),
