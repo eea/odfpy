@@ -964,7 +964,7 @@ attrconverters = {
 	((STYLENS,u'color'), None): cnv_string,
 	((STYLENS,u'column-width'), None): cnv_string,
 	((STYLENS,u'condition'), None): cnv_string,
-  ((STYLENS,u'contextual-spacing'), None): cnv_boolean,
+	((STYLENS,u'contextual-spacing'), None): cnv_boolean,
 	((STYLENS,u'country-asian'), None): cnv_string,
 	((STYLENS,u'country-complex'), None): cnv_string,
 	((STYLENS,u'data-style-name'), None): cnv_StyleNameRef,
