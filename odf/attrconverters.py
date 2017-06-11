@@ -784,6 +784,7 @@ attrconverters = {
 	((FORMNS,u'xforms-list-source'), None): cnv_string,
 	((FORMNS,u'xforms-submission'), None): cnv_string,
         ((GRDDLNS,u'transformation'), None): cnv_string,
+	((LOEXTNS,u'contextual-spacing'), None): cnv_boolean,
 	((MANIFESTNS,u'algorithm-name'), None): cnv_string,
 	((MANIFESTNS,u'checksum'), None): cnv_string,
 	((MANIFESTNS,u'checksum-type'), None): cnv_string,
@@ -1609,4 +1610,3 @@ class AttrConverters:
             return unicode(value)
         else:
             return str(value)
-
