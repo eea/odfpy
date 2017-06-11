@@ -27,7 +27,7 @@ from odf.namespaces import TEXTNS
 from elementparser import ElementParser
 
 class TestMasterStyles(unittest.TestCase):
-    
+
     def assertContains(self, stack, needle):
         self.assertNotEqual(-1, stack.find(needle))
 

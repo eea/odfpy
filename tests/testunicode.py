@@ -38,7 +38,7 @@ class TestUnicode(unittest.TestCase):
         self.assertNotEqual(-1, stack.find(needle))
 
     def assertNotContains(self, stack, needle):
-        self.assertEquals(-1, stack.find(needle))
+        self.assertEqual(-1, stack.find(needle))
 
     def test_xstyle(self):
         self.assertRaises(UnicodeDecodeError, style.Style, name="X✗", family="paragraph")

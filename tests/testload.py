@@ -28,7 +28,7 @@ if sys.version_info[0]==3:
     unicode=str
 
 class TestSimple(unittest.TestCase):
-    
+
     def setUp(self):
         textdoc = OpenDocumentText()
         p = P(text="Hello World!")
@@ -39,7 +39,7 @@ class TestSimple(unittest.TestCase):
     def tearDown(self):
         if self.saved:
             os.unlink(u"TEST.odt")
-        
+
     def test_simple(self):
         """ Check that a simple load works """
         d = load(u"TEST.odt")
@@ -48,13 +48,13 @@ class TestSimple(unittest.TestCase):
 
 
 class TestHeadings(unittest.TestCase):
-    
+
     saved = False
 
     def tearDown(self):
         if self.saved:
             os.unlink("TEST.odt")
-        
+
     def test_headings(self):
         """ Create a document, save it and load it """
         textdoc = OpenDocumentText()
@@ -159,7 +159,7 @@ class TestExampleDocs(unittest.TestCase):
             os.path.dirname(__file__), "examples", "nasty.odt")
         d = load(simplelist_odt)
         result = unicode(d.contentxml(),'utf-8')
-        self.assertEquals(-1, result.find(u"""The quick brown fox jumps over the lazy dog"""))
+        self.assertEqual(-1, result.find(u"""The quick brown fox jumps over the lazy dog"""))
 
     def test_spreadsheet(self):
         """ Load a document containing subobjects """

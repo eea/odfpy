@@ -28,13 +28,13 @@ from odf import text, chart
 
 
 class TestDatastyles(unittest.TestCase):
-    
+
     saved = False
 
     def tearDown(self):
         if self.saved:
             os.unlink("TEST.ods")
-        
+
     def test_percentage(self):
         """ Test that an automatic style can refer to a PercentageStyle as a datastylename """
         doc = OpenDocumentSpreadsheet()

@@ -24,7 +24,7 @@ from odf import draw, svg
 from odf.element import IllegalChild
 
 class TestDrawElements(unittest.TestCase):
-    
+
     def testNoName(self):
         """ Check that 'name' is required """
         self.assertRaises(AttributeError, draw.FillImage, href="y")

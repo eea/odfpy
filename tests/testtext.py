@@ -28,7 +28,7 @@ if sys.version_info[0]==3:
     unicode=str
 
 class TestText(unittest.TestCase):
-    
+
     def test_softpagebreak(self):
         """ Create a soft page break """
         textdoc = OpenDocumentText()
@@ -41,7 +41,7 @@ class TestText(unittest.TestCase):
         poem_odt = os.path.join(
             os.path.dirname(__file__), u"examples", u"serious_poem.odt")
         d = load(poem_odt)
-        shouldbe = u"The boy stood on the burning deck,Whence allbuthim had fled.The flames that litthe battle'swreck,Shone o'er him, round the dead. "
+        shouldbe = u"The boy stood on the burning deck,Whence allbuthim had fled.The flames that litthe battle'swreck, Shone o'er him, round the dead. "
         #self.assertEqual(shouldbe, d.body)
         self.assertEqual(shouldbe, unicode(d.body))
 

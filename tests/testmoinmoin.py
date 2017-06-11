@@ -25,7 +25,7 @@ from odf.text import P, H, LineBreak
 from odf import odf2moinmoin
 
 class TestSimple(unittest.TestCase):
-    
+
     def setUp(self):
         textdoc = OpenDocumentText()
         p = P(text=u"Hello World!")
@@ -36,20 +36,20 @@ class TestSimple(unittest.TestCase):
     def tearDown(self):
         if self.saved:
             os.unlink(u"TEST.odt")
-        
+
     def test_simple(self):
         result = odf2moinmoin.ODF2MoinMoin(u"TEST.odt")
         self.assertEqual(u'Hello World!\n', result.toString())
 
 
 class TestHeadings(unittest.TestCase):
-    
+
     saved = False
 
     def tearDown(self):
         if self.saved:
             os.unlink(u"TEST.odt")
-        
+
     def test_headings(self):
         textdoc = OpenDocumentText()
         textdoc.text.addElement(H(outlinelevel=1, text=u"Heading 1"))

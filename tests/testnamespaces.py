@@ -26,7 +26,7 @@ class TestNamespaces(unittest.TestCase):
     def test_version(self):
         """ document's write method """
         self.assertEqual("ODFPY", TOOLSVERSION[:5])
-        
+
 
 
 if __name__ == '__main__':

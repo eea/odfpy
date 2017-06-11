@@ -39,7 +39,7 @@ class TestWrite(unittest.TestCase):
         # outfp now contains the document.
         z = zipfile.ZipFile(outfp,"r")
         self.assertEqual(None, z.testzip())
-        
+
         outfp.close()
 
     def test_topnode(self):

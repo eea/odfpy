@@ -27,7 +27,7 @@ from odf import style, text
 from odf.text import P
 
 class TestWhite(unittest.TestCase):
-    
+
 
     def test_create(self):
         """ Test that tabs and newlines are converted to elements """
@@ -43,7 +43,7 @@ class TestWhite(unittest.TestCase):
           u'''<text:tab/>His feet<text:tab/>were<text:tab/><text:tab/>full of blisters.<text:line-break/>''' +
           u'''The captain <text:s text:c="1"/>stood in<text:tab/>the public house<text:line-break/>''' +
           u''' <text:s text:c="8"/>With beer running down his whiskers. <text:s text:c="2"/></text:p>''', outfp.getvalue())
-       
+
 
     def test_extract(self):
         """ Convert a paragraph to plain text """
@@ -53,7 +53,7 @@ class TestWhite(unittest.TestCase):
         allparas = d.getElementsByType(P)
         content = u"""<text:p text:style-name="Standard">The boy stood <text:s text:c="3"/>on the burning deck,<text:line-break/><text:tab/>Whence all<text:tab/>but<text:tab/><text:tab/>him had fled.<text:line-break/>The flames <text:s text:c="2"/>that lit<text:tab/>the battle's<text:tab/>wreck,<text:line-break/> <text:s text:c="11"/>Shone o'er him, round the dead. <text:s text:c="2"/></text:p>"""
 
-        self.assertEqual(u"The boy stood    on the burning deck,\n\tWhence all\tbut\t\thim had fled.\nThe flames   that lit\tthe battle's\twreck,\n           Shone o'er him, round the dead.   ", teletype.extractText(allparas[0]))
+        self.assertEqual(u"The boy stood    on the burning deck,\n\tWhence all\tbut\t\thim had fled.\nThe flames   that lit\tthe battle's\twreck,\n            Shone o'er him, round the dead.   ", teletype.extractText(allparas[0]))
 
     def test_extract_with_span(self):
         """ Extract a text with a bold/italic span """

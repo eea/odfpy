@@ -56,7 +56,7 @@ def element_has_attributes(s, tag, attribs):
 
 
 class TestUnicode(unittest.TestCase):
-    
+
     def setUp(self):
         self.textdoc = OpenDocumentText()
         self.saved = False

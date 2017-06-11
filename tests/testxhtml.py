@@ -97,7 +97,7 @@ h1 {
 """
 
 class TestXHTML(unittest.TestCase):
-    
+
     def setUp(self):
         d = OpenDocumentText()
 

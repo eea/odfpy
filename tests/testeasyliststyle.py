@@ -54,7 +54,7 @@ itemList = (
     ">>Toy Poodle",
     ">>Standard Poodle"
 )
-    
+
 class TestEasyListStype(unittest.TestCase):
 
     def createList(self, itemList, indentDelim, styleName):
@@ -62,24 +62,24 @@ class TestEasyListStype(unittest.TestCase):
         listItem = ListItem()
         level = 0
         lastLevel = 0
-                
+
         for levCount in range(0,10):
             listArray.append(None)
         listArray[0] = List()
-        
+
         for item in itemList:
             level = 0;
             while (level < len(item) and item[level] == indentDelim):
                 level +=1
             item = item[level:]
-            
+
             if (level > lastLevel):    # open the sub-levels
                 for levCount in range(lastLevel+1, level+1):
                     listArray[levCount] = List()
             elif (level < lastLevel):    # close off the intervening lists
                 for levCount in range(lastLevel, level, -1):
                     listArray[levCount-1].childNodes[-1].addElement(listArray[levCount])
-                    
+
             # now that we are at the proper level, add the item.
             listArray[level].setAttribute( 'stylename', styleName );
             listItem = ListItem()
@@ -87,7 +87,7 @@ class TestEasyListStype(unittest.TestCase):
             listItem.addElement(para);
             listArray[level].addElement(listItem);
             lastLevel = level;
-            
+
         # close off any remaining open lists
         for levCount in range(lastLevel, 0, -1):
             listArray[levCount-1].childNodes[-1].addElement(listArray[levCount])

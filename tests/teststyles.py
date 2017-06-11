@@ -27,7 +27,7 @@ from odf.namespaces import TEXTNS
 from elementparser import ElementParser
 
 class TestStyles(unittest.TestCase):
-    
+
     def test_style(self):
         """ Get a common style with getStyleByName """
         textdoc = OpenDocumentText()

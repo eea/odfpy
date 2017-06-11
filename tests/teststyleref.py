@@ -25,7 +25,7 @@ from odf.element import IllegalChild
 
 
 class TestStyleRefs(unittest.TestCase):
-    
+
     def testTxtStylename(self):
         """ Check that 'name' is required """
         self.assertRaises(AttributeError, dr3d.Cube, stylename="Bold")

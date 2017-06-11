@@ -24,7 +24,7 @@ from odf import chart
 from odf.element import IllegalChild
 
 class TestChartElements(unittest.TestCase):
-    
+
     def testChart(self):
         """ Check chart doesn't allow 'Major' as class """
         chart.Chart( width="8cm", height="7cm", attributes={'class':'chart:circle'})

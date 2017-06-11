@@ -26,12 +26,12 @@ from odf.namespaces import TEXTNS
 from elementparser import ElementParser
 
 class TestPresentations(unittest.TestCase):
-    
+
     def assertContains(self, stack, needle):
         self.assertNotEqual(-1, stack.find(needle))
 
     def assertNotContains(self, stack, needle):
-        self.assertEquals(-1, stack.find(needle))
+        self.assertEqual(-1, stack.find(needle))
 
     def testTable(self):
         """ Create a presentation with a page layout called MyLayout

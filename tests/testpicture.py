@@ -27,7 +27,7 @@ from odf import text
 from odf.namespaces import TEXTNS
 
 class TestPicture(unittest.TestCase):
-    
+
     def testAddPicture(self):
         """ Check that AddPicture works"""
         THUMBNAILNAME = "thumbnail.png"
