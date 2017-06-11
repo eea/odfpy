@@ -67,7 +67,7 @@ class LoadParser(handler.ContentHandler):
         self.level = self.level + 1
         # Add any accumulated text content
         content = ''.join(self.data)
-        if len(content.strip()) > 0:
+        if content:
             self.parent.addText(content, check_grammar=False)
             self.data = []
         # Create the element
@@ -106,7 +106,7 @@ class LoadParser(handler.ContentHandler):
             return
         self.level = self.level - 1
         str = ''.join(self.data)
-        if len(str.strip()) > 0:
+        if str:
             self.curr.addText(str, check_grammar=False)
         self.data = []
         self.curr = self.curr.parentNode
