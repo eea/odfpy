@@ -17,7 +17,7 @@
 #
 # Contributor(s):
 #
-__version__ = "1.3.5"
+__version__ = "1.3.6dev"
 
 TOOLSVERSION = u"ODFPY/" + __version__
 
