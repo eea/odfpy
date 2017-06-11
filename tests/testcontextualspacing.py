@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# Copyright (C) 2007 Søren Roug, European Environment Agency
+# Copyright (C) 2017 Martijn Berntsen
 #
 # This is free software.  You may redistribute it under the terms
 # of the Apache license and the GNU General Public License Version
