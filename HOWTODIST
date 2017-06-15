@@ -11,7 +11,13 @@ $ cd odfpy
 
 Run the automated tests:
 
-$ cd tests ; make ; cd ..
+Install `tox` via `pip` when running the tests for the first time:
+
+$ pip install tox
+
+Run the tests for all supported python versions:
+
+$ tox
 
 Remove the "dev" marker from the version in setup.py and odf/namespaces.py
 
