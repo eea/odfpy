@@ -40,6 +40,8 @@ class TestUnicode(unittest.TestCase):
     def assertNotContains(self, stack, needle):
         self.assertEqual(-1, stack.find(needle))
 
+    @unittest.skipIf(sys.version_info[0] != 2,
+                     "For Python3, unicode strings are type 'str'.")
     def test_xstyle(self):
         self.assertRaises(UnicodeDecodeError, style.Style, name="X✗", family="paragraph")
         xstyle = style.Style(name=u"X✗", family=u"paragraph")
