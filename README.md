@@ -29,7 +29,17 @@ The library is incompatible with PyXML.
 
 ## RUNNING TESTS
 
-To run the tests, `cd` into the tests directory and run `make`.
+Install `tox` via `pip` when running the tests for the first time:
+
+```
+$ pip install tox
+```
+
+Run the tests for all supported python versions:
+
+```
+$ tox
+```
 
 ## REDISTRIBUTION LICENSE
 
