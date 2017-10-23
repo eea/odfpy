@@ -24,6 +24,7 @@
 #
 import sys, os.path
 sys.path.append(os.path.dirname(__file__))
+import re
 import xml.dom
 from xml.dom.minicompat import *
 from odf.namespaces import nsdict
@@ -32,6 +33,56 @@ from odf.attrconverters import AttrConverters
 
 if sys.version_info[0] == 3:
     unicode=str # unicode function does not exist
+    unichr=chr  # unichr does not exist
+
+_xml11_illegal_ranges = (
+    (0xd800, 0xdfff,),
+    (0xfffe, 0xffff,),
+)
+
+_xml10_illegal_ranges = _xml11_illegal_ranges + (
+    (0x01, 0x08,),
+    (0x0b, 0x0c,),
+    (0x0e, 0x1f,),
+)
+
+_xml_discouraged_ranges = (
+    (0x7f, 0x84,),
+    (0x86, 0x9f,),
+)
+
+if sys.maxunicode >= 0x10000:
+    # modern or "wide" python build
+    _xml_discouraged_ranges = _xml_discouraged_ranges + (
+        (0x1fffe, 0x1ffff,),
+        (0x2fffe, 0x2ffff,),
+        (0x3fffe, 0x3ffff,),
+        (0x4fffe, 0x4ffff,),
+        (0x5fffe, 0x5ffff,),
+        (0x6fffe, 0x6ffff,),
+        (0x7fffe, 0x7ffff,),
+        (0x8fffe, 0x8ffff,),
+        (0x9fffe, 0x9ffff,),
+        (0xafffe, 0xaffff,),
+        (0xbfffe, 0xbffff,),
+        (0xcfffe, 0xcffff,),
+        (0xdfffe, 0xdffff,),
+        (0xefffe, 0xeffff,),
+        (0xffffe, 0xfffff,),
+        (0x10fffe, 0x10ffff,),
+    )
+# else "narrow" python build - only possible with old versions
+
+def _range_seq_to_re(range_seq):
+    # range pairs are specified as closed intervals
+    return re.compile(u"[{}]".format(
+        u"".join(
+            u"{}-{}".format(re.escape(unichr(lo)), re.escape(unichr(hi)))
+            for lo, hi in range_seq
+        )
+    ), flags=re.UNICODE)
+
+_xml_filtered_chars_re = _range_seq_to_re(_xml10_illegal_ranges + _xml_discouraged_ranges)
 
 # The following code is pasted form xml.sax.saxutils
 # Tt makes it possible to run the code without the xml sax package installed
@@ -43,6 +94,7 @@ def _escape(data, entities={}):
         the optional entities parameter.  The keys and values must all be
         strings; each key will be replaced with its corresponding value.
     """
+    data = _xml_filtered_chars_re.sub("?", data)
     data = data.replace("&", "&amp;")
     data = data.replace("<", "&lt;")
     data = data.replace(">", "&gt;")
