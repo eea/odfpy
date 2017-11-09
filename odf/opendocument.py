@@ -532,7 +532,7 @@ class OpenDocument:
             self.manifest.addElement(manifest.FileEntry(fullpath=u"%s%s" % ( folder ,arcname), mediatype=mediatype))
             hasPictures = True
             if what_it_is == IS_FILENAME:
-                self._z.write(fileobj, arcname, zipfile.ZIP_STORED)
+                self._z.write(fileobj, folder + arcname, zipfile.ZIP_STORED)
             else:
                 zi = zipfile.ZipInfo(str(arcname), self._now)
                 zi.compress_type = zipfile.ZIP_STORED
