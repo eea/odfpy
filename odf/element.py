@@ -84,6 +84,9 @@ def _range_seq_to_re(range_seq):
 
 _xml_filtered_chars_re = _range_seq_to_re(_xml10_illegal_ranges + _xml_discouraged_ranges)
 
+def _handle_unrepresentable(data):
+    return _xml_filtered_chars_re.sub("?", data)
+
 # The following code is pasted form xml.sax.saxutils
 # Tt makes it possible to run the code without the xml sax package installed
 # To make it possible to have <rubbish> in your text elements, it is necessary to escape the texts
@@ -94,13 +97,15 @@ def _escape(data, entities={}):
         the optional entities parameter.  The keys and values must all be
         strings; each key will be replaced with its corresponding value.
     """
-    data = _xml_filtered_chars_re.sub("?", data)
     data = data.replace("&", "&amp;")
     data = data.replace("<", "&lt;")
     data = data.replace(">", "&gt;")
     for chars, entity in entities.items():
         data = data.replace(chars, entity)
     return data
+
+def _sanitize(data, entities={}):
+    return _escape(_handle_unrepresentable(data), entities=entities)
 
 def _quoteattr(data, entities={}):
     """ Escape and quote an attribute value.
@@ -115,7 +120,7 @@ def _quoteattr(data, entities={}):
     """
     entities['\n']='&#10;'
     entities['\r']='&#12;'
-    data = _escape(data, entities)
+    data = _sanitize(data, entities)
     if '"' in data:
         if "'" in data:
             data = '"%s"' % data.replace('"', "&quot;")
@@ -311,7 +316,7 @@ class Text(Childless, Node):
     def toXml(self,level,f):
         """ Write XML in UTF-8 """
         if self.data:
-            f.write(_escape(unicode(self.data)))
+            f.write(_sanitize(unicode(self.data)))
     
 class CDATASection(Text, Childless):
     nodeType = Node.CDATA_SECTION_NODE
@@ -542,10 +547,10 @@ class Element(Node):
         f.write(('<'+self.tagName))
         if level == 0:
             for namespace, prefix in self.namespaces.items():
-                f.write(u' xmlns:' + prefix + u'="'+ _escape(str(namespace))+'"')
+                f.write(u' xmlns:' + prefix + u'="'+ _sanitize(str(namespace))+'"')
         for qname in self.attributes.keys():
             prefix = self.get_nsprefix(qname[0])
-            f.write(u' '+_escape(str(prefix+u':'+qname[1]))+u'='+_quoteattr(unicode(self.attributes[qname])))
+            f.write(u' '+_sanitize(str(prefix+u':'+qname[1]))+u'='+_quoteattr(unicode(self.attributes[qname])))
         f.write(u'>')
 
     def write_close_tag(self, level, f):
@@ -560,10 +565,10 @@ class Element(Node):
         f.write(u'<'+self.tagName)
         if level == 0:
             for namespace, prefix in self.namespaces.items():
-                f.write(u' xmlns:' + prefix + u'="'+ _escape(str(namespace))+u'"')
+                f.write(u' xmlns:' + prefix + u'="'+ _sanitize(str(namespace))+u'"')
         for qname in self.attributes.keys():
             prefix = self.get_nsprefix(qname[0])
-            f.write(u' '+_escape(unicode(prefix+':'+qname[1]))+u'='+_quoteattr(unicode(self.attributes[qname])))
+            f.write(u' '+_sanitize(unicode(prefix+':'+qname[1]))+u'='+_quoteattr(unicode(self.attributes[qname])))
         if self.childNodes:
             f.write(u'>')
             for element in self.childNodes:
