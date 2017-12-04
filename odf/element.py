@@ -36,6 +36,7 @@ if sys.version_info[0] == 3:
     unichr=chr  # unichr does not exist
 
 _xml11_illegal_ranges = (
+    (0x0, 0x0,),
     (0xd800, 0xdfff,),
     (0xfffe, 0xffff,),
 )

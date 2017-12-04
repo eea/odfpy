@@ -70,11 +70,11 @@ class TestUnicode(unittest.TestCase):
 
     def test_illegaltext(self):
         p = H(outlinelevel=1,text=u"Spot \u001e the")
-        p.addText(u' d\u00a3liberate \ud801 mistakes\U0002fffe')
+        p.addText(u' d\u00a3libe\u0000rate \ud801 mistakes\U0002fffe')
         self.textdoc.text.addElement(p)
         c = self.textdoc.contentxml() # contentxml is supposed to yeld a bytes
         print(c)
-        self.assertContains(c, b'<office:body><office:text><text:h text:outline-level="1">Spot ? the d\xc2\xa3liberate ? mistakes?</text:h></office:text></office:body>')
+        self.assertContains(c, b'<office:body><office:text><text:h text:outline-level="1">Spot ? the d\xc2\xa3libe?rate ? mistakes?</text:h></office:text></office:body>')
         self.assertContains(c, b'xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"')
         self.assertContains(c, b'<office:automatic-styles/>')
 
