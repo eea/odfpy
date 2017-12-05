@@ -86,7 +86,7 @@ def _range_seq_to_re(range_seq):
 _xml_filtered_chars_re = _range_seq_to_re(_xml10_illegal_ranges + _xml_discouraged_ranges)
 
 def _handle_unrepresentable(data):
-    return _xml_filtered_chars_re.sub("?", data)
+    return _xml_filtered_chars_re.sub(u"\ufffd", data)
 
 # The following code is pasted form xml.sax.saxutils
 # Tt makes it possible to run the code without the xml sax package installed
