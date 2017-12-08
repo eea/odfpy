@@ -19,46 +19,41 @@
 #
 
 from odf.opendocument import OpenDocumentSpreadsheet
-from odf.style import Style, TextProperties, ParagraphProperties, TableColumnProperties
+from odf.style import (ParagraphProperties, Style, TableColumnProperties,
+                       TextProperties)
+from odf.table import Table, TableCell, TableColumn, TableRow
 from odf.text import P
-from odf.table import Table, TableColumn, TableRow, TableCell
-
-PWENC = "utf-8"
 
 textdoc = OpenDocumentSpreadsheet()
 # Create a style for the table content. One we can modify
 # later in the word processor.
-tablecontents = Style(name="Table Contents", family="paragraph")
-tablecontents.addElement(ParagraphProperties(numberlines="false", linenumber="0"))
-tablecontents.addElement(TextProperties(fontweight="bold"))
-textdoc.styles.addElement(tablecontents)
+tablecontents = Style(parent=textdoc.styles,
+                      name='Table Contents', family='paragraph')
+ParagraphProperties(parent=tablecontents, numberlines='false', linenumber='0')
+TextProperties(parent=tablecontents, fontweight='bold')
 
 # Create automatic styles for the column widths.
 # We want two different widths, one in inches, the other one in metric.
 # ODF Standard section 15.9.1
-widthshort = Style(name="Wshort", family="table-column")
-widthshort.addElement(TableColumnProperties(columnwidth="1.7cm"))
-textdoc.automaticstyles.addElement(widthshort)
+widthshort = Style(parent=textdoc.automaticstyles,
+                   name='Wshort', family='table-column')
+TableColumnProperties(parent=widthshort, columnwidth='1.7cm')
 
-widthwide = Style(name="Wwide", family="table-column")
-widthwide.addElement(TableColumnProperties(columnwidth="1.5in"))
-textdoc.automaticstyles.addElement(widthwide)
+widthwide = Style(parent=textdoc.automaticstyles,
+                  name='Wwide', family='table-column')
+TableColumnProperties(parent=widthwide, columnwidth='1.5in')
 
 # Start the table, and describe the columns
-table = Table(name="Password")
-table.addElement(TableColumn(numbercolumnsrepeated=4,stylename=widthshort))
-table.addElement(TableColumn(numbercolumnsrepeated=3,stylename=widthwide))
+table = Table(parent=textdoc.spreadsheet, name='Password')
+TableColumn(parent=table, numbercolumnsrepeated=4, stylename=widthshort)
+TableColumn(parent=table, numbercolumnsrepeated=3, stylename=widthwide)
 
-f = open('/etc/passwd')
-for line in f:
-    rec = line.strip().split(":")
-    tr = TableRow()
-    table.addElement(tr)
-    for val in rec:
-        tc = TableCell()
-        tr.addElement(tc)
-        p = P(stylename=tablecontents,text=unicode(val,PWENC))
-        tc.addElement(p)
+with open('/etc/passwd') as f:
+    for line in f:
+        rec = line.strip().split(':')
+        tr = TableRow(parent=table)
+        for val in rec:
+            tc = TableCell(parent=tr)
+            p = P(parent=tc, stylename=tablecontents, text=val)
 
-textdoc.spreadsheet.addElement(table)
-textdoc.save("passwd.ods")
+textdoc.save('passwd.ods')
