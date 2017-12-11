@@ -63,8 +63,18 @@ class TestUnicode(unittest.TestCase):
         p = H(outlinelevel=1,text=u"Æblegrød")
         p.addText(u' Blåbærgrød')
         self.textdoc.text.addElement(p)
-        c = self.textdoc.contentxml() # contentxml is supposed to yeld a bytes
+        c = self.textdoc.contentxml() # contentxml is supposed to yield a bytes
         self.assertContains(c, b'<office:body><office:text><text:h text:outline-level="1">\xc3\x86blegr\xc3\xb8d Bl\xc3\xa5b\xc3\xa6rgr\xc3\xb8d</text:h></office:text></office:body>')
+        self.assertContains(c, b'xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"')
+        self.assertContains(c, b'<office:automatic-styles/>')
+
+    def test_illegaltext(self):
+        p = H(outlinelevel=1,text=u"Spot \u001e the")
+        p.addText(u' d\u00a3libe\u0000rate \ud801 mistakes\U0002fffe')
+        self.textdoc.text.addElement(p)
+        c = self.textdoc.contentxml() # contentxml is supposed to yield a bytes
+        # unicode replacement char \UFFFD === \xef\xbf\xbd in UTF-8
+        self.assertContains(c, b'<office:body><office:text><text:h text:outline-level="1">Spot \xef\xbf\xbd the d\xc2\xa3libe\xef\xbf\xbdrate \xef\xbf\xbd mistakes\xef\xbf\xbd</text:h></office:text></office:body>')
         self.assertContains(c, b'xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"')
         self.assertContains(c, b'<office:automatic-styles/>')
 

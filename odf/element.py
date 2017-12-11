@@ -24,6 +24,7 @@
 #
 import sys, os.path
 sys.path.append(os.path.dirname(__file__))
+import re
 import xml.dom
 from xml.dom.minicompat import *
 from odf.namespaces import nsdict
@@ -32,6 +33,60 @@ from odf.attrconverters import AttrConverters
 
 if sys.version_info[0] == 3:
     unicode=str # unicode function does not exist
+    unichr=chr  # unichr does not exist
+
+_xml11_illegal_ranges = (
+    (0x0, 0x0,),
+    (0xd800, 0xdfff,),
+    (0xfffe, 0xffff,),
+)
+
+_xml10_illegal_ranges = _xml11_illegal_ranges + (
+    (0x01, 0x08,),
+    (0x0b, 0x0c,),
+    (0x0e, 0x1f,),
+)
+
+_xml_discouraged_ranges = (
+    (0x7f, 0x84,),
+    (0x86, 0x9f,),
+)
+
+if sys.maxunicode >= 0x10000:
+    # modern or "wide" python build
+    _xml_discouraged_ranges = _xml_discouraged_ranges + (
+        (0x1fffe, 0x1ffff,),
+        (0x2fffe, 0x2ffff,),
+        (0x3fffe, 0x3ffff,),
+        (0x4fffe, 0x4ffff,),
+        (0x5fffe, 0x5ffff,),
+        (0x6fffe, 0x6ffff,),
+        (0x7fffe, 0x7ffff,),
+        (0x8fffe, 0x8ffff,),
+        (0x9fffe, 0x9ffff,),
+        (0xafffe, 0xaffff,),
+        (0xbfffe, 0xbffff,),
+        (0xcfffe, 0xcffff,),
+        (0xdfffe, 0xdffff,),
+        (0xefffe, 0xeffff,),
+        (0xffffe, 0xfffff,),
+        (0x10fffe, 0x10ffff,),
+    )
+# else "narrow" python build - only possible with old versions
+
+def _range_seq_to_re(range_seq):
+    # range pairs are specified as closed intervals
+    return re.compile(u"[{}]".format(
+        u"".join(
+            u"{}-{}".format(re.escape(unichr(lo)), re.escape(unichr(hi)))
+            for lo, hi in range_seq
+        )
+    ), flags=re.UNICODE)
+
+_xml_filtered_chars_re = _range_seq_to_re(_xml10_illegal_ranges + _xml_discouraged_ranges)
+
+def _handle_unrepresentable(data):
+    return _xml_filtered_chars_re.sub(u"\ufffd", data)
 
 # The following code is pasted form xml.sax.saxutils
 # Tt makes it possible to run the code without the xml sax package installed
@@ -50,6 +105,9 @@ def _escape(data, entities={}):
         data = data.replace(chars, entity)
     return data
 
+def _sanitize(data, entities={}):
+    return _escape(_handle_unrepresentable(data), entities=entities)
+
 def _quoteattr(data, entities={}):
     """ Escape and quote an attribute value.
 
@@ -63,7 +121,7 @@ def _quoteattr(data, entities={}):
     """
     entities['\n']='&#10;'
     entities['\r']='&#12;'
-    data = _escape(data, entities)
+    data = _sanitize(data, entities)
     if '"' in data:
         if "'" in data:
             data = '"%s"' % data.replace('"', "&quot;")
@@ -259,8 +317,8 @@ class Text(Childless, Node):
     def toXml(self,level,f):
         """ Write XML in UTF-8 """
         if self.data:
-            f.write(_escape(unicode(self.data)))
-
+            f.write(_sanitize(unicode(self.data)))
+    
 class CDATASection(Text, Childless):
     nodeType = Node.CDATA_SECTION_NODE
 
@@ -493,10 +551,10 @@ class Element(Node):
         f.write(('<'+self.tagName))
         if level == 0:
             for namespace, prefix in self.namespaces.items():
-                f.write(u' xmlns:' + prefix + u'="'+ _escape(str(namespace))+'"')
+                f.write(u' xmlns:' + prefix + u'="'+ _sanitize(str(namespace))+'"')
         for qname in self.attributes.keys():
             prefix = self.get_nsprefix(qname[0])
-            f.write(u' '+_escape(str(prefix+u':'+qname[1]))+u'='+_quoteattr(unicode(self.attributes[qname])))
+            f.write(u' '+_sanitize(str(prefix+u':'+qname[1]))+u'='+_quoteattr(unicode(self.attributes[qname])))
         f.write(u'>')
 
     def write_close_tag(self, level, f):
@@ -511,10 +569,10 @@ class Element(Node):
         f.write(u'<'+self.tagName)
         if level == 0:
             for namespace, prefix in self.namespaces.items():
-                f.write(u' xmlns:' + prefix + u'="'+ _escape(str(namespace))+u'"')
+                f.write(u' xmlns:' + prefix + u'="'+ _sanitize(str(namespace))+u'"')
         for qname in self.attributes.keys():
             prefix = self.get_nsprefix(qname[0])
-            f.write(u' '+_escape(unicode(prefix+':'+qname[1]))+u'='+_quoteattr(unicode(self.attributes[qname])))
+            f.write(u' '+_sanitize(unicode(prefix+':'+qname[1]))+u'='+_quoteattr(unicode(self.attributes[qname])))
         if self.childNodes:
             f.write(u'>')
             for element in self.childNodes:
