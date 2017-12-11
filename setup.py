@@ -21,7 +21,7 @@
 import platform
 from setuptools import setup
 
-version = '1.3.6dev'
+version = '1.3.6'
 
 if platform.system() in ('Linux','Unix'):
     man1pages = [('share/man/man1', [
