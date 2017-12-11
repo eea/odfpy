@@ -864,7 +864,7 @@ def __loadxmlparts(z, manifest, doc, objectpath):
     assert(isinstance(doc, OpenDocument))
     assert(type(objectpath)==type(u""))
 
-    from load import LoadParser
+    from odf.load import LoadParser
     from xml.sax import make_parser, handler
 
     for xmlfile in (objectpath+u'settings.xml', objectpath+u'meta.xml', objectpath+u'content.xml', objectpath+u'styles.xml'):

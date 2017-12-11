@@ -347,7 +347,7 @@ class Element(Node):
                          Node.TEXT_NODE,
                          Node.CDATA_SECTION_NODE,
                          Node.ENTITY_REFERENCE_NODE)
-    
+
     def __init__(self, attributes=None, text=None, cdata=None, qname=None, qattributes=None, check_grammar=True, **args):
         if qname is not None:
             self.qname = qname
@@ -398,7 +398,7 @@ class Element(Node):
         for ns,p in nsdict.items():
             if p == prefix: return ns
         return None
-        
+
     def get_nsprefix(self, namespace):
         """ Odfpy maintains a list of known namespaces. In some cases we have a namespace URL,
             and needs to look up or assign the prefix for it.
@@ -416,7 +416,7 @@ class Element(Node):
         element.ownerDocument = self.ownerDocument
         for child in element.childNodes:
             self._setOwnerDoc(child)
-        
+
     def addElement(self, element, check_grammar=True):
         """ adds an element to an Element
 
@@ -474,20 +474,23 @@ class Element(Node):
             library will add the correct namespace.
             Must overwrite, If attribute already exists.
         """
-        allowed_attrs = self.allowed_attributes()
-        if allowed_attrs is None:
-            if type(attr) == type(()):
-                prefix, localname = attr
-                self.setAttrNS(prefix, localname, value)
-            else:
-                raise AttributeError( "Unable to add simple attribute - use (namespace, localpart)")
+        if attr == 'parent' and value is not None:
+            value.addElement(self)
         else:
-            # Construct a list of allowed arguments
-            allowed_args = [ a[1].lower().replace('-','') for a in allowed_attrs]
-            if check_grammar and attr not in allowed_args:
-                raise AttributeError( "Attribute %s is not allowed in <%s>" % ( attr, self.tagName))
-            i = allowed_args.index(attr)
-            self.setAttrNS(allowed_attrs[i][0], allowed_attrs[i][1], value)
+            allowed_attrs = self.allowed_attributes()
+            if allowed_attrs is None:
+                if type(attr) == type(()):
+                    prefix, localname = attr
+                    self.setAttrNS(prefix, localname, value)
+                else:
+                    raise AttributeError( "Unable to add simple attribute - use (namespace, localpart)")
+            else:
+                # Construct a list of allowed arguments
+                allowed_args = [ a[1].lower().replace('-','') for a in allowed_attrs]
+                if check_grammar and attr not in allowed_args:
+                    raise AttributeError( "Attribute %s is not allowed in <%s>" % ( attr, self.tagName))
+                i = allowed_args.index(attr)
+                self.setAttrNS(allowed_attrs[i][0], allowed_attrs[i][1], value)
 
     def setAttrNS(self, namespace, localpart, value):
         """ Add an attribute to the element
@@ -595,5 +598,3 @@ class Element(Node):
         """ This is a check to see if the object is an instance of a type """
         obj = element(check_grammar=False)
         return self.qname == obj.qname
-
-
