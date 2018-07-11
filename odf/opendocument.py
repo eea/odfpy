@@ -42,6 +42,7 @@ import odf.element as element
 from odf.attrconverters import make_NCName
 from xml.sax.xmlreader import InputSource
 from odf.odfmanifest import manifestlist
+import codecs
 
 if sys.version_info[0] == 3:
     unicode=str # unicode function does not exist
