@@ -17,9 +17,12 @@
 #
 # Contributor(s):
 #
-from xml.sax import make_parser,handler
+from odf.xml import make_parser
+
+from xml.sax import handler
 from xml.sax.xmlreader import InputSource
 import xml.sax.saxutils
+
 
 RELAXNS=u"http://relaxng.org/ns/structure/1.0"
 
