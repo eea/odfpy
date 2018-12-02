@@ -140,6 +140,7 @@ class BaseXMLVulnerabilities(unittest.TestCase):
 
         for old, new in replacements:
             new_content = new_content.replace(old, new)
+        new_content = new_content.encode('utf-8')
 
         return self._modify_zip_file(zip_path, filename, replacement_content=new_content)
 

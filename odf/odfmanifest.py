@@ -21,7 +21,7 @@
 from __future__ import print_function
 # This script lists the content of the manifest.xml file
 import zipfile
-from odf.xml import make_parser
+from defusedxml.sax import make_parser
 from xml.sax import handler
 from xml.sax.xmlreader import InputSource
 import xml.sax.saxutils
