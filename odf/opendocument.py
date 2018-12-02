@@ -866,7 +866,8 @@ def __loadxmlparts(z, manifest, doc, objectpath):
     assert(type(objectpath)==type(u""))
 
     from odf.load import LoadParser
-    from xml.sax import make_parser, handler
+    from odf.xml import make_parser
+    from xml.sax import handler
 
     for xmlfile in (objectpath+u'settings.xml', objectpath+u'meta.xml', objectpath+u'content.xml', objectpath+u'styles.xml'):
         if xmlfile not in manifest:

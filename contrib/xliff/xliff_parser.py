@@ -20,8 +20,10 @@
 # NOTE:
 # This parser doesn't understand the ALT-TRANS element.
 
+from odf.xml import make_parser
 from xml.sax.handler import ContentHandler
-from xml.sax import *
+from xml.sax import handler, InputSource
+
 from cStringIO import StringIO
 from types import StringType, UnicodeType
 

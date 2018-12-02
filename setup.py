@@ -114,5 +114,6 @@ The code at https://joinup.ec.europa.eu/software/odfpy/home is obsolete."""
           'odfoutline/odfoutline',
           'odfuserfield/odfuserfield',
           'xml2odf/xml2odf'],
-      data_files=datafiles
+      data_files=datafiles,
+      install_requires=['defusedxml', ]
       )

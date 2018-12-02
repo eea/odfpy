@@ -24,7 +24,8 @@
 # in memory. The user should then be able to make operations and then save
 # the structure again.
 
-from xml.sax import make_parser,handler
+from odf.xml import make_parser
+from xml.sax import handler
 from xml.sax.xmlreader import InputSource
 import xml.sax.saxutils
 from odf.element import Element
