@@ -1,5 +1,6 @@
-build/
-*.pyc
-.tox/
-.cache/
 *.egg-info/
+*.pyc
+.cache/
+.pytest_cache/
+.tox/
+build/
