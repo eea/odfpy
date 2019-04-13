@@ -233,7 +233,7 @@ class Node(xml.dom.Node):
             oldChild.previousSibling.nextSibling = oldChild.nextSibling
         oldChild.nextSibling = oldChild.previousSibling = None
         if self.ownerDocument:
-            self.ownerDocument.clear_caches()
+            self.ownerDocument.remove_from_caches(oldChild)
         oldChild.parentNode = None
         return oldChild
 
