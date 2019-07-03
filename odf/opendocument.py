@@ -194,6 +194,23 @@ class OpenDocument:
         if styleref is not None and styleref in self._styles_ooo_fix:
             elt.setAttrNS(TEXTNS,u'style-name', self._styles_ooo_fix[styleref])
 
+    def remove_from_caches(self, elt):
+        """
+        Updates internal caches when an element has been removed
+        @param elt an element.Element instance
+        """
+        # See remark in build_caches about the following assertion
+        import odf.element
+        assert(isinstance(elt, element.Element) or isinstance(elt, odf.element.Element))
+
+        self.element_dict[elt.qname].remove(elt)
+        for e in elt.childNodes:
+            if e.nodeType == element.Node.ELEMENT_NODE:
+                self.remove_from_caches(e)
+
+        if elt.qname == (STYLENS, u'style'):
+            del self._styles_dict[elt.getAttrNS(STYLENS, u'name')]
+
     def __register_stylename(self, elt):
         '''
         Register a style. But there are three style dictionaries:
