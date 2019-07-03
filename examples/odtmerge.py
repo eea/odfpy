@@ -60,7 +60,7 @@ def merge(inputfile, textdoc):
     for body in inputtextdoc.body.childNodes[:]:
         textdoc.body.addElement(body)
 
-    textdoc.Pictures = inputtextdoc.Pictures
+    textdoc.Pictures.update(inputtextdoc.Pictures)
     return textdoc
 
 
