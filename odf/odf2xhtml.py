@@ -1445,10 +1445,7 @@ ol, ul { padding-left: 2em; }
 
         self.lines = []
         self._wfunc = self._wlines
-        if type(odffile)==type(u""):
-            self.document = load(odffile)
-        else:
-            self.document = odffile
+        self.document = load(odffile)
         self._walknode(self.document.topnode)
 
     def _walknode(self, node):
