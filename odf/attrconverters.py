@@ -785,6 +785,8 @@ attrconverters = {
 	((FORMNS,u'xforms-submission'), None): cnv_string,
         ((GRDDLNS,u'transformation'), None): cnv_string,
 	((LOEXTNS,u'contextual-spacing'), None): cnv_boolean,
+        ((LOEXTNS,u'scale-to-X'), None): cnv_string,
+        ((LOEXTNS,u'scale-to-Y'), None): cnv_string,
 	((MANIFESTNS,u'algorithm-name'), None): cnv_string,
 	((MANIFESTNS,u'checksum'), None): cnv_string,
 	((MANIFESTNS,u'checksum-type'), None): cnv_string,
