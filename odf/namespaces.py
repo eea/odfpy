@@ -82,6 +82,7 @@ nsdict = {
    FORMXNS: u'formx',
    GRDDLNS: u'grddl',
    KOFFICENS: u'koffice',
+   LOEXTNS: u'loext',
    MANIFESTNS: u'manifest',
    MATHNS: u'math',
    METANS: u'meta',
