@@ -1,4 +1,6 @@
 
+Rst2html is in the python3-docutils package
+
 Check that pypi can understand the long description
 
 python setup.py --long-description | rst2html > test.html
