@@ -7434,6 +7434,8 @@ allowed_attributes = {
 		(STYLENS,u'shadow'),
 		(STYLENS,u'table-centering'),
 		(STYLENS,u'writing-mode'),
+                (LOEXTNS,u'scale-to-X'),
+                (LOEXTNS,u'scale-to-Y')
 	),
 # allowed_attributes
 	(STYLENS,u'paragraph-properties'): (
