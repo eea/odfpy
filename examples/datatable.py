@@ -43,7 +43,7 @@ class DataTable(object):
             else:
                 self.numcols = 1
         else:
-            raise ValueError, "Value must be list or tuple"
+            raise ValueError('Value must be list or tuple.')
 
     def __setattr__(self, name, value):
         if name == 'values':
@@ -91,4 +91,3 @@ class DataTable(object):
                 tc.addElement(text.P(text=str(val)))
             rownum += 1
         return datatable
-
