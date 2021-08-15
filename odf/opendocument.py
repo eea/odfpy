@@ -573,7 +573,7 @@ class OpenDocument:
         belonging to the application that created the document.
         """
         for m in self.meta.childNodes[:]:
-            if m.qname == (METANS, u'generator'):
+            if hasattr(m,'qname') and m.qname == (METANS, u'generator'):
                 self.meta.removeChild(m)
         self.meta.addElement(meta.Generator(text=TOOLSVERSION))
 

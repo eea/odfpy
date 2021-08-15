@@ -478,7 +478,10 @@ class TestXXE(BaseXMLVulnerabilities):
 class TestExampleDocs(unittest.TestCase):
 
     def test_metagenerator(self):
-        """ Check that meta:generator is the original one """
+        """
+        Check that meta:generator is the original one.
+        Check that spaces in meta.xml is processed correctly.
+        """
         parastyles_odt = os.path.join(
             os.path.dirname(__file__), "examples", "parastyles.odt")
         d = load(parastyles_odt)
