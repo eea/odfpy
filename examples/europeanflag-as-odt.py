@@ -31,6 +31,7 @@ from odf.opendocument import OpenDocumentText
 from odf.style import Style, GraphicProperties, DrawingPageProperties
 from odf.text import P
 from odf.draw import G, Polygon, Rect
+from functools import reduce
 
 class VectorSet:
     """ A class to simulate LOGO's turtle. The turtle starts a 0,0 pointing
