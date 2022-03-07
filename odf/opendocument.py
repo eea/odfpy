@@ -22,9 +22,9 @@
 #      build of documentation
 #
 
-__doc__="""Use OpenDocument to generate your documents."""
+__doc__ = """Use OpenDocument to generate your documents."""
 
-import zipfile, time, uuid, sys, mimetypes, copy, os.path
+import zipfile, time, uuid, sys, mimetypes, os.path
 
 # to allow Python3 to access modules in the same path
 sys.path.append(os.path.dirname(__file__))
@@ -45,7 +45,7 @@ from odf.odfmanifest import manifestlist
 import codecs
 
 if sys.version_info[0] == 3:
-    unicode=str # unicode function does not exist
+    unicode = str  # unicode function does not exist
 
 __version__= TOOLSVERSION
 
@@ -64,10 +64,10 @@ UNIXPERMS = 2175008768
 IS_FILENAME = 0
 IS_IMAGE = 1
 # We need at least Python 2.2
-assert sys.version_info[0]>=2 and sys.version_info[1] >= 2
+assert sys.version_info[0] >= 2 and sys.version_info[1] >= 2
 
-#sys.setrecursionlimit(100)
-#The recursion limit is set conservative so mistakes like
+# sys.setrecursionlimit(100)
+# The recursion limit is set conservative so mistakes like
 # s=content() s.addElement(s) won't eat up too much processor time.
 
 ###############
@@ -92,6 +92,7 @@ odmimetypes = {
  u'application/vnd.oasis.opendocument.text-web':              u'.oth',
 }
 
+
 class OpaqueObject:
     """
     just a record to bear a filename, a mediatype and a bytes content
@@ -103,13 +104,14 @@ class OpaqueObject:
         @param mediatype a unicode string
         @param content a byte string or None
         """
-        assert(type(filename)==type(u""))
-        assert(type(mediatype)==type(u""))
-        assert(type(content)==type(b"") or content == None)
+        assert(type(filename) == type(u""))
+        assert(type(mediatype) == type(u""))
+        assert(type(content) == type(b"") or content == None)
 
         self.mediatype = mediatype
         self.filename = filename
         self.content = content
+
 
 class OpenDocument:
     """
@@ -126,13 +128,13 @@ class OpenDocument:
         @param mimetype a unicode string
         @param add_generator a boolean
         """
-        assert(type(mimetype)==type(u""))
-        assert(isinstance(add_generator,True.__class__))
+        assert(type(mimetype) == type(u""))
+        assert(isinstance(add_generator, True.__class__))
 
         self.mimetype = mimetype
         self.childobjects = []
         self._extra = []
-        self.folder = u"" # Always empty for toplevel documents
+        self.folder = u""  # Always empty for toplevel documents
         self.topnode = Document(mimetype=self.mimetype)
         self.topnode.ownerDocument = self
 
@@ -189,10 +191,10 @@ class OpenDocument:
             self.element_dict[elt.qname] = []
         self.element_dict[elt.qname].append(elt)
         if elt.qname == (STYLENS, u'style'):
-            self.__register_stylename(elt) # Add to style dictionary
-        styleref = elt.getAttrNS(TEXTNS,u'style-name')
+            self.__register_stylename(elt)  # Add to style dictionary
+        styleref = elt.getAttrNS(TEXTNS, u'style-name')
         if styleref is not None and styleref in self._styles_ooo_fix:
-            elt.setAttrNS(TEXTNS,u'style-name', self._styles_ooo_fix[styleref])
+            elt.setAttrNS(TEXTNS, u'style-name', self._styles_ooo_fix[styleref])
 
     def remove_from_caches(self, elt):
         """
@@ -223,9 +225,9 @@ class OpenDocument:
         name = elt.getAttrNS(STYLENS, u'name')
         if name is None:
             return
-        if elt.parentNode.qname in ((OFFICENS,u'styles'), (OFFICENS,u'automatic-styles')):
+        if elt.parentNode.qname in ((OFFICENS, u'styles'), (OFFICENS, u'automatic-styles')):
             if name in self._styles_dict:
-                newname = u'M'+name # Rename style
+                newname = u'M'+name  # Rename style
                 self._styles_ooo_fix[name] = newname
                 # From here on all references to the old name will refer to the new one
                 name = newname
@@ -242,19 +244,19 @@ class OpenDocument:
         containing valid XML.
         Then a ".getvalue()" should return a unicode string.
         """
-        assert(type(filename)==type(u""))
+        assert(type(filename) == type(u""))
 
-        result=None
-        xml=StringIO()
-        if sys.version_info[0]==2:
+        result = None
+        xml = StringIO()
+        if sys.version_info[0] == 2:
             xml.write(_XMLPROLOGUE)
         else:
             xml.write(_XMLPROLOGUE)
         self.body.toXml(0, xml)
         if not filename:
-            result=xml.getvalue()
+            result = xml.getvalue()
         else:
-            f=codecs.open(filename,'w', encoding='utf-8')
+            f = codecs.open(filename, 'w', encoding='utf-8')
             f.write(xml.getvalue())
             f.close()
         return result
@@ -265,21 +267,20 @@ class OpenDocument:
         @return a bytestream in UTF-8 encoding
         """
         self.__replaceGenerator()
-        xml=StringIO()
-        if sys.version_info[0]==2:
+        xml = StringIO()
+        if sys.version_info[0] == 2:
             xml.write(_XMLPROLOGUE)
         else:
             xml.write(_XMLPROLOGUE)
         self.topnode.toXml(0, xml)
         return xml.getvalue().encode("utf-8")
 
-
     def contentxml(self):
         """
         Generates the content.xml file
         @return a bytestream in UTF-8 encoding
         """
-        xml=StringIO()
+        xml = StringIO()
         xml.write(_XMLPROLOGUE)
         x = DocumentContent()
         x.write_open_tag(0, xml)
@@ -306,11 +307,11 @@ class OpenDocument:
         The self.manifest isn't avaible unless the document is being saved
         @return a unicode string
         """
-        xml=StringIO()
+        xml = StringIO()
         xml.write(_XMLPROLOGUE)
-        self.manifest.toXml(0,xml)
-        result=xml.getvalue()
-        assert(type(result)==type(u""))
+        self.manifest.toXml(0, xml)
+        result = xml.getvalue()
+        assert(type(result) == type(u""))
         return result
 
     def metaxml(self):
@@ -321,11 +322,11 @@ class OpenDocument:
         self.__replaceGenerator()
         x = DocumentMeta()
         x.addElement(self.meta)
-        xml=StringIO()
+        xml = StringIO()
         xml.write(_XMLPROLOGUE)
-        x.toXml(0,xml)
-        result=xml.getvalue()
-        assert(type(result)==type(u""))
+        x.toXml(0, xml)
+        result = xml.getvalue()
+        assert(type(result) == type(u""))
         return result
 
     def settingsxml(self):
@@ -335,14 +336,14 @@ class OpenDocument:
         """
         x = DocumentSettings()
         x.addElement(self.settings)
-        xml=StringIO()
-        if sys.version_info[0]==2:
+        xml = StringIO()
+        if sys.version_info[0] == 2:
             xml.write(_XMLPROLOGUE)
         else:
             xml.write(_XMLPROLOGUE)
-        x.toXml(0,xml)
-        result=xml.getvalue()
-        assert(type(result)==type(u""))
+        x.toXml(0, xml)
+        result = xml.getvalue()
+        assert(type(result) == type(u""))
         return result
 
     def _parseoneelement(self, top, stylenamelist):
@@ -355,19 +356,19 @@ class OpenDocument:
         for e in top.childNodes:
             if e.nodeType == element.Node.ELEMENT_NODE:
                 for styleref in (
-                        (CHARTNS,u'style-name'),
-                        (DRAWNS,u'style-name'),
-                        (DRAWNS,u'text-style-name'),
-                        (PRESENTATIONNS,u'style-name'),
-                        (STYLENS,u'data-style-name'),
-                        (STYLENS,u'list-style-name'),
-                        (STYLENS,u'page-layout-name'),
-                        (STYLENS,u'style-name'),
-                        (TABLENS,u'default-cell-style-name'),
-                        (TABLENS,u'style-name'),
-                        (TEXTNS,u'style-name') ):
-                    if e.getAttrNS(styleref[0],styleref[1]):
-                        stylename = e.getAttrNS(styleref[0],styleref[1])
+                        (CHARTNS, u'style-name'),
+                        (DRAWNS, u'style-name'),
+                        (DRAWNS, u'text-style-name'),
+                        (PRESENTATIONNS, u'style-name'),
+                        (STYLENS, u'data-style-name'),
+                        (STYLENS, u'list-style-name'),
+                        (STYLENS, u'page-layout-name'),
+                        (STYLENS, u'style-name'),
+                        (TABLENS, u'default-cell-style-name'),
+                        (TABLENS, u'style-name'),
+                        (TEXTNS, u'style-name')):
+                    if e.getAttrNS(styleref[0], styleref[1]):
+                        stylename = e.getAttrNS(styleref[0], styleref[1])
                         if stylename not in stylenamelist:
                             # due to the polymorphism of e.getAttrNS(),
                             # a unicode type is enforced for elements
@@ -387,11 +388,11 @@ class OpenDocument:
             stylenamelist = self._parseoneelement(top, stylenamelist)
         stylelist = []
         for e in self.automaticstyles.childNodes:
-            if isinstance(e, element.Element) and e.getAttrNS(STYLENS,u'name') in stylenamelist:
+            if isinstance(e, element.Element) and e.getAttrNS(STYLENS, u'name') in stylenamelist:
                 stylelist.append(e)
 
         # check the type of the returned data
-        ok=True
+        ok = True
         for e in stylelist: ok = ok and isinstance(e, element.Element)
         assert(ok)
 
@@ -402,7 +403,7 @@ class OpenDocument:
         Generates the styles.xml file
         @return valid XML code as a unicode string
         """
-        xml=StringIO()
+        xml = StringIO()
         xml.write(_XMLPROLOGUE)
         x = DocumentStyles()
         x.write_open_tag(0, xml)
@@ -419,7 +420,7 @@ class OpenDocument:
         x.write_close_tag(0, xml)
         result = xml.getvalue()
 
-        assert(type(result)==type(u""))
+        assert(type(result) == type(u""))
 
         return result
 
@@ -441,18 +442,18 @@ class OpenDocument:
             if mediatype is None:
                 mediatype = u''
                 try: ext = filename[filename.rindex(u'.'):]
-                except: ext=u''
+                except: ext = u''
             else:
                 ext = mimetypes.guess_extension(mediatype)
             manifestfn = u"Pictures/%s%s" % (uuid.uuid4().hex.upper(), ext)
             self.Pictures[manifestfn] = (IS_FILENAME, filename, mediatype)
-            content=b""  # this value is only use by the assert further
-            filename=u"" # this value is only use by the assert further
+            content = b""  # this value is only use by the assert further
+            filename = u""  # this value is only use by the assert further
         else:
             manifestfn = filename
             self.Pictures[manifestfn] = (IS_IMAGE, content, mediatype)
 
-        assert(type(filename)==type(u""))
+        assert(type(filename) == type(u""))
         assert(type(content) == type(b""))
 
         return manifestfn
@@ -473,14 +474,14 @@ class OpenDocument:
         if mediatype is None:
             mediatype = u''
             try: ext = filename[filename.rindex(u'.'):]
-            except ValueError: ext=u''
+            except ValueError: ext = u''
         else:
             ext = mimetypes.guess_extension(mediatype)
         manifestfn = u"Pictures/%s%s" % (uuid.uuid4().hex.upper(), ext)
         self.Pictures[manifestfn] = (IS_FILENAME, filename, mediatype)
 
-        assert(type(filename)==type(u""))
-        assert(type(mediatype)==type(u""))
+        assert(type(filename) == type(u""))
+        assert(type(mediatype) == type(u""))
 
         return manifestfn
 
@@ -495,8 +496,8 @@ class OpenDocument:
         @param mediatype unicode string: name of a media
         @return a unicode string, the name of the created file
         """
-        assert(type(content)==type(b""))
-        assert(type(mediatype)==type(u""))
+        assert(type(content) == type(b""))
+        assert(type(mediatype) == type(u""))
 
         ext = mimetypes.guess_extension(mediatype)
         manifestfn = u"Pictures/%s%s" % (uuid.uuid4().hex.upper(), ext)
@@ -509,7 +510,7 @@ class OpenDocument:
         The thumbnail in the library is big, so this is pretty useless.
         @param filecontent bytes: the content of a file; defaults to None
         """
-        assert(type(filecontent)==type(b""))
+        assert(type(filecontent) == type(b""))
 
         if filecontent is None:
             import thumbnail
@@ -526,7 +527,7 @@ class OpenDocument:
         stored in.
         """
         assert(isinstance(document, OpenDocument))
-        assert(type(objectname)==type(u"") or objectname == None)
+        assert(type(objectname) == type(u"") or objectname == None)
 
         self.childobjects.append(document)
         if objectname is None:
@@ -542,7 +543,7 @@ class OpenDocument:
         @param folder unicode string: place to save pictures
         """
         assert(isinstance(anObject, OpenDocument))
-        assert(type(folder)==type(u""))
+        assert(type(folder) == type(u""))
 
         hasPictures = False
         for arcname, picturerec in anObject.Pictures.items():
@@ -573,7 +574,7 @@ class OpenDocument:
         belonging to the application that created the document.
         """
         for m in self.meta.childNodes[:]:
-            if hasattr(m,'qname') and m.qname == (METANS, u'generator'):
+            if m.qname == (METANS, u'generator'):
                 self.meta.removeChild(m)
         self.meta.addElement(meta.Generator(text=TOOLSVERSION))
 
@@ -588,10 +589,10 @@ class OpenDocument:
         """
 
         if outputfile == u'-':
-            outputfp = zipfile.ZipFile(sys.stdout,"w")
+            outputfp = zipfile.ZipFile(sys.stdout, "w")
         else:
             if addsuffix:
-                outputfile = outputfile + odmimetypes.get(self.mimetype,u'.xxx')
+                outputfile = outputfile + odmimetypes.get(self.mimetype, u'.xxx')
             outputfp = zipfile.ZipFile(outputfile, "w")
         self.__zipwrite(outputfp)
         outputfp.close()
@@ -602,7 +603,7 @@ class OpenDocument:
         Writes the ZIP format
         @param outputfp open file descriptor
         """
-        zipoutputfp = zipfile.ZipFile(outputfp,"w")
+        zipoutputfp = zipfile.ZipFile(outputfp, "w")
         self.__zipwrite(zipoutputfp)
 
     def __zipwrite(self, outputfp):
@@ -623,10 +624,10 @@ class OpenDocument:
         zi.external_attr = UNIXPERMS
         self._z.writestr(zi, self.mimetype.encode("utf-8"))
 
-        self._saveXmlObjects(self,u"")
+        self._saveXmlObjects(self, u"")
 
         # Write pictures
-        self._savePictures(self,u"")
+        self._savePictures(self, u"")
 
         # Write the thumbnail
         if self.thumbnail is not None:
@@ -639,9 +640,9 @@ class OpenDocument:
 
         # Write any extra files
         for op in self._extra:
-            if op.filename == u"META-INF/documentsignatures.xml": continue # Don't save signatures
+            if op.filename == u"META-INF/documentsignatures.xml": continue  # Don't save signatures
             self.manifest.addElement(manifest.FileEntry(fullpath=op.filename, mediatype=op.mediatype))
-            if sys.version_info[0]==3:
+            if sys.version_info[0] == 3:
                 zi = zipfile.ZipInfo(op.filename, self._now)
             else:
                 zi = zipfile.ZipInfo(op.filename.encode('utf-8'), self._now)
@@ -653,11 +654,10 @@ class OpenDocument:
         zi = zipfile.ZipInfo(u"META-INF/manifest.xml", self._now)
         zi.compress_type = zipfile.ZIP_DEFLATED
         zi.external_attr = UNIXPERMS
-        self._z.writestr(zi, self.__manifestxml() )
+        self._z.writestr(zi, self.__manifestxml())
         del self._z
         del self._now
         del self.manifest
-
 
     def _saveXmlObjects(self, anObject, folder):
         """
@@ -666,7 +666,7 @@ class OpenDocument:
         @param folder unicode string place to save xml objects
         """
         assert(isinstance(anObject, OpenDocument))
-        assert(type(folder)==type(u""))
+        assert(type(folder) == type(u""))
 
         if self == anObject:
             self.manifest.addElement(manifest.FileEntry(fullpath=u"/", mediatype=anObject.mimetype))
@@ -721,7 +721,6 @@ class OpenDocument:
         # this old code is ambiguous: is 'element' the module or is it the
         # local variable? To disambiguate this, the local variable has been
         # renamed to 'elt'
-        #return element(check_grammar=False)
         return elt(check_grammar=False)
 
     def createTextNode(self, data):
@@ -730,7 +729,7 @@ class OpenDocument:
         @param data unicode string to include in the Text element
         @return an instance of element.Text
         """
-        assert(type(data)==type(u""))
+        assert(type(data) == type(u""))
 
         return element.Text(data)
 
@@ -740,7 +739,7 @@ class OpenDocument:
         @param data unicode string to include in the CDATA element
         @return an instance of element.CDATASection
         """
-        assert(type(data)==type(u""))
+        assert(type(data) == type(u""))
 
         return element.CDATASection(cdata)
 
@@ -749,7 +748,7 @@ class OpenDocument:
         Returns the media type
         @result a unicode string
         """
-        assert (type(self.mimetype)==type(u""))
+        assert (type(self.mimetype) == type(u""))
 
         return self.mimetype
 
@@ -759,12 +758,12 @@ class OpenDocument:
         @param name unicode string the name of style to search
         @return a syle as an element.Element instance
         """
-        assert(type(name)==type(u""))
+        assert(type(name) == type(u""))
 
         ncname = make_NCName(name)
         if self._styles_dict == {}:
             self.rebuild_caches()
-        result=self._styles_dict.get(ncname, None)
+        result = self._styles_dict.get(ncname, None)
 
         assert(isinstance(result, element.Element))
         return result
@@ -777,7 +776,7 @@ class OpenDocument:
         @return a list of istances of element.Element
         """
         import types
-        assert(isinstance (elt, types.FunctionType))
+        assert(isinstance(elt, types.FunctionType))
 
         obj = elt(check_grammar=False)
         assert (isinstance(obj, element.Element))
@@ -788,15 +787,15 @@ class OpenDocument:
         # This previous code was ambiguous
         # was "element" the module name or the local variable?
         # the local variable is renamed to "elt" to disambiguate the code
-        #return self.element_dict.get(obj.qname, [])
 
-        result=self.element_dict.get(obj.qname, [])
+        result = self.element_dict.get(obj.qname, [])
 
-        ok=True
+        ok = True
         for e in result: ok = ok and isinstance(e, element.Element)
         assert(ok)
 
         return result
+
 
 # Convenience functions
 def OpenDocumentChart():
@@ -809,6 +808,7 @@ def OpenDocumentChart():
     doc.body.addElement(doc.chart)
     return doc
 
+
 def OpenDocumentDrawing():
     """
     Creates a drawing document
@@ -818,6 +818,7 @@ def OpenDocumentDrawing():
     doc.drawing = Drawing()
     doc.body.addElement(doc.drawing)
     return doc
+
 
 def OpenDocumentImage():
     """
@@ -829,6 +830,7 @@ def OpenDocumentImage():
     doc.body.addElement(doc.image)
     return doc
 
+
 def OpenDocumentPresentation():
     """
     Creates a presentation document
@@ -838,6 +840,7 @@ def OpenDocumentPresentation():
     doc.presentation = Presentation()
     doc.body.addElement(doc.presentation)
     return doc
+
 
 def OpenDocumentSpreadsheet():
     """
@@ -849,6 +852,7 @@ def OpenDocumentSpreadsheet():
     doc.body.addElement(doc.spreadsheet)
     return doc
 
+
 def OpenDocumentText():
     """
     Creates a text document
@@ -858,6 +862,7 @@ def OpenDocumentText():
     doc.text = Text()
     doc.body.addElement(doc.text)
     return doc
+
 
 def OpenDocumentTextMaster():
     """
@@ -869,6 +874,7 @@ def OpenDocumentTextMaster():
     doc.body.addElement(doc.text)
     return doc
 
+
 def __loadxmlparts(z, manifest, doc, objectpath):
     """
     Parses a document from its zipfile
@@ -878,9 +884,9 @@ def __loadxmlparts(z, manifest, doc, objectpath):
     @param objectpath unicode string: path to an object
     """
     assert(isinstance(z, zipfile.ZipFile))
-    assert(type(manifest)==type(dict()))
+    assert(type(manifest) == type(dict()))
     assert(isinstance(doc, OpenDocument))
-    assert(type(objectpath)==type(u""))
+    assert(type(objectpath) == type(u""))
 
     from odf.load import LoadParser
     from defusedxml.sax import make_parser
@@ -910,7 +916,7 @@ def __loadxmlparts(z, manifest, doc, objectpath):
             # a missing xmlns prefix like meta, config, etc.
             # So i add such declarations when needed (GK, 2014/10/21).
             # Is there any option to prevent xmlns checks by SAX?
-            xmlpart=__fixXmlPart(xmlpart)
+            xmlpart = __fixXmlPart(xmlpart)
 
             inpsrc.setByteStream(BytesIO(xmlpart.encode("utf-8")))
             parser.parse(inpsrc)
@@ -918,6 +924,7 @@ def __loadxmlparts(z, manifest, doc, objectpath):
         except KeyError as v: pass
         except SAXParseException:
             print (u"====== SAX FAILED TO PARSE ==========\n", xmlpart)
+
 
 def __fixXmlPart(xmlpart):
     """
@@ -927,7 +934,7 @@ def __fixXmlPart(xmlpart):
     @param xmlpart unicode string: some XML code
     @return fixed XML code
     """
-    result=xmlpart
+    result = xmlpart
     requestedPrefixes = (u'meta', u'config', u'dc', u'style',
                          u'svg', u'fo',u'draw', u'table',u'form')
     for prefix in requestedPrefixes:
@@ -939,9 +946,9 @@ def __fixXmlPart(xmlpart):
             # 2016-02-19 G.K.
             ###########################################
             try:
-                pos=result.index(u" xmlns:")
-                toInsert=u' xmlns:{prefix}="urn:oasis:names:tc:opendocument:xmlns:{prefix}:1.0"'.format(prefix=prefix)
-                result=result[:pos]+toInsert+result[pos:]
+                pos = result.index(u" xmlns:")
+                toInsert = u' xmlns:{prefix}="urn:oasis:names:tc:opendocument:xmlns:{prefix}:1.0"'.format(prefix=prefix)
+                result = result[:pos]+toInsert+result[pos:]
             except:
                 pass
     return result
@@ -963,14 +970,15 @@ def __detectmimetype(zipfd, odffile):
         pass
     # Fall-through to next mechanism
     manifestpart = zipfd.read('META-INF/manifest.xml')
-    manifest =  manifestlist(manifestpart)
-    for mentry,mvalue in manifest.items():
+    manifest = manifestlist(manifestpart)
+    for mentry, mvalue in manifest.items():
         if mentry == "/":
-            assert(type(mvalue['media-type'])==type(u""))
+            assert(type(mvalue['media-type']) == type(u""))
             return mvalue['media-type']
 
     # Fall-through to last mechanism
     return u'application/vnd.oasis.opendocument.text'
+
 
 def load(odffile):
     """
@@ -985,9 +993,9 @@ def load(odffile):
 
     # Look in the manifest file to see if which of the four files there are
     manifestpart = z.read('META-INF/manifest.xml')
-    manifest =  manifestlist(manifestpart)
+    manifest = manifestlist(manifestpart)
     __loadxmlparts(z, manifest, doc, u'')
-    for mentry,mvalue in manifest.items():
+    for mentry, mvalue in manifest.items():
         if mentry[:9] == u"Pictures/" and len(mentry) > 9:
             doc.addPicture(mvalue['full-path'], mvalue['media-type'], z.read(mentry))
         elif mentry == u"Thumbnails/thumbnail.png":
@@ -1000,7 +1008,7 @@ def load(odffile):
             doc.addObject(subdoc, u"/" + mentry[:-1])
             __loadxmlparts(z, manifest, subdoc, mentry)
         elif mentry[:7] == u"Object ":
-            pass # Don't load subobjects as opaque objects
+            pass  # Don't load subobjects as opaque objects
         else:
             if mvalue['full-path'][-1] == u'/':
                 doc._extra.append(OpaqueObject(mvalue['full-path'], mvalue['media-type'], None))
