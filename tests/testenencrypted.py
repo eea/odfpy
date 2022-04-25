@@ -295,7 +295,7 @@ class TestEncryption(unittest.TestCase):
         manifest = manifestlist(manifestpart)
         self.assertEqual(sorted(sample_1_manifest.items()), sorted(manifest.items()))
 
-        # z = zipfile.ZipFile(sample_2_name)
-        # manifestpart = z.read('META-INF/manifest.xml')
-        # manifest = manifestlist(manifestpart)
-        # self.assertEqual(sorted(sample_2_manifest.items()), sorted(manifest.items()))
+        z = zipfile.ZipFile(sample_2_name)
+        manifestpart = z.read('META-INF/manifest.xml')
+        manifest = manifestlist(manifestpart)
+        self.assertEqual(sorted(sample_2_manifest.items()), sorted(manifest.items()))
