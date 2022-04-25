@@ -24,9 +24,15 @@
 
 __doc__="""Use OpenDocument to generate your documents."""
 
+import base64
+import hashlib
 import zipfile, time, uuid, sys, mimetypes, copy, os.path
 
 # to allow Python3 to access modules in the same path
+import zlib
+
+from Crypto.Cipher import Blowfish, AES, DES3
+
 sys.path.append(os.path.dirname(__file__))
 
 # using BytesIO provides a cleaner interface than StringIO
@@ -869,7 +875,8 @@ def OpenDocumentTextMaster():
     doc.body.addElement(doc.text)
     return doc
 
-def __loadxmlparts(z, manifest, doc, objectpath):
+
+def __loadxmlparts(z, manifest, doc, objectpath, password=None):
     """
     Parses a document from its zipfile
     @param z an instance of zipfile.ZipFile
@@ -895,7 +902,11 @@ def __loadxmlparts(z, manifest, doc, objectpath):
         from xml.sax._exceptions import SAXParseException
         ##########################################################
         try:
-            xmlpart = z.read(xmlfile).decode("utf-8")
+            xmlpart = z.read(xmlfile)
+            if 'encrypted-data' in manifest[xmlfile].keys():
+                xmlpart = __decrypt(xmlpart, manifest[xmlfile]['encrypted-data'], password)
+            xmlpart = xmlpart.decode("utf-8")
+
             doc._parsing = xmlfile
 
             parser = make_parser()
@@ -972,7 +983,7 @@ def __detectmimetype(zipfd, odffile):
     # Fall-through to last mechanism
     return u'application/vnd.oasis.opendocument.text'
 
-def load(odffile):
+def load(odffile, password=None):
     """
     Load an ODF file into memory
     @param odffile unicode string: name of a file, or as an alternative,
@@ -986,7 +997,7 @@ def load(odffile):
     # Look in the manifest file to see if which of the four files there are
     manifestpart = z.read('META-INF/manifest.xml')
     manifest =  manifestlist(manifestpart)
-    __loadxmlparts(z, manifest, doc, u'')
+    __loadxmlparts(z, manifest, doc, u'', password)
     for mentry,mvalue in manifest.items():
         if mentry[:9] == u"Pictures/" and len(mentry) > 9:
             doc.addPicture(mvalue['full-path'], mvalue['media-type'], z.read(mentry))
@@ -1026,5 +1037,101 @@ def load(odffile):
         doc.formula = b[0].firstChild
 
     return doc
+
+
+# --------------------------------------
+# Encryption functions
+# --------------------------------------
+
+def __normalize_name(algorithm_name):
+    """ According to the OpenDocument docs (https://docs.oasis-open.org/office/v1.2/os/OpenDocument-v1.2-os-part3.html),
+    the algorithms presented in the "encrypted-data" section can be specified in different ways:
+
+        - As plain algorithm name: SHA1, SHA1/1K, Blowfish CFB
+        - As IRI: http://www.w3.org/2000/09/xmldsig#sha256
+        - With MANIFEST prefix: urn:oasis:names:tc:opendocument:xmlns:manifest:1.0#sha256-1k
+
+    This function tries to normalize algorithm name.
+    """
+    assert isinstance(algorithm_name, type(u''))
+    if algorithm_name.startswith('http') or algorithm_name.startswith(MANIFESTNS):
+        algorithm_name = algorithm_name.split('#')[1]
+    return algorithm_name.lower()
+
+
+def __inflate(data):
+    decompress = zlib.decompressobj(-zlib.MAX_WBITS)
+    inflated = decompress.decompress(data)
+    inflated += decompress.flush()
+    return inflated
+
+
+def __deflate(data, compress_level=9):
+    compress = zlib.compressobj(compress_level, zlib.DEFLATED, -zlib.MAX_WBITS, zlib.DEF_MEM_LEVEL, 0)
+    deflated = compress.compress(data)
+    deflated += compress.flush()
+    return deflated
+
+
+def __make_key(password, algorithm, salt, deriv_iter_count, deriv_key_size):
+    """ Makes encryption key from password with addition derivation.
+    :param password: document's password.
+    :param algorithm: manifest:start-key-generation-name, the algorithm used to generate a start key from the
+        user password. Can be SHA1, SHA256.
+    :param salt: manifest:salt, base64-encoded salt
+    :param deriv_iter_count: manifest:iteration-count, the number of iterations used by the key derivation algorithm
+        to derive a key.
+    :param deriv_key_size: manifest:key-size,  the length in octets of a key delivered by a key-developing algorithm.
+    """
+    assert algorithm in ('sha1', 'sha256'), 'Only sha251 and sha1 are allowed'
+    sha_key = hashlib.new(algorithm, password).digest()
+
+    return hashlib.pbkdf2_hmac('sha1', sha_key, base64.b64decode(salt), int(deriv_iter_count), int(deriv_key_size))
+
+
+def __decrypt_data(algorithm, iv, derived_key, encrypted_data):
+    """ Decrypt data.
+    :param algorithm: manifest:algorithm-name, the algorithm and mode used to encrypt a file entry. Can be:
+        1. An IRI listed in §5.2 of xmlenc-core (Block Encryption Algorithms): tripledes-cbc, aes128-cbc, aes192-cbc,
+            aes256-cbc
+        2. Blowfish CFB: The Blowfish algorithm in 8-bit CFB mode.
+        3. An IRI listed in §5.1 of xmlenc-core (Algorithm Identifiers and Implementation Requirements): NOT IMPLEMENTED
+    :param iv: manifest:initialisation-vector, base64-encrypted initialization vector used by the encryption algorithm.
+    :param derived_key: the key derived from a password.
+    :param encrypted_data: the encrypted data
+    """
+    algorithm = __normalize_name(algorithm)
+    assert algorithm in ('blowfish cfb', 'blowfish', 'aes128-cbc', 'aes192-cbc', 'aes256-cbc', 'tripledes-cbc'), \
+        'Unknown algorithm: {}'.format(algorithm)
+
+    iv = base64.b64decode(iv)
+
+    if 'blowfish' in algorithm:
+        alg_obj = Blowfish.new(key=derived_key, mode=Blowfish.MODE_CFB, IV=iv)
+    elif 'aes' in algorithm:
+        alg_obj = AES.new(key=derived_key, mode=AES.MODE_CBC, IV=iv)
+    elif 'tripledes' in algorithm:
+        alg_obj = DES3.new(key=derived_key, mode=DES3.MODE_CBC, IV=iv)
+
+    return alg_obj.decrypt(encrypted_data)
+
+
+def __decrypt(raw_data, manifest_data, password):
+    # Stage 1: Get the encryption key from the password.
+    start_key_generation_alg = __normalize_name(manifest_data['start-key-generation']['start-key-generation-name'])
+    derived_key = __make_key(password,
+                             algorithm=start_key_generation_alg,
+                             salt=manifest_data['key-derivation']['salt'],
+                             deriv_iter_count=manifest_data['key-derivation']['iteration-count'],
+                             deriv_key_size=manifest_data['key-derivation']['key-size'])
+
+    # Stage 3: Decrypt data.
+    decrypted_data = __decrypt_data(algorithm=manifest_data['algorithm']['algorithm-name'],
+                                    iv=manifest_data['algorithm']['initialisation-vector'],
+                                    derived_key=derived_key,
+                                    encrypted_data=raw_data)
+
+    # Stage 3: Inflate decrypted data.
+    return __inflate(decrypted_data)
 
 # vim: set expandtab sw=4 :

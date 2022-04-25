@@ -38,18 +38,20 @@ MANIFESTNS="urn:oasis:names:tc:opendocument:xmlns:manifest:1.0"
 #
 #-----------------------------------------------------------------------------
 
+
 class ODFManifestHandler(handler.ContentHandler):
-    """ The ODFManifestHandler parses a manifest file and produces a list of
-        content """
 
     def __init__(self):
         self.manifest = {}
-
-        # Tags
-        # FIXME: Also handle encryption data
         self.elements = {
-        (MANIFESTNS, 'file-entry'): (self.s_file_entry, self.donothing),
+            (MANIFESTNS, 'file-entry'): (self.s_file_entry, self.donothing),
+            (MANIFESTNS, 'encryption-data'): (self.e_file_entry, self.e_file_entry_close),
+            (MANIFESTNS, 'algorithm'): (self.e_alg_file_entry, self.donothing),
+            (MANIFESTNS, 'key-derivation'): (self.e_key_der_file_entry, self.donothing),
+            (MANIFESTNS, 'start-key-generation'): (self.e_key_gen_file_entry, self.donothing)
         }
+
+        self._encr_el_key = None
 
     def handle_starttag(self, tag, method, attrs):
         method(tag,attrs)
@@ -81,9 +83,46 @@ class ODFManifestHandler(handler.ContentHandler):
         pass
 
     def s_file_entry(self, tag, attrs):
-        m = attrs.get((MANIFESTNS, 'media-type'),"application/octet-stream")
+        m = attrs.get((MANIFESTNS, 'media-type'),"")
         p = attrs.get((MANIFESTNS, 'full-path'))
-        self.manifest[p] = { 'media-type':m, 'full-path':p }
+
+        self.manifest[p] = {'media-type': m, 'full-path': p}
+
+        s = attrs.get((MANIFESTNS, 'size'), None)
+        # only encrypted entries have 'size' attr
+        # so there we assume that the next element will be encrypted-data
+        if s:
+            self.manifest[p]['size'] = s
+            self._encr_el_key = p
+            self.manifest[p]['encrypted-data'] = {}
+
+    def e_file_entry(self, tag, attrs):
+        self.manifest[self._encr_el_key]['encrypted-data']['checksum-type'] = \
+            attrs.get((MANIFESTNS, 'checksum-type'), "SHA1/1K")
+        self.manifest[self._encr_el_key]['encrypted-data']['checksum'] = attrs.get((MANIFESTNS, 'checksum'), "")
+
+    def e_file_entry_close(self, tag):
+        self._encr_el_key = None
+
+    def e_alg_file_entry(self, tag, attrs):
+        self.manifest[self._encr_el_key]['encrypted-data']['algorithm'] = {
+            'algorithm-name': attrs.get((MANIFESTNS, 'algorithm-name'), "Blowfish CFB"),
+            'initialisation-vector': attrs.get((MANIFESTNS, 'initialisation-vector'), "")
+        }
+
+    def e_key_der_file_entry(self, tag, attrs):
+        self.manifest[self._encr_el_key]['encrypted-data']['key-derivation'] = {
+            'key-derivation-name': attrs.get((MANIFESTNS, 'key-derivation-name'), "PBKDF2"),
+            'key-size': attrs.get((MANIFESTNS, 'key-size'), "16"),
+            'iteration-count': attrs.get((MANIFESTNS, 'iteration-count'), "1024"),
+            'salt': attrs.get((MANIFESTNS, 'salt'), "")
+        }
+
+    def e_key_gen_file_entry(self, tag, attrs):
+        self.manifest[self._encr_el_key]['encrypted-data']['start-key-generation'] = {
+            'start-key-generation-name': attrs.get((MANIFESTNS, 'start-key-generation-name'), "SHA1"),
+            'key-size': attrs.get((MANIFESTNS, 'key-size'), "20")
+        }
 
 
 #-----------------------------------------------------------------------------
