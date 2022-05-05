@@ -1,21 +1,21 @@
 import unittest, sys, os
 import zipfile
 
-from odf import easyliststyle
 from odf.odfmanifest import manifestlist
-from odf.opendocument import OpenDocumentText
-from odf.style import Style, TextProperties
-from odf.text import P, List, ListItem
+from odf.opendocument import load, OpenDocumentEncryptionException
 
 if sys.version_info[0] == 3:
     unicode = str
 
 
 class TestEncryption(unittest.TestCase):
+    BLOWFISH_SAMPLE = (os.path.join(os.path.abspath('tests/examples/blowfish_sample.odt')), '12345')
+    AES_SAMPLE = (os.path.join(os.path.abspath('tests/examples/aes_sample.odt')), 'qwerty')
+    TEMPFILE = 'tmpfile'
+
     def test_manifest_parsed_correctly(self):
         self.maxDiff = None
-        sample_1_name = os.path.join(os.path.abspath('tests/examples/enc_sample_old.odt'))
-        sample_1_manifest = {
+        blowsidh_sample_manifest = {
             '/': {
                 'full-path': u'/',
                 'media-type': u'application/vnd.oasis.opendocument.presentation'
@@ -163,8 +163,7 @@ class TestEncryption(unittest.TestCase):
                 }
             }
         }
-        sample_2_name = os.path.join(os.path.abspath('tests/examples/enc_sample.odt'))
-        sample_2_manifest = {
+        aes_sample_manifest = {
             "/": {
                 "full-path": u"/",
                 "media-type": u"application/vnd.oasis.opendocument.text"
@@ -290,12 +289,35 @@ class TestEncryption(unittest.TestCase):
             }
         }
 
-        z = zipfile.ZipFile(sample_1_name)
+        z = zipfile.ZipFile(self.BLOWFISH_SAMPLE[0])
         manifestpart = z.read('META-INF/manifest.xml')
         manifest = manifestlist(manifestpart)
-        self.assertEqual(sorted(sample_1_manifest.items()), sorted(manifest.items()))
+        self.assertEqual(sorted(blowsidh_sample_manifest.items()), sorted(manifest.items()))
 
-        z = zipfile.ZipFile(sample_2_name)
+        z = zipfile.ZipFile(self.AES_SAMPLE[0])
         manifestpart = z.read('META-INF/manifest.xml')
         manifest = manifestlist(manifestpart)
-        self.assertEqual(sorted(sample_2_manifest.items()), sorted(manifest.items()))
+        self.assertEqual(sorted(aes_sample_manifest.items()), sorted(manifest.items()))
+
+    def test_decryption_with_right_password(self):
+        for sample in (self.BLOWFISH_SAMPLE, self.AES_SAMPLE):
+            load(sample[0], sample[1])
+        return True
+
+    def test_decryption_with_wrong_password(self):
+        for sample in (self.BLOWFISH_SAMPLE, self.AES_SAMPLE):
+            with self.assertRaises(OpenDocumentEncryptionException) as context:
+                load(sample[0], 'wrong_password')
+
+    def test_decryption_and_save(self):
+        for sample in (self.BLOWFISH_SAMPLE, self.AES_SAMPLE):
+            doc = load(sample[0], sample[1])
+            doc.save(self.TEMPFILE, False)
+
+            load(self.TEMPFILE)
+
+        return True
+
+    def tearDown(self):
+        if os.path.exists(self.TEMPFILE):
+            os.remove(self.TEMPFILE)

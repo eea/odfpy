@@ -804,6 +804,15 @@ class OpenDocument:
 
         return result
 
+
+class OpenDocumentException(Exception):
+    pass
+
+
+class OpenDocumentEncryptionException(OpenDocumentException):
+    pass
+
+
 # Convenience functions
 def OpenDocumentChart():
     """
@@ -904,7 +913,12 @@ def __loadxmlparts(z, manifest, doc, objectpath, password=None):
         try:
             xmlpart = z.read(xmlfile)
             if 'encrypted-data' in manifest[xmlfile].keys():
-                xmlpart = __decrypt(xmlpart, manifest[xmlfile]['encrypted-data'], password)
+                if not password:
+                    raise OpenDocumentEncryptionException('Document is encrypted and password is not provided')
+                try:
+                    xmlpart = __decrypt(xmlpart, manifest[xmlfile]['encrypted-data'], password, verify_checksum=False)
+                except OpenDocumentEncryptionException as err:
+                    raise OpenDocumentEncryptionException('{}: {}'.format(xmlfile, err.message))
             xmlpart = xmlpart.decode("utf-8")
 
             doc._parsing = xmlfile
@@ -998,9 +1012,17 @@ def load(odffile, password=None):
     manifestpart = z.read('META-INF/manifest.xml')
     manifest =  manifestlist(manifestpart)
     __loadxmlparts(z, manifest, doc, u'', password)
-    for mentry,mvalue in manifest.items():
+    for mentry, mvalue in manifest.items():
         if mentry[:9] == u"Pictures/" and len(mentry) > 9:
-            doc.addPicture(mvalue['full-path'], mvalue['media-type'], z.read(mentry))
+            raw_pic = z.read(mentry)
+            if 'encrypted-data' in mvalue.keys():
+                if not password:
+                    raise OpenDocumentEncryptionException('Document is encrypted and password is not provided')
+                try:
+                    raw_pic = __decrypt(raw_pic, mvalue['encrypted-data'], password, verify_checksum=True)
+                except OpenDocumentEncryptionException as err:
+                    raise OpenDocumentEncryptionException('{}: {}'.format("filename", err.message))
+            doc.addPicture(mvalue['full-path'], mvalue['media-type'], raw_pic)
         elif mentry == u"Thumbnails/thumbnail.png":
             doc.addThumbnail(z.read(mentry))
         elif mentry in (u'settings.xml', u'meta.xml', u'content.xml', u'styles.xml'):
@@ -1084,8 +1106,7 @@ def __make_key(password, algorithm, salt, deriv_iter_count, deriv_key_size):
     :param deriv_key_size: manifest:key-size,  the length in octets of a key delivered by a key-developing algorithm.
     """
     assert algorithm in ('sha1', 'sha256'), 'Only sha251 and sha1 are allowed'
-    sha_key = hashlib.new(algorithm, password).digest()
-
+    sha_key = hashlib.new(algorithm, password.encode()).digest()
     return hashlib.pbkdf2_hmac('sha1', sha_key, base64.b64decode(salt), int(deriv_iter_count), int(deriv_key_size))
 
 
@@ -1107,17 +1128,15 @@ def __decrypt_data(algorithm, iv, derived_key, encrypted_data):
     iv = base64.b64decode(iv)
 
     if 'blowfish' in algorithm:
-        alg_obj = Blowfish.new(key=derived_key, mode=Blowfish.MODE_CFB, IV=iv)
+        return Blowfish.new(key=derived_key, mode=Blowfish.MODE_CFB, IV=iv, segment_size=64).decrypt(encrypted_data)
     elif 'aes' in algorithm:
-        alg_obj = AES.new(key=derived_key, mode=AES.MODE_CBC, IV=iv)
+        return AES.new(key=derived_key, mode=AES.MODE_CBC, IV=iv).decrypt(encrypted_data)
     elif 'tripledes' in algorithm:
-        alg_obj = DES3.new(key=derived_key, mode=DES3.MODE_CBC, IV=iv)
-
-    return alg_obj.decrypt(encrypted_data)
+        return DES3.new(key=derived_key, mode=DES3.MODE_CBC, IV=iv).decrypt(encrypted_data)
 
 
-def __decrypt(raw_data, manifest_data, password):
-    # Stage 1: Get the encryption key from the password.
+def __decrypt(raw_data, manifest_data, password, verify_checksum=True):
+    # Get the encryption key from the password.
     start_key_generation_alg = __normalize_name(manifest_data['start-key-generation']['start-key-generation-name'])
     derived_key = __make_key(password,
                              algorithm=start_key_generation_alg,
@@ -1125,13 +1144,58 @@ def __decrypt(raw_data, manifest_data, password):
                              deriv_iter_count=manifest_data['key-derivation']['iteration-count'],
                              deriv_key_size=manifest_data['key-derivation']['key-size'])
 
-    # Stage 3: Decrypt data.
+    # Add padding if needed
+    raw_data = __append_padding(raw_data)
+
+    # Decrypt data.
     decrypted_data = __decrypt_data(algorithm=manifest_data['algorithm']['algorithm-name'],
                                     iv=manifest_data['algorithm']['initialisation-vector'],
                                     derived_key=derived_key,
                                     encrypted_data=raw_data)
 
-    # Stage 3: Inflate decrypted data.
-    return __inflate(decrypted_data)
+    # Verify the result with checksum
+    if verify_checksum and not verify(manifest_data['checksum'], manifest_data['checksum-type'], decrypted_data):
+        raise OpenDocumentEncryptionException("Checksum verification failed. Wrong password or corrupted document")
+
+    # Inflate decrypted data.
+    try:
+        return __inflate(decrypted_data)
+    except zlib.error:
+        raise OpenDocumentEncryptionException("Wrong password or corrupted document")
+
+
+def __append_padding(ciphertext, segment_size=64., block_size=8.):
+    assert isinstance(segment_size, float)
+    assert isinstance(block_size, float)
+    while not (len(ciphertext) % segment_size / block_size).is_integer():
+        ciphertext += b'\x00'
+    return ciphertext
+
+
+def verify(checksum, checksum_type, decrypted_data):
+    """
+    Verify password.
+
+    :param checksum: base64 encoded checksum from manifest
+    :param checksum_type: name of a digest algorithm that can be used to check password correctness. SHA1 or SHA256.
+        Can be:
+        1. SHA1/1K: SHA1 algorithm applied to first 1024 bytes of the compressed unencrypted file.
+        2. urn:oasis:names:tc:opendocument:xmlns:manifest:1.0#sha1-1k: The same as SHA1/1K.
+        3. SHA1: The same as http://www.w3.org/2000/09/xmldsig#sha1.
+        4. urn:oasis:names:tc:opendocument:xmlns:manifest:1.0#sha256-1k: SHA256 algorithm applied to first 1024 bytes
+           of the compressed unencrypted file.
+    :param decrypted_data: ...
+    """
+
+    checksum_type = __normalize_name(checksum_type)
+    assert checksum_type in ('sha1/1k', 'sha1-1k', 'sha1', 'sha256-1k'), \
+        'Wrong checksum algorithm: {}'.format(checksum_type)
+
+    checksum = base64.b64decode(checksum)
+
+    if 'sha256' in checksum_type:
+        return checksum == hashlib.sha256(decrypted_data[:1024]).digest()
+    elif 'sha1' in checksum_type:
+        return checksum == hashlib.sha1(decrypted_data[:1024]).digest()[:1024]
 
 # vim: set expandtab sw=4 :
