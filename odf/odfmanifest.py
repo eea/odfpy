@@ -38,11 +38,14 @@ MANIFESTNS="urn:oasis:names:tc:opendocument:xmlns:manifest:1.0"
 #
 #-----------------------------------------------------------------------------
 
-
 class ODFManifestHandler(handler.ContentHandler):
+    """ The ODFManifestHandler parses a manifest file and produces a list of
+            content """
 
     def __init__(self):
         self.manifest = {}
+
+        # Tags
         self.elements = {
             (MANIFESTNS, 'file-entry'): (self.s_file_entry, self.donothing),
             (MANIFESTNS, 'encryption-data'): (self.e_file_entry, self.e_file_entry_close),
