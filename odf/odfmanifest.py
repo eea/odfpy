@@ -40,7 +40,7 @@ MANIFESTNS="urn:oasis:names:tc:opendocument:xmlns:manifest:1.0"
 
 class ODFManifestHandler(handler.ContentHandler):
     """ The ODFManifestHandler parses a manifest file and produces a list of
-            content """
+        content """
 
     def __init__(self):
         self.manifest = {}
