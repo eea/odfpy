@@ -365,7 +365,7 @@ class Element(Node):
         allowed_attrs = self.allowed_attributes()
         if allowed_attrs is not None:
             allowed_args = [ a[1].lower().replace('-','') for a in allowed_attrs]
-        self.attributes={}
+        self.attributes={} # type: dict[tuple[str, str], ...]
         # Load the attributes from the 'attributes' argument
         if attributes:
             for attr, value in attributes.items():
@@ -391,6 +391,7 @@ class Element(Node):
                     raise AttributeError( "Required attribute missing: %s in <%s>" % (r[1].lower().replace('-',''), self.tagName))
 
     def get_knownns(self, prefix):
+        # type: (Element, str) -> str | None
         """ Odfpy maintains a list of known namespaces. In some cases a prefix is used, and
             we need to know which namespace it resolves to.
         """
@@ -410,6 +411,7 @@ class Element(Node):
         return prefix
 
     def allowed_attributes(self):
+        # type: (Element) -> tuple[tuple[str, str], ...]
         return grammar.allowed_attributes.get(self.qname)
 
     def _setOwnerDoc(self, element):
@@ -418,6 +420,7 @@ class Element(Node):
             self._setOwnerDoc(child)
 
     def addElement(self, element, check_grammar=True):
+        # type: (Element, Element, bool) -> None
         """ adds an element to an Element
 
             Element.addElement(Element)
@@ -450,6 +453,7 @@ class Element(Node):
             self.appendChild(CDATASection(cdata))
 
     def removeAttribute(self, attr, check_grammar=True):
+        # type: (Element, str | tuple[str, str], bool) -> None
         """ Removes an attribute by name. """
         allowed_attrs = self.allowed_attributes()
         if allowed_attrs is None:
@@ -467,6 +471,7 @@ class Element(Node):
             self.removeAttrNS(allowed_attrs[i][0], allowed_attrs[i][1])
 
     def setAttribute(self, attr, value, check_grammar=True):
+        # type: (Element, str | tuple[str, str], Any, bool) -> None
         """ Add an attribute to the element
             This is sort of a convenience method. All attributes in ODF have
             namespaces. The library knows what attributes are legal and then allows
@@ -493,6 +498,7 @@ class Element(Node):
                 self.setAttrNS(allowed_attrs[i][0], allowed_attrs[i][1], value)
 
     def setAttrNS(self, namespace, localpart, value):
+        # type: (Element, str, str, Any) -> None
         """ Add an attribute to the element
             In case you need to add an attribute the library doesn't know about
             then you must provide the full qualified name
@@ -507,6 +513,7 @@ class Element(Node):
         self.attributes[(namespace, localpart)] = c.convert((namespace, localpart), value, self)
 
     def getAttrNS(self, namespace, localpart):
+        # type: (Element, str, str) -> Any
         """
         gets an attribute, given a namespace and a key
         @param namespace a unicode string or a bytes: the namespace
@@ -529,9 +536,11 @@ class Element(Node):
         return result
 
     def removeAttrNS(self, namespace, localpart):
+        # type: (Element, str, str) -> None
         del self.attributes[(namespace, localpart)]
 
     def getAttribute(self, attr):
+        # type: (str | tuple[str, str]) -> Any
         """ Get an attribute value. The method knows which namespace the attribute is in
         """
         allowed_attrs = self.allowed_attributes()
@@ -582,6 +591,7 @@ class Element(Node):
             f.write(u'/>')
 
     def _getElementsByObj(self, obj, accumulator):
+        # type: (Element, Element, list[Element]) -> list[Element]
         if self.qname == obj.qname:
             accumulator.append(self)
         for e in self.childNodes:
@@ -590,11 +600,13 @@ class Element(Node):
         return accumulator
 
     def getElementsByType(self, element):
+        # type: (Element, ...) -> list[Element]
         """ Gets elements based on the type, which is function from text.py, draw.py etc. """
         obj = element(check_grammar=False)
         return self._getElementsByObj(obj,[])
 
     def isInstanceOf(self, element):
+        # type: (Element, ...) -> bool
         """ This is a check to see if the object is an instance of a type """
         obj = element(check_grammar=False)
         return self.qname == obj.qname

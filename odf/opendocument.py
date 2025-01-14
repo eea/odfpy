@@ -754,6 +754,7 @@ class OpenDocument:
         return self.mimetype
 
     def getStyleByName(self, name):
+        # type: (str) -> element.Element
         """
         Finds a style object based on the name
         @param name unicode string the name of style to search
@@ -770,6 +771,7 @@ class OpenDocument:
         return result
 
     def getElementsByType(self, elt):
+        # type: (...) -> list[element.Element]
         """
         Gets elements based on the type, which is function from
         text.py, draw.py etc.
