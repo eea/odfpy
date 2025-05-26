@@ -183,7 +183,7 @@ def lint(odffile):
             if zi.filename == 'mimetype':
                 if zi.compress_type != zipfile.ZIP_STORED:
                     print_error("Error: The 'mimetype' member must be stored - not deflated")
-                if zi.comment != "":
+                if zi.comment != b"":
                     print_error("Error: The 'mimetype' member must not have extra header info")
             else:
                 print_error("Warning: The first member in the archive should be the mimetype")
