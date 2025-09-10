@@ -32,8 +32,8 @@ import odf.grammar as grammar
 from odf.attrconverters import AttrConverters
 
 if sys.version_info[0] == 3:
-    unicode=str # unicode function does not exist
-    unichr=chr  # unichr does not exist
+    unicode = str  # unicode function does not exist
+    unichr = chr  # unichr does not exist
 
 _xml11_illegal_ranges = (
     (0x0, 0x0,),
@@ -74,6 +74,7 @@ if sys.maxunicode >= 0x10000:
     )
 # else "narrow" python build - only possible with old versions
 
+
 def _range_seq_to_re(range_seq):
     # range pairs are specified as closed intervals
     return re.compile(u"[{}]".format(
@@ -83,7 +84,9 @@ def _range_seq_to_re(range_seq):
         )
     ), flags=re.UNICODE)
 
+
 _xml_filtered_chars_re = _range_seq_to_re(_xml10_illegal_ranges + _xml_discouraged_ranges)
+
 
 def _handle_unrepresentable(data):
     return _xml_filtered_chars_re.sub(u"\ufffd", data)
@@ -105,8 +108,10 @@ def _escape(data, entities={}):
         data = data.replace(chars, entity)
     return data
 
+
 def _sanitize(data, entities={}):
     return _escape(_handle_unrepresentable(data), entities=entities)
+
 
 def _quoteattr(data, entities={}):
     """ Escape and quote an attribute value.
@@ -131,6 +136,7 @@ def _quoteattr(data, entities={}):
         data = '"%s"' % data
     return data
 
+
 def _nssplit(qualifiedName):
     """ Split a qualified name into namespace part and local part.  """
     fields = qualifiedName.split(':', 1)
@@ -139,15 +145,19 @@ def _nssplit(qualifiedName):
     else:
         return (None, fields[0])
 
+
 def _nsassign(namespace):
-    return nsdict.setdefault(namespace,"ns" + str(len(nsdict)))
+    return nsdict.setdefault(namespace, "ns" + str(len(nsdict)))
 
 
 # Exceptions
 class IllegalChild(Exception):
     """ Complains if you add an element to a parent where it is not allowed """
+
+
 class IllegalText(Exception):
     """ Complains if you add text or cdata to an element where it is not allowed """
+
 
 class Node(xml.dom.Node):
     """ super class for more specific nodes """
@@ -180,7 +190,7 @@ class Node(xml.dom.Node):
             If refChild is null, insert newChild at the end of the list of children.
         """
         if newChild.nodeType not in self._child_node_types:
-            raise IllegalChild( "%s cannot be child of %s" % (newChild.tagName, self.tagName))
+            raise IllegalChild("%s cannot be child of %s" % (newChild.tagName, self.tagName))
         if newChild.parentNode is not None:
             newChild.parentNode.removeChild(newChild)
         if refChild is None:
@@ -212,7 +222,7 @@ class Node(xml.dom.Node):
             ### The DOM does not clearly specify what to return in this case
             return newChild
         if newChild.nodeType not in self._child_node_types:
-            raise IllegalChild( "<%s> is not allowed in %s" % ( newChild.tagName, self.tagName))
+            raise IllegalChild("<%s> is not allowed in %s" % (newChild.tagName, self.tagName))
         if newChild.parentNode is not None:
             newChild.parentNode.removeChild(newChild)
         _append_child(self, newChild)
@@ -249,8 +259,10 @@ class Node(xml.dom.Node):
             val.append(unicode(c))
         return u''.join(val)
 
+
 defproperty(Node, "firstChild", doc="First child node, or None.")
 defproperty(Node, "lastChild",  doc="Last child node, or None.")
+
 
 def _append_child(self, node):
     # fast path with less checks; usable by DOM builders if careful
@@ -261,6 +273,7 @@ def _append_child(self, node):
         last.__dict__["nextSibling"] = node
     childNodes.append(node)
     node.__dict__["parentNode"] = self
+
 
 class Childless:
     """ Mixin that makes childless-ness easy to implement and avoids
@@ -301,6 +314,7 @@ class Childless:
         raise xml.dom.HierarchyRequestErr(
             self.tagName + " nodes do not have children")
 
+
 class Text(Childless, Node):
     nodeType = Node.TEXT_NODE
     tagName = "Text"
@@ -314,21 +328,23 @@ class Text(Childless, Node):
     def __unicode__(self):
         return self.data
 
-    def toXml(self,level,f):
+    def toXml(self, level, f):
         """ Write XML in UTF-8 """
         if self.data:
             f.write(_sanitize(unicode(self.data)))
     
+
 class CDATASection(Text, Childless):
     nodeType = Node.CDATA_SECTION_NODE
 
-    def toXml(self,level,f):
+    def toXml(self, level, f):
         """ Generate XML output of the node. If the text contains "]]>", then
             escape it by going out of CDATA mode (]]>), then write the string
             and then go into CDATA mode again. (<![CDATA[)
         """
         if self.data:
             f.write('<![CDATA[%s]]>' % self.data.replace(']]>',']]>]]><![CDATA['))
+
 
 class Element(Node):
     """ Creates a arbitrary element and is intended to be subclassed not used on its own.
@@ -353,7 +369,7 @@ class Element(Node):
             self.qname = qname
         assert(hasattr(self, 'qname'))
         self.ownerDocument = None
-        self.childNodes=[]
+        self.childNodes = []
         self.allowed_children = grammar.allowed_children.get(self.qname)
         prefix = self.get_nsprefix(self.qname[0])
         self.tagName = prefix + ":" + self.qname[1]
@@ -364,8 +380,8 @@ class Element(Node):
 
         allowed_attrs = self.allowed_attributes()
         if allowed_attrs is not None:
-            allowed_args = [ a[1].lower().replace('-','') for a in allowed_attrs]
-        self.attributes={}
+            allowed_args = [a[1].lower().replace('-', '') for a in allowed_attrs]
+        self.attributes = {}
         # Load the attributes from the 'attributes' argument
         if attributes:
             for attr, value in attributes.items():
@@ -380,22 +396,22 @@ class Element(Node):
                 self.setAttribute(arg, args[arg])
         else:
             for arg in args.keys():  # If any attribute is allowed
-                self.attributes[arg]=args[arg]
+                self.attributes[arg] = args[arg]
         if not check_grammar:
             return
         # Test that all mandatory attributes have been added.
         required = grammar.required_attributes.get(self.qname)
         if required:
             for r in required:
-                if self.getAttrNS(r[0],r[1]) is None:
-                    raise AttributeError( "Required attribute missing: %s in <%s>" % (r[1].lower().replace('-',''), self.tagName))
+                if self.getAttrNS(r[0], r[1]) is None:
+                    raise AttributeError("Required attribute missing: %s in <%s>" % (r[1].lower().replace('-', ''), self.tagName))
 
     def get_knownns(self, prefix):
         """ Odfpy maintains a list of known namespaces. In some cases a prefix is used, and
             we need to know which namespace it resolves to.
         """
         global nsdict
-        for ns,p in nsdict.items():
+        for ns, p in nsdict.items():
             if p == prefix: return ns
         return None
 
@@ -405,7 +421,7 @@ class Element(Node):
         """
         if namespace is None: namespace = ""
         prefix = _nsassign(namespace)
-        if not namespace in self.namespaces:
+        if namespace not in self.namespaces:
             self.namespaces[namespace] = prefix
         return prefix
 
@@ -424,7 +440,7 @@ class Element(Node):
         """
         if check_grammar and self.allowed_children is not None:
             if element.qname not in self.allowed_children:
-                raise IllegalChild( "<%s> is not allowed in <%s>" % ( element.tagName, self.tagName))
+                raise IllegalChild("<%s> is not allowed in <%s>" % (element.tagName, self.tagName))
         self.appendChild(element)
         self._setOwnerDoc(element)
         if self.ownerDocument:
@@ -435,7 +451,7 @@ class Element(Node):
             Setting check_grammar=False turns off grammar checking
         """
         if check_grammar and self.qname not in grammar.allows_text:
-            raise IllegalText( "The <%s> element does not allow text" % self.tagName)
+            raise IllegalText("The <%s> element does not allow text" % self.tagName)
         else:
             if text != '':
                 self.appendChild(Text(text))
@@ -445,7 +461,7 @@ class Element(Node):
             Setting check_grammar=False turns off grammar checking
         """
         if check_grammar and self.qname not in grammar.allows_text:
-            raise IllegalText( "The <%s> element does not allow text" % self.tagName)
+            raise IllegalText("The <%s> element does not allow text" % self.tagName)
         else:
             self.appendChild(CDATASection(cdata))
 
@@ -453,16 +469,16 @@ class Element(Node):
         """ Removes an attribute by name. """
         allowed_attrs = self.allowed_attributes()
         if allowed_attrs is None:
-            if type(attr) == type(()):
+            if isinstance(attr, tuple):
                 prefix, localname = attr
                 self.removeAttrNS(prefix, localname)
             else:
-                raise AttributeError( "Unable to add simple attribute - use (namespace, localpart)")
+                raise AttributeError("Unable to add simple attribute - use (namespace, localpart)")
         else:
             # Construct a list of allowed arguments
-            allowed_args = [ a[1].lower().replace('-','') for a in allowed_attrs]
+            allowed_args = [a[1].lower().replace('-', '') for a in allowed_attrs]
             if check_grammar and attr not in allowed_args:
-                raise AttributeError( "Attribute %s is not allowed in <%s>" % ( attr, self.tagName))
+                raise AttributeError("Attribute %s is not allowed in <%s>" % (attr, self.tagName))
             i = allowed_args.index(attr)
             self.removeAttrNS(allowed_attrs[i][0], allowed_attrs[i][1])
 
@@ -479,16 +495,16 @@ class Element(Node):
         else:
             allowed_attrs = self.allowed_attributes()
             if allowed_attrs is None:
-                if type(attr) == type(()):
+                if isinstance(attr, tuple):
                     prefix, localname = attr
                     self.setAttrNS(prefix, localname, value)
                 else:
-                    raise AttributeError( "Unable to add simple attribute - use (namespace, localpart)")
+                    raise AttributeError("Unable to add simple attribute - use (namespace, localpart)")
             else:
                 # Construct a list of allowed arguments
-                allowed_args = [ a[1].lower().replace('-','') for a in allowed_attrs]
+                allowed_args = [a[1].lower().replace('-', '') for a in allowed_attrs]
                 if check_grammar and attr not in allowed_args:
-                    raise AttributeError( "Attribute %s is not allowed in <%s>" % ( attr, self.tagName))
+                    raise AttributeError("Attribute %s is not allowed in <%s>" % (attr, self.tagName))
                 i = allowed_args.index(attr)
                 self.setAttrNS(allowed_attrs[i][0], allowed_attrs[i][1], value)
 
@@ -499,8 +515,8 @@ class Element(Node):
             It will not check that the attribute is legal according to the schema.
             Must overwrite, If attribute already exists.
         """
-        allowed_attrs = self.allowed_attributes()
-        prefix = self.get_nsprefix(namespace)
+        # allowed_attrs = self.allowed_attributes()
+        # prefix = self.get_nsprefix(namespace)
 #       if allowed_attrs and (namespace, localpart) not in allowed_attrs:
 #           raise AttributeError( "Attribute %s:%s is not allowed in element <%s>" % ( prefix, localpart, self.tagName))
         c = AttrConverters()
@@ -516,7 +532,7 @@ class Element(Node):
         are byte strings, it will be a bytes; if both attributes are
         unicode strings, it will be a unicode string
         """
-        prefix = self.get_nsprefix(namespace)
+        # prefix = self.get_nsprefix(namespace)
         result = self.attributes.get((namespace, localpart))
 
         assert(
@@ -536,14 +552,14 @@ class Element(Node):
         """
         allowed_attrs = self.allowed_attributes()
         if allowed_attrs is None:
-            if type(attr) == type(()):
+            if isinstance(attr, tuple):
                 prefix, localname = attr
                 return self.getAttrNS(prefix, localname)
             else:
-                raise AttributeError( "Unable to get simple attribute - use (namespace, localpart)")
+                raise AttributeError("Unable to get simple attribute - use (namespace, localpart)")
         else:
             # Construct a list of allowed arguments
-            allowed_args = [ a[1].lower().replace('-','') for a in allowed_attrs]
+            allowed_args = [a[1].lower().replace('-', '') for a in allowed_attrs]
             i = allowed_args.index(attr)
             return self.getAttrNS(allowed_attrs[i][0], allowed_attrs[i][1])
 
@@ -551,7 +567,7 @@ class Element(Node):
         f.write(('<'+self.tagName))
         if level == 0:
             for namespace, prefix in self.namespaces.items():
-                f.write(u' xmlns:' + prefix + u'="'+ _sanitize(str(namespace))+'"')
+                f.write(u' xmlns:' + prefix + u'="' + _sanitize(str(namespace)) + '"')
         for qname in self.attributes.keys():
             prefix = self.get_nsprefix(qname[0])
             f.write(u' '+_sanitize(str(prefix+u':'+qname[1]))+u'='+_quoteattr(unicode(self.attributes[qname])))
@@ -569,7 +585,7 @@ class Element(Node):
         f.write(u'<'+self.tagName)
         if level == 0:
             for namespace, prefix in self.namespaces.items():
-                f.write(u' xmlns:' + prefix + u'="'+ _sanitize(str(namespace))+u'"')
+                f.write(u' xmlns:' + prefix + u'="' + _sanitize(str(namespace)) + u'"')
         for qname in self.attributes.keys():
             prefix = self.get_nsprefix(qname[0])
             f.write(u' '+_sanitize(unicode(prefix+':'+qname[1]))+u'='+_quoteattr(unicode(self.attributes[qname])))
@@ -592,7 +608,7 @@ class Element(Node):
     def getElementsByType(self, element):
         """ Gets elements based on the type, which is function from text.py, draw.py etc. """
         obj = element(check_grammar=False)
-        return self._getElementsByObj(obj,[])
+        return self._getElementsByObj(obj, [])
 
     def isInstanceOf(self, element):
         """ This is a check to see if the object is an instance of a type """
