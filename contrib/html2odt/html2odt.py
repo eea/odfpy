@@ -22,7 +22,8 @@ import string, sys, re
 import urllib2, htmlentitydefs, urlparse
 from urllib import quote_plus
 from HTMLParser import HTMLParser
-from cgi import escape,parse_header
+from cgi import parse_header
+from html import escape
 from types import StringType
 import emptycontent
 
