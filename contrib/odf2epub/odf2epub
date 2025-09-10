@@ -21,8 +21,8 @@ from odf.odf2xhtml import ODF2XHTML
 from odf.namespaces import TEXTNS, XLINKNS
 from odf.opendocument import load
 import sys, getopt, time, zipfile
-from StringIO import StringIO
-from cgi import escape
+from io import StringIO
+from html import escape
 
 UNIXPERMS = 0100644 << 16L  # -rw-r--r--
 
