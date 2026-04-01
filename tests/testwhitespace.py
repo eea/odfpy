@@ -20,10 +20,8 @@
 
 import unittest, os
 import io
-import zipfile
 from odf import teletype
-from odf.opendocument import OpenDocumentText, load
-from odf import style, text
+from odf.opendocument import load
 from odf.text import P
 
 class TestWhite(unittest.TestCase):

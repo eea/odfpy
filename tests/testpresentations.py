@@ -19,11 +19,8 @@
 #
 
 import unittest
-from odf.opendocument import OpenDocumentPresentation, OpenDocumentText
+from odf.opendocument import OpenDocumentPresentation
 from odf import draw, style, table, text
-from odf.element import IllegalChild
-from odf.namespaces import TEXTNS
-from elementparser import ElementParser
 
 class TestPresentations(unittest.TestCase):
 

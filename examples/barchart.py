@@ -30,7 +30,7 @@
 # oddities.
 
 from odf.opendocument import OpenDocumentChart
-from odf import chart, style, table, text
+from odf import chart, style, text
 
 # import a support class from the examples directory
 from datatable import DataTable

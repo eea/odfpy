@@ -21,7 +21,6 @@
 import unittest, sys
 from odf.opendocument import OpenDocumentText
 from odf import style, text
-from odf.table import Table, TableColumn, TableRow, TableCell
 from odf.element import IllegalChild
 from odf.namespaces import TEXTNS
 from elementparser import ElementParser

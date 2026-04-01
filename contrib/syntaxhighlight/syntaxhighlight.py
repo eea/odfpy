@@ -21,7 +21,7 @@
 # Syntax Highlighting
 # Originally from Peter Clive Wilkinson (http://www.petersblog.org/node/763)
 #
-import os, sys, re, getopt
+import sys, re, getopt
 from odf.opendocument import OpenDocumentText
 from odf.style import FontFace, Style, TextProperties, ParagraphProperties
 from odf.text import P, Span, S

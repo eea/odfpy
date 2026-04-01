@@ -21,7 +21,6 @@
 import unittest
 from odf import dr3d, draw, office, style
 
-from odf.element import IllegalChild
 
 
 class TestStyleRefs(unittest.TestCase):

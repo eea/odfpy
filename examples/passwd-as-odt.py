@@ -19,7 +19,7 @@
 #
 
 from odf.opendocument import OpenDocumentText
-from odf.style import Style, TextProperties, ParagraphProperties, TableColumnProperties
+from odf.style import Style, ParagraphProperties, TableColumnProperties
 from odf.text import P
 from odf.table import Table, TableColumn, TableRow, TableCell
 

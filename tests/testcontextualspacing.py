@@ -20,9 +20,7 @@
 
 import unittest
 import os, sys
-from odf.opendocument import OpenDocumentText, load
-from odf import text
-from odf.namespaces import TEXTNS
+from odf.opendocument import load
 
 if sys.version_info[0]==3:
     unicode=str

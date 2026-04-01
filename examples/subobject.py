@@ -21,7 +21,7 @@
 # This is an example of an OpenDocument Text with an embedded Chart.
 #
 from odf.opendocument import OpenDocumentChart, OpenDocumentText
-from odf import chart, style, table, text, draw
+from odf import chart, style, text, draw
 
 # import a support class from the examples directory
 from datatable import DataTable

@@ -21,7 +21,7 @@
 # This example shows how to create a manual page break.
 
 from odf.opendocument import OpenDocumentText
-from odf.style import Style, TextProperties, ParagraphProperties
+from odf.style import Style, ParagraphProperties
 from odf.text import P
 
 

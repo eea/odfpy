@@ -19,7 +19,7 @@
 #
 
 import unittest
-import sys, os, os.path, re
+import os, os.path, re
 import io
 from odf.odf2xhtml import ODF2XHTML
 

@@ -29,9 +29,8 @@ from xml.dom import Node
 
 from opendocument import load
 
-from odf.namespaces import ANIMNS, CHARTNS, CONFIGNS, DCNS, DR3DNS, DRAWNS, FONS, \
-  FORMNS, MATHNS, METANS, NUMBERNS, OFFICENS, PRESENTATIONNS, SCRIPTNS, \
-  SMILNS, STYLENS, SVGNS, TABLENS, TEXTNS, XLINKNS
+from odf.namespaces import DCNS, DRAWNS, FONS, \
+  METANS, NUMBERNS, OFFICENS, PRESENTATIONNS, STYLENS, SVGNS, TABLENS, TEXTNS, XLINKNS
 
 # Handling of styles
 #

@@ -20,10 +20,9 @@
 # Contributor(s):
 # Søren Roug
 
-import unittest, sys
+import unittest
 from odf import easyliststyle
 from odf.opendocument import OpenDocumentText
-from odf.style import Style, TextProperties
 from odf.text import P, List, ListItem
 
 """

@@ -21,7 +21,6 @@
 import unittest
 from odf import chart
 
-from odf.element import IllegalChild
 
 class TestChartElements(unittest.TestCase):
 

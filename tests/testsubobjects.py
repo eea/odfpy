@@ -20,8 +20,7 @@
 
 import unittest, os, zipfile, re
 from odf.opendocument import OpenDocumentText
-from odf import draw, text
-from odf.element import IllegalChild
+from odf import draw
 from elementparser import ElementParser
 
 def _getxmlpart(odffile, xmlfile):

@@ -28,7 +28,7 @@
 # LOGO language does.
 import math
 from odf.opendocument import OpenDocumentText
-from odf.style import Style, GraphicProperties, DrawingPageProperties
+from odf.style import Style, GraphicProperties
 from odf.text import P
 from odf.draw import G, Polygon, Rect
 

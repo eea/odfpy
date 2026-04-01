@@ -19,7 +19,6 @@
 #
 
 import xml.sax, xml.sax.saxutils
-import io
 import tempfile
 import unittest
 import sys

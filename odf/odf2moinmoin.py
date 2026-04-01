@@ -20,7 +20,7 @@
 # Contributor(s):
 #
 
-import sys, zipfile, xml.dom.minidom
+import zipfile, xml.dom.minidom
 from odf.namespaces import nsdict
 from odf.elementtypes import *
 
