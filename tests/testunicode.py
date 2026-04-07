@@ -20,9 +20,8 @@
 
 import unittest, os, sys
 from odf.opendocument import OpenDocumentText
-from odf import style, text
+from odf import style
 from odf.text import P, H
-from odf.element import IllegalChild
 
 class TestUnicode(unittest.TestCase):
 

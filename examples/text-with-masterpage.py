@@ -19,7 +19,7 @@
 #
 
 from odf.opendocument import OpenDocumentText
-from odf.style import PageLayout, MasterPage, Header, Footer
+from odf.style import PageLayout, MasterPage, Header
 from odf.text import P
 
 textdoc = OpenDocumentText()

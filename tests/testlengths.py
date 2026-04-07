@@ -21,7 +21,6 @@
 import unittest
 from odf import chart, draw, presentation, style, svg
 
-from odf.element import IllegalChild
 
 class TestDrawElements(unittest.TestCase):
 

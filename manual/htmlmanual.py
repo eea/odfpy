@@ -20,7 +20,6 @@
 
 from odf import grammar
 from odf.namespaces import *
-from odf import style, text
 
 textfd = None
 

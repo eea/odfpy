@@ -20,7 +20,6 @@
 #Python imports
 import zipfile
 from odf.odf2xhtml import ODF2XHTML
-from odf.namespaces import OFFICENS, TEXTNS, XLINKNS
 from odf.opendocument import odmimetypes
 
 #Zope imports
@@ -28,7 +27,7 @@ from OFS.Image import File, cookId
 from Globals import InitializeClass
 from Globals import DTMLFile
 from AccessControl import ClassSecurityInfo
-from AccessControl.Permissions import view_management_screens, view, change_images_and_files
+from AccessControl.Permissions import view, change_images_and_files
 try:
     from cStringIO import StringIO
 except ImportError:

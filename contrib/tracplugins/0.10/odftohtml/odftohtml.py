@@ -19,8 +19,6 @@
 
 from trac.core import *
 from trac.mimeview.api import IContentConverter
-import os
-import re
 from odf.odf2xhtml import ODF2XHTML
 
 class OdfToHtmlConverter(Component):

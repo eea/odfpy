@@ -23,7 +23,6 @@ import os, sys
 import os.path
 import odf.userfield
 import tempfile
-import zipfile
 
 from io import BytesIO
 

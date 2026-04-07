@@ -21,7 +21,7 @@
 
 import re, sys, os.path
 sys.path.append(os.path.dirname(__file__))
-from odf.style import Style, TextProperties, ListLevelProperties
+from odf.style import ListLevelProperties
 from odf.text import ListStyle,ListLevelStyleNumber,ListLevelStyleBullet
 
 """

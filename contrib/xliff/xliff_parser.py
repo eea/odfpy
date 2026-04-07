@@ -25,7 +25,7 @@ from xml.sax.handler import ContentHandler
 from xml.sax import handler, InputSource
 
 from cStringIO import StringIO
-from types import StringType, UnicodeType
+from types import StringType
 
 #constants
 _FILE_ATTRS = ['original', 'source-language', 'datatype', 'date',

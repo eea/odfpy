@@ -24,7 +24,7 @@
 
 __doc__="""Use OpenDocument to generate your documents."""
 
-import zipfile, time, uuid, sys, mimetypes, copy, os.path
+import zipfile, time, uuid, sys, mimetypes, os.path
 
 # to allow Python3 to access modules in the same path
 sys.path.append(os.path.dirname(__file__))

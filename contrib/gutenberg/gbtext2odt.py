@@ -21,7 +21,7 @@
 
 from odf.opendocument import OpenDocumentText
 from odf import style, text, dc, meta
-import sys, getopt, time
+import sys, getopt
 
 def usage():
    sys.stderr.write("""Usage: %s [-l language] [-e encoding] [-T] [-a author]

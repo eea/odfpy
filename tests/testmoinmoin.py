@@ -20,7 +20,6 @@
 
 import unittest, os, os.path
 from odf.opendocument import OpenDocumentText
-from odf import style, text
 from odf.text import P, H, LineBreak
 from odf import odf2moinmoin
 

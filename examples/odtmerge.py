@@ -21,10 +21,7 @@
 # Inspired by ods2odt.py
 #
 import sys, getopt
-import zipfile, xml.dom.minidom
 from odf.opendocument import OpenDocumentText, load
-from odf.element import Text
-from odf.text import P
 
 
 def usage():

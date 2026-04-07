@@ -21,10 +21,7 @@
 import unittest, os
 from odf import thumbnail
 
-from odf.element import IllegalChild
-from odf.opendocument import OpenDocumentText, load
-from odf import text
-from odf.namespaces import TEXTNS
+from odf.opendocument import OpenDocumentText
 
 class TestPicture(unittest.TestCase):
 

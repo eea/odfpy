@@ -24,7 +24,6 @@ import zipfile
 from defusedxml.sax import make_parser
 from xml.sax import handler
 from xml.sax.xmlreader import InputSource
-import xml.sax.saxutils
 try:
     from cStringIO import StringIO
 except ImportError:

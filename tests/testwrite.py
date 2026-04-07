@@ -18,11 +18,10 @@
 # Contributor(s):
 #
 
-import unittest, os
+import unittest
 import io
 import zipfile
 from odf.opendocument import OpenDocumentText
-from odf import style, text
 from odf.text import P
 
 class TestWrite(unittest.TestCase):

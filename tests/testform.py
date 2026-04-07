@@ -18,7 +18,7 @@
 # Contributor(s):
 #
 
-import unittest, os, os.path
+import unittest
 from odf.opendocument import OpenDocumentSpreadsheet
 import odf.table
 import odf.office

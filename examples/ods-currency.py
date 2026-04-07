@@ -22,7 +22,7 @@
 
 from odf.opendocument import OpenDocumentSpreadsheet
 from odf.style import Style, TextProperties, TableColumnProperties, Map
-from odf.number import NumberStyle, CurrencyStyle, CurrencySymbol,  Number,  Text
+from odf.number import CurrencyStyle, CurrencySymbol,  Number,  Text
 from odf.text import P
 from odf.table import Table, TableColumn, TableRow, TableCell
 

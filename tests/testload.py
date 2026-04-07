@@ -24,7 +24,6 @@ from io import BytesIO
 from zipfile import ZipFile
 
 from odf.opendocument import OpenDocumentText, load
-from odf import style, text
 from odf.text import P, H, LineBreak
 from elementparser import ElementParser
 

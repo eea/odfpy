@@ -28,7 +28,6 @@ elements.  This module takes care of that problem.
 """
 
 from odf.element import Node
-import odf.opendocument
 from odf.text import S,LineBreak,Tab
 
 class WhitespaceText(object):
