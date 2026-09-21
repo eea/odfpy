@@ -23,11 +23,13 @@ import unittest, os, os.path, sys
 from io import BytesIO
 from zipfile import ZipFile
 
-from odf.opendocument import OpenDocumentText, load
+from odf.opendocument import OpenDocumentText, OpaqueObject, load
+from odf.namespaces import MANIFESTNS
 from odf.text import P, H, LineBreak
 from elementparser import ElementParser
 
 from defusedxml import EntitiesForbidden
+from defusedxml.ElementTree import fromstring
 
 
 if sys.version_info[0]==3:
@@ -51,6 +53,48 @@ class TestSimple(unittest.TestCase):
         d = load(u"TEST.odt")
         result = d.contentxml() # contentxml() is supposed to yeld a bytes
         self.assertNotEqual(-1, result.find(b"""Hello World!"""))
+
+
+class TestManifestRoundTrip(unittest.TestCase):
+
+    def test_single_root_entry_after_repeated_round_trips(self):
+        document = OpenDocumentText()
+        document.text.addElement(P(text=u"Round trip"))
+        for unused in range(3):
+            output = BytesIO()
+            document.write(output)
+            output.seek(0)
+            with ZipFile(output) as archive:
+                manifest = fromstring(archive.read('META-INF/manifest.xml'))
+                roots = [entry for entry in manifest
+                         if entry.get('{%s}full-path' % MANIFESTNS) == '/']
+                self.assertEqual(len(roots), 1)
+                self.assertEqual(roots[0].get('{%s}media-type' % MANIFESTNS),
+                                 document.mimetype)
+            output.seek(0)
+            document = load(output)
+
+    def test_opaque_directory_and_file_survive_round_trip(self):
+        document = OpenDocumentText()
+        document._extra.append(OpaqueObject(u'Extras/', u'', None))
+        document._extra.append(OpaqueObject(u'Extras/data.txt', u'text/plain',
+                                            b'extra data'))
+        original = BytesIO()
+        document.write(original)
+        original.seek(0)
+        document = load(original)
+        self.assertEqual(sorted(obj.filename for obj in document._extra),
+                         ['Extras/', 'Extras/data.txt'])
+        output = BytesIO()
+        document.write(output)
+        output.seek(0)
+        with ZipFile(output) as archive:
+            manifest = fromstring(archive.read('META-INF/manifest.xml'))
+            paths = [entry.get('{%s}full-path' % MANIFESTNS)
+                     for entry in manifest]
+            self.assertEqual(paths.count('Extras/'), 1)
+            self.assertEqual(paths.count('Extras/data.txt'), 1)
+            self.assertEqual(archive.read('Extras/data.txt'), b'extra data')
 
 
 class TestHeadings(unittest.TestCase):
