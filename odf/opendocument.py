@@ -1000,7 +1000,7 @@ def load(odffile):
             doc.addPicture(mvalue['full-path'], mvalue['media-type'], z.read(mentry))
         elif mentry == u"Thumbnails/thumbnail.png":
             doc.addThumbnail(z.read(mentry))
-        elif mentry in (u'settings.xml', u'meta.xml', u'content.xml', u'styles.xml'):
+        elif mentry in (u'/', u'settings.xml', u'meta.xml', u'content.xml', u'styles.xml'):
             pass
         # Load subobjects into structure
         elif mentry[:7] == u"Object " and len(mentry) < 11 and mentry[-1] == u"/":
