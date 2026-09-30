@@ -516,7 +516,7 @@ class Element(Node):
             Must overwrite, If attribute already exists.
         """
         # allowed_attrs = self.allowed_attributes()
-        # prefix = self.get_nsprefix(namespace)
+        self.get_nsprefix(namespace)
 #       if allowed_attrs and (namespace, localpart) not in allowed_attrs:
 #           raise AttributeError( "Attribute %s:%s is not allowed in element <%s>" % ( prefix, localpart, self.tagName))
         c = AttrConverters()
