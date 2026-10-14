@@ -1119,7 +1119,10 @@ ol, ul { padding-left: 2em; }
     def s_table_table_column(self, tag, attrs):
         """ Start a table column """
         c = attrs.get( (TABLENS,'style-name'), None)
-        repeated = int(attrs.get( (TABLENS,'number-columns-repeated'), 1))
+        try:
+            repeated = int(attrs.get( (TABLENS,'number-columns-repeated'), 1))
+        except ValueError:
+            repeated = 1
         htmlattrs = {}
         if c:
             htmlattrs['class'] = "TC-%s" % c.replace(".","_")
@@ -1177,7 +1180,10 @@ ol, ul { padding-left: 2em; }
 
     def s_text_h(self, tag, attrs):
         """ Headings start """
-        level = int(attrs[(TEXTNS,'outline-level')])
+        try:
+            level = int(attrs[(TEXTNS,'outline-level')])
+        except ValueError:
+            level = 1
         if level > 6: level = 6 # Heading levels go only to 6 in XHTML
         if level < 1: level = 1
         self.headinglevels[level] = self.headinglevels[level] + 1
@@ -1197,7 +1203,10 @@ ol, ul { padding-left: 2em; }
             from the first heading of any level.
         """
         self.writedata()
-        level = int(attrs[(TEXTNS,'outline-level')])
+        try:
+            level = int(attrs[(TEXTNS,'outline-level')])
+        except ValueError:
+            level = 1
         if level > 6: level = 6 # Heading levels go only to 6 in XHTML
         if level < 1: level = 1
         lev = self.headinglevels[1:level+1]
@@ -1382,7 +1391,11 @@ ol, ul { padding-left: 2em; }
             We use &#160; so we can send the output through an XML parser if we desire to
         """
         c = attrs.get( (TEXTNS,'c'),"1")
-        for x in range(int(c)):
+        try:
+            count = int(c)
+        except ValueError:
+            count = 1
+        for x in range(count):
             self.writeout('&#160;')
 
     def s_text_span(self, tag, attrs):

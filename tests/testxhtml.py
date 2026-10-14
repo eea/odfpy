@@ -21,11 +21,13 @@
 import unittest
 import os, os.path, re
 import io
+import tempfile
 from odf.odf2xhtml import ODF2XHTML
 
 from odf.opendocument import OpenDocumentText
 from odf import style
-from odf.text import H, P, Span
+from odf.text import H, P, S, Span
+from odf.table import Table, TableColumn, TableRow, TableCell
 
 def has_rules(html, selector, rules):
     """ Returns false if the selector or rule is not found in html
@@ -141,6 +143,37 @@ not changed many times in the course of its long history. \
         self.assertEqual(-1, strresult.find(u"<ol "))
 
 class TestExampleDocs(unittest.TestCase):
+
+    def test_malformed_numeric_attributes(self):
+        """ A malformed numeric attribute should not crash the converter """
+        d = OpenDocumentText()
+        h = H(outlinelevel=1, text=u"Title")
+        h.setAttribute(u'outlinelevel', u'x', check_grammar=False)
+        d.text.addElement(h)
+        p = P(text=u"A")
+        sp = S()
+        sp.setAttribute(u'c', u'abc', check_grammar=False)
+        p.addElement(sp)
+        d.text.addElement(p)
+        t = Table(name=u"T")
+        col = TableColumn()
+        col.setAttribute(u'numbercolumnsrepeated', u'abc', check_grammar=False)
+        t.addElement(col)
+        tr = TableRow()
+        tc = TableCell()
+        tc.addElement(P(text=u"x"))
+        tr.addElement(tc)
+        t.addElement(tr)
+        d.text.addElement(t)
+        fd, path = tempfile.mkstemp(suffix=u".odt")
+        os.close(fd)
+        d.save(path)
+        try:
+            result = ODF2XHTML().odf2xhtml(path)
+        finally:
+            os.unlink(path)
+        # The bad outline-level falls back to 1, so the heading is still there.
+        self.assertNotEqual(-1, result.find(u"<h1"))
 
     def test_twolevellist(self):
         """ Check CSS has list styles for two level lists"""
