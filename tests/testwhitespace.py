@@ -22,7 +22,7 @@ import unittest, os
 import io
 from odf import teletype
 from odf.opendocument import load
-from odf.text import P
+from odf.text import P, S
 
 class TestWhite(unittest.TestCase):
 
@@ -52,6 +52,15 @@ class TestWhite(unittest.TestCase):
         content = u"""<text:p text:style-name="Standard">The boy stood <text:s text:c="3"/>on the burning deck,<text:line-break/><text:tab/>Whence all<text:tab/>but<text:tab/><text:tab/>him had fled.<text:line-break/>The flames <text:s text:c="2"/>that lit<text:tab/>the battle's<text:tab/>wreck,<text:line-break/> <text:s text:c="11"/>Shone o'er him, round the dead. <text:s text:c="2"/></text:p>"""
 
         self.assertEqual(u"The boy stood    on the burning deck,\n\tWhence all\tbut\t\thim had fled.\nThe flames   that lit\tthe battle's\twreck,\n            Shone o'er him, round the dead.   ", teletype.extractText(allparas[0]))
+
+    def test_extract_malformed_space_count(self):
+        """ A malformed text:s count should not crash extractText """
+        para = P()
+        para.addText(u"A")
+        para.addElement(S(c=u"abc"))
+        para.addText(u"B")
+        # Falls back to a single space, as a missing count does.
+        self.assertEqual(u"A B", teletype.extractText(para))
 
     def test_extract_with_span(self):
         """ Extract a text with a bold/italic span """
