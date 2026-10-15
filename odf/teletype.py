@@ -125,9 +125,9 @@ def extractText(odfElement):
                     result.append("\t")
                 elif tagName == (u"urn:oasis:names:tc:opendocument:xmlns:text:1.0", u"s"):
                     c = subElement.getAttribute('c')
-                    if c:
-                        spaceCount =  int(c)
-                    else:
+                    try:
+                        spaceCount = int(c) if c else 1
+                    except ValueError:
                         spaceCount = 1
 
                     result.append(" " * spaceCount)
