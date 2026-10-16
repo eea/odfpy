@@ -27,7 +27,7 @@ sys.path.append(os.path.dirname(__file__))
 import re
 import xml.dom
 from xml.dom.minicompat import *
-from odf.namespaces import nsdict
+from odf.namespaces import nsdict, OFFICENS
 import odf.grammar as grammar
 from odf.attrconverters import AttrConverters
 
@@ -159,6 +159,15 @@ class IllegalText(Exception):
     """ Complains if you add text or cdata to an element where it is not allowed """
 
 
+# Qualified names of annotation (cell comment) elements. Their text content is
+# metadata about the containing element rather than part of its textual value,
+# so it is skipped when collecting the string value of a node (see issue #146).
+_annotation_qnames = frozenset((
+    (OFFICENS, u'annotation'),
+    (OFFICENS, u'annotation-end'),
+))
+
+
 class Node(xml.dom.Node):
     """ super class for more specific nodes """
     parentNode = None
@@ -250,12 +259,16 @@ class Node(xml.dom.Node):
     def __str__(self):
         val = []
         for c in self.childNodes:
+            if getattr(c, "qname", None) in _annotation_qnames:
+                continue
             val.append(str(c))
         return ''.join(val)
 
     def __unicode__(self):
         val = []
         for c in self.childNodes:
+            if getattr(c, "qname", None) in _annotation_qnames:
+                continue
             val.append(unicode(c))
         return u''.join(val)
 
