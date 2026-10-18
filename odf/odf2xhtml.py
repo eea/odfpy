@@ -1350,7 +1350,7 @@ ol, ul { padding-left: 2em; }
         # Since HTML only knows about endnotes, there is too much risk that the
         # marker is reused in the source. Therefore we force numeric markers
         if sys.version_info[0]==3:
-            self.writeout(self.currentnote)
+            self.writeout(str(self.currentnote))
         else:
             self.writeout(unicode(self.currentnote))
         self.closetag('sup')
