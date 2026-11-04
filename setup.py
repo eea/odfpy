@@ -69,7 +69,7 @@ setup(name='odfpy',
         'Topic :: Software Development :: Libraries :: Python Modules',
       ],
       license = "GPL-2.0-or-later OR Apache-2.0",
-      license-files = ["GPL-LICENSE-2.txt", "APACHE-LICENSE-2.0.txt"],
+      license_files = ["GPL-LICENSE-2.txt", "APACHE-LICENSE-2.0.txt"],
       description='Python API and tools to manipulate OpenDocument files',
       long_description = (
 """
