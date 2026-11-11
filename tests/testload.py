@@ -96,6 +96,34 @@ class TestManifestRoundTrip(unittest.TestCase):
             self.assertEqual(paths.count('Extras/data.txt'), 1)
             self.assertEqual(archive.read('Extras/data.txt'), b'extra data')
 
+    def test_mimetype_manifest_entry_is_not_copied(self):
+        # ezodf lists the mimetype file in the manifest
+        original = BytesIO()
+        OpenDocumentText().write(original)
+        original.seek(0)
+        with ZipFile(original) as archive:
+            parts = [(info, archive.read(info)) for info in archive.infolist()]
+        listed = BytesIO()
+        with ZipFile(listed, 'w') as archive:
+            for info, data in parts:
+                if info.filename == 'META-INF/manifest.xml':
+                    data = data.replace(
+                        b'</manifest:manifest>',
+                        b'<manifest:file-entry manifest:full-path="mimetype"'
+                        b' manifest:media-type=""/></manifest:manifest>')
+                archive.writestr(info, data)
+        listed.seek(0)
+        document = load(listed)
+        output = BytesIO()
+        document.write(output)
+        output.seek(0)
+        with ZipFile(output) as archive:
+            self.assertEqual(archive.namelist().count('mimetype'), 1)
+            manifest = fromstring(archive.read('META-INF/manifest.xml'))
+            paths = [entry.get('{%s}full-path' % MANIFESTNS)
+                     for entry in manifest]
+            self.assertNotIn('mimetype', paths)
+
 
 class TestHeadings(unittest.TestCase):
 
