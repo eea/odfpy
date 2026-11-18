@@ -22,9 +22,10 @@ import unittest
 import os, os.path, re
 import io
 import tempfile
+from xml.etree import ElementTree
 from odf.odf2xhtml import ODF2XHTML
 
-from odf.opendocument import OpenDocumentText
+from odf.opendocument import OpenDocumentSpreadsheet, OpenDocumentText
 from odf import style
 from odf.text import H, P, S, Span
 from odf.table import Table, TableColumn, TableRow, TableCell
@@ -143,6 +144,32 @@ not changed many times in the course of its long history. \
         self.assertEqual(-1, strresult.find(u"<ol "))
 
 class TestExampleDocs(unittest.TestCase):
+
+    def test_numeric_spreadsheet_cells(self):
+        book = OpenDocumentSpreadsheet()
+        sheet = Table(name=u"Values")
+        book.spreadsheet.addElement(sheet)
+        row = TableRow()
+        sheet.addElement(row)
+
+        row.addElement(TableCell(valuetype="float", value="0"))
+        row.addElement(TableCell(valuetype="float", value="-12.50"))
+        row.addElement(TableCell(valuetype="percentage", value="0.125"))
+        row.addElement(TableCell(valuetype="currency", currency="EUR", value="4.20"))
+        formatted = TableCell(valuetype="percentage", value="0.125")
+        paragraph = P()
+        paragraph.addElement(Span(text=u"12.5%"))
+        formatted.addElement(paragraph)
+        row.addElement(formatted)
+        row.addElement(TableCell())
+
+        stream = io.BytesIO()
+        book.save(stream)
+        stream.seek(0)
+        root = ElementTree.fromstring(ODF2XHTML().odf2xhtml(stream))
+        cells = root.findall(".//{http://www.w3.org/1999/xhtml}td")
+        self.assertEqual([u"0", u"-12.50", u"0.125", u"4.20", u"12.5%", u""],
+                         [u"".join(cell.itertext()).strip() for cell in cells])
 
     def test_malformed_numeric_attributes(self):
         """ A malformed numeric attribute should not crash the converter """

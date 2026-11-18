@@ -1109,6 +1109,9 @@ ol, ul { padding-left: 2em; }
             htmlattrs['class'] = 'TD-%s' % c.replace(".","_")
         self.opentag('td', htmlattrs)
         self.purgedata()
+        if attrs.get((OFFICENS, 'value-type')) in ('float', 'percentage', 'currency'):
+            # A display paragraph replaces this buffered value when it starts.
+            self.characters(attrs.get((OFFICENS, 'value'), ''))
 
     def e_table_table_cell(self, tag, attrs):
         """ End a table cell """
