@@ -21,10 +21,20 @@
 import unittest
 import io
 import zipfile
-from odf.opendocument import OpenDocumentText
+from odf.opendocument import OpenDocumentText, load
+from odf.teletype import extractText
 from odf.text import P
 
 class TestWrite(unittest.TestCase):
+
+    def test_save_stream_with_addsuffix(self):
+        textdoc = OpenDocumentText()
+        textdoc.text.addElement(P(text=u"Æblegrød"))
+        with io.BytesIO() as stream:
+            textdoc.save(stream, addsuffix=True)
+            stream.seek(0)
+            paragraphs = load(stream).getElementsByType(P)
+            self.assertEqual([extractText(p) for p in paragraphs], [u"Æblegrød"])
 
     def test_write(self):
         """ document's write method """
