@@ -583,15 +583,15 @@ class OpenDocument:
         Save the document under the filename.
         If the filename is '-' then save to stdout
         @param outputfile unicode string: the special name '-' is for stdout;
-        as an alternative, it can be an io.ByteIO instance which contains
-        the ZIP content.
-        @param addsuffix boolean: whether to add a suffix or not; defaults to False
+        as an alternative, it can be a binary stream such as io.BytesIO.
+        @param addsuffix boolean: append the document suffix to a filename.
+        Ignored for streams; defaults to False.
         """
 
         if outputfile == u'-':
             outputfp = zipfile.ZipFile(sys.stdout, "w")
         else:
-            if addsuffix:
+            if addsuffix and not hasattr(outputfile, 'write'):
                 outputfile = outputfile + odmimetypes.get(self.mimetype, u'.xxx')
             outputfp = zipfile.ZipFile(outputfile, "w")
         self.__zipwrite(outputfp)
