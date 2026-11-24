@@ -22,6 +22,7 @@
 # OpenDocument can be a complete office document in a single
 # XML document. This script will create such a document.
 import sys, getopt, base64
+from io import BytesIO
 from odf.opendocument import load
 from odf.draw import Image, ObjectOle
 from odf.style import BackgroundImage
@@ -54,7 +55,8 @@ if __name__ == "__main__":
         usage()
         sys.exit(2)
     if len(args) == 0:
-        d = load(sys.stdin)
+        # The package is a zip file: it needs bytes and to be seekable
+        d = load(BytesIO(getattr(sys.stdin, "buffer", sys.stdin).read()))
     else:
         d = load(unicode(args[0]))
     if embedimage:
@@ -66,12 +68,12 @@ if __name__ == "__main__":
             href = image.getAttribute('href')
             if href and href[:9] == "Pictures/":
                 p = d.Pictures[href]
-                bp = base64.encodestring(p[1])
+                bp = base64.b64encode(p[1]).decode("ascii")
                 image.addElement(BinaryData(text=bp))
                 image.removeAttribute('href')
     xml = d.xml()
     if outputfile == '-':
-       print (xml)
+       getattr(sys.stdout, "buffer", sys.stdout).write(xml)
     else:
         open(outputfile,"wb").write(xml)
 
